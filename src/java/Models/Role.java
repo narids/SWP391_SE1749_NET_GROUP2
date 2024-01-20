@@ -9,7 +9,6 @@ package Models;
  * @author User
  */
 public class Role {
-                     
     private int RoleID;
     private String RoleName;
 
@@ -36,5 +35,5 @@ public class Role {
     public void setRoleName(String RoleName) {
         this.RoleName = RoleName;
     }
-    
+  
 }

@@ -10,7 +10,7 @@ package Models;
  */
 public class Account {
     private int UserID; 
-    private String Username; 
+    private String Username;
     private Role role;
     private String Email; 
     private String Password; 
@@ -95,8 +95,5 @@ public class Account {
     public void setRemember(boolean Remember) {
         this.Remember = Remember;
     }
-
-    
-
     
 }
