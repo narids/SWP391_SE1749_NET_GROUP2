@@ -10,22 +10,26 @@ package Models;
  */
 public class Account {
     private int UserID; 
-    private String Username; 
-    private int RoleID;
+    private String Username;
+    private Role role;
     private String Email; 
     private String Password; 
     private String Avatar; 
+    private boolean Status; 
+    private boolean Remember;
 
     public Account() {
     }
 
-    public Account(int UserID, String Username, int RoleID, String Email, String Password, String Avatar) {
+    public Account(int UserID, String Username, Role role, String Email, String Password, String Avatar, boolean Status, boolean Remember) {
         this.UserID = UserID;
         this.Username = Username;
-        this.RoleID = RoleID;
+        this.role = role;
         this.Email = Email;
         this.Password = Password;
         this.Avatar = Avatar;
+        this.Status = Status;
+        this.Remember = Remember;
     }
 
     public int getUserID() {
@@ -44,12 +48,12 @@ public class Account {
         this.Username = Username;
     }
 
-    public int getRoleID() {
-        return RoleID;
+    public Role getRole() {
+        return role;
     }
 
-    public void setRoleID(int RoleID) {
-        this.RoleID = RoleID;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public String getEmail() {
@@ -75,7 +79,21 @@ public class Account {
     public void setAvatar(String Avatar) {
         this.Avatar = Avatar;
     }
-    
-    
+
+    public boolean getStatus() {
+        return Status;
+    }
+
+    public void setStatus(boolean Status) {
+        this.Status = Status;
+    }
+
+    public boolean getRemember() {
+        return Remember;
+    }
+
+    public void setRemember(boolean Remember) {
+        this.Remember = Remember;
+    }
     
 }

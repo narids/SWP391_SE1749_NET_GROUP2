@@ -1,4 +1,3 @@
-
 /build/
 /dist/  
 /nbproject/private/ 
@@ -9,5 +8,19 @@ nbproject/private/private.properties
 nbproject/private/private.xml 
 nbproject/project.properties 
 nbproject/project.xml
+nbproject/ant-deploy.xml
 src/java/DAOs/DBContext.java
-nbproject/private/
+
+\nbproject\private\
+\build\
+\dist\  
+\nbproject\private\ 
+nbproject\build-impl.xml
+nbproject\build-impl.xml 
+nbproject\genfiles.properties 
+nbproject\private\private.properties
+nbproject\private\private.xml 
+nbproject\project.properties 
+nbproject\project.xml
+nbproject\ant-deploy.xml
+src\java\DAOs\DBContext.java
