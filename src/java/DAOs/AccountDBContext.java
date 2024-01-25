@@ -35,10 +35,10 @@ public class AccountDBContext extends DBContext<Account> {
                 account.setEmail(rs.getString("Email"));
                 account.setAvatar(rs.getNString("Avatar"));
                 account.setStatus(rs.getBoolean("Status"));
-                account.setRemember(rs.getBoolean("Remember"));
+//                account.setRemember(rs.getBoolean("Remember"));
 
                 Role role = new Role();
-                role.setRoleID(rs.getInt("RoleID"));
+                role.setRoleId(rs.getInt("RoleID"));
                 role.setRoleName(rs.getString("RoleName"));
                 account.setRole(role);
 
@@ -173,4 +173,29 @@ public class AccountDBContext extends DBContext<Account> {
 //    public void delete(Account model) {
 //        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
 //    }
+
+    @Override
+    public ArrayList<Account> list() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void insert(Account entity) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void update(Account entity) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void delete(Account entity) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Account get(Account entity) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

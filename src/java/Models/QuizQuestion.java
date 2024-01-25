@@ -9,19 +9,24 @@ package Models;
  * @author khanhlinh
  */
 public class QuizQuestion {
+
     private int quizID;
     private int questionID;
-    
-    public QuizQuestion(){
+
+    private Quiz quiz;
+    private QuizQuestion quizQuestion;
+
+    public QuizQuestion() {
     }
-    
-    public QuizQuestion(int quizID, int questionID){
+
+    public QuizQuestion(int quizID, int questionID, Quiz quiz, QuizQuestion quizQuestion) {
         this.quizID = quizID;
         this.questionID = questionID;
+        this.quiz = quiz;
+        this.quizQuestion = quizQuestion;
     }
-    
-    //Getter and setter
 
+    //Getter and setter
     public int getQuizID() {
         return quizID;
     }
@@ -37,12 +42,27 @@ public class QuizQuestion {
     public void setQuestionID(int questionID) {
         this.questionID = questionID;
     }
-    
+
+    public Quiz getQuiz() {
+        return quiz;
+    }
+
+    public void setQuiz(Quiz quiz) {
+        this.quiz = quiz;
+    }
+
+    public QuizQuestion getQuizQuestion() {
+        return quizQuestion;
+    }
+
+    public void setQuizQuestion(QuizQuestion quizQuestion) {
+        this.quizQuestion = quizQuestion;
+    }
+
     // toString method for easy debugging
     @Override
     public String toString() {
         return "QuizQuestion{" + "quizID=" + quizID + ", questionID=" + questionID + '}';
     }
-    
-    
+
 }

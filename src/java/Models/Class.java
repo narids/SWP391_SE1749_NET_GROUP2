@@ -9,67 +9,37 @@ package Models;
  * @author admin
  */
 public class Class {
-    private int ClassID;
-    private String ClassName;
-    private int TeacherID;
-    private int StudentID;
-    private int SubjectID;
+
+    private int classId;
+    private String className;
 
     public Class() {
     }
 
-    public Class(int ClassID, String ClassName, int TeacherID, int StudentID, int SubjectID) {
-        this.ClassID = ClassID;
-        this.ClassName = ClassName;
-        this.TeacherID = TeacherID;
-        this.StudentID = StudentID;
-        this.SubjectID = SubjectID;
+    public Class(int classId, String className) {
+        this.classId = classId;
+        this.className = className;
     }
 
     public int getClassID() {
-        return ClassID;
+        return classId;
     }
 
-    public void setClassID(int ClassID) {
-        this.ClassID = ClassID;
+    public void setClassID(int classId) {
+        this.classId = classId;
     }
 
     public String getClassName() {
-        return ClassName;
+        return className;
     }
 
-    public void setClassName(String ClassName) {
-        this.ClassName = ClassName;
-    }
-
-    public int getTeacherID() {
-        return TeacherID;
-    }
-
-    public void setTeacherID(int TeacherID) {
-        this.TeacherID = TeacherID;
-    }
-
-    public int getStudentID() {
-        return StudentID;
-    }
-
-    public void setStudentID(int StudentID) {
-        this.StudentID = StudentID;
-    }
-
-    public int getSubjectID() {
-        return SubjectID;
-    }
-
-    public void setSubjectID(int SubjectID) {
-        this.SubjectID = SubjectID;
+    public void setClassName(String className) {
+        this.className = className;
     }
 
     @Override
     public String toString() {
-        return "Class{" + "ClassID=" + ClassID + ", ClassName=" + ClassName + ", TeacherID=" + TeacherID + ", StudentID=" + StudentID + ", SubjectID=" + SubjectID + '}';
+        return "Class{" + "classId=" + classId + ", className=" + className + '}';
     }
-    
-    
+
 }
