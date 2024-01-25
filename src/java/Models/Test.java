@@ -9,83 +9,108 @@ package Models;
  * @author owner
  */
 public class Test {
-    private int TestID;
-    private int QuizID;
-    private int UserID;
-    private int Correct_Answer;
-    private String StartTime;
-    private String Completion_Date;
-    private String EndTime;
-    
+
+    private int testId;
+    private int quizId;
+    private int userId;
+    private int correctAnswer;
+    private String startTime;
+    private String completionDate;
+    private String endTime;
+
+    private Account user;
+    private Quiz quiz;
+
     public Test() {
-    }  
-
-    public Test(int TestID, int QuizID, int UserID, int Correct_Answer, String StartTime, String Completion_Date, String EndTime) {
-        this.TestID = TestID;
-        this.QuizID = QuizID;
-        this.UserID = UserID;
-        this.Correct_Answer = Correct_Answer;
-        this.StartTime = StartTime;
-        this.Completion_Date = Completion_Date;
-        this.EndTime = EndTime;
     }
 
-    public int getTestID() {
-        return TestID;
+    public Test(int testId, int quizId, int userId, int correctAnswer, String startTime, String completionDate, String endTime, Account user, Quiz quiz) {
+        this.testId = testId;
+        this.quizId = quizId;
+        this.userId = userId;
+        this.correctAnswer = correctAnswer;
+        this.startTime = startTime;
+        this.completionDate = completionDate;
+        this.endTime = endTime;
+        this.user = user;
+        this.quiz = quiz;
     }
 
-    public void setTestID(int TestID) {
-        this.TestID = TestID;
+    public int getTestId() {
+        return testId;
     }
 
-    public int getQuizID() {
-        return QuizID;
+    public void setTestId(int testId) {
+        this.testId = testId;
     }
 
-    public void setQuizID(int QuizID) {
-        this.QuizID = QuizID;
+    public int getQuizId() {
+        return quizId;
     }
 
-    public int getUserID() {
-        return UserID;
+    public void setQuizId(int quizId) {
+        this.quizId = quizId;
     }
 
-    public void setUserID(int UserID) {
-        this.UserID = UserID;
+    public int getUserId() {
+        return userId;
     }
 
-    public int getCorrect_Answer() {
-        return Correct_Answer;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
-    public void setCorrect_Answer(int Correct_Answer) {
-        this.Correct_Answer = Correct_Answer;
+    public int getCorrectAnswer() {
+        return correctAnswer;
+    }
+
+    public void setCorrectAnswer(int correctAnswer) {
+        this.correctAnswer = correctAnswer;
     }
 
     public String getStartTime() {
-        return StartTime;
+        return startTime;
     }
 
-    public void setStartTime(String StartTime) {
-        this.StartTime = StartTime;
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
     }
 
-    public String getCompletion_Date() {
-        return Completion_Date;
+    public String getCompletionDate() {
+        return completionDate;
     }
 
-    public void setCompletion_Date(String Completion_Date) {
-        this.Completion_Date = Completion_Date;
+    public void setCompletionDate(String completionDate) {
+        this.completionDate = completionDate;
     }
 
     public String getEndTime() {
-        return EndTime;
+        return endTime;
     }
 
-    public void setEndTime(String EndTime) {
-        this.EndTime = EndTime;
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
-    
-    
-    
+
+    public Account getUser() {
+        return user;
+    }
+
+    public void setUser(Account user) {
+        this.user = user;
+    }
+
+    public Quiz getQuiz() {
+        return quiz;
+    }
+
+    public void setQuiz(Quiz quiz) {
+        this.quiz = quiz;
+    }
+
+    @Override
+    public String toString() {
+        return "Test{" + "testId=" + testId + ", quizId=" + quizId + ", userId=" + userId + ", correctAnswer=" + correctAnswer + ", startTime=" + startTime + ", completionDate=" + completionDate + ", endTime=" + endTime + ", user=" + user + ", quiz=" + quiz + '}';
+    }
+
 }

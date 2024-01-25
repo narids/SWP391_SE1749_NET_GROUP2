@@ -4,48 +4,83 @@
  */
 package Models;
 
+import DAOs.BaseEntity;
+
 /**
  *
  * @author nghia
  */
-public class Account {
-    private int UserID; 
-    private String Username;
+public class Account extends BaseEntity {
+
+    private int userId;
+    private String username;
+    private int roleId;
+    private String email;
+    private String password;
+    private String avatar;
     private Role role;
-    private String Email; 
-    private String Password; 
-    private String Avatar; 
-    private boolean Status; 
-    private boolean Remember;
+    private boolean status;
 
     public Account() {
     }
 
-    public Account(int UserID, String Username, Role role, String Email, String Password, String Avatar, boolean Status, boolean Remember) {
-        this.UserID = UserID;
-        this.Username = Username;
+    public Account(int userId, String username, int roleId, String email, String password, String avatar, Role role, boolean status) {
+        this.userId = userId;
+        this.username = username;
+        this.roleId = roleId;
+        this.email = email;
+        this.password = password;
+        this.avatar = avatar;
         this.role = role;
-        this.Email = Email;
-        this.Password = Password;
-        this.Avatar = Avatar;
-        this.Status = Status;
-        this.Remember = Remember;
+        this.status = status;
     }
 
-    public int getUserID() {
-        return UserID;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setUserID(int UserID) {
-        this.UserID = UserID;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getUsername() {
-        return Username;
+        return username;
     }
 
-    public void setUsername(String Username) {
-        this.Username = Username;
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public int getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public Role getRole() {
@@ -56,44 +91,17 @@ public class Account {
         this.role = role;
     }
 
-    public String getEmail() {
-        return Email;
-    }
-
-    public void setEmail(String Email) {
-        this.Email = Email;
-    }
-
-    public String getPassword() {
-        return Password;
-    }
-
-    public void setPassword(String Password) {
-        this.Password = Password;
-    }
-
-    public String getAvatar() {
-        return Avatar;
-    }
-
-    public void setAvatar(String Avatar) {
-        this.Avatar = Avatar;
-    }
-
     public boolean getStatus() {
-        return Status;
+        return status;
     }
 
-    public void setStatus(boolean Status) {
-        this.Status = Status;
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
-    public boolean getRemember() {
-        return Remember;
+    @Override
+    public String toString() {
+        return "Account{" + "userId=" + userId + ", username=" + username + ", roleId=" + roleId + ", email=" + email + ", password=" + password + ", avatar=" + avatar + ", role=" + role + ", status=" + status + '}';
     }
 
-    public void setRemember(boolean Remember) {
-        this.Remember = Remember;
-    }
-    
 }

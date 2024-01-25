@@ -9,31 +9,37 @@ package Models;
  * @author User
  */
 public class Role {
-    private int RoleID;
-    private String RoleName;
+
+    private int roleId;
+    private String roleName;
 
     public Role() {
     }
 
-    public Role(int RoleID, String RoleName) {
-        this.RoleID = RoleID;
-        this.RoleName = RoleName;
+    public Role(int roleId, String roleName) {
+        this.roleId = roleId;
+        this.roleName = roleName;
     }
 
-    public int getRoleID() {
-        return RoleID;
+    public int getRoleId() {
+        return roleId;
     }
 
-    public void setRoleID(int RoleID) {
-        this.RoleID = RoleID;
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
     }
 
     public String getRoleName() {
-        return RoleName;
+        return roleName;
     }
 
-    public void setRoleName(String RoleName) {
-        this.RoleName = RoleName;
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
-  
+
+    @Override
+    public String toString() {
+        return "Role{" + "roleId=" + roleId + ", roleName=" + roleName + '}';
+    }
+
 }

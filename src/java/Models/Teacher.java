@@ -9,47 +9,37 @@ package Models;
  * @author admin
  */
 public class Teacher {
-    private int UserID;
-    private int ClassID;
-    private int TeacherID;
+
+    private int userId;
+    private String teacherId;
 
     public Teacher() {
     }
 
-    public Teacher(int UserID, int ClassID, int TeacherID) {
-        this.UserID = UserID;
-        this.ClassID = ClassID;
-        this.TeacherID = TeacherID;
+    public Teacher(int userId, String teacherId) {
+        this.userId = userId;
+        this.teacherId = teacherId;
     }
 
-    public int getUserID() {
-        return UserID;
+    public int getuserId() {
+        return userId;
     }
 
-    public void setUserID(int UserID) {
-        this.UserID = UserID;
+    public void setuserId(int userId) {
+        this.userId = userId;
     }
 
-    public int getClassID() {
-        return ClassID;
+    public String getTeacherId() {
+        return teacherId;
     }
 
-    public void setClassID(int ClassID) {
-        this.ClassID = ClassID;
-    }
-
-    public int getTeacherID() {
-        return TeacherID;
-    }
-
-    public void setTeacherID(int TeacherID) {
-        this.TeacherID = TeacherID;
+    public void setTeacherId(String teacherId) {
+        this.teacherId = teacherId;
     }
 
     @Override
     public String toString() {
-        return "Teacher{" + "UserID=" + UserID + ", ClassID=" + ClassID + ", TeacherID=" + TeacherID + '}';
+        return "Teacher{" + "userId=" + userId + ", teacherId=" + teacherId + '}';
     }
-    
-    
+
 }
