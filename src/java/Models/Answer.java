@@ -9,52 +9,67 @@ package Models;
  * @author owner
  */
 public class Answer {
-    private int AnswerID;
-    private int QuestionID;
-    private boolean IsCorrect;
-    private String Answer_Content;
-    
+
+    private int answerId;
+    private int questionId;
+    private boolean isCorrect;
+    private String answerContent;
+    private QuizQuestion quizQuestion;
+
     public Answer() {
-    }  
-    
-    public Answer(int AnswerID, int QuestionID, boolean IsCorrect, String Answer_Content) {
-        this.AnswerID = AnswerID;
-        this.QuestionID = QuestionID;
-        this.IsCorrect = IsCorrect;
-        this.Answer_Content = Answer_Content;
     }
 
-    public int getAnswerID() {
-        return AnswerID;
+    public Answer(int answerId, int questionId, boolean isCorrect, String answerContent, QuizQuestion quizQuestion) {
+        this.answerId = answerId;
+        this.questionId = questionId;
+        this.isCorrect = isCorrect;
+        this.answerContent = answerContent;
+        this.quizQuestion = quizQuestion;
     }
 
-    public void setAnswerID(int AnswerID) {
-        this.AnswerID = AnswerID;
+    public int getAnswerId() {
+        return answerId;
     }
 
-    public int getQuestionID() {
-        return QuestionID;
+    public void setAnswerId(int answerId) {
+        this.answerId = answerId;
     }
 
-    public void setQuestionID(int QuestionID) {
-        this.QuestionID = QuestionID;
+    public int getQuestionId() {
+        return questionId;
+    }
+
+    public void setQuestionId(int questionId) {
+        this.questionId = questionId;
     }
 
     public boolean isIsCorrect() {
-        return IsCorrect;
+        return isCorrect;
     }
 
-    public void setIsCorrect(boolean IsCorrect) {
-        this.IsCorrect = IsCorrect;
+    public void setIsCorrect(boolean isCorrect) {
+        this.isCorrect = isCorrect;
     }
 
-    public String getAnswer_Content() {
-        return Answer_Content;
+    public String getAnswerContent() {
+        return answerContent;
     }
 
-    public void setAnswer_Content(String Answer_Content) {
-        this.Answer_Content = Answer_Content;
+    public void setAnswerContent(String answerContent) {
+        this.answerContent = answerContent;
     }
-    
-    
+
+    public QuizQuestion getQuizQuestion() {
+        return quizQuestion;
+    }
+
+    public void setQuizQuestion(QuizQuestion quizQuestion) {
+        this.quizQuestion = quizQuestion;
+    }
+
+    @Override
+    public String toString() {
+        return "Answer{" + "answerId=" + answerId + ", questionId=" + questionId + ", isCorrect=" + isCorrect + ", answerContent=" + answerContent + ", quizQuestion=" + quizQuestion + '}';
+    }
+
 }

@@ -9,43 +9,47 @@ package Models;
  * @author owner
  */
 public class SubjectDemension {
-    private int SubDeID;
-    private String SubDeName;
-    private String SubDeDetail;
-    
+
+    private int subDeId;
+    private String subDeName;
+    private String subDeDetail;
+
     public SubjectDemension() {
     }
 
-    public SubjectDemension(int SubDeID, String SubDeName, String SubDeDetail) {
-        this.SubDeID = SubDeID;
-        this.SubDeName = SubDeName;
-        this.SubDeDetail = SubDeDetail;
+    public SubjectDemension(int subDeId, String subDeName, String subDeDetail) {
+        this.subDeId = subDeId;
+        this.subDeName = subDeName;
+        this.subDeDetail = subDeDetail;
     }
 
-    public int getSubDeID() {
-        return SubDeID;
+    public int getSubDeId() {
+        return subDeId;
     }
 
-    public void setSubDeID(int SubDeID) {
-        this.SubDeID = SubDeID;
+    public void setSubDeId(int subDeId) {
+        this.subDeId = subDeId;
     }
 
     public String getSubDeName() {
-        return SubDeName;
+        return subDeName;
     }
 
-    public void setSubDeName(String SubDeName) {
-        this.SubDeName = SubDeName;
+    public void setSubDeName(String subDeName) {
+        this.subDeName = subDeName;
     }
 
     public String getSubDeDetail() {
-        return SubDeDetail;
+        return subDeDetail;
     }
 
-    public void setSubDeDetail(String SubDeDetail) {
-        this.SubDeDetail = SubDeDetail;
+    public void setSubDeDetail(String subDeDetail) {
+        this.subDeDetail = subDeDetail;
     }
-    
-    
-    
+
+    @Override
+    public String toString() {
+        return "SubjectDemension{" + "subDeId=" + subDeId + ", subDeName=" + subDeName + ", subDeDetail=" + subDeDetail + '}';
+    }
+
 }

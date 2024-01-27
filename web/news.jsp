@@ -1,13 +1,12 @@
 <%-- 
-    Document   : home
-    Created on : Jan 20, 2024, 12:54:25 PM
-    Author     : owner
+    Document   : news
+    Created on : Jan 24, 2024, 11:16:03 AM
+    Author     : admin
 --%>
-
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
     <head>
 
         <!-- META ============================================= -->
@@ -43,7 +42,6 @@
 
         <!-- All PLUGINS CSS ============================================= -->
         <link rel="stylesheet" type="text/css" href="assets/css/assets.css">
-        <link href="../assets/css/assets.css" rel="stylesheet" type="text/css"/>
 
         <!-- TYPOGRAPHY ============================================= -->
         <link rel="stylesheet" type="text/css" href="assets/css/typography.css">
@@ -55,11 +53,6 @@
         <link rel="stylesheet" type="text/css" href="assets/css/style.css">
         <link class="skin" rel="stylesheet" type="text/css" href="assets/css/color/color-1.css">
 
-        <!-- REVOLUTION SLIDER CSS ============================================= -->
-        <link rel="stylesheet" type="text/css" href="assets/vendors/revolution/css/layers.css">
-        <link rel="stylesheet" type="text/css" href="assets/vendors/revolution/css/settings.css">
-        <link rel="stylesheet" type="text/css" href="assets/vendors/revolution/css/navigation.css">
-        <!-- REVOLUTION SLIDER END -->	
     </head>
     <body id="bg">
         <div class="page-wraper">
@@ -83,7 +76,7 @@
                                             <option data-icon="flag flag-us">English US</option>
                                         </select>
                                     </li>
-                                    <li><a href="login">Login</a></li>
+                                    <li><a href="login.html">Login</a></li>
                                     <li><a href="register.html">Register</a></li>
                                 </ul>
                             </div>
@@ -229,347 +222,189 @@
                     </div>
                 </div>
             </header>
-            <!-- Header Top END ==== -->
+            <!-- header END -->
             <!-- Content -->
             <div class="page-content bg-white">
-                <!-- Main Slider -->
-                <div class="section-area section-sp1 ovpr-dark bg-fix online-cours" style="background-image:url(assets/images/background/bg1.jpg);">
+                <!-- inner page banner -->
+                <div class="page-banner ovbl-dark" style="background-image:url(assets/images/banner/banner1.jpg);">
                     <div class="container">
-                        <div class="row">
-                            <div class="col-md-12 text-center text-white">
-                                <h2>Online Courses To Learn</h2>
-                                <h5>Own Your Feature Learning New Skills Online</h5>
-                                <form class="cours-search">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="What do you want to learn today?	">
-                                        <div class="input-group-append">
-                                            <button class="btn" type="submit">Search</button> 
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                        <div class="mw800 m-auto">
-                            <div class="row">
-                                <div class="col-md-4 col-sm-6">
-                                    <div class="cours-search-bx m-b30">
-                                        <div class="icon-box">
-                                            <h3><i class="ti-user"></i><span class="counter">5</span>M</h3>
-                                        </div>
-                                        <span class="cours-search-text">Over 5 million student</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 col-sm-6">
-                                    <div class="cours-search-bx m-b30">
-                                        <div class="icon-box">
-                                            <h3><i class="ti-book"></i><span class="counter">30</span>K</h3>
-                                        </div>
-                                        <span class="cours-search-text">30,000 Courses.</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 col-sm-12">
-                                    <div class="cours-search-bx m-b30">
-                                        <div class="icon-box">
-                                            <h3><i class="ti-layout-list-post"></i><span class="counter">20</span>K</h3>
-                                        </div>
-                                        <span class="cours-search-text">Learn Anythink Online.</span>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="page-banner-entry">
+                            <h1 class="text-white">Blog Classic Sidebar</h1>
                         </div>
                     </div>
                 </div>
-                <!-- Main Slider -->
+                <!-- Breadcrumb row -->
+                <div class="breadcrumb-row">
+                    <div class="container">
+                        <ul class="list-inline">
+                            <li><a href="#">Home</a></li>
+                            <li>Blog Classic Sidebar</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Breadcrumb row END -->
                 <div class="content-block">
-                    <!-- Popular Courses -->
-                    <div class="section-area section-sp2 popular-courses-bx">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-12 heading-bx left">
-                                    <h2 class="title-head">Popular <span>Courses</span></h2>
-                                    <p>It is a long established fact that a reader will be distracted by the readable content of a page</p>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="courses-carousel owl-carousel owl-btn-1 col-12 p-lr0">
-                                    <div class="item">
-                                        <div class="cours-bx">
-                                            <div class="action-box">
-                                                <img src="assets/images/courses/pic1.jpg" alt="">
-                                                <a href="#" class="btn">Read More</a>
-                                            </div>
-                                            <div class="info-bx text-center">
-                                                <h5><a href="#">Introduction EduChamp – LMS plugin</a></h5>
-                                                <span>Programming</span>
-                                            </div>
-                                            <div class="cours-more-info">
-                                                <div class="review">
-                                                    <span>3 Review</span>
-                                                    <ul class="cours-star">
-                                                        <li class="active"><i class="fa fa-star"></i></li>
-                                                        <li class="active"><i class="fa fa-star"></i></li>
-                                                        <li class="active"><i class="fa fa-star"></i></li>
-                                                        <li><i class="fa fa-star"></i></li>
-                                                        <li><i class="fa fa-star"></i></li>
-                                                    </ul>
-                                                </div>
-                                                <div class="price">
-                                                    <del>$190</del>
-                                                    <h5>$120</h5>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <div class="cours-bx">
-                                            <div class="action-box">
-                                                <img src="assets/images/courses/pic2.jpg" alt="">
-                                                <a href="#" class="btn">Read More</a>
-                                            </div>
-                                            <div class="info-bx text-center">
-                                                <h5><a href="#">Introduction EduChamp – LMS plugin</a></h5>
-                                                <span>Programming</span>
-                                            </div>
-                                            <div class="cours-more-info">
-                                                <div class="review">
-                                                    <span>3 Review</span>
-                                                    <ul class="cours-star">
-                                                        <li class="active"><i class="fa fa-star"></i></li>
-                                                        <li class="active"><i class="fa fa-star"></i></li>
-                                                        <li class="active"><i class="fa fa-star"></i></li>
-                                                        <li><i class="fa fa-star"></i></li>
-                                                        <li><i class="fa fa-star"></i></li>
-                                                    </ul>
-                                                </div>
-                                                <div class="price">
-                                                    <del>$190</del>
-                                                    <h5>$120</h5>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <div class="cours-bx">
-                                            <div class="action-box">
-                                                <img src="assets/images/courses/pic3.jpg" alt="">
-                                                <a href="#" class="btn">Read More</a>
-                                            </div>
-                                            <div class="info-bx text-center">
-                                                <h5><a href="#">Introduction EduChamp – LMS plugin</a></h5>
-                                                <span>Programming</span>
-                                            </div>
-                                            <div class="cours-more-info">
-                                                <div class="review">
-                                                    <span>3 Review</span>
-                                                    <ul class="cours-star">
-                                                        <li class="active"><i class="fa fa-star"></i></li>
-                                                        <li class="active"><i class="fa fa-star"></i></li>
-                                                        <li class="active"><i class="fa fa-star"></i></li>
-                                                        <li><i class="fa fa-star"></i></li>
-                                                        <li><i class="fa fa-star"></i></li>
-                                                    </ul>
-                                                </div>
-                                                <div class="price">
-                                                    <del>$190</del>
-                                                    <h5>$120</h5>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <div class="cours-bx">
-                                            <div class="action-box">
-                                                <img src="assets/images/courses/pic4.jpg" alt="">
-                                                <a href="#" class="btn">Read More</a>
-                                            </div>
-                                            <div class="info-bx text-center">
-                                                <h5><a href="#">Introduction EduChamp – LMS plugin</a></h5>
-                                                <span>Programming</span>
-                                            </div>
-                                            <div class="cours-more-info">
-                                                <div class="review">
-                                                    <span>3 Review</span>
-                                                    <ul class="cours-star">
-                                                        <li class="active"><i class="fa fa-star"></i></li>
-                                                        <li class="active"><i class="fa fa-star"></i></li>
-                                                        <li class="active"><i class="fa fa-star"></i></li>
-                                                        <li><i class="fa fa-star"></i></li>
-                                                        <li><i class="fa fa-star"></i></li>
-                                                    </ul>
-                                                </div>
-                                                <div class="price">
-                                                    <del>$190</del>
-                                                    <h5>$120</h5>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Popular Courses END -->
-                    <div class="section-area section-sp2 bg-fix ovbl-dark join-bx text-center" style="background-image:url(assets/images/background/bg1.jpg);">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="join-content-bx text-white">
-                                        <h2>Learn a new skill online on <br> your time</h2>
-                                        <h4><span class="counter">57,000</span> Online Courses</h4>
-                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-                                        <a href="#" class="btn button-md">Join Now</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Form END -->
                     <div class="section-area section-sp1">
                         <div class="container">
                             <div class="row">
-                                <div class="col-lg-6 m-b30">
-                                    <h2 class="title-head ">Learn a new skill online<br> <span class="text-primary"> on your time</span></h2>
-                                    <h4><span class="counter">57,000</span> Online Courses</h4>
-                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type.</p>
-                                    <a href="#" class="btn button-md">Join Now</a>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="row">
-                                        <div class="col-lg-6 col-md-6 col-sm-6 m-b30">
-                                            <div class="feature-container">
-                                                <div class="feature-md text-white m-b20">
-                                                    <a href="#" class="icon-cell"><img src="assets/images/icon/icon1.png" alt=""></a> 
+                                <!-- left part start -->
+                                <div class="col-lg-8 col-xl-8 col-md-7">
+                                    <!-- blog grid -->
+                                    <c:forEach items="${newList}" var="newList">
+                                        <div id="masonry" class="ttr-blog-grid-3 row">
+                                            <div class="post action-card col-xl-6 col-lg-6 col-md-12 col-xs-12 m-b40">
+                                                <div class="recent-news">
+                                                    <div class="action-box">
+                                                        <img src="assets/images/blog/latest-blog/pic1.jpg" alt="">
+                                                    </div>
+                                                    <div class="info-bx">
+                                                        <ul class="media-post">
+                                                            <li><a href="#"><i class="fa fa-calendar"></i>Jan 02 2019</a></li>
+                                                            <li><a href="#"><i class="fa fa-user"></i>By William</a></li>
+                                                        </ul>
+                                                        
+                                                        <h5 class="post-title"><a href="blog-details.html">${newList.Title}</a></h5>
+                                                        <p>Knowing that, you’ve optimised your pages countless amount of times, written tons.</p>
+                                                        <div class="post-extra">
+                                                            <a href="#" class="btn-link">READ MORE</a>
+                                                            <a href="#" class="comments-bx"><i class="fa fa-comments-o"></i>20 Comment</a>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="icon-content">
-                                                    <h5 class="ttr-tilte">Our Philosophy</h5>
-                                                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing.</p>
-                                                </div>
-                                            </div>
+                                            </div>                 
                                         </div>
-                                        <div class="col-lg-6 col-md-6 col-sm-6 m-b30">
-                                            <div class="feature-container">
-                                                <div class="feature-md text-white m-b20">
-                                                    <a href="#" class="icon-cell"><img src="assets/images/icon/icon2.png" alt=""></a> 
-                                                </div>
-                                                <div class="icon-content">
-                                                    <h5 class="ttr-tilte">Kingster's Principle</h5>
-                                                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing.</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6 col-md-6 col-sm-6 m-b30">
-                                            <div class="feature-container">
-                                                <div class="feature-md text-white m-b20">
-                                                    <a href="#" class="icon-cell"><img src="assets/images/icon/icon3.png" alt=""></a> 
-                                                </div>
-                                                <div class="icon-content">
-                                                    <h5 class="ttr-tilte">Key Of Success</h5>
-                                                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing.</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6 col-md-6 col-sm-6 m-b30">
-                                            <div class="feature-container">
-                                                <div class="feature-md text-white m-b20">
-                                                    <a href="#" class="icon-cell"><img src="assets/images/icon/icon4.png" alt=""></a> 
-                                                </div>
-                                                <div class="icon-content">
-                                                    <h5 class="ttr-tilte">Our Philosophy</h5>
-                                                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing.</p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    </c:forEach>
+                                    <!-- blog grid END -->
+                                    <!-- Pagination -->
+                                    <div class="pagination-bx rounded-sm gray clearfix">
+                                        <ul class="pagination">
+                                            <li class="previous"><a href="#"><i class="ti-arrow-left"></i> Prev</a></li>
+                                            <li class="active"><a href="#">1</a></li>
+                                            <li><a href="#">2</a></li>
+                                            <li><a href="#">3</a></li>
+                                            <li class="next"><a href="#">Next <i class="ti-arrow-right"></i></a></li>
+                                        </ul>
                                     </div>
+                                    <!-- Pagination END -->
                                 </div>
+                                <!-- left part END -->
+                                <!-- Side bar start -->
+                                <div class="col-lg-4 col-xl-4 col-md-5 sticky-top">
+                                    <aside class="side-bar sticky-top">
+                                        <div class="widget">
+                                            <h6 class="widget-title">Search</h6>
+                                            <div class="search-bx style-1">
+                                                <form role="search" method="post">
+                                                    <div class="input-group">
+                                                        <input name="text" class="form-control" placeholder="Enter your keywords..." type="text">
+                                                        <span class="input-group-btn">
+                                                            <button type="submit" class="fa fa-search text-primary"></button>
+                                                        </span> 
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div class="widget recent-posts-entry">
+                                            <h6 class="widget-title">Recent Posts</h6>
+                                            <div class="widget-post-bx">
+                                                <div class="widget-post clearfix">
+                                                    <div class="ttr-post-media"> <img src="assets/images/blog/recent-blog/pic1.jpg" width="200" height="143" alt=""> </div>
+                                                    <div class="ttr-post-info">
+                                                        <div class="ttr-post-header">
+                                                            <h6 class="post-title"><a href="blog-details.html">This Story Behind Education Will Haunt You Forever.</a></h6>
+                                                        </div>
+                                                        <ul class="media-post">
+                                                            <li><a href="#"><i class="fa fa-calendar"></i>Oct 23 2019</a></li>
+                                                            <li><a href="#"><i class="fa fa-comments-o"></i>15 Comment</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="widget-post clearfix">
+                                                    <div class="ttr-post-media"> <img src="assets/images/blog/recent-blog/pic2.jpg" width="200" height="160" alt=""> </div>
+                                                    <div class="ttr-post-info">
+                                                        <div class="ttr-post-header">
+                                                            <h6 class="post-title"><a href="blog-details.html">What Will Education Be Like In The Next 50 Years?</a></h6>
+                                                        </div>
+                                                        <ul class="media-post">
+                                                            <li><a href="#"><i class="fa fa-calendar"></i>May 14 2019</a></li>
+                                                            <li><a href="#"><i class="fa fa-comments-o"></i>23 Comment</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="widget-post clearfix">
+                                                    <div class="ttr-post-media"> <img src="assets/images/blog/recent-blog/pic3.jpg" width="200" height="160" alt=""> </div>
+                                                    <div class="ttr-post-info">
+                                                        <div class="ttr-post-header">
+                                                            <h6 class="post-title"><a href="blog-details.html">Eliminate Your Fears And Doubts About Education.</a></h6>
+                                                        </div>
+                                                        <ul class="media-post">
+                                                            <li><a href="#"><i class="fa fa-calendar"></i>June 12 2019</a></li>
+                                                            <li><a href="#"><i class="fa fa-comments-o"></i>27 Comment</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="widget widget-newslatter">
+                                            <h6 class="widget-title">Newsletter</h6>
+                                            <div class="news-box">
+                                                <p>Enter your e-mail and subscribe to our newsletter.</p>
+                                                <form class="subscription-form" action="http://educhamp.themetrades.com/demo/assets/script/mailchamp.php" method="post">
+                                                    <div class="ajax-message"></div>
+                                                    <div class="input-group">
+                                                        <input name="dzEmail" required="required" type="email" class="form-control" placeholder="Your Email Address"/>
+                                                        <button name="submit" value="Submit" type="submit" class="btn black radius-no">
+                                                            <i class="fa fa-paper-plane-o"></i>
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div class="widget widget_gallery gallery-grid-4">
+                                            <h6 class="widget-title">Our Gallery</h6>
+                                            <ul>
+                                                <li><div><a href="#"><img src="assets/images/gallery/pic2.jpg" alt=""></a></div></li>
+                                                <li><div><a href="#"><img src="assets/images/gallery/pic1.jpg" alt=""></a></div></li>
+                                                <li><div><a href="#"><img src="assets/images/gallery/pic5.jpg" alt=""></a></div></li>
+                                                <li><div><a href="#"><img src="assets/images/gallery/pic7.jpg" alt=""></a></div></li>
+                                                <li><div><a href="#"><img src="assets/images/gallery/pic8.jpg" alt=""></a></div></li>
+                                                <li><div><a href="#"><img src="assets/images/gallery/pic9.jpg" alt=""></a></div></li>
+                                                <li><div><a href="#"><img src="assets/images/gallery/pic3.jpg" alt=""></a></div></li>
+                                                <li><div><a href="#"><img src="assets/images/gallery/pic4.jpg" alt=""></a></div></li>
+                                            </ul>
+                                        </div>
+                                        <div class="widget widget_tag_cloud">
+                                            <h6 class="widget-title">Tags</h6>
+                                            <div class="tagcloud"> 
+                                                <a href="#">Design</a> 
+                                                <a href="#">User interface</a> 
+                                                <a href="#">SEO</a> 
+                                                <a href="#">WordPress</a> 
+                                                <a href="#">Development</a> 
+                                                <a href="#">Joomla</a> 
+                                                <a href="#">Design</a> 
+                                                <a href="#">User interface</a> 
+                                                <a href="#">SEO</a> 
+                                                <a href="#">WordPress</a> 
+                                                <a href="#">Development</a> 
+                                                <a href="#">Joomla</a> 
+                                                <a href="#">Design</a> 
+                                                <a href="#">User interface</a> 
+                                                <a href="#">SEO</a> 
+                                                <a href="#">WordPress</a> 
+                                                <a href="#">Development</a> 
+                                                <a href="#">Joomla</a> 
+                                            </div>
+                                        </div>
+                                    </aside>
+                                </div>
+                                <!-- Side bar END -->
                             </div>
                         </div>
                     </div>
-
-                    <!-- Testimonials -->
-                    <div class="section-area section-sp1 bg-fix ovbl-dark text-white" style="background-image:url(assets/images/background/bg1.jpg);">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-lg-3 col-md-6 col-sm-6 col-6 m-b30">
-                                    <div class="counter-style-1">
-                                        <div class="text-white">
-                                            <span class="counter">3000</span><span>+</span>
-                                        </div>
-                                        <span class="counter-text">Completed Projects</span>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3 col-md-6 col-sm-6 col-6 m-b30">
-                                    <div class="counter-style-1">
-                                        <div class="text-white">
-                                            <span class="counter">2500</span><span>+</span>
-                                        </div>
-                                        <span class="counter-text">Happy Clients</span>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3 col-md-6 col-sm-6 col-6 m-b30">
-                                    <div class="counter-style-1">
-                                        <div class="text-white">
-                                            <span class="counter">1500</span><span>+</span>
-                                        </div>
-                                        <span class="counter-text">Questions Answered</span>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3 col-md-6 col-sm-6 col-6 m-b30">
-                                    <div class="counter-style-1">
-                                        <div class="text-white">
-                                            <span class="counter">1000</span><span>+</span>
-                                        </div>
-                                        <span class="counter-text">Ordered Coffee's</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Testimonials END -->
-                    <!-- Testimonials ==== -->
-                    <div class="section-area section-sp2">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-12 heading-bx left">
-                                    <h2 class="title-head text-uppercase">what people <span>say</span></h2>
-                                    <p>It is a long established fact that a reader will be distracted by the readable content of a page</p>
-                                </div>
-                            </div>
-                            <div class="testimonial-carousel owl-carousel owl-btn-1 col-12 p-lr0">
-                                <div class="item">
-                                    <div class="testimonial-bx">
-                                        <div class="testimonial-thumb">
-                                            <img src="assets/images/testimonials/pic1.jpg" alt="">
-                                        </div>
-                                        <div class="testimonial-info">
-                                            <h5 class="name">Peter Packer</h5>
-                                            <p>-Art Director</p>
-                                        </div>
-                                        <div class="testimonial-content">
-                                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type...</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <div class="testimonial-bx">
-                                        <div class="testimonial-thumb">
-                                            <img src="assets/images/testimonials/pic2.jpg" alt="">
-                                        </div>
-                                        <div class="testimonial-info">
-                                            <h5 class="name">Peter Packer</h5>
-                                            <p>-Art Director</p>
-                                        </div>
-                                        <div class="testimonial-content">
-                                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type...</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Testimonials END ==== -->
                 </div>
-                <!-- contact area END -->
             </div>
+            <!-- Left & right section END -->
             <!-- Content END-->
             <!-- Footer ==== -->
             <footer>
@@ -677,9 +512,9 @@
                 </div>
             </footer>
             <!-- Footer END ==== -->
+            <!-- scroll top button -->
             <button class="back-to-top fa fa-chevron-up" ></button>
         </div>
-
         <!-- External JavaScripts -->
         <script src="assets/js/jquery.min.js"></script>
         <script src="assets/vendors/bootstrap/js/popper.min.js"></script>
@@ -697,5 +532,4 @@
         <script src="assets/js/contact.js"></script>
         <script src='assets/vendors/switcher/switcher.js'></script>
     </body>
-
 </html>

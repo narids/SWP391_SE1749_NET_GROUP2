@@ -9,52 +9,68 @@ package Models;
  * @author owner
  */
 public class Subject {
-    private int SubjectID;
-    private String SubjectName;
-    private int SubDeID;
-    private String SubDetail;
-    
+
+    private int subjectId;
+    private String subjectName;
+    private int subDeId;
+    private String subDetail;
+
+    private SubjectDemension subDe;
+
     public Subject() {
     }
 
-    public Subject(int SubjectID, String SubjectName, int SubDeID, String SubDetail) {
-        this.SubjectID = SubjectID;
-        this.SubjectName = SubjectName;
-        this.SubDeID = SubDeID;
-        this.SubDetail = SubDetail;
+    public Subject(int subjectId, String subjectName, int subDeId, String subDetail, SubjectDemension subDe) {
+        this.subjectId = subjectId;
+        this.subjectName = subjectName;
+        this.subDeId = subDeId;
+        this.subDetail = subDetail;
+        this.subDe = subDe;
     }
 
-    public int getSubjectID() {
-        return SubjectID;
+    public int getSubjectId() {
+        return subjectId;
     }
 
-    public void setSubjectID(int SubjectID) {
-        this.SubjectID = SubjectID;
+    public void setSubjectId(int subjectId) {
+        this.subjectId = subjectId;
     }
 
     public String getSubjectName() {
-        return SubjectName;
+        return subjectName;
     }
 
-    public void setSubjectName(String SubjectName) {
-        this.SubjectName = SubjectName;
+    public void setSubjectName(String subjectName) {
+        this.subjectName = subjectName;
     }
 
-    public int getSubDeID() {
-        return SubDeID;
+    public int getSubDeId() {
+        return subDeId;
     }
 
-    public void setSubDeID(int SubDeID) {
-        this.SubDeID = SubDeID;
+    public void setSubDeId(int subDeId) {
+        this.subDeId = subDeId;
     }
 
     public String getSubDetail() {
-        return SubDetail;
+        return subDetail;
     }
 
-    public void setSubDetail(String SubDetail) {
-        this.SubDetail = SubDetail;
+    public void setSubDetail(String subDetail) {
+        this.subDetail = subDetail;
     }
-    
-    
+
+    public SubjectDemension getSubDe() {
+        return subDe;
+    }
+
+    public void setSubDe(SubjectDemension subDe) {
+        this.subDe = subDe;
+    }
+
+    @Override
+    public String toString() {
+        return "Subject{" + "subjectId=" + subjectId + ", subjectName=" + subjectName + ", subDeId=" + subDeId + ", subDetail=" + subDetail + ", subDe=" + subDe + '}';
+    }
+
 }
