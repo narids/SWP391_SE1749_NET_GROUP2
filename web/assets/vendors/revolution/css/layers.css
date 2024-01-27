@@ -3137,7 +3137,9 @@ website:   	http://www.themepunch.com
         line-height: 25px;
         font-weight: 700;
         font-style: italic;
-        font-family: ""Playfair Display"";
+        //User: KhanhLinh
+        //Date: 22/01/2024
+        font-family: "Playfair Display", sans-serif;
         padding: 0px 0px 10px 0px;
         text-decoration: none;
         text-align: left;
@@ -5648,7 +5650,7 @@ tp-caption.Team-Thumb,
         background: linear-gradient(to bottom, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0) 100%);
         /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
         
-        filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#d9000000', endColorstr='#00000000', GradientType=0);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#d9000000', endColorstr='#00000000', GradientType=0);
         /* IE6-9 */
     }
     #mc_embed_signup input[type="email"] {
