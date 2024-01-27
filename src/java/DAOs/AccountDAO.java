@@ -17,11 +17,11 @@ import java.util.logging.Logger;
  *
  * @author owner
  */
-public class AccountDBContext extends DBContext<Account> {
+public class AccountDAO extends DBContext {
 
     public Account getAccount(String UserName, String Password) {
         try {
-            String sql = "SELECT Account.Username, Account.Remember, Account.Status, Role.RoleID, Role.RoleName, Account.Email, Account.Avatar\n"
+            String sql = "SELECT Account.Username, Account.Status, Role.RoleID, Role.RoleName, Account.Email, Account.Avatar\n"
                     + "FROM Account INNER JOIN\n"
                     + "Role ON Account.UserID = Role.RoleID\n"
                     + "where Account.Username = ? AND Account.Password = ?";
@@ -35,7 +35,6 @@ public class AccountDBContext extends DBContext<Account> {
                 account.setEmail(rs.getString("Email"));
                 account.setAvatar(rs.getNString("Avatar"));
                 account.setStatus(rs.getBoolean("Status"));
-                account.setRemember(rs.getBoolean("Remember"));
 
                 Role role = new Role();
                 role.setRoleID(rs.getInt("RoleID"));
@@ -45,7 +44,7 @@ public class AccountDBContext extends DBContext<Account> {
                 return account;
             }
         } catch (SQLException ex) {
-            Logger.getLogger(AccountDBContext.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
@@ -60,41 +59,25 @@ public class AccountDBContext extends DBContext<Account> {
                 return true;
             }
         } catch (SQLException ex) {
-            Logger.getLogger(AccountDBContext.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
     }
 
-//    public Boolean registerUser(String username, String password, String fullname, String rollnumber) {
-//
-//        String sql = "INSERT INTO [dbo].[User]\n"
-//                + "           ([username]\n"
-//                + "           ,[password]\n"
-//                + "           ,[role_id]\n"
-//                + "           ,[status]\n"
-//                + "           ,[fullname]\n"
-//                + "           ,[rollnumber])\n"
-//                + "     VALUES (?,?,1,1,?,?)";
-//
-//        try {
-//            connection.setAutoCommit(false);
-//            PreparedStatement stm = connection.prepareCall(sql);
-//
-//            stm.setString(1, username);
-//            stm.setString(2, password);
-//            stm.setString(3, fullname);
-//            stm.setString(4, rollnumber);
-//
-//            if (stm.executeUpdate() > 0) {
-//                connection.commit();
-//                return true;
-//            }
-//        } catch (SQLException ex) {
-//            Logger.getLogger(AccountDBContext.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        return false;
-//    }
-//
+    public void resetPass(String password, String email) {
+        try {
+            String sql = "UPDATE [dbo].[Account]\n"
+                    + "   SET [Password] = ?\n"
+                    + " WHERE Email = ?";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setString(1, password);
+            stm.setString(2, email);
+            stm.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
 //    @Override
 //    public ArrayList<Account> list() {
 //
@@ -127,7 +110,7 @@ public class AccountDBContext extends DBContext<Account> {
 //
 //            return accounts;
 //        } catch (SQLException ex) {
-//            Logger.getLogger(AccountDBContext.class.getName()).log(Level.SEVERE, null, ex);
+//            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
 //        }
 //        return null;
 //    }
@@ -158,7 +141,7 @@ public class AccountDBContext extends DBContext<Account> {
 //                return true;
 //            }
 //        } catch (SQLException ex) {
-//            Logger.getLogger(AccountDBContext.class.getName()).log(Level.SEVERE, null, ex);
+//            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
 //        }
 //
 //        return false;

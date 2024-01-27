@@ -6,7 +6,7 @@ package Models;
 
 /**
  *
- * @author nghia
+ * @author owner
  */
 public class Account {
     private int UserID; 
@@ -16,12 +16,11 @@ public class Account {
     private String Password; 
     private String Avatar; 
     private boolean Status; 
-    private boolean Remember;
 
     public Account() {
     }
 
-    public Account(int UserID, String Username, Role role, String Email, String Password, String Avatar, boolean Status, boolean Remember) {
+    public Account(int UserID, String Username, Role role, String Email, String Password, String Avatar, boolean Status) {
         this.UserID = UserID;
         this.Username = Username;
         this.role = role;
@@ -29,7 +28,6 @@ public class Account {
         this.Password = Password;
         this.Avatar = Avatar;
         this.Status = Status;
-        this.Remember = Remember;
     }
 
     public int getUserID() {
@@ -88,12 +86,4 @@ public class Account {
         this.Status = Status;
     }
 
-    public boolean getRemember() {
-        return Remember;
-    }
-
-    public void setRemember(boolean Remember) {
-        this.Remember = Remember;
-    }
-    
 }

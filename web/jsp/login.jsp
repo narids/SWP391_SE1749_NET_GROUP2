@@ -44,17 +44,19 @@
         <![endif]-->
 
         <!-- All PLUGINS CSS ============================================= -->
-        <link rel="stylesheet" type="text/css" href="assets/css/assets.css">
+        <!--<link rel="stylesheet" type="text/css" href="assets/css/assets.css">-->
+        <link href="../assets/css/assets.css" rel="stylesheet" type="text/css"/>
 
         <!-- TYPOGRAPHY ============================================= -->
-        <link rel="stylesheet" type="text/css" href="assets/css/typography.css">
+        <link rel="stylesheet" type="text/css" href="../assets/css/typography.css">
 
         <!-- SHORTCODES ============================================= -->
-        <link rel="stylesheet" type="text/css" href="assets/css/shortcodes/shortcodes.css">
+        <link rel="stylesheet" type="text/css" href="../assets/css/shortcodes/shortcodes.css">
 
         <!-- STYLESHEETS ============================================= -->
-        <link rel="stylesheet" type="text/css" href="assets/css/style.css">
-        <link class="skin" rel="stylesheet" type="text/css" href="assets/css/color/color-1.css">
+        <!--<link rel="stylesheet" type="text/css" href="./assets/css/style.css">-->
+        <link href="../assets/css/style.css" rel="stylesheet" type="text/css"/>
+        <link class="skin" rel="stylesheet" type="text/css" href="../assets/css/color/color-1.css">
 
     </head>
     <body id="bg">
@@ -68,36 +70,36 @@
                     <div class="account-container">
                         <div class="heading-bx left">
                             <h2 class="title-head">Login to your <span>Account</span></h2>
-                            <p>Don't have an account? <a href="register.html">Create one here</a></p>
+                            <p>You don't have an account? <a href="register">Sign In</a></p>
                         </div>	
                         <form class="contact-bx" method="post" action="login">
                             <div class="row placeani">
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <div class="input-group">
-                                            <label>User Name</label>
-                                            <input name="username" value="${requestScope.username}" type="text" required="" class="form-control">
+                                            <input name="username" placeholder="Username" value="${requestScope.username}" type="text" required="" class="form-control">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <div class="input-group"> 
-                                            <label>Your Password</label>
-                                            <input name="password" value="${requestScope.password}" type="password" class="form-control" required="">
+                                            <input name="password" placeholder="Password" value="${requestScope.password}" type="password" class="form-control" required="">
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <p  style="color: ${messColor};">${mess}</p>
 
                                 <div class="col-lg-12">
                                     <div class="form-group form-forget">
                                         <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" value="${requestScope.remember}" class="custom-control-input" id="customControlAutosizing">
+                                            <input type="checkbox" name="remember"
+                                                   <c:if test="${remember == true}">checked="checked"</c:if>
+                                                   class="custom-control-input" id="customControlAutosizing">
                                             <label class="custom-control-label" for="customControlAutosizing">Remember me</label>
                                         </div>
-                                        <a href="forget-password.html" class="ml-auto">Forgot Password?</a>
+                                        <a href="forgot-password" class="ml-auto">Forgot Password?</a>
                                     </div>
                                 </div>
                                 <div class="col-lg-12 m-b30">
