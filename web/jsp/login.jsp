@@ -44,19 +44,19 @@
         <![endif]-->
 
         <!-- All PLUGINS CSS ============================================= -->
-        <!--<link rel="stylesheet" type="text/css" href="assets/css/assets.css">-->
+        <link rel="stylesheet" type="text/css" href="./assets/css/assets.css">
         <link href="../assets/css/assets.css" rel="stylesheet" type="text/css"/>
 
         <!-- TYPOGRAPHY ============================================= -->
-        <link rel="stylesheet" type="text/css" href="../assets/css/typography.css">
+        <link rel="stylesheet" type="text/css" href="./assets/css/typography.css">
 
         <!-- SHORTCODES ============================================= -->
-        <link rel="stylesheet" type="text/css" href="../assets/css/shortcodes/shortcodes.css">
+        <link rel="stylesheet" type="text/css" href="./assets/css/shortcodes/shortcodes.css">
 
         <!-- STYLESHEETS ============================================= -->
         <!--<link rel="stylesheet" type="text/css" href="./assets/css/style.css">-->
-        <link href="../assets/css/style.css" rel="stylesheet" type="text/css"/>
-        <link class="skin" rel="stylesheet" type="text/css" href="../assets/css/color/color-1.css">
+        <link href="./assets/css/style.css" rel="stylesheet" type="text/css"/>
+        <link class="skin" rel="stylesheet" type="text/css" href="./assets/css/color/color-1.css">
 
     </head>
     <body id="bg">

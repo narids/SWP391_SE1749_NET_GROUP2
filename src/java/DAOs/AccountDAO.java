@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  *
  * @author owner
  */
-public class AccountDAO extends DBContext {
+public class AccountDAO extends DBContext<BaseEntity> {
 
     public Account getAccount(String UserName, String Password) {
         try {
@@ -158,27 +158,29 @@ public class AccountDAO extends DBContext {
 //    }
 
     @Override
-    public ArrayList<Account> list() {
+    public ArrayList<BaseEntity> list() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public void insert(Account entity) {
+    public void insert(BaseEntity entity) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public void update(Account entity) {
+    public void update(BaseEntity entity) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public void delete(Account entity) {
+    public void delete(BaseEntity entity) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public Account get(Account entity) {
+    public BaseEntity get(BaseEntity entity) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+
+    
 }
