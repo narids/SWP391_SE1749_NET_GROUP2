@@ -15,6 +15,10 @@
         <servlet-name>ForgotPassword</servlet-name>
         <servlet-class>Controllers.Common.ForgotPassword</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ClassController</servlet-name>
+        <servlet-class>Controllers.Common.ClassController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/login</url-pattern>
@@ -27,6 +31,10 @@
         <servlet-name>HomeController</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>-->
+    <servlet-mapping>
+        <servlet-name>ClassController</servlet-name>
+        <url-pattern>/class</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>30</session-timeout>
     </session-config>

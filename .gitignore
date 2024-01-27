@@ -24,3 +24,4 @@ nbproject\project.properties
 nbproject\project.xml
 nbproject\ant-deploy.xml
 src\java\DAOs\DBContext.java
+nbproject/project.properties
