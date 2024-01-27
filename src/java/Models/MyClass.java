@@ -3,22 +3,24 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Models;
+import DAOs.BaseEntity;
 
 /**
  *
  * @author admin
  */
-public class Class {
+public class MyClass extends BaseEntity{
 
     private int classId;
     private String className;
 
-    public Class() {
+    public MyClass() {
     }
 
-    public Class(int classId, String className) {
+    public MyClass(int classId, String className, String name) {
         this.classId = classId;
         this.className = className;
+        this.name = name;
     }
 
     public int getClassID() {

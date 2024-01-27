@@ -9,5 +9,22 @@ package DAOs;
  * @author admin
  */
 public abstract class BaseEntity {
+    public String name;
+
+    public BaseEntity() {
+    }
+
+    public BaseEntity(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    
     
 }
