@@ -8,7 +8,7 @@ import DAOs.BaseEntity;
 
 /**
  *
- * @author nghia
+ * @author owner
  */
 public class Account extends BaseEntity {
 

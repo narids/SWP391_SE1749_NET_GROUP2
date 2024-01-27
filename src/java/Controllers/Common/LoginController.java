@@ -4,7 +4,7 @@
  */
 package Controllers.Common;
 
-import DAOs.AccountDBContext;
+import DAOs.AccountDAO;
 import Models.Account;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.Cookie;
 
 /**
  *
@@ -44,6 +45,7 @@ public class LoginController extends HttpServlet {
             out.println("</body>");
             out.println("</html>");
         }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -58,8 +60,29 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("jsp/login.jsp").forward(request, response);
+        Cookie[] cookies = request.getCookies();
+        String username = "";
+        String password = "";
 
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("username")) {
+                    username = cookie.getValue();
+                } else if (cookie.getName().equals("password")) {
+                    password = cookie.getValue();
+                }
+            }
+        }
+
+        if (username.isEmpty() && password.isEmpty()) {
+            request.setAttribute("remember", false);
+        } else {
+            request.setAttribute("username", username);
+            request.setAttribute("password", password);
+            request.setAttribute("remember", true);
+        }
+
+        request.getRequestDispatcher("jsp/login.jsp").forward(request, response);
     }
 
     /**
@@ -73,21 +96,59 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        //lấy thông tin từ form
         String UserName = request.getParameter("username");
         String Password = request.getParameter("password");
+        String Remember = request.getParameter("remember");
 
-        AccountDBContext adb = new AccountDBContext();
+        AccountDAO adb = new AccountDAO();
         Account account = adb.getAccount(UserName, Password);
 
         if (account == null) {
+            request.setAttribute("username", UserName);
+            request.setAttribute("password", Password);
+
             request.setAttribute("messColor", "red");
-            request.setAttribute("mess", "Wrong username or password");
+            request.setAttribute("mess", "Username or password not correct. Please try again!");
+
             request.getRequestDispatcher("jsp/login.jsp").forward(request, response);
+
         } else if (!account.getStatus()) {
+            request.setAttribute("username", UserName);
+            request.setAttribute("password", Password);
+
             request.setAttribute("messColor", "red");
-            request.setAttribute("mess", "Account not active, contact to Admin");
+            request.setAttribute("mess", "Your account is inactive. Please contact Admin!");
+
             request.getRequestDispatcher("jsp/login.jsp").forward(request, response);
+
         } else {
+            //save thông tin đăng nhập vào cookies nếu người dùng chọn "Remember"
+            if (Remember != null) {
+
+                Cookie usernameCookie = new Cookie("username", UserName);
+                Cookie passwordCookie = new Cookie("password", Password);
+
+                //đặt thời gian cho cookies là 30 ngày
+                int cookieMaxAge = 30 * 24 * 60 * 60;
+                usernameCookie.setMaxAge(cookieMaxAge);
+                passwordCookie.setMaxAge(cookieMaxAge);
+
+                response.addCookie(usernameCookie);
+                response.addCookie(passwordCookie);
+            } else {
+                //user không chọn "Remember", hủy cookies nếu có
+                Cookie[] cookies = request.getCookies();
+                if (cookies != null) {
+                    for (Cookie cookie : cookies) {
+                        if (cookie.getName().equals("username") || cookie.getName().equals("password")) {
+                            cookie.setMaxAge(0); //hủy cookie
+                            response.addCookie(cookie);
+                        }
+                    }
+                }
+            }
+
             HttpSession session = request.getSession();
             session.setAttribute("account", account);
 
@@ -102,6 +163,7 @@ public class LoginController extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
+
         return "Short description";
     }// </editor-fold>
 

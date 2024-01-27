@@ -1,14 +1,12 @@
 <%-- 
-    Document   : login
-    Created on : Jan 20, 2024, 1:06:03 PM
-    Author     : owner
+    Document   : forgetpassword
+    Created on : Jan 13, 2024, 12:09:56 AM
+    Author     : tudo7
 --%>
 
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
-
 
     <head>
 
@@ -44,23 +42,27 @@
         <![endif]-->
 
         <!-- All PLUGINS CSS ============================================= -->
-        <!--<link rel="stylesheet" type="text/css" href="assets/css/assets.css">-->
-        <link href="../assets/css/assets.css" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" type="text/css" href="assets/css/assets.css">
 
         <!-- TYPOGRAPHY ============================================= -->
-        <link rel="stylesheet" type="text/css" href="../assets/css/typography.css">
+        <link rel="stylesheet" type="text/css" href="assets/css/typography.css">
 
         <!-- SHORTCODES ============================================= -->
-        <link rel="stylesheet" type="text/css" href="../assets/css/shortcodes/shortcodes.css">
+        <link rel="stylesheet" type="text/css" href="assets/css/shortcodes/shortcodes.css">
 
         <!-- STYLESHEETS ============================================= -->
-        <!--<link rel="stylesheet" type="text/css" href="./assets/css/style.css">-->
-        <link href="../assets/css/style.css" rel="stylesheet" type="text/css"/>
-        <link class="skin" rel="stylesheet" type="text/css" href="../assets/css/color/color-1.css">
+        <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+        <link class="skin" rel="stylesheet" type="text/css" href="assets/css/color/color-1.css">
+        <link rel="stylesheet" type="text/css" href="assets/css/snackbar.css">
+        <link rel="stylesheet" type="text/css" href="assets/css/successtoast.css">
 
     </head>
     <body id="bg">
         <div class="page-wraper">
+            
+        <div id="failtoast">Sorry!</div>
+        <div id="sucesstoast">Confirm successful! Redirecting...</div>
+        
             <div id="loading-icon-bx"></div>
             <div class="account-form">
                 <div class="account-head" style="background-image:url(assets/images/background/bg2.jpg);">
@@ -69,48 +71,25 @@
                 <div class="account-form-inner">
                     <div class="account-container">
                         <div class="heading-bx left">
-                            <h2 class="title-head">Login to your <span>Account</span></h2>
-                            <p>You don't have an account? <a href="register">Sign In</a></p>
+                            <h2 class="title-head">Forget <span>Password</span></h2>
+                            <p>Login Your Account <a href="login">Click here</a></p>
                         </div>	
-                        <form class="contact-bx" method="post" action="login">
+                        <form id="changeForm" class="contact-bx" action="forgot-password" method="post">
+                            <input type="hidden" name="action" value="verifyforgot">
                             <div class="row placeani">
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <div class="input-group">
-                                            <input name="username" placeholder="Username" value="${requestScope.username}" type="text" required="" class="form-control">
+                                            <label>Your Email Address</label>
+                                            <input name="email" type="email" required="" class="form-control">
+                                            <div class="invalid-feedback">
+                                                Please enter a valid email.
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <div class="input-group"> 
-                                            <input name="password" placeholder="Password" value="${requestScope.password}" type="password" class="form-control" required="">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <p  style="color: ${messColor};">${mess}</p>
-
-                                <div class="col-lg-12">
-                                    <div class="form-group form-forget">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" name="remember"
-                                                   <c:if test="${remember == true}">checked="checked"</c:if>
-                                                   class="custom-control-input" id="customControlAutosizing">
-                                            <label class="custom-control-label" for="customControlAutosizing">Remember me</label>
-                                        </div>
-                                        <a href="forgot-password" class="ml-auto">Forgot Password?</a>
                                     </div>
                                 </div>
                                 <div class="col-lg-12 m-b30">
-                                    <button name="submit" type="submit" value="Submit" class="btn button-md">Login</button>
-                                </div>
-                                <div class="col-lg-12">
-                                    <h6>Login with Social media</h6>
-                                    <div class="d-flex">
-                                        <a class="btn flex-fill m-r5 facebook" href="#"><i class="fa fa-facebook"></i>Facebook</a>
-                                        <a class="btn flex-fill m-l5 google-plus" href="#"><i class="fa fa-google-plus"></i>Google Plus</a>
-                                    </div>
+                                    <button action="verifyforgot" type="submit" class="btn button-md">Send</button>
                                 </div>
                             </div>
                         </form>
@@ -134,6 +113,7 @@
         <script src="assets/js/functions.js"></script>
         <script src="assets/js/contact.js"></script>
         <script src='assets/vendors/switcher/switcher.js'></script>
+        
     </body>
 
 </html>

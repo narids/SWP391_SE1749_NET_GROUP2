@@ -1,12 +1,12 @@
 <%-- 
     Document   : login
-    Created on : Jan 20, 2024, 1:06:03 PM
-    Author     : owner
+    Created on : Jan 13, 2024, 12:05:38 AM
+    Author     : tudo7
 --%>
 
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+
 <html lang="en">
 
 
@@ -44,23 +44,25 @@
         <![endif]-->
 
         <!-- All PLUGINS CSS ============================================= -->
-        <!--<link rel="stylesheet" type="text/css" href="assets/css/assets.css">-->
-        <link href="../assets/css/assets.css" rel="stylesheet" type="text/css"/>
+        <link rel="stylesheet" type="text/css" href="assets/css/assets.css">
 
         <!-- TYPOGRAPHY ============================================= -->
-        <link rel="stylesheet" type="text/css" href="../assets/css/typography.css">
+        <link rel="stylesheet" type="text/css" href="assets/css/typography.css">
 
         <!-- SHORTCODES ============================================= -->
-        <link rel="stylesheet" type="text/css" href="../assets/css/shortcodes/shortcodes.css">
+        <link rel="stylesheet" type="text/css" href="assets/css/shortcodes/shortcodes.css">
 
         <!-- STYLESHEETS ============================================= -->
-        <!--<link rel="stylesheet" type="text/css" href="./assets/css/style.css">-->
-        <link href="../assets/css/style.css" rel="stylesheet" type="text/css"/>
-        <link class="skin" rel="stylesheet" type="text/css" href="../assets/css/color/color-1.css">
+        <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+        <link class="skin" rel="stylesheet" type="text/css" href="assets/css/color/color-1.css">
+        <link rel="stylesheet" type="text/css" href="assets/css/snackbar.css">
+        <link rel="stylesheet" type="text/css" href="assets/css/successtoast.css">
 
     </head>
     <body id="bg">
         <div class="page-wraper">
+<!--            <div id="failtoast">Fail to reset! check your password</div>
+            <div id="sucesstoast">Reset successful! Redirecting...</div>-->
             <div id="loading-icon-bx"></div>
             <div class="account-form">
                 <div class="account-head" style="background-image:url(assets/images/background/bg2.jpg);">
@@ -69,50 +71,54 @@
                 <div class="account-form-inner">
                     <div class="account-container">
                         <div class="heading-bx left">
-                            <h2 class="title-head">Login to your <span>Account</span></h2>
-                            <p>You don't have an account? <a href="register">Sign In</a></p>
+                            <h2 class="title-head">Reset your <span>Account</span></h2>
+                            <p>Have an account? <a href="login">Login</a></p>
                         </div>	
-                        <form class="contact-bx" method="post" action="login">
+                        <form id="resetForm" class="contact-bx" action="forgot-password" method="post">
+                            <input type="hidden"  name="action" value="changepassword">
+                            <div><b>${mess}</b></div>
+
                             <div class="row placeani">
                                 <div class="col-lg-12">
                                     <div class="form-group">
-                                        <div class="input-group">
-                                            <input name="username" placeholder="Username" value="${requestScope.username}" type="text" required="" class="form-control">
+                                        <div class="input-group"> 
+                                            <label>Password:</label>
+                                             <input name="password" type="password" required="" class="form-control" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$">
+                                             <div class="invalid-feedback">
+                                                Please enter a valid password.
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <div class="input-group"> 
-                                            <input name="password" placeholder="Password" value="${requestScope.password}" type="password" class="form-control" required="">
+                                            <label>Repeat password:</label>
+                                            <input  type="password" class="form-control" required="" name="repassword">
                                         </div>
                                     </div>
                                 </div>
-
-                                <p  style="color: ${messColor};">${mess}</p>
-
-                                <div class="col-lg-12">
+<!--                                <div class="col-lg-12">
                                     <div class="form-group form-forget">
                                         <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" name="remember"
-                                                   <c:if test="${remember == true}">checked="checked"</c:if>
-                                                   class="custom-control-input" id="customControlAutosizing">
+                                            <input type="checkbox" class="custom-control-input" id="customControlAutosizing">
                                             <label class="custom-control-label" for="customControlAutosizing">Remember me</label>
                                         </div>
-                                        <a href="forgot-password" class="ml-auto">Forgot Password?</a>
+
                                     </div>
-                                </div>
+                                </div>-->
                                 <div class="col-lg-12 m-b30">
-                                    <button name="submit" type="submit" value="Submit" class="btn button-md">Login</button>
+                                    <button  type="submit" class="btn button-md">save</button>
                                 </div>
-                                <div class="col-lg-12">
+<!--                                <div class="col-lg-12">
                                     <h6>Login with Social media</h6>
                                     <div class="d-flex">
                                         <a class="btn flex-fill m-r5 facebook" href="#"><i class="fa fa-facebook"></i>Facebook</a>
                                         <a class="btn flex-fill m-l5 google-plus" href="#"><i class="fa fa-google-plus"></i>Google Plus</a>
                                     </div>
-                                </div>
+                                </div>-->
                             </div>
+
                         </form>
                     </div>
                 </div>
@@ -134,6 +140,41 @@
         <script src="assets/js/functions.js"></script>
         <script src="assets/js/contact.js"></script>
         <script src='assets/vendors/switcher/switcher.js'></script>
+        <script>
+             $("#resetForm").submit(function (event) {
+        event.preventDefault(); // Prevent the default form submission
+        var formData = $(this).serialize();
+        $.ajax({
+            type: "GET",
+            url: "usercontroller?action=changepassword", // Use the URL of your AddUserServlet
+            data: formData,
+            success: function (response) {
+                if (response.trim() === 'fail') {
+                    // SHOW SUCCESS TOAST BY JS
+                     var errorToast = document.getElementById("failtoast");
+                    errorToast.style.backgroundColor = "#ff5733"; // Replace with the desired color code
+                    errorToast.className = "show";
+
+                    // After 3 seconds, remove the show class from DIV
+                    setTimeout(function () {
+                        errorToast.className = errorToast.className.replace("show", "");
+                    }, 1000);
+                } else {
+                 var successToast = document.getElementById("sucesstoast");
+                successToast.style.backgroundColor = "#00ff7f"; // Replace with the desired color code
+                successToast.className = "show";
+
+                // After 3 seconds, remove the show class from DIV and redirect
+                setTimeout(function () {
+                    successToast.className = successToast.className.replace("show", "");
+                    window.location.href = "login.jsp";
+                }, 2000);
+                   
+                }
+            }
+        });
+    });
+        </script>
     </body>
 
 </html>
