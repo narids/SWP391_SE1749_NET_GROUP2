@@ -57,10 +57,13 @@
         <!--<link rel="stylesheet" type="text/css" href="./assets/css/style.css">-->
         <link href="./assets/css/style.css" rel="stylesheet" type="text/css"/>
         <link class="skin" rel="stylesheet" type="text/css" href="./assets/css/color/color-1.css">
-
+        <link href="./assets/css/login.css" rel="stylesheet" type="text/css"/>
     </head>
     <body id="bg">
         <div class="page-wraper">
+            
+            <div id="toast">Login successfully!</div>
+            
             <div id="loading-icon-bx"></div>
             <div class="account-form">
                 <div class="account-head" style="background-image:url(assets/images/background/bg2.jpg);">
@@ -70,9 +73,9 @@
                     <div class="account-container">
                         <div class="heading-bx left">
                             <h2 class="title-head">Login to your <span>Account</span></h2>
-                            <p>You don't have an account? <a href="register">Sign In</a></p>
+                            <p>You don't have an account? <a href="register">Sign Up</a></p>
                         </div>	
-                        <form class="contact-bx" method="post" action="login">
+                        <form class="contact-bx" id="loginForm" method="post" action="login">
                             <div class="row placeani">
                                 <div class="col-lg-12">
                                     <div class="form-group">
@@ -84,7 +87,8 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <div class="input-group"> 
-                                            <input name="password" placeholder="Password" value="${requestScope.password}" type="password" class="form-control" required="">
+                                            <input name="password" id="password" placeholder="Password" value="${requestScope.password}" type="password" class="form-control" required="">
+                                            <span class="toggle-password" id="togglePassword">&#x1F441;</span>
                                         </div>
                                     </div>
                                 </div>
@@ -105,13 +109,7 @@
                                 <div class="col-lg-12 m-b30">
                                     <button name="submit" type="submit" value="Submit" class="btn button-md">Login</button>
                                 </div>
-                                <div class="col-lg-12">
-                                    <h6>Login with Social media</h6>
-                                    <div class="d-flex">
-                                        <a class="btn flex-fill m-r5 facebook" href="#"><i class="fa fa-facebook"></i>Facebook</a>
-                                        <a class="btn flex-fill m-l5 google-plus" href="#"><i class="fa fa-google-plus"></i>Google Plus</a>
-                                    </div>
-                                </div>
+                                
                             </div>
                         </form>
                     </div>
@@ -134,6 +132,8 @@
         <script src="assets/js/functions.js"></script>
         <script src="assets/js/contact.js"></script>
         <script src='assets/vendors/switcher/switcher.js'></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="./assets/js/login.js"></script>
     </body>
 
 </html>

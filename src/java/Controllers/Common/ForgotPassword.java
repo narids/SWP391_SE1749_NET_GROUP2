@@ -79,25 +79,37 @@ public class ForgotPassword extends HttpServlet {
         String action = request.getParameter("action");
         HttpSession session = request.getSession();
         AccountDAO accDAO = new AccountDAO();
-        SendEmail ems = new SendEmail();
 
         if (action != null) {
             switch (action) {
                 case "verifyforgot":
                     String vem = request.getParameter("email");
-                    String vecode = String.valueOf((int) ((Math.random() * (999999 - 100000)) + 100000));
-                    long currentTime = System.currentTimeMillis();
 
-                    try {
-                        ems.sendEmail(vem, vecode);
-                    } catch (MessagingException ex) {
-                        Logger.getLogger(ForgotPassword.class.getName()).log(Level.SEVERE, null, ex);
+                    if (!accDAO.checkExistedEmail(vem)) {
+                        session.setAttribute("email", vem);
+                        request.setAttribute("mess", "Email not existed, please register.");
+                        request.setAttribute("messColor", "red");
+                        request.getRequestDispatcher("jsp/forgot-password.jsp").forward(request, response);
+
+                    } else {
+                        String vecode = String.valueOf((int) ((Math.random() * (999999 - 100000)) + 100000));
+                        long currentTime = System.currentTimeMillis();
+
+                        try {
+                            SendEmail.sendEmail(vem, vecode);
+
+                            session.setAttribute("email", vem);
+                            session.setAttribute("vecode", vecode);
+                            session.setAttribute("verificationTime", currentTime);
+                            request.getRequestDispatcher("jsp/verifyforgot.jsp").forward(request, response);
+
+                        } catch (MessagingException ex) {
+                            session.setAttribute("email", vem);
+                            request.setAttribute("mess", "Send email failed.");
+                            request.setAttribute("messColor", "red");
+                            request.getRequestDispatcher("jsp/forgot-password.jsp").forward(request, response);
+                        }
                     }
-
-                    session.setAttribute("email", vem);
-                    session.setAttribute("vecode", vecode);
-                    session.setAttribute("verificationTime", currentTime);
-                    request.getRequestDispatcher("jsp/verifyforgot.jsp").forward(request, response);
 
                     break;
                 case "fverify":
@@ -115,19 +127,24 @@ public class ForgotPassword extends HttpServlet {
 
                             if (elapsedTime <= 60) {
                                 request.setAttribute("mess", "Verification correct code, let change password");
+                                request.setAttribute("messColor", "green");
                                 request.getRequestDispatcher("jsp/resetpass.jsp").forward(request, response);
                             } else {
                                 request.setAttribute("codeInput", fcode);
                                 request.setAttribute("mess", "Verification code has expired.");
+                                request.setAttribute("messColor", "red");
                                 request.getRequestDispatcher("jsp/verifyforgot.jsp").forward(request, response);
                             }
                         } else {
                             request.setAttribute("codeInput", fcode);
+
                             request.setAttribute("mess", "Invalid verification code.");
+                            request.setAttribute("messColor", "red");
                             request.getRequestDispatcher("jsp/verifyforgot.jsp").forward(request, response);
                         }
                     } catch (Exception e) {
                         request.setAttribute("mess", "Verification code has expired.");
+                        request.setAttribute("messColor", "red");
                         request.getRequestDispatcher("jsp/verifyforgot.jsp").forward(request, response);
                     }
 
@@ -135,23 +152,22 @@ public class ForgotPassword extends HttpServlet {
                 case "changepassword":
                     String cmail = (String) session.getAttribute("email");
                     String cpass = request.getParameter("password");
-                    String crpass = request.getParameter("repassword");
 
-                    if (cpass.equalsIgnoreCase(crpass)) {
-//                        try (PrintWriter out = response.getWriter()) {
-//                            out.print("success");
-//                        }
+                    if (!cmail.equals("null")) {
                         accDAO.resetPass(cpass, cmail);
-                        request.setAttribute("mess", "Reset password successfully");
-                        request.getRequestDispatcher("jsp/login.jsp").forward(request, response);
+                        
+                        try (PrintWriter out = response.getWriter()) {
+                            out.print("success");
+                        }
 
                     } else {
-//                        try (PrintWriter out = response.getWriter()) {
-//                            out.print("fail");
-//                        }
+                        try (PrintWriter out = response.getWriter()) {
+                            out.print("failed");
+                        }
                     }
 
                     break;
+
             }
         }
     }

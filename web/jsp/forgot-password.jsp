@@ -59,10 +59,9 @@
     </head>
     <body id="bg">
         <div class="page-wraper">
-            
-        <div id="failtoast">Sorry!</div>
-        <div id="sucesstoast">Confirm successful! Redirecting...</div>
-        
+
+            <div id="toast"></div>
+
             <div id="loading-icon-bx"></div>
             <div class="account-form">
                 <div class="account-head" style="background-image:url(assets/images/background/bg2.jpg);">
@@ -71,7 +70,7 @@
                 <div class="account-form-inner">
                     <div class="account-container">
                         <div class="heading-bx left">
-                            <h2 class="title-head">Forget <span>Password</span></h2>
+                            <h2 class="title-head">Forgot <span>Password</span></h2>
                             <p>Login Your Account <a href="login">Click here</a></p>
                         </div>	
                         <form id="changeForm" class="contact-bx" action="forgot-password" method="post">
@@ -88,8 +87,11 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <p  style="color: ${messColor};">${mess}</p>
+
                                 <div class="col-lg-12 m-b30">
-                                    <button action="verifyforgot" type="submit" class="btn button-md">Send</button>
+                                    <button action="verifyforgot" type="submit" id="submitForgot" class="btn button-md">Send</button>
                                 </div>
                             </div>
                         </form>
@@ -113,7 +115,7 @@
         <script src="assets/js/functions.js"></script>
         <script src="assets/js/contact.js"></script>
         <script src='assets/vendors/switcher/switcher.js'></script>
-        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     </body>
 
 </html>

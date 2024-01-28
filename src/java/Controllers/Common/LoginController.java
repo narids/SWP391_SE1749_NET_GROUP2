@@ -105,22 +105,14 @@ public class LoginController extends HttpServlet {
         Account account = adb.getAccount(UserName, Password);
 
         if (account == null) {
-            request.setAttribute("username", UserName);
-            request.setAttribute("password", Password);
-
-            request.setAttribute("messColor", "red");
-            request.setAttribute("mess", "Username or password not correct. Please try again!");
-
-            request.getRequestDispatcher("jsp/login.jsp").forward(request, response);
+            try (PrintWriter out = response.getWriter()) {
+                out.print("notCorrect");
+            }
 
         } else if (!account.getStatus()) {
-            request.setAttribute("username", UserName);
-            request.setAttribute("password", Password);
-
-            request.setAttribute("messColor", "red");
-            request.setAttribute("mess", "Your account is inactive. Please contact Admin!");
-
-            request.getRequestDispatcher("jsp/login.jsp").forward(request, response);
+            try (PrintWriter out = response.getWriter()) {
+                out.print("inActive");
+            }
 
         } else {
             //save thông tin đăng nhập vào cookies nếu người dùng chọn "Remember"
@@ -152,7 +144,9 @@ public class LoginController extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("account", account);
 
-            response.sendRedirect("/SWP391_SE1749_NET_GROUP2");
+            try (PrintWriter out = response.getWriter()) {
+                out.print("success");
+            }
         }
     }
 

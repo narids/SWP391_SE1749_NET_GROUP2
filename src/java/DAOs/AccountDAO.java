@@ -21,10 +21,10 @@ public class AccountDAO extends DBContext<BaseEntity> {
 
     public Account getAccount(String UserName, String Password) {
         try {
-            String sql = "SELECT Account.Username, Account.Status, Role.RoleID, Role.RoleName, Account.Email, Account.Avatar\n"
+            String sql = "SELECT Account.UserID, Account.Username, Account.Email, Account.Avatar, Account.Status, Role.RoleID, Role.RoleName\n"
                     + "FROM Account INNER JOIN\n"
-                    + "Role ON Account.UserID = Role.RoleID\n"
-                    + "where Account.Username = ? AND Account.Password = ?";
+                    + "Role ON Account.RoleID = Role.RoleID\n"
+                    + "where Account.Username = ? and Account.Password = ?";
             PreparedStatement stm = connection.prepareStatement(sql);
             stm.setString(1, UserName);
             stm.setString(2, Password);
@@ -33,7 +33,7 @@ public class AccountDAO extends DBContext<BaseEntity> {
                 Account account = new Account();
                 account.setUsername(rs.getString("Username"));
                 account.setEmail(rs.getString("Email"));
-                account.setAvatar(rs.getNString("Avatar"));
+                account.setAvatar(rs.getString("Avatar") != null ? rs.getString("Avatar") : "");
                 account.setStatus(rs.getBoolean("Status"));
 
                 Role role = new Role();
@@ -54,6 +54,21 @@ public class AccountDAO extends DBContext<BaseEntity> {
         try {
             PreparedStatement stm = connection.prepareStatement(sql);
             stm.setString(1, userName);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    
+    public Boolean checkExistedEmail(String email) {
+        String sql = "SELECT * FROM Account where Email = ?";
+        try {
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setString(1, email);
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
                 return true;
@@ -156,7 +171,6 @@ public class AccountDAO extends DBContext<BaseEntity> {
 //    public void delete(Account model) {
 //        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
 //    }
-
     @Override
     public ArrayList<BaseEntity> list() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
@@ -182,5 +196,4 @@ public class AccountDAO extends DBContext<BaseEntity> {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    
 }
