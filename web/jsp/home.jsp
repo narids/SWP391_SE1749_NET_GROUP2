@@ -3,6 +3,7 @@
     Created on : Jan 20, 2024, 12:54:25 PM
     Author     : owner
 --%>
+<jsp:useBean id="qdao" class="DAOs.QuizDAO" scope="request"></jsp:useBean>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -77,14 +78,9 @@
                             </div>
                             <div class="topbar-right">
                                 <ul>
-                                    <li>
-                                        <select class="header-lang-bx">
-                                            <option data-icon="flag flag-uk">English UK</option>
-                                            <option data-icon="flag flag-us">English US</option>
-                                        </select>
-                                    </li>
+                                    
                                     <li><a href="login">Login</a></li>
-                                    <li><a href="register.html">Register</a></li>
+                                    <li><a href="register">Register</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -95,7 +91,7 @@
                         <div class="container clearfix">
                             <!-- Header Logo ==== -->
                             <div class="menu-logo">
-                                <a href="index.html"><img src="assets/images/logo.png" alt=""></a>
+                                <a href="home"><img src="assets/images/logo.png" alt=""></a>
                             </div>
                             <!-- Mobile Nav Button ==== -->
                             <button class="navbar-toggler collapsed menuicon justify-content-end" type="button" data-toggle="collapse" data-target="#menuDropdown" aria-controls="menuDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -107,9 +103,6 @@
                             <div class="secondary-menu">
                                 <div class="secondary-inner">
                                     <ul>
-                                        <li><a href="javascript:;" class="btn-link"><i class="fa fa-facebook"></i></a></li>
-                                        <li><a href="javascript:;" class="btn-link"><i class="fa fa-google-plus"></i></a></li>
-                                        <li><a href="javascript:;" class="btn-link"><i class="fa fa-linkedin"></i></a></li>
                                         <!-- Search Button ==== -->
                                         <li class="search-btn"><button id="quik-search-btn" type="button" class="btn-link"><i class="fa fa-search"></i></button></li>
                                     </ul>
@@ -117,8 +110,10 @@
                             </div>
                             <!-- Search Box ==== -->
                             <div class="nav-search-bar">
-                                <form action="#">
-                                    <input name="search" value="" type="text" class="form-control" placeholder="Type to search">
+                                <form action="quiz-search">
+                                    <input type="hidden" value="${requestScope.pageSaved}" name="page">
+                                    <input type="hidden" value="${requestScope.typeSaved}" name="type">
+                                    <input name="keyword" value="" type="text" class="form-control" placeholder="Type to search">
                                     <span><i class="ti-search"></i></span>
                                 </form>
                                 <span id="search-remove"><i class="ti-close"></i></span>
@@ -126,103 +121,14 @@
                             <!-- Navigation Menu ==== -->
                             <div class="menu-links navbar-collapse collapse justify-content-start" id="menuDropdown">
                                 <div class="menu-logo">
-                                    <a href="index.html"><img src="assets/images/logo.png" alt=""></a>
+                                    <a href="home"><img src="assets/images/logo.png" alt=""></a>
                                 </div>
                                 <ul class="nav navbar-nav">	
-                                    <li class="active"><a href="javascript:;">Home <i class="fa fa-chevron-down"></i></a>
-                                        <ul class="sub-menu">
-                                            <li><a href="index.html">Home 1</a></li>
-                                            <li><a href="index-2.html">Home 2</a></li>
-                                        </ul>
+                                    <li class="active"><a href="javascript:;">Home</a>
                                     </li>
-                                    <li><a href="javascript:;">Pages <i class="fa fa-chevron-down"></i></a>
-                                        <ul class="sub-menu">
-                                            <li><a href="javascript:;">About<i class="fa fa-angle-right"></i></a>
-                                                <ul class="sub-menu">
-                                                    <li><a href="about-1.html">About 1</a></li>
-                                                    <li><a href="about-2.html">About 2</a></li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="javascript:;">Event<i class="fa fa-angle-right"></i></a>
-                                                <ul class="sub-menu">
-                                                    <li><a href="event.html">Event</a></li>
-                                                    <li><a href="events-details.html">Events Details</a></li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="javascript:;">FAQ's<i class="fa fa-angle-right"></i></a>
-                                                <ul class="sub-menu">
-                                                    <li><a href="faq-1.html">FAQ's 1</a></li>
-                                                    <li><a href="faq-2.html">FAQ's 2</a></li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="javascript:;">Contact Us<i class="fa fa-angle-right"></i></a>
-                                                <ul class="sub-menu">
-                                                    <li><a href="contact-1.html">Contact Us 1</a></li>
-                                                    <li><a href="contact-2.html">Contact Us 2</a></li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="portfolio.html">Portfolio</a></li>
-                                            <li><a href="profile.html">Profile</a></li>
-                                            <li><a href="membership.html">Membership</a></li>
-                                            <li><a href="error-404.html">404 Page</a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="add-mega-menu"><a href="javascript:;">Our Courses <i class="fa fa-chevron-down"></i></a>
-                                        <ul class="sub-menu add-menu">
-                                            <li class="add-menu-left">
-                                                <h5 class="menu-adv-title">Our Courses</h5>
-                                                <ul>
-                                                    <li><a href="courses.html">Courses </a></li>
-                                                    <li><a href="courses-details.html">Courses Details</a></li>
-                                                    <li><a href="profile.html">Instructor Profile</a></li>
-                                                    <li><a href="event.html">Upcoming Event</a></li>
-                                                    <li><a href="membership.html">Membership</a></li>
-                                                </ul>
-                                            </li>
-                                            <li class="add-menu-right">
-                                                <img src="assets/images/adv/adv.jpg" alt=""/>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="javascript:;">Blog <i class="fa fa-chevron-down"></i></a>
-                                        <ul class="sub-menu">
-                                            <li><a href="blog-classic-grid.html">Blog Classic</a></li>
-                                            <li><a href="blog-classic-sidebar.html">Blog Classic Sidebar</a></li>
-                                            <li><a href="blog-list-sidebar.html">Blog List Sidebar</a></li>
-                                            <li><a href="blog-standard-sidebar.html">Blog Standard Sidebar</a></li>
-                                            <li><a href="blog-details.html">Blog Details</a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="nav-dashboard"><a href="javascript:;">Dashboard <i class="fa fa-chevron-down"></i></a>
-                                        <ul class="sub-menu">
-                                            <li><a href="admin/index.html">Dashboard</a></li>
-                                            <li><a href="admin/add-listing.html">Add Listing</a></li>
-                                            <li><a href="admin/bookmark.html">Bookmark</a></li>
-                                            <li><a href="admin/courses.html">Courses</a></li>
-                                            <li><a href="admin/review.html">Review</a></li>
-                                            <li><a href="admin/teacher-profile.html">Teacher Profile</a></li>
-                                            <li><a href="admin/user-profile.html">User Profile</a></li>
-                                            <li><a href="javascript:;">Calendar<i class="fa fa-angle-right"></i></a>
-                                                <ul class="sub-menu">
-                                                    <li><a href="admin/basic-calendar.html">Basic Calendar</a></li>
-                                                    <li><a href="admin/list-view-calendar.html">List View Calendar</a></li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="javascript:;">Mailbox<i class="fa fa-angle-right"></i></a>
-                                                <ul class="sub-menu">
-                                                    <li><a href="admin/mailbox.html">Mailbox</a></li>
-                                                    <li><a href="admin/mailbox-compose.html">Compose</a></li>
-                                                    <li><a href="admin/mailbox-read.html">Mail Read</a></li>
-                                                </ul>
-                                            </li>
-                                        </ul>
+                                    <li class=""><a href="catalog">Your library</a>
                                     </li>
                                 </ul>
-                                <div class="nav-social-link">
-                                    <a href="javascript:;"><i class="fa fa-facebook"></i></a>
-                                    <a href="javascript:;"><i class="fa fa-google-plus"></i></a>
-                                    <a href="javascript:;"><i class="fa fa-linkedin"></i></a>
-                                </div>
                             </div>
                             <!-- Navigation Menu END ==== -->
                         </div>
@@ -239,9 +145,9 @@
                             <div class="col-md-12 text-center text-white">
                                 <h2>Online Quizzes To Study</h2>
                                 <h5>94% of students who use Test helps them get better grades</h5>
-                                <form class="cours-search">
+                                <form class="cours-search" action="quiz-search">
                                     <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="What do you want to learn today?	">
+                                        <input type="text" name="keyword" class="form-control" placeholder="What do you want to learn today?	">
                                         <div class="input-group-append">
                                             <button class="btn" type="submit">Search</button> 
                                         </div>
@@ -292,11 +198,11 @@
                             </div>
                             <div class="row">
                                 <div class="courses-carousel owl-carousel owl-btn-1 col-12 p-lr0">
-                                    <c:forEach items="${requestScope.quizzes}" var="q" >
+                                    <c:forEach items="${qdao.quizForGuest}" var="q" >
                                         <div class="item">
                                             <div class="cours-bx">
                                                 <div class="action-box">
-                                                    <img src="assets/images/courses/pic1.jpg" alt="">
+                                                    <img src="https://media.istockphoto.com/id/1322647265/video/quiz-time-for-web-design-quiz-symbol-poster-banner-animated.jpg?s=640x640&k=20&c=S4_3WlgD8Nw3crK3KSAlzXDP1lwW9EzXrg7fmobEjoo=" alt="">
                                                     <div class="info-bx text-center">
                                                         <h5>
                                                             <button 
@@ -617,7 +523,7 @@
             <button class="back-to-top fa fa-chevron-up" ></button>
         </div>
         <!-- TakeQuiz Modal -->
-        <c:forEach items="${requestScope.quizzes}" var="q">
+        <c:forEach items="${qdao.quizForGuest}" var="q">
             <jsp:include page="../assets/components/take-quiz-modal.jsp">
                 <jsp:param name="quizId" value="${q.quizId}"></jsp:param>
             </jsp:include>
