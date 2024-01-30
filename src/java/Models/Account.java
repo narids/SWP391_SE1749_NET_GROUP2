@@ -14,7 +14,6 @@ public class Account extends BaseEntity {
 
     private int userId;
     private String username;
-    private int roleId;
     private String email;
     private String password;
     private String avatar;
@@ -24,10 +23,9 @@ public class Account extends BaseEntity {
     public Account() {
     }
 
-    public Account(int userId, String username, int roleId, String email, String password, String avatar, Role role, boolean status) {
+    public Account(int userId, String username, String email, String password, String avatar, Role role, boolean status) {
         this.userId = userId;
         this.username = username;
-        this.roleId = roleId;
         this.email = email;
         this.password = password;
         this.avatar = avatar;
@@ -49,14 +47,6 @@ public class Account extends BaseEntity {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public int getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(int roleId) {
-        this.roleId = roleId;
     }
 
     public String getEmail() {
@@ -101,7 +91,7 @@ public class Account extends BaseEntity {
 
     @Override
     public String toString() {
-        return "Account{" + "userId=" + userId + ", username=" + username + ", roleId=" + roleId + ", email=" + email + ", password=" + password + ", avatar=" + avatar + ", role=" + role + ", status=" + status + '}';
+        return "Account{" + "userId=" + userId + ", username=" + username + ", email=" + email + ", password=" + password + ", avatar=" + avatar + ", role=" + role + ", status=" + status + '}';
     }
 
 }

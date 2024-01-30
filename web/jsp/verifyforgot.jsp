@@ -45,7 +45,9 @@
         <![endif]-->
 
         <!-- All PLUGINS CSS ============================================= -->
-        <link rel="stylesheet" type="text/css" href="assets/css/assets.css">
+        <link rel="stylesheet" type="text/css" href="./assets/css/assets.css">
+        <link href="./assets/css/assets.css" rel="stylesheet" type="text/css" >
+
 
         <!-- TYPOGRAPHY ============================================= -->
         <link rel="stylesheet" type="text/css" href="assets/css/typography.css">
@@ -62,8 +64,8 @@
 
     </head>
     <body id="bg">
-<!--        <div id="failtoast">Code is incorrect or expired please resend</div>
-        <div id="sucesstoast">Confirm successful! Redirecting...</div>-->
+        <!--        <div id="failtoast">Code is incorrect or expired please resend</div>
+                <div id="sucesstoast">Confirm successful! Redirecting...</div>-->
         <div class="page-wraper">
             <div id="loading-icon-bx"></div>
             <div class="account-form">
@@ -73,19 +75,23 @@
                 <div class="account-form-inner">
                     <div class="account-container">
                         <div class="heading-bx left">
-                            <h2 class="title-head">Verifying your <span>account</span></h2>
-                            <p>Haved an account? <a href="login">Login</a></p>
+                            <h2 class="title-head">Verify your <span>Account</span></h2>
+                            <p>Re-enter another email address, <a href="forgot-password">click here</a></p>
                         </div>	
                         <div class="container">
                             <h2 class="head">Enter Verification Code</h2>
-                            <h4 class="inform">${mess}</h4>
+
                             <form id="verifyFormfg" action="forgot-password" method="post">
                                 <input type="hidden"  name="action" value="fverify">
-                                <input type="text" id="code" name="code" value="${codeInput}" placeholder="Enter your 6-digit code sent in email">
-                                <input type="submit" value="verify">
-
+                                <input type="text" id="code" name="code" value="${codeInput}" placeholder="Enter 6-digit code ">
+                                <input type="submit" value="Verify">
                             </form>
-                            <a href="forgot-password?action=verifyforgot&email=<%= session.getAttribute("email") %>">resend code</a>
+
+                            <p  style="color: ${messColor};">${mess}</p>
+                            
+                            <br/>
+                            
+                            <a href="forgot-password?action=verifyforgot&email=<%= session.getAttribute("email") %>">Resend code</a>
                         </div>
                     </div>
                 </div>
@@ -119,44 +125,44 @@
         <script src="assets/js/contact.js"></script>
         <script src='assets/vendors/switcher/switcher.js'></script>
 
-<!--        <script>
-            $("#verifyFormfg").submit(function (event) {
-                event.preventDefault(); // Prevent the default form submission
-                var formData = $(this).serialize();
-                $.ajax({
-                    type: "GET",
-                    url: "usercontroller?action=fverify", // Use the URL of your AddUserServlet
-                    data: formData,
-                    success: function (response) {
-                        if (response.trim() === 'fail') {
-                            // SHOW SUCCESS TOAST BY JS
-                            var failToast = document.getElementById("failtoast");
-                            failToast.style.backgroundColor = "red"; // Replace with the desired color code
-                            failToast.className = "show";
-
-                            // After 3 seconds, remove the show class from DIV and redirect
-                            setTimeout(function () {
-                                failToast.className = failToast.className.replace("show", "");
-                            }, 2000);
-
-
-
-                        } else {
-                            var successToast = document.getElementById("sucesstoast");
-                            successToast.style.backgroundColor = "#00ff7f"; // Replace with the desired color code
-                            successToast.className = "show";
-
-                            // After 3 seconds, remove the show class from DIV and redirect
-                            setTimeout(function () {
-                                successToast.className = successToast.className.replace("show", "");
-                                window.location.href = "resetpass.jsp";
-                            }, 2000);
-
-                        }
-                    }
-                });
-            });
-        </script>-->
+        <!--        <script>
+                    $("#verifyFormfg").submit(function (event) {
+                        event.preventDefault(); // Prevent the default form submission
+                        var formData = $(this).serialize();
+                        $.ajax({
+                            type: "GET",
+                            url: "usercontroller?action=fverify", // Use the URL of your AddUserServlet
+                            data: formData,
+                            success: function (response) {
+                                if (response.trim() === 'fail') {
+                                    // SHOW SUCCESS TOAST BY JS
+                                    var failToast = document.getElementById("failtoast");
+                                    failToast.style.backgroundColor = "red"; // Replace with the desired color code
+                                    failToast.className = "show";
+        
+                                    // After 3 seconds, remove the show class from DIV and redirect
+                                    setTimeout(function () {
+                                        failToast.className = failToast.className.replace("show", "");
+                                    }, 2000);
+        
+        
+        
+                                } else {
+                                    var successToast = document.getElementById("sucesstoast");
+                                    successToast.style.backgroundColor = "#00ff7f"; // Replace with the desired color code
+                                    successToast.className = "show";
+        
+                                    // After 3 seconds, remove the show class from DIV and redirect
+                                    setTimeout(function () {
+                                        successToast.className = successToast.className.replace("show", "");
+                                        window.location.href = "resetpass.jsp";
+                                    }, 2000);
+        
+                                }
+                            }
+                        });
+                    });
+                </script>-->
     </body>
 
 </html>
