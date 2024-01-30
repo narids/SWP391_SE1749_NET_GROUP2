@@ -59,13 +59,47 @@
         <link class="skin" rel="stylesheet" type="text/css" href="assets/css/color/color-1.css">
         <link rel="stylesheet" type="text/css" href="assets/css/snackbar.css">
         <link rel="stylesheet" type="text/css" href="assets/css/successtoast.css">
-        <link href="./assets/css/resetpassword.css" rel="stylesheet" type="text/css"/>
+        <style>
+            .input-group {
+                position: relative;
+            }
+            .toggle-password {
+                position: absolute;
+                right: 5px;
+                top: 50%;
+                transform: translateY(-50%);
+                cursor: pointer;
+                z-index: 99;
+            }
+
+            #toast {
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                color : white;
+                padding: 20px 40px;
+                z-index: 9999;
+                box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+                border-radius: 10px;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.7s;
+            }
+
+            .show {
+                opacity: 1 !important;
+                visibility: visible !important;
+            }
+
+
+        </style>
     </head>
     <body id="bg">
         <div class="page-wraper">
-           
+
             <div id="toast"></div>
-            
+
             <div id="loading-icon-bx"></div>
             <div class="account-form">
                 <div class="account-head" style="background-image:url(assets/images/background/bg2.jpg);">
@@ -80,17 +114,14 @@
                         <form id="resetForm" class="contact-bx">
                             <input type="hidden"  name="action" value="changepassword">
 
-                            <p  style="color: ${messColor};" id="mess">${mess}</p>
-
                             <div class="row placeani">
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <div class="input-group"> 
-                                            <label>Password</label>
-                                            <input name="password" type="password" id="password" required="" class="form-control" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$">
+                                            <input name="password" type="password" id="password" required="" class="form-control" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$">
                                             <span class="toggle-password" id="togglePassword1">&#x1F441;</span>
                                             <div class="invalid-feedback">
-                                                Please enter a valid password.
+                                                Password must least 6 char, 2 digit and string
                                             </div>
                                         </div>
                                     </div>
@@ -98,8 +129,8 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <div class="input-group"> 
-                                            <label>Repeat password</label>
-                                            <input  type="password" id="repassword" class="form-control" required name="repassword">
+                                            <input  type="password" placeholder="Enter confirm password" id="repassword" class="form-control" required name="repassword">
+
                                             <span class="toggle-password" id="togglePassword2">&#x1F441;</span>
                                         </div>
                                     </div>
@@ -147,7 +178,103 @@
         <script src="assets/js/contact.js"></script>
         <script src='assets/vendors/switcher/switcher.js'></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-        <script src="./assets/js/resetpassword.js"></script>
+        <script>
+            function toastMessageAction(text, color, link) {
+                if (text && text !== "") {
+                    $('#toast').text(text);
+                    $('#toast').css('background-color', color);
+                    $('#toast').toggleClass('show');
+
+                    // After 3 seconds, remove the show class from DIV and redirect
+                    if (link) {
+                        setTimeout(function () {
+                            window.location.href = link;
+                        }, 3000);
+                    }
+                    setTimeout(function () {
+                        $("#savePass").removeAttr('disabled');
+
+                        $('#toast').text("");
+                        $('#toast').toggleClass('show');
+                    }, 4000);
+                }
+            }
+
+            $(document).ready(function () {
+                $('#togglePassword1').click(function () {
+                    var passwordInput = $('#password');
+                    var icon = $(this);
+
+                    if (passwordInput.attr('type') === 'password') {
+                        passwordInput.attr('type', 'text');
+                        icon.html('&#x1F440;'); // Mắt mở
+                    } else {
+                        passwordInput.attr('type', 'password');
+                        icon.html('&#x1F441;'); // Mắt đóng
+                    }
+                });
+
+                $('#togglePassword2').click(function () {
+                    var passwordInput = $('#repassword');
+                    var icon = $(this);
+
+                    if (passwordInput.attr('type') === 'password') {
+                        passwordInput.attr('type', 'text');
+                        icon.html('&#x1F440;'); // Mắt mở
+                    } else {
+                        passwordInput.attr('type', 'password');
+                        icon.html('&#x1F441;'); // Mắt đóng
+                    }
+                });
+
+                $('#resetForm').submit(function (event) {
+                    event.preventDefault();
+
+                    // Kiểm tra xem mật khẩu và mật khẩu nhập lại có khớp nhau không
+                    var password = $('#password').val();
+                    var confirmPassword = $('#repassword').val();
+
+                    if (password !== confirmPassword) {
+                        toastMessageAction("Confirm password does not match!", "red");
+
+                    } else {
+                        $("#savePass").prop("disabled", true);
+
+                        $.ajax({
+                            url: "/SWP391_SE1749_NET_GROUP2/resetpassword",
+                            type: "post",
+                            data: {
+                                password: password
+                            },
+                            success: function (data) {
+                                let text = "";
+                                let color = "green";
+                                let link = "";
+
+                                switch (data) {
+                                    case "success":
+                                        text = "Reset password successfully! Sendirect login...";
+                                        link = "/SWP391_SE1749_NET_GROUP2/login";
+                                        break;
+
+                                    case "failed":
+                                        text = "Verification code has expired! Sendirect...";
+                                        color = "red";
+                                        link = "/SWP391_SE1749_NET_GROUP2/forgot-password";
+                                        break;
+                                }
+
+                                toastMessageAction(text, color, link);
+                            },
+                            error: function (err) {
+                                toastMessageAction(err, "red", "");
+                            }
+                        });
+                    }
+                });
+            });
+
+        </script>
     </body>
 
 </html>

@@ -7,6 +7,7 @@ package Controllers.Common;
 import DAOs.AccountDAO;
 import Models.Account;
 import Models.Role;
+import Ultils.SendEmail;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,6 +16,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.concurrent.TimeUnit;
+import javax.mail.MessagingException;
 
 /**
  *
@@ -76,60 +78,104 @@ public class ConfirmEmail extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         AccountDAO accDAO = new AccountDAO();
-        
+
         String action = request.getParameter("action");
         // switch case check action
 
-        String codeInput = request.getParameter("code").trim();
-        String vefcode = (String) session.getAttribute("vecode");
-        
+        switch (action) {
+            case "confirmEmail":
+                String codeInput = request.getParameter("code").trim();
+                String vefcode = (String) session.getAttribute("vecode");
+                String type = (String) session.getAttribute("type");
 
-        try {
-            long afverificationTime = (long) session.getAttribute("verificationTime");
+                try {
+                    long afverificationTime = (long) session.getAttribute("verificationTime");
 
-            if (codeInput.equals(vefcode)) {
-                long currentTimes = System.currentTimeMillis();
-                long elapsedTime = TimeUnit.MILLISECONDS.toSeconds(currentTimes - afverificationTime);
+                    if (codeInput.equals(vefcode)) {
+                        long currentTimes = System.currentTimeMillis();
+                        long elapsedTime = TimeUnit.MILLISECONDS.toSeconds(currentTimes - afverificationTime);
 
-                if (elapsedTime <= 60) {
-                    // => active account : email + code
-                    // resend code
-                    Account acc = new Account();
-                    Role role = new Role();
+                        if (elapsedTime <= 60) {
 
-                    acc.setUsername((String) session.getAttribute("username"));
-                    acc.setEmail((String) session.getAttribute("email"));
-                    acc.setPassword((String) session.getAttribute("password"));
-                    acc.setAvatar("");
-                    acc.setStatus(true);
+                            if (type.equals("register")) {
+                                Account acc = new Account();
+                                Role role = new Role();
 
-                    role.setRoleId(4); // student
-                    acc.setRole(role);
+                                acc.setUsername((String) session.getAttribute("username"));
+                                acc.setEmail((String) session.getAttribute("email"));
+                                acc.setPassword((String) session.getAttribute("password"));
+                                acc.setAvatar("");
+                                acc.setStatus(true);
 
-                    if (accDAO.registerUser(acc)) {
-                        try (PrintWriter out = response.getWriter()) {
-                            out.print("success");
+                                role.setRoleId(4); // student
+                                acc.setRole(role);
+
+                                if (accDAO.registerUser(acc)) {
+                                    try (PrintWriter out = response.getWriter()) {
+                                        out.print("success-register");
+                                    }
+                                } else {
+                                    try (PrintWriter out = response.getWriter()) {
+                                        out.print("failed-register");
+                                    }
+                                }
+
+                            } else if (type.equals("forgot")) {
+                                try (PrintWriter out = response.getWriter()) {
+                                    out.print("success-forgot");
+                                }
+                            }
+
+                        } else {
+                            try (PrintWriter out = response.getWriter()) {
+                                if (type.equals("register")) {
+                                    out.print("timeout-register");
+                                } else {
+                                    out.print("timeout-forgot");
+                                }
+                            }
                         }
                     } else {
                         try (PrintWriter out = response.getWriter()) {
-                            out.print("failed");
+                            if (type.equals("register")) {
+                                out.print("invalid-register");
+                            } else {
+                                out.print("invalid-forgot");
+                            }
                         }
                     }
-
-                } else {
+                } catch (Exception e) {
                     try (PrintWriter out = response.getWriter()) {
-                        out.print("timeout");
+                        if (type.equals("register")) {
+                            out.print("timeout-register");
+                        } else {
+                            out.print("timeout-forgot");
+                        }
                     }
                 }
-            } else {
+                break;
+
+            case "resend":
+            try {
+                String vecode = String.valueOf((int) ((Math.random() * (999999 - 100000)) + 100000));
+                long currentTime = System.currentTimeMillis();
+
+                String emailInput = (String) session.getAttribute("email");
+
+                SendEmail.sendEmail(emailInput, vecode);
+
+                session.setAttribute("vecode", vecode);
+                session.setAttribute("verificationTime", currentTime);
+
                 try (PrintWriter out = response.getWriter()) {
-                    out.print("invalid");
+                    out.print("success");
+                }
+            } catch (MessagingException ex) {
+                try (PrintWriter out = response.getWriter()) {
+                    out.print("failed");
                 }
             }
-        } catch (Exception e) {
-            try (PrintWriter out = response.getWriter()) {
-                out.print("timeout");
-            }
+            break;
         }
 
     }
