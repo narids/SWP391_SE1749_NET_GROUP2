@@ -152,7 +152,7 @@ public class LoginController extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("account", account);
 
-            response.sendRedirect("/SWP391_SE1749_NET_GROUP2");
+            response.sendRedirect("/SWP391_SE1749_NET_GROUP2/home");
         }
     }
 
