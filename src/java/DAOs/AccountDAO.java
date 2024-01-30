@@ -63,12 +63,29 @@ public class AccountDAO extends DBContext<BaseEntity> {
         }
         return false;
     }
-    
+
     public Boolean checkExistedEmail(String email) {
         String sql = "SELECT * FROM Account where Email = ?";
         try {
             PreparedStatement stm = connection.prepareStatement(sql);
             stm.setString(1, email);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+
+    public Boolean checkExistedEmailOrUser(String email, String username) {
+        String sql = "SELECT * FROM Account \n"
+                + "where Username = ? OR Email = ?";
+        try {
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setString(1, email);
+            stm.setString(2, username);
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
                 return true;
@@ -91,6 +108,38 @@ public class AccountDAO extends DBContext<BaseEntity> {
         } catch (SQLException ex) {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public Boolean registerUser(Account a) {
+        try {
+            String sql = "INSERT INTO [dbo].[Account]\n"
+                    + "           ([Username]\n"
+                    + "           ,[Password]\n"
+                    + "           ,[RoleID]\n"
+                    + "           ,[Email]\n"
+                    + "           ,[Avatar]\n"
+                    + "           ,[Status])\n"
+                    + "     VALUES\n"
+                    + "           (?,?,?,?,?,?)";
+            connection.setAutoCommit(false);
+            PreparedStatement stm = connection.prepareCall(sql);
+
+            stm.setString(1, a.getUsername());
+            stm.setString(2, a.getPassword());
+            stm.setInt(3, a.getRole().getRoleId());
+            stm.setString(4, a.getEmail());
+            stm.setString(5, a.getAvatar());
+            stm.setBoolean(6, a.getStatus());
+
+            if (stm.executeUpdate() > 0) {
+                connection.commit();
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return false;
     }
 
 //    @Override

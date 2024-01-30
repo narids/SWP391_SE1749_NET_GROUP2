@@ -121,8 +121,8 @@ public class LoginController extends HttpServlet {
                 Cookie usernameCookie = new Cookie("username", UserName);
                 Cookie passwordCookie = new Cookie("password", Password);
 
-                //đặt thời gian cho cookies là 30 ngày
-                int cookieMaxAge = 30 * 24 * 60 * 60;
+                //đặt thời gian cho cookies là 1 ngày
+                int cookieMaxAge = 1 * 24 * 60 * 60;
                 usernameCookie.setMaxAge(cookieMaxAge);
                 passwordCookie.setMaxAge(cookieMaxAge);
 

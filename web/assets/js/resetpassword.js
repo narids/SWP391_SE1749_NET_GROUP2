@@ -57,7 +57,7 @@ $(document).ready(function () {
         var confirmPassword = $('#repassword').val();
 
         if (password !== confirmPassword) {
-            toastMessageAction("Confirm password not match!", "red");
+            toastMessageAction("Confirm password does not match!", "red");
 
         } else {
             $.ajax({
@@ -73,11 +73,11 @@ $(document).ready(function () {
 
                     switch (data) {
                         case "success":
-                            text = "Reset password successfully, Sendirect...";
+                            text = "Reset password successfully! Sendirect...";
                             break;
 
                         case "failed":
-                            text = "Verification code has expired, Sendirect...";
+                            text = "Verification code has expired! Sendirect...";
                             color = "red";
                             break;
                     }

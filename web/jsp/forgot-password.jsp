@@ -42,7 +42,9 @@
         <![endif]-->
 
         <!-- All PLUGINS CSS ============================================= -->
-        <link rel="stylesheet" type="text/css" href="assets/css/assets.css">
+        <link rel="stylesheet" type="text/css" href="./assets/css/assets.css">
+        <link href="./assets/css/assets.css" rel="stylesheet" type="text/css" >
+
 
         <!-- TYPOGRAPHY ============================================= -->
         <link rel="stylesheet" type="text/css" href="assets/css/typography.css">
@@ -71,7 +73,7 @@
                     <div class="account-container">
                         <div class="heading-bx left">
                             <h2 class="title-head">Forgot <span>Password</span></h2>
-                            <p>Login Your Account <a href="login">Click here</a></p>
+                            <p>Login Your Account, <a href="login">click here</a></p>
                         </div>	
                         <form id="changeForm" class="contact-bx" action="forgot-password" method="post">
                             <input type="hidden" name="action" value="verifyforgot">

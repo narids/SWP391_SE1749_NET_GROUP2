@@ -45,7 +45,7 @@
 
         <!-- All PLUGINS CSS ============================================= -->
         <link rel="stylesheet" type="text/css" href="./assets/css/assets.css">
-        <link href="../assets/css/assets.css" rel="stylesheet" type="text/css"/>
+        <link href="./assets/css/assets.css" rel="stylesheet" type="text/css"/>
 
         <!-- TYPOGRAPHY ============================================= -->
         <link rel="stylesheet" type="text/css" href="./assets/css/typography.css">
@@ -61,9 +61,9 @@
     </head>
     <body id="bg">
         <div class="page-wraper">
-            
-            <div id="toast">Login successfully!</div>
-            
+
+            <div id="toast"></div>
+
             <div id="loading-icon-bx"></div>
             <div class="account-form">
                 <div class="account-head" style="background-image:url(assets/images/background/bg2.jpg);">
@@ -73,7 +73,7 @@
                     <div class="account-container">
                         <div class="heading-bx left">
                             <h2 class="title-head">Login to your <span>Account</span></h2>
-                            <p>You don't have an account? <a href="register">Sign Up</a></p>
+                            <p>You don't have an account? <a href="register">Register now</a></p>
                         </div>	
                         <form class="contact-bx" id="loginForm" method="post" action="login">
                             <div class="row placeani">
@@ -109,7 +109,7 @@
                                 <div class="col-lg-12 m-b30">
                                     <button name="submit" type="submit" value="Submit" class="btn button-md">Login</button>
                                 </div>
-                                
+
                             </div>
                         </form>
                     </div>

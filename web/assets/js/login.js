@@ -3,6 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/JavaScript.js to edit this template
  */
 
+
+//hiển thị thông báo
 function toastMessageAction(text, color, link) {
     if (text && text !== "") {
         $('#toast').text(text);
@@ -46,7 +48,7 @@ $(document).ready(function () {
             type: "post",
             data: formData,
             success: function (data) {
-                let text = "Login successfully! Sendirect home...";
+                let text = "Login successfully! Sendirect Home...";
                 let color = "green";
                 let link = "/SWP391_SE1749_NET_GROUP2/home";
 
@@ -55,13 +57,13 @@ $(document).ready(function () {
                         break;
                     
                     case "notCorrect":
-                        text = "Username or password not correct. Please try again!";
+                        text = "Username or password are not correct. Please try again!";
                         color = "red";
                         link = "";
                         break;
 
                     case "inActive":
-                        text = "Your account is inactive. Please contact Admin!";
+                        text = "Your account is inactive. Need verify account";
                         color = "red";
                         link = "";
                         break;

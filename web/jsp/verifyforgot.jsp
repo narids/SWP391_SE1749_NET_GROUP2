@@ -45,7 +45,9 @@
         <![endif]-->
 
         <!-- All PLUGINS CSS ============================================= -->
-        <link rel="stylesheet" type="text/css" href="assets/css/assets.css">
+        <link rel="stylesheet" type="text/css" href="./assets/css/assets.css">
+        <link href="./assets/css/assets.css" rel="stylesheet" type="text/css" >
+
 
         <!-- TYPOGRAPHY ============================================= -->
         <link rel="stylesheet" type="text/css" href="assets/css/typography.css">
@@ -73,23 +75,23 @@
                 <div class="account-form-inner">
                     <div class="account-container">
                         <div class="heading-bx left">
-                            <h2 class="title-head">Verifying your <span>account</span></h2>
-                            <p>Go back? <a href="forgot-password">Click here</a></p>
+                            <h2 class="title-head">Verify your <span>Account</span></h2>
+                            <p>Re-enter another email address, <a href="forgot-password">click here</a></p>
                         </div>	
                         <div class="container">
                             <h2 class="head">Enter Verification Code</h2>
 
                             <form id="verifyFormfg" action="forgot-password" method="post">
                                 <input type="hidden"  name="action" value="fverify">
-                                <input type="text" id="code" name="code" value="${codeInput}" placeholder="Enter your 6-digit code sent in email">
-                                <input type="submit" value="verify">
+                                <input type="text" id="code" name="code" value="${codeInput}" placeholder="Enter 6-digit code ">
+                                <input type="submit" value="Verify">
                             </form>
 
                             <p  style="color: ${messColor};">${mess}</p>
                             
                             <br/>
                             
-                            <a href="forgot-password?action=verifyforgot&email=<%= session.getAttribute("email") %>">resend code</a>
+                            <a href="forgot-password?action=verifyforgot&email=<%= session.getAttribute("email") %>">Resend code</a>
                         </div>
                     </div>
                 </div>
