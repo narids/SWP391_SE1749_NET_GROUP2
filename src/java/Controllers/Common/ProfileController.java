@@ -39,10 +39,10 @@ public class ProfileController extends HttpServlet {
         // Pass the user object to the JSP
         request.setAttribute("user", user);
         // Forward to the JSP based on user's role
-        if (user.getRole().getRoleId()== 2) {
+        if (user.getRole().getRoleId()== 4) {
             RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/studentProfile.jsp");
             dispatcher.forward(request, response);
-        } else if (user.getRole().getRoleId()==1) {
+        } else if (user.getRole().getRoleId()==3) {
             RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/teacherProfile.jsp");
             dispatcher.forward(request, response);
         }
