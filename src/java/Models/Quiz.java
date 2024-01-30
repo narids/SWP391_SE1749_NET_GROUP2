@@ -1,12 +1,13 @@
 package Models;
 
+import DAOs.BaseEntity;
 import java.util.Date;
 
 /**
  *
  * @author khanhlinh date 18/01/2024
  */
-public class Quiz {
+public class Quiz extends BaseEntity {
 
     /*Entity
     Table(name = "Quiz")
@@ -15,14 +16,20 @@ public class Quiz {
     //Column(name = "QuizID")
     private int quizId;
 
-    //Column(name = "QuestionID")
-    private int questionId;
-
     //Column(name = "Quiz_Content")
     private String quizContent;
 
     //Column(name = "Created_Day")
     private Date createdDay;
+
+    public Quiz() {
+    }
+
+    public Quiz(int quizId, String quizContent, Date createdDay) {
+        this.quizId = quizId;
+        this.quizContent = quizContent;
+        this.createdDay = createdDay;
+    }
 
     // getters and setters
     public int getQuizId() {
@@ -31,14 +38,6 @@ public class Quiz {
 
     public void setQuizId(int quizId) {
         this.quizId = quizId;
-    }
-
-    public int getQuestionId() {
-        return questionId;
-    }
-
-    public void setQuestionId(int questionId) {
-        this.questionId = questionId;
     }
 
     public String getQuizContent() {
@@ -59,7 +58,7 @@ public class Quiz {
 
     @Override
     public String toString() {
-        return "Quiz{" + "quizId=" + quizId + ", questionId=" + questionId + ", quizContent=" + quizContent + ", createdDay=" + createdDay + '}';
+        return "Quiz{" + "quizId=" + quizId + ", quizContent=" + quizContent + ", createdDay=" + createdDay + '}';
     }
 
 }

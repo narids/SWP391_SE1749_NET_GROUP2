@@ -4,21 +4,23 @@
  */
 package Controllers.Common;
 
-import DAOs.ClassDAO;
-import Models.MyClass;
-import java.io.IOException;
-import java.io.PrintWriter;
+import Models.Account;
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.SQLException;
 
 /**
  *
- * @author nghia
+ * @author User
  */
-public class ClassController extends HttpServlet {
+@WebServlet(name = "ProfileController", urlPatterns = {"/profile"})
+public class ProfileController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,18 +34,19 @@ public class ClassController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ClassController</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ClassController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        // Assuming you have a method to get the currently logged-in user from the session
+        Account user = getCurrentUser(request);
+        // Pass the user object to the JSP
+        request.setAttribute("user", user);
+        // Forward to the JSP based on user's role
+        if (user.getRole().getRoleId()== 2) {
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/studentProfile.jsp");
+            dispatcher.forward(request, response);
+        } else if (user.getRole().getRoleId()==1) {
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/teacherProfile.jsp");
+            dispatcher.forward(request, response);
         }
+        // Add more conditions for other roles if needed
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -58,10 +61,7 @@ public class ClassController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ClassDAO t = new ClassDAO();
-        List<MyClass> ClassList = t.getAllClasses();
-        request.setAttribute("ClassList", ClassList);
-        request.getRequestDispatcher("jsp/Class-list.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /**
@@ -75,7 +75,12 @@ public class ClassController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        processRequest(request, response);
+    }
 
+    private Account getCurrentUser(HttpServletRequest request) {
+        // Assume you have a session attribute named "user"
+        return (Account) request.getSession().getAttribute("account");
     }
 
     /**

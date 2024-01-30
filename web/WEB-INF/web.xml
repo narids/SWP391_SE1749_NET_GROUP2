@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     <welcome-file-list>
-        <welcome-file>/home</welcome-file>
+        <welcome-file>jsp/home.jsp</welcome-file>
     </welcome-file-list>
     <servlet>
         <servlet-name>LoginController</servlet-name>
@@ -17,7 +17,11 @@
     </servlet>
     <servlet>
         <servlet-name>ClassController</servlet-name>
-        <servlet-class>Controllers.Common.ClassController</servlet-class>
+        <servlet-class>Controllers.Manager.ClassController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ClassDetailController</servlet-name>
+        <servlet-class>Controllers.Manager.ClassDetailController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>RegisterController</servlet-name>
@@ -42,6 +46,10 @@
     <servlet-mapping>
         <servlet-name>RegisterController</servlet-name>
         <url-pattern>/register</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ClassDetailController</servlet-name>
+        <url-pattern>/ClassDetail</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>30</session-timeout>
