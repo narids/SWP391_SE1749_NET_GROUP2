@@ -20,7 +20,6 @@ import java.util.List;
  *
  * @author owner
  */
-@WebServlet(name = "HomeController", urlPatterns = {"/home"})
 public class HomeController extends HttpServlet {
     
     QuizDAO qdao = new QuizDAO();
