@@ -37,7 +37,6 @@ public class ClassDAO extends DBContext<BaseEntity> {
 //        }
 //        return cls;
 //    }
-
     public List<MyClass> getAllClasses() {
         String sql = "SELECT s.ClassID, s.ClassName, a.Username\n"
                 + "FROM Class s, ClassSubject cs, Teacher t, Account a\n"
@@ -56,6 +55,41 @@ public class ClassDAO extends DBContext<BaseEntity> {
             ;
         }
         return classes;
+    }
+
+    public int getNumberOfStudentInClass(int ClassID) {
+        String sql = "select COUNT * as count_student_in_class \n"
+                + "from ClassStudent where ClassID = ?";
+        // declare and initialize the number of students in the class
+        int numStudents = 0;
+
+        PreparedStatement pst;
+        try {
+            pst = connection.prepareStatement(sql);
+            // set the parameter value for the ClassID placeholder
+            pst.setInt(1, ClassID);
+
+            // declare and initialize the result set object
+            ResultSet rs = pst.executeQuery();
+
+            // check if the result set has any data
+            if (rs.next()) {
+                // assign the value of the count_student_in_class column to the variable
+                numStudents = rs.getInt("count_student_in_class");
+            }
+            // close the result set, prepared statement, and connection objects
+
+            rs.close();
+            pst.close();
+            connection.close();
+            return numStudents;
+        } catch (SQLException ex) {
+            Logger.getLogger(ClassDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        // return the number of students in the class
+        return numStudents;
+
     }
 
     @Override

@@ -7,7 +7,7 @@
         <servlet-name>LoginController</servlet-name>
         <servlet-class>Controllers.Common.LoginController</servlet-class>
     </servlet>
-<!--    <servlet>
+    <!--    <servlet>
         <servlet-name>HomeController</servlet-name>
         <servlet-class>Controllers.Common.HomeController</servlet-class>
     </servlet>-->
@@ -17,7 +17,11 @@
     </servlet>
     <servlet>
         <servlet-name>ClassController</servlet-name>
-        <servlet-class>Controllers.Common.ClassController</servlet-class>
+        <servlet-class>Controllers.Manager.ClassController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ClassDetailController</servlet-name>
+        <servlet-class>Controllers.Manager.ClassDetailController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
@@ -27,13 +31,17 @@
         <servlet-name>ForgotPassword</servlet-name>
         <url-pattern>/forgot-password</url-pattern>
     </servlet-mapping>
-<!--    <servlet-mapping>
+    <!--    <servlet-mapping>
         <servlet-name>HomeController</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>-->
     <servlet-mapping>
         <servlet-name>ClassController</servlet-name>
         <url-pattern>/class</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ClassDetailController</servlet-name>
+        <url-pattern>/ClassDetail</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>30</session-timeout>
