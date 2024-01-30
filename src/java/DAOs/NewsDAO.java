@@ -5,18 +5,25 @@
 package DAOs;
 
 import Models.News;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author admin
  */
-public class NewsDAO extends DBContext<BaseEntity>{
+public class NewsDAO extends DBContext<BaseEntity> {
 
     @Override
     public ArrayList<BaseEntity> list() {
@@ -42,7 +49,7 @@ public class NewsDAO extends DBContext<BaseEntity>{
     public BaseEntity get(BaseEntity entity) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
+
 //    public News getNews(String email, String pass) {
 //        String strSQL = "SELECT [UserId]\n"
 //                + "      ,[FullName]\n"
@@ -80,7 +87,6 @@ public class NewsDAO extends DBContext<BaseEntity>{
 //        }
 //        return u;
 //    }
-    
 //    public User checkAccountExist(String email) {
 //        String strSQL = "select UserId, Email, Password  from Users_HE140553 where Email = ?";
 //        try {
@@ -100,7 +106,6 @@ public class NewsDAO extends DBContext<BaseEntity>{
 //        }
 //        return null;
 //    }
-
 //    public void signup(String email, String pass, String fullName) {
 //        String query = "INSERT INTO [dbo].[Users_HE140553]\n"
 //                + "           ([FullName]\n"
@@ -119,7 +124,6 @@ public class NewsDAO extends DBContext<BaseEntity>{
 //            System.out.println("Error: "  + e.getMessage());
 //        }
 //    }
-    
 //    public void addUser(String fullName, String email, String password
 //                        , String address, String gender, String birthDate) {
 //        try {
@@ -144,7 +148,6 @@ public class NewsDAO extends DBContext<BaseEntity>{
 //            System.out.println("addReview: " + e.getMessage());
 //        }
 //    }
-    
 //    public void updateUser(String fullName, String email,String address, String gender, String birthDate, String userId) {
 //        try {
 //            String query = "UPDATE [dbo].[Users_HE140553]\n"
@@ -166,7 +169,6 @@ public class NewsDAO extends DBContext<BaseEntity>{
 //            System.out.println("addReview: " + e.getMessage());
 //        }
 //    }
-    
 //    public void changePassword(String email, String password){
 //        try {
 //            String query = "UPDATE [dbo].[Users_HE140553]\n"
@@ -180,7 +182,6 @@ public class NewsDAO extends DBContext<BaseEntity>{
 //            System.out.println("addReview: " + e.getMessage());
 //        }
 //    }
-    
 //    public boolean deleteUser(int userId) {
 //        
 //        String query = "DELETE FROM [dbo].[Users_HE140553]\n" 
@@ -198,7 +199,6 @@ public class NewsDAO extends DBContext<BaseEntity>{
 //
 //        return false;
 //    }
-    
     public ArrayList<News> getListNew() {
         ArrayList<News> newList = new ArrayList<News>();
 
@@ -207,6 +207,7 @@ public class NewsDAO extends DBContext<BaseEntity>{
             PreparedStatement statement = connection.prepareStatement(strSQL);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
+                News news = new News();
                 int NewsID = resultSet.getInt(1);
                 String Title = resultSet.getString(2);
                 String Content = resultSet.getString(3);
@@ -217,10 +218,19 @@ public class NewsDAO extends DBContext<BaseEntity>{
 //                    birthDate = f.format(resultSet.getDate(5));
 //                }
                 String Thumbnail = resultSet.getString(5);
-
+                news.setNewsId(NewsID);
+                news.setTitle(Title);
+                news.setContent(Content);
+                news.setCreatedDay(Created_Day);
+                news.setThumbnail(Thumbnail);
+                news.setSummary(resultSet.getString("Summary"));
+                news.setNumberCommment(resultSet.getInt("NumberComment"));
+                news.setCreatedBy(resultSet.getInt("Created_By"));
+                news.setViewsCount(resultSet.getInt("ViewsCount"));
+                news.setStatus(resultSet.getInt("Status"));
 //                News n = new News(NewsID, Title, Content, Created_Day, Thumbnail);
 //                newList.add(n);
-
+                newList.add(news);
             }
         } catch (Exception e) {
             System.out.println("getListUsers:" + e.getMessage());
@@ -228,27 +238,127 @@ public class NewsDAO extends DBContext<BaseEntity>{
         return newList;
     }
 
-//    public User getUserById(String userId) {
-//        try {
-//            String strSQL = "select UserId, FullName, Password, Email, BirthDate, Address, Gender,Role from Users_HE140553 where UserId = ?";
-//            PreparedStatement statement = connection.prepareStatement(strSQL);
-//            statement.setString(1, userId);
-//            ResultSet resultSet = statement.executeQuery();
-//
-//            if (resultSet.next()) {
-//                String fullName = resultSet.getString("FullName");
-//                String password = resultSet.getString("Password");
-//                String email = resultSet.getString("Email");
-//                String birthDate = resultSet.getString("BirthDate");
-//                String address = resultSet.getString("Address");
-//                String gender = resultSet.getString("Gender");
-//                String role = resultSet.getString("Role");
-//                return new User(userId, fullName, password, email, birthDate, address, gender, role);
-////                return new User(userId, fullName, password, email, birthDate, address, gender);
-//            }
-//        } catch (Exception e) {
-//            System.out.println("getUserById: " + e.getMessage());
-//        }
-//        return null;
-//    }
+    public String getFullnameById(int id) {
+        try {
+            String strSQL = "select Fullname from Account WHERE UserID = ?";
+            PreparedStatement statement = connection.prepareStatement(strSQL);
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                return resultSet.getString("Fullname");
+            }
+        } catch (Exception e) {
+            System.out.println("getListUsers:" + e.getMessage());
+        }
+        return null;
+    }
+
+    public void addNews(String title, String summary, String content, String thumbnail, int userId, int status) {
+        try {
+            String strSQL = "INSERT INTO [dbo].[News]"
+                    + "([Title],[Content],[Created_Day],"
+                    + "[Thumbnail],[Summary],[NumberComment],"
+                    + "[Created_By],[ViewsCount],[Status]) "
+                    + "VALUES(?,?,?,?,?,?,?,?,?)";
+            PreparedStatement statement = connection.prepareStatement(strSQL);
+            statement.setString(1, title);
+            statement.setString(2, content);
+            statement.setString(3, new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+            statement.setString(4, thumbnail);
+            statement.setString(5, summary);
+            statement.setInt(6, 0);
+            statement.setInt(7, userId);
+            statement.setInt(8, 0);
+            statement.setInt(9, status);
+
+            statement.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("getListUsers:" + e.getMessage());
+        }
+    }
+
+    public void deleteNews(int id) {
+        try {
+            String strSQL = "DELETE FROM [dbo].[News] WHERE NewsID = ?";
+            PreparedStatement statement = connection.prepareStatement(strSQL);
+            statement.setInt(1, id);
+            statement.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("getListUsers:" + e.getMessage());
+        }
+    }
+
+    public News getNewsById(int id) {
+        String sql = "SELECT * FROM News WHERE NewsID = ?";
+        try {
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, id);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                News news = new News();
+                news.setNewsId(rs.getInt("NewsID"));
+                news.setTitle(rs.getString("Title"));
+                news.setContent(rs.getString("Content"));
+                news.setCreatedDay(rs.getDate("Created_Day"));
+                news.setThumbnail(rs.getString("Thumbnail"));
+                news.setSummary(rs.getString("Summary"));
+                news.setNumberCommment(rs.getInt("NumberComment"));
+                news.setCreatedBy(rs.getInt("Created_By"));
+                news.setViewsCount(rs.getInt("ViewsCount"));
+                news.setStatus(rs.getInt("Status"));
+                return news;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(QuizDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public void updateNews(String title, String summary, String content, String thumbnail, int userId, int status, int newsId) {
+        try {
+            String strSQL = "UPDATE [dbo].[News] "
+                    + "SET [Title] = ?,"
+                    + "[Content] = ?,"
+                    + "[Thumbnail] = ?,"
+                    + "[Summary] = ?,"
+                    + "[Status] = ? "
+                    + "WHERE [NewsID] = ?";
+            PreparedStatement statement = connection.prepareStatement(strSQL);
+            statement.setString(1, title);
+            statement.setString(2, content);
+            statement.setString(3, thumbnail);
+            statement.setString(4, summary);
+            statement.setInt(5, status);
+            statement.setInt(6, newsId);
+            statement.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("getListUsers:" + e.getMessage());
+        }
+    }
+    
+    public void updateNews(String title, String summary, String content, int userId, int status, int newsId) {
+        try {
+            String strSQL = "UPDATE [dbo].[News] "
+                    + "SET [Title] = ?,"
+                    + "[Content] = ?,"
+                    + "[Summary] = ?,"
+                    + "[Status] = ? "
+                    + "WHERE [NewsID] = ?";
+            PreparedStatement statement = connection.prepareStatement(strSQL);
+            statement.setString(1, title);
+            statement.setString(2, content);
+            statement.setString(3, summary);
+            statement.setInt(4, status);
+            statement.setInt(5, newsId);
+            statement.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("getListUsers:" + e.getMessage());
+        }
+    }
+
+    
+
+    public static void main(String[] args) {
+        new NewsDAO().updateNews("1", "2", "3", 1, 0, 1);
+    }
 }

@@ -21,11 +21,12 @@ public class News {
     private int numberCommment;
     private int createdBy;
     private int viewsCount;
+    private int status;
 
     public News() {
     }
 
-    public News(int newsId, String title, String content, Date createdDay, String thumbnail, String summary, int numberCommment, int createdBy, int viewsCount) {
+    public News(int newsId, String title, String content, Date createdDay, String thumbnail, String summary, int numberCommment, int createdBy, int viewsCount, int status) {
         this.newsId = newsId;
         this.title = title;
         this.content = content;
@@ -35,13 +36,14 @@ public class News {
         this.numberCommment = numberCommment;
         this.createdBy = createdBy;
         this.viewsCount = viewsCount;
+        this.status = status;
     }
 
-    public int getNewsID() {
+    public int getNewsId() {
         return newsId;
     }
 
-    public void setNewsID(int newsId) {
+    public void setNewsId(int newsId) {
         this.newsId = newsId;
     }
 
@@ -109,9 +111,19 @@ public class News {
         this.viewsCount = viewsCount;
     }
 
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
-        return "News{" + "newsId=" + newsId + ", title=" + title + ", content=" + content + ", createdDay=" + createdDay + ", thumbnail=" + thumbnail + ", summary=" + summary + ", numberCommment=" + numberCommment + ", createdBy=" + createdBy + ", viewsCount=" + viewsCount + '}';
+        return "News{" + "newsId=" + newsId + ", title=" + title + ", content=" + content + ", createdDay=" + createdDay + ", thumbnail=" + thumbnail + ", summary=" + summary + ", numberCommment=" + numberCommment + ", createdBy=" + createdBy + ", viewsCount=" + viewsCount + ", status=" + status + '}';
     }
+
+    
 
 }

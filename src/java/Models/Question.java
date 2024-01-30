@@ -109,16 +109,9 @@ public class Question {
         this.subject = subject;
     }
 
-    // toString method for easy debugging
     @Override
     public String toString() {
-        return "Questions{"
-                + "questionId=" + questionId
-                + ", answerId=" + answerId
-                + ", questionContent='" + questionContent + '\''
-                + ", createdDay=" + createdDay
-                + ", imageUrl='" + imageUrl + '\''
-                + '}';
+        return "Question{" + "questionId=" + questionId + ", answerId=" + answerId + ", questionContent=" + questionContent + ", createdDay=" + createdDay + ", imageUrl=" + imageUrl + ", explain=" + explain + ", subjectId=" + subjectId + ", subject=" + subject + '}';
     }
 
 }
