@@ -1,15 +1,14 @@
 <%-- 
-    Document   : Class-list
-    Created on : Jan 27, 2024, 3:39:03 PM
-    Author     : nghia
+    Document   : add-news
+    Created on : Jan 29, 2024, 10:28:22 PM
+    Author     : admin
 --%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
 <!DOCTYPE html>
 <html lang="en">
 
-
+    <!-- Mirrored from educhamp.themetrades.com/demo/admin/add-listing.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 22 Feb 2019 13:09:05 GMT -->
     <head>
 
         <!-- META ============================================= -->
@@ -29,8 +28,8 @@
         <meta name="format-detection" content="telephone=no">
 
         <!-- FAVICONS ICON ============================================= -->
-        <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon" />
-        <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.png" />
+        <link rel="icon" href="../error-404.html" type="image/x-icon" />
+        <link rel="shortcut icon" type="image/x-icon" href="admin/assets/images/favicon.png" />
 
         <!-- PAGE TITLE HERE ============================================= -->
         <title>EduChamp : Education HTML Template </title>
@@ -39,14 +38,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <!--[if lt IE 9]>
-        <script src="assets/js/html5shiv.min.js"></script>
-        <script src="assets/js/respond.min.js"></script>
+        <script src="admin/assets/js/html5shiv.min.js"></script>
+        <script src="admin/assets/js/respond.min.js"></script>
         <![endif]-->
 
         <!-- All PLUGINS CSS ============================================= -->
         <link rel="stylesheet" type="text/css" href="admin/assets/css/assets.css">
-        <link href="admin/assets/css/assets.css" rel="stylesheet" type="text/css"/>
         <link rel="stylesheet" type="text/css" href="admin/assets/vendors/calendar/fullcalendar.css">
+        <link rel="stylesheet" type="text/css" href="admin/assets/vendors/summernote/summernote.css">
+        <link rel="stylesheet" type="text/css" href="admin/assets/vendors/file-upload/imageuploadify.min.css">
 
         <!-- TYPOGRAPHY ============================================= -->
         <link rel="stylesheet" type="text/css" href="admin/assets/css/typography.css">
@@ -56,8 +56,8 @@
 
         <!-- STYLESHEETS ============================================= -->
         <link rel="stylesheet" type="text/css" href="admin/assets/css/style.css">
-        <link class="skin" rel="stylesheet" type="text/css" href="admin/assets/css/color/color-1.css">
         <link rel="stylesheet" type="text/css" href="admin/assets/css/dashboard.css">
+        <link class="skin" rel="stylesheet" type="text/css" href="admin/assets/css/color/color-1.css">
 
     </head>
     <body class="ttr-opened-sidebar ttr-pinned-sidebar">
@@ -75,8 +75,8 @@
                 <div class="ttr-logo-box">
                     <div>
                         <a href="index.html" class="ttr-logo">
-                            <img alt="" class="ttr-logo-mobile" src="assets/images/logo-mobile.png" width="30" height="30">
-                            <img alt="" class="ttr-logo-desktop" src="assets/images/logo-white.png" width="160" height="27">
+                            <img alt="" class="ttr-logo-mobile" src="admin/assets/images/logo-mobile.png" width="30" height="30">
+                            <img alt="" class="ttr-logo-desktop" src="admin/assets/images/logo-white.png" width="160" height="27">
                         </a>
                     </div>
                 </div>
@@ -180,7 +180,7 @@
                             </div>
                         </li>
                         <li>
-                            <a href="#" class="ttr-material-button ttr-submenu-toggle"><span class="ttr-user-avatar"><img alt="" src="assets/images/testimonials/pic3.jpg" width="32" height="32"></span></a>
+                            <a href="#" class="ttr-material-button ttr-submenu-toggle"><span class="ttr-user-avatar"><img alt="" src="admin/assets/images/testimonials/pic3.jpg" width="32" height="32"></span></a>
                             <div class="ttr-header-submenu">
                                 <ul>
                                     <li><a href="user-profile.html">My profile</a></li>
@@ -243,7 +243,7 @@
             <div class="ttr-sidebar-wrapper content-scroll">
                 <!-- side menu logo start -->
                 <div class="ttr-sidebar-logo">
-                    <a href="#"><img alt="" src="assets/images/logo.png" width="122" height="27"></a>
+                    <a href="#"><img alt="" src="admin/assets/images/logo.png" width="122" height="27"></a>
                     <!-- <div class="ttr-sidebar-pin-button" title="Pin/Unpin Menu">
                             <i class="material-icons ttr-fixed-icon">gps_fixed</i>
                             <i class="material-icons ttr-not-fixed-icon">gps_not_fixed</i>
@@ -347,10 +347,11 @@
         <main class="ttr-wrapper">
             <div class="container-fluid">
                 <div class="db-breadcrumb">
-                    <h4 class="breadcrumb-title">Classes</h4>
+                    <h4 class="breadcrumb-title">Add news</h4>
                     <ul class="db-breadcrumb-list">
                         <li><a href="#"><i class="fa fa-home"></i>Home</a></li>
-                        <li>Courses</li>
+                        <li><a href="news-list">News List</a></li>
+                        <li>Add news</li>
                     </ul>
                 </div>	
                 <div class="row">
@@ -358,45 +359,44 @@
                     <div class="col-lg-12 m-b30">
                         <div class="widget-box">
                             <div class="wc-title">
-                                <h4>Classes</h4>
+                                <h4>Add news</h4>
                             </div>
                             <div class="widget-inner">
-                                <c:forEach var="classes" items="${ClassList}">
-                                    <div class="card-courses-list admin-courses">
-                                        <div class="card-courses-media">
-                                            <img src="assets/images/courses/pic1.jpg" alt=""/>
-                                        </div>
-                                        <div class="card-courses-full-dec">
-                                            <div class="card-courses-title">
-                                                <h4><a href="../ClassDetail?id=${classes.id}">${classes.className}</a>  </h4>
-
+                                <form action="add-news" method="POST" class="edit-profile m-b30"  enctype="multipart/form-data" onsubmit="getContent()">
+                                    <div class="row">
+                                        <div class="form-group col-8">
+                                            <label class="col-form-label">Title <span class="text-red">*</span></label>
+                                            <div>
+                                                <input name="title" class="form-control" type="text" required>
                                             </div>
-                                            <div class="card-courses-list-bx">
-                                                <ul class="card-courses-view">
-                                                    <li class="card-courses-user">
-                                                        <div class="card-courses-user-pic">
-                                                            <img src="assets/images/testimonials/pic3.jpg" alt=""/>
-                                                        </div>
-                                                        <div class="card-courses-user-info">
-                                                            <h5>Teacher</h5>
-                                                            <h4>${classes.name}</h4>
-                                                        </div>
-                                                    </li>
-                                                    <li class="card-courses-categories">
-                                                        <h5>3 Categories</h5>
-                                                        <h4>Backend</h4>
-                                                    </li>                                                                                                                                            
-                                                </ul>
-                                            </div>
-
-
                                         </div>
-
+                                        <div class="form-group col-4">
+                                            <label class="col-form-label">Thumbnail</label>
+                                            <div>
+                                                <input type="hidden" id="fileNameInput" name="fileName">
+                                                <input type="file" id="fileInput" name="thumbnail" accept="image/*">
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-12">
+                                            <label class="col-form-label">Summary <span class="text-red">*</span></label>
+                                            <div>
+                                                <textarea name="summary" class="form-control" style="width: 100%; min-height: 100px" required></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-12">
+                                            <label class="col-form-label">Content <span class="text-red">*</span></label>
+                                            <div style="width: 100%">
+                                                <div class="summernote" id="summernote"><p></p></div>
+                                                <!-- Hidden input field to store Summernote content -->
+                                                <input type="hidden" name="content" id="summernoteContent">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <button type="submit" class="btn-secondry add-item m-r5"><i class="fa fa-fw fa-plus-circle"></i> Add</button>
+                                        </div>
                                     </div>
-
-                                </c:forEach>
+                                </form>
                             </div>
-
                         </div>
                     </div>
                     <!-- Your Profile Views Chart END-->
@@ -406,23 +406,57 @@
         <div class="ttr-overlay"></div>
 
         <!-- External JavaScripts -->
-        <script src="assets/js/jquery.min.js"></script>
-        <script src="assets/vendors/bootstrap/js/popper.min.js"></script>
-        <script src="assets/vendors/bootstrap/js/bootstrap.min.js"></script>
-        <script src="assets/vendors/bootstrap-select/bootstrap-select.min.js"></script>
-        <script src="assets/vendors/bootstrap-touchspin/jquery.bootstrap-touchspin.js"></script>
-        <script src="assets/vendors/magnific-popup/magnific-popup.js"></script>
-        <script src="assets/vendors/counter/waypoints-min.js"></script>
-        <script src="assets/vendors/counter/counterup.min.js"></script>
-        <script src="assets/vendors/imagesloaded/imagesloaded.js"></script>
-        <script src="assets/vendors/masonry/masonry.js"></script>
-        <script src="assets/vendors/masonry/filter.js"></script>
-        <script src="assets/vendors/owl-carousel/owl.carousel.js"></script>
-        <script src='assets/vendors/scroll/scrollbar.min.js'></script>
-        <script src="assets/js/functions.js"></script>
-        <script src="assets/vendors/chart/chart.min.js"></script>
-        <script src="assets/js/admin.js"></script>
-        <script src='assets/vendors/switcher/switcher.js'></script>
+        <script src="admin/assets/js/jquery.min.js"></script>
+        <script src="admin/assets/vendors/bootstrap/js/popper.min.js"></script>
+        <script src="admin/assets/vendors/bootstrap/js/bootstrap.min.js"></script>
+        <script src="admin/assets/vendors/bootstrap-select/bootstrap-select.min.js"></script>
+        <script src="admin/assets/vendors/bootstrap-touchspin/jquery.bootstrap-touchspin.js"></script>
+        <script src="admin/assets/vendors/magnific-popup/magnific-popup.js"></script>
+        <script src="admin/assets/vendors/counter/waypoints-min.js"></script>
+        <script src="admin/assets/vendors/counter/counterup.min.js"></script>
+        <script src="admin/assets/vendors/imagesloaded/imagesloaded.js"></script>
+        <script src="admin/assets/vendors/masonry/masonry.js"></script>
+        <script src="admin/assets/vendors/masonry/filter.js"></script>
+        <script src="admin/assets/vendors/owl-carousel/owl.carousel.js"></script>
+        <script src='admin/assets/vendors/scroll/scrollbar.min.js'></script>
+        <script src="admin/assets/js/functions.js"></script>
+        <script src="admin/assets/vendors/chart/chart.min.js"></script>
+        <script src="admin/assets/js/admin.js"></script>
+        <script src="admin/assets/vendors/summernote/summernote.js"></script>
+        <script src="admin/assets/vendors/file-upload/imageuploadify.min.js"></script>
+        <script src='admin/assets/vendors/switcher/switcher.js'></script>
+        <script>
+        </script>
+        <script>
+            $(document).ready(function () {
+                $('.summernote').summernote({
+                    height: 300,
+                    tabsize: 2
+                });
+
+                $('input[type="file"]').imageuploadify();
+            });
+        </script>
+        <script>
+            function getContent() {
+                var content = $('#summernote').summernote('code');
+                $('#summernoteContent').val(content);
+            }
+        </script>
+        <script>
+            document.getElementById('fileInput').addEventListener('change', function () {
+                var fileInput = document.getElementById('fileInput');
+                var fileNameInput = document.getElementById('fileNameInput');
+                if (fileInput.files.length > 0) {
+                    var fileName = fileInput.files[0].name;
+                    fileNameInput.value = fileName;
+                } else {
+                    fileNameInput.value = ''; // Clear the filename if no file is selected
+                }
+            });
+
+        </script>
     </body>
 
+    <!-- Mirrored from educhamp.themetrades.com/demo/admin/add-listing.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 22 Feb 2019 13:09:05 GMT -->
 </html>
