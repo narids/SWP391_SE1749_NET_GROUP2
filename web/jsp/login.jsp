@@ -45,7 +45,7 @@
 
         <!-- All PLUGINS CSS ============================================= -->
         <link rel="stylesheet" type="text/css" href="./assets/css/assets.css">
-        <link href="../assets/css/assets.css" rel="stylesheet" type="text/css"/>
+        <link href="./assets/css/assets.css" rel="stylesheet" type="text/css"/>
 
         <!-- TYPOGRAPHY ============================================= -->
         <link rel="stylesheet" type="text/css" href="./assets/css/typography.css">
@@ -54,13 +54,48 @@
         <link rel="stylesheet" type="text/css" href="./assets/css/shortcodes/shortcodes.css">
 
         <!-- STYLESHEETS ============================================= -->
-        <!--<link rel="stylesheet" type="text/css" href="./assets/css/style.css">-->
-        <link href="./assets/css/style.css" rel="stylesheet" type="text/css"/>
-        <link class="skin" rel="stylesheet" type="text/css" href="./assets/css/color/color-1.css">
+        <link rel="stylesheet" type="text/css" href="./assets/css/style.css">
+        <link rel="stylesheet" type="text/css" href="./assets/css/color/color-1.css">
+        <style>
+            .input-group {
+                position: relative;
+            }
+            .toggle-password {
+                position: absolute;
+                right: 5px;
+                top: 50%;
+                transform: translateY(-50%);
+                cursor: pointer;
+                z-index: 99;
+            }
 
+            #toast {
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                color : white;
+                padding: 20px 40px;
+                z-index: 9999;
+                box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+                border-radius: 10px;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.7s;
+            }
+
+            .show {
+                opacity: 1 !important;
+                visibility: visible !important;
+            }
+
+        </style>
     </head>
     <body id="bg">
         <div class="page-wraper">
+
+            <div id="toast"></div>
+
             <div id="loading-icon-bx"></div>
             <div class="account-form">
                 <div class="account-head" style="background-image:url(assets/images/background/bg2.jpg);">
@@ -70,21 +105,28 @@
                     <div class="account-container">
                         <div class="heading-bx left">
                             <h2 class="title-head">Login to your <span>Account</span></h2>
-                            <p>You don't have an account? <a href="register">Sign In</a></p>
+                            <p>You don't have an account? <a href="register">Register now</a></p>
                         </div>	
-                        <form class="contact-bx" method="post" action="login">
+                        <form class="contact-bx" id="loginForm" method="post" action="login">
                             <div class="row placeani">
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <div class="input-group">
-                                            <input name="username" placeholder="Username" value="${requestScope.username}" type="text" required="" class="form-control">
+                                            <input name="username" pattern="^[A-Za-z0-9]{6,}$" placeholder="Enter username" value="${requestScope.username}" type="text" required="" class="form-control">
+                                            <div class="invalid-feedback">
+                                                Username must least 6 char, string and digit only.
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <div class="input-group"> 
-                                            <input name="password" placeholder="Password" value="${requestScope.password}" type="password" class="form-control" required="">
+                                            <input name="password" id="password" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$" placeholder="Enter password" value="${requestScope.password}" type="password" class="form-control" required="">
+                                            <div class="invalid-feedback">
+                                                Password must least 6 char, 2 digit and string
+                                            </div>
+                                            <span class="toggle-password" id="togglePassword">&#x1F441;</span>
                                         </div>
                                     </div>
                                 </div>
@@ -103,15 +145,9 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-12 m-b30">
-                                    <button name="submit" type="submit" value="Submit" class="btn button-md">Login</button>
+                                    <button name="submit" id="loginButton" type="submit" value="Submit" class="btn button-md">Login</button>
                                 </div>
-                                <div class="col-lg-12">
-                                    <h6>Login with Social media</h6>
-                                    <div class="d-flex">
-                                        <a class="btn flex-fill m-r5 facebook" href="#"><i class="fa fa-facebook"></i>Facebook</a>
-                                        <a class="btn flex-fill m-l5 google-plus" href="#"><i class="fa fa-google-plus"></i>Google Plus</a>
-                                    </div>
-                                </div>
+
                             </div>
                         </form>
                     </div>
@@ -134,6 +170,84 @@
         <script src="assets/js/functions.js"></script>
         <script src="assets/js/contact.js"></script>
         <script src='assets/vendors/switcher/switcher.js'></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script>
+            function toastMessageAction(text, color, link) {
+                if (text && text !== "") {
+                    $('#toast').text(text);
+                    $('#toast').css('background-color', color);
+                    $('#toast').toggleClass('show');
+
+                    // After 3 seconds, remove the show class from DIV and redirect
+                    if (link && link !== "") {
+                        setTimeout(function () {
+                            window.location.href = link;
+                        }, 3000);
+                    }
+                    setTimeout(function () {
+                        $("#loginButton").removeAttr('disabled');
+                        $('#toast').text("");
+                        $('#toast').toggleClass('show');
+                    }, 4000);
+                }
+            }
+
+            $(document).ready(function () {
+                $('#togglePassword').click(function () {
+                    var passwordInput = $('#password');
+                    var icon = $(this);
+
+                    if (passwordInput.attr('type') === 'password') {
+                        passwordInput.attr('type', 'text');
+                        icon.html('&#x1F440;'); // Mắt mở
+                    } else {
+                        passwordInput.attr('type', 'password');
+                        icon.html('&#x1F441;'); // Mắt đóng
+                    }
+                });
+
+
+                $('#loginForm').submit(function (event) {
+                    event.preventDefault();
+
+                    $("#loginButton").prop("disabled", true);
+                    var formData = $(this).serialize();
+                    $.ajax({
+                        url: "/SWP391_SE1749_NET_GROUP2/login",
+                        type: "post",
+                        data: formData,
+                        success: function (data) {
+                            let text = "Login successfully! Sendirect Home...";
+                            let color = "green";
+                            let link = "/SWP391_SE1749_NET_GROUP2/home";
+
+                            switch (data) {
+                                case "success":
+                                    break;
+
+                                case "notCorrect":
+                                    text = "Username or password are not correct. Please try again!";
+                                    color = "red";
+                                    link = "";
+                                    break;
+
+                                case "inActive":
+                                    text = "Your account is inactive. Need verify account";
+                                    color = "red";
+                                    link = "";
+                                    break;
+                            }
+
+                            toastMessageAction(text, color, link);
+                        },
+                        error: function (err) {
+                            toastMessageAction(err, "red", "/SWP391_SE1749_NET_GROUP2/login");
+                        }
+                    });
+                });
+            });
+
+        </script>
     </body>
 
 </html>

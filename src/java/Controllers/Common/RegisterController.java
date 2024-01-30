@@ -19,7 +19,7 @@ import javax.mail.MessagingException;
  *
  * @author owner
  */
-public class ForgotPassword extends HttpServlet {
+public class RegisterController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,10 +38,10 @@ public class ForgotPassword extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ForgotPassword</title>");
+            out.println("<title>Servlet RegisterController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ForgotPassword at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet RegisterController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -59,7 +59,7 @@ public class ForgotPassword extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("jsp/forgot-password.jsp").forward(request, response);
+        request.getRequestDispatcher("jsp/register.jsp").forward(request, response);
     }
 
     /**
@@ -73,39 +73,51 @@ public class ForgotPassword extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String action = request.getParameter("action");
         HttpSession session = request.getSession();
         AccountDAO accDAO = new AccountDAO();
-
-        String emailInput = request.getParameter("email").trim();
-
-        //kiểm tra email tồn tại chưa
-        if (!accDAO.checkExistedEmail(emailInput)) {
-            try (PrintWriter out = response.getWriter()) {
-                out.print("notExisted");
+        
+        //kiểm tra tham số action có tồn tại không
+        if (action != null) {
+            switch (action) {
+                case "register":
+                    String emailInput = request.getParameter("email").trim();
+                    String usernameInput = request.getParameter("username").trim();
+                    String passwordInput = request.getParameter("password").trim();
+                    
+                    //kiểm tra tên người dùng hoặc email tồn tại chưa
+                    if (accDAO.checkExistedUser(usernameInput) || accDAO.checkExistedEmail(emailInput)) {
+                        try (PrintWriter out = response.getWriter()) {
+                            out.print("existed");
+                        }
+                    } else {
+                        try {
+                            String vecode = String.valueOf((int) ((Math.random() * (999999 - 100000)) + 100000));
+                            long currentTime = System.currentTimeMillis();
+                            
+                            SendEmail.sendEmail(emailInput, vecode);
+                            
+                            session.setAttribute("email", emailInput);
+                            session.setAttribute("username", usernameInput);
+                            session.setAttribute("password", passwordInput);
+                            session.setAttribute("vecode", vecode);
+                            session.setAttribute("verificationTime", currentTime);
+                            session.setAttribute("type", "register");
+                            
+                            try (PrintWriter out = response.getWriter()) {
+                                out.print("success");
+                            }
+                        } catch (MessagingException ex) {
+                            try (PrintWriter out = response.getWriter()) {
+                                out.print("sendEmailFailed");
+                            }
+                        }
+                        
+                    }
+                    
+                    break;
             }
-        } else {
-            try {
-                String vecode = String.valueOf((int) ((Math.random() * (999999 - 100000)) + 100000));
-                long currentTime = System.currentTimeMillis();
-
-                SendEmail.sendEmail(emailInput, vecode);
-
-                session.setAttribute("email", emailInput);
-                session.setAttribute("vecode", vecode);
-                session.setAttribute("verificationTime", currentTime);
-                session.setAttribute("type", "forgot");
-
-                try (PrintWriter out = response.getWriter()) {
-                    out.print("success");
-                }
-            } catch (MessagingException ex) {
-                try (PrintWriter out = response.getWriter()) {
-                    out.print("sendEmailFailed");
-                }
-            }
-
         }
-
     }
 
     /**

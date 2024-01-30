@@ -1,14 +1,18 @@
 <%-- 
-    Document   : forgetpassword
-    Created on : Jan 13, 2024, 12:09:56 AM
+    Document   : login
+    Created on : Jan 13, 2024, 12:05:38 AM
     Author     : tudo7
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+
 <html lang="en">
 
+
     <head>
+        <title>Verify Code</title>
 
         <!-- META ============================================= -->
         <meta charset="utf-8">
@@ -55,6 +59,7 @@
         <!-- STYLESHEETS ============================================= -->
         <link rel="stylesheet" type="text/css" href="assets/css/style.css">
         <link class="skin" rel="stylesheet" type="text/css" href="assets/css/color/color-1.css">
+        <link rel="stylesheet" type="text/css" href="assets/css/verifyform.css"/>
         <link rel="stylesheet" type="text/css" href="assets/css/snackbar.css">
         <link rel="stylesheet" type="text/css" href="assets/css/successtoast.css">
 
@@ -97,9 +102,9 @@
 
 
         </style>
-
     </head>
     <body id="bg">
+
         <div class="page-wraper">
 
             <div id="toast"></div>
@@ -113,33 +118,30 @@
                 <div class="account-form-inner">
                     <div class="account-container">
                         <div class="heading-bx left">
-                            <h2 class="title-head">Forgot <span>Password</span></h2>
-                            <p>Login Your Account, <a href="login">click here</a></p>
+                            <h2 class="title-head">Verify your <span>Account</span></h2>
+                            <p>Change another email address, <a href="${sessionScope.type == 'register' ? 'register' : 'forgot-password'}">click here</a></p>
                         </div>	
-                        <form id="changeForm" class="contact-bx" action="forgot-password" method="post">
-                            <input type="hidden" name="action" value="verifyforgot">
-                            <div class="row placeani">
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <div class="input-group">
-                                            <input name="email" placeholder="Enter email" type="email" required="" class="form-control">
-                                            <div class="invalid-feedback">
-                                                Please enter a valid email.
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                        <div class="container">
+                            <h2 class="head">Enter Verification Code</h2>
 
-                                <div class="col-lg-12 m-b30">
-                                    <button action="verifyforgot" type="submit" id="submitForgot" class="btn button-md">Send</button>
-                                </div>
+                            <form id="verifyFormfg" method="post">
+                                <input type="hidden"  name="action" value="confirmEmail">
+                                <input type="text" id="code" name="code" placeholder="Enter 6-digit code" pattern="\d{6}">
+                                <input type="submit" id="verifySubmit" value="Verify">
+                            </form>
+
+                            <br/>
+
+                            <div class="col-lg-12 m-b30">
+                                <button id="reSendCode" class="btn button-md">Resent Code</button>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         <!-- External JavaScripts -->
+
         <script src="assets/js/jquery.min.js"></script>
         <script src="assets/vendors/bootstrap/js/popper.min.js"></script>
         <script src="assets/vendors/bootstrap/js/bootstrap.min.js"></script>
@@ -156,7 +158,6 @@
         <script src="assets/js/contact.js"></script>
         <script src='assets/vendors/switcher/switcher.js'></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-
         <script>
             function toastMessLoading() {
                 $('#toastLoading').toggleClass('show');
@@ -174,54 +175,98 @@
                         }, 3000);
                     }
                     setTimeout(function () {
-                        $("#submitForgot").removeAttr('disabled');
+                        $("#verifySubmit").removeAttr('disabled');
+                        $("#reSendCode").removeAttr('disabled');
+
                         $('#toast').text("");
                         $('#toast').toggleClass('show');
                     }, 4000);
                 }
             }
 
-            $(document).ready(function () {
-                $('#changeForm').submit(function (event) {
-                    event.preventDefault();
-                    $("#submitForgot").prop("disabled", true);
+            $('#verifyFormfg').submit(function (event) {
+                event.preventDefault();
+                $("#verifySubmit").prop("disabled", true);
+                $("#reSendCode").prop("disabled", true);
 
-                    toastMessLoading();
-                    var formData = $(this).serialize();
-                    $.ajax({
-                        url: "/SWP391_SE1749_NET_GROUP2/forgot-password",
-                        type: "post",
-                        data: formData,
-                        success: function (data) {
-                            toastMessLoading();
-                            let text = "Send email successfully! Sendirect to verify code...";
-                            let color = "green";
-                            let link = "/SWP391_SE1749_NET_GROUP2/confirmEmail";
+                var formData = $(this).serialize();
+                $.ajax({
+                    url: "/SWP391_SE1749_NET_GROUP2/confirmEmail",
+                    type: "post",
+                    data: formData,
+                    success: function (data) {
+                        const status = data.toString().split("-")[0];
+                        const type = data.toString().split("-")[1];
 
-                            switch (data) {
-                                case "success":
-                                    break;
+                        let text = type === "register" ? "Verify successfully! Sendirect Login..." : "Verify successfully! Sendirect resetpassword...";
+                        let color = "green";
+                        let link = type === "register" ? "/SWP391_SE1749_NET_GROUP2/login" : "/SWP391_SE1749_NET_GROUP2/resetpassword";
 
-                                case "notExisted":
-                                    text = "Email not exist. Please try again!";
-                                    color = "red";
-                                    link = "";
-                                    break;
+                        switch (status) {
+                            case "success":
+                                break;
 
-                                case "sendEmailFailed":
-                                    text = "Send email failed!";
-                                    color = "red";
-                                    link = "";
-                                    break;
-                            }
+                            case "failed":
+                                text = "Register failed, please try again";
+                                color = "red";
+                                link = "";
+                                break;
 
-                            toastMessageAction(text, color, link);
-                        },
-                        error: function (err) {
-                            toastMessLoading();
-                            toastMessageAction(err, "red");
+                            case "timeout":
+                                text = "Verification code has expired.";
+                                color = "red";
+                                link = "";
+                                break;
+
+                            case "invalid":
+                                text = "Invalid verification code.";
+                                color = "red";
+                                link = "";
+                                break;
                         }
-                    });
+
+                        toastMessageAction(text, color, link);
+                    },
+                    error: function (err) {
+                        toastMessageAction(err, "red", "");
+                    }
+                });
+            });
+
+            $('#reSendCode').click(function (event) {
+                event.preventDefault();
+                toastMessLoading();
+                $("#verifySubmit").prop("disabled", true);
+                $("#reSendCode").prop("disabled", true);
+
+                $.ajax({
+                    url: "/SWP391_SE1749_NET_GROUP2/confirmEmail",
+                    type: "post",
+                    data: {
+                        code: $("#code").val(),
+                        action: "resend"
+                    },
+                    success: function (data) {
+                        toastMessLoading();
+                        let text = "Resend code successfully! Please check email...";
+                        let color = "green";
+
+                        switch (data) {
+                            case "success":
+                                break;
+
+                            case "failed":
+                                text = "Resend failed, please try again";
+                                color = "red";
+                                break;
+                        }
+
+                        toastMessageAction(text, color, "");
+                    },
+                    error: function (err) {
+                        toastMessLoading();
+                        toastMessageAction(err, "red", "");
+                    }
                 });
             });
         </script>

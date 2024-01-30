@@ -1,9 +1,9 @@
 <%-- 
-    Document   : forgetpassword
-    Created on : Jan 13, 2024, 12:09:56 AM
+    Document   : register
+    Created on : Jan 13, 2024, 12:08:46 AM
     Author     : tudo7
 --%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -44,7 +44,6 @@
         <!-- All PLUGINS CSS ============================================= -->
         <link rel="stylesheet" type="text/css" href="./assets/css/assets.css">
         <link href="./assets/css/assets.css" rel="stylesheet" type="text/css" >
-
 
         <!-- TYPOGRAPHY ============================================= -->
         <link rel="stylesheet" type="text/css" href="assets/css/typography.css">
@@ -97,7 +96,6 @@
 
 
         </style>
-
     </head>
     <body id="bg">
         <div class="page-wraper">
@@ -106,6 +104,7 @@
             <div id="toastLoading">Loading...</div>
 
             <div id="loading-icon-bx"></div>
+
             <div class="account-form">
                 <div class="account-head" style="background-image:url(assets/images/background/bg2.jpg);">
                     <a href="index.html"><img src="assets/images/logo-white-2.png" alt=""></a>
@@ -113,16 +112,27 @@
                 <div class="account-form-inner">
                     <div class="account-container">
                         <div class="heading-bx left">
-                            <h2 class="title-head">Forgot <span>Password</span></h2>
-                            <p>Login Your Account, <a href="login">click here</a></p>
+                            <h2 class="title-head">Register <span>Now</span></h2>
+                            <p>Login Your Account <a href="login">Click here</a></p>
                         </div>	
-                        <form id="changeForm" class="contact-bx" action="forgot-password" method="post">
-                            <input type="hidden" name="action" value="verifyforgot">
+                        <form id="registerForm" action="register" class="contact-bx needs-validation" method="post">
+                            <input type="hidden"  name="action" value="register">
                             <div class="row placeani">
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <div class="input-group">
-                                            <input name="email" placeholder="Enter email" type="email" required="" class="form-control">
+                                            <input name="username" placeholder="Enter username" type="text" required class="form-control" pattern="^[A-Za-z0-9]{6,}$">
+
+                                            <div class="invalid-feedback">
+                                                Username must least 6 char, string and digit only.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <input name="email" type="email" placeholder="Enter email" required class="form-control">
                                             <div class="invalid-feedback">
                                                 Please enter a valid email.
                                             </div>
@@ -130,16 +140,37 @@
                                     </div>
                                 </div>
 
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <div class="input-group"> 
+                                            <input name="password" placeholder="Enter password" id="password" type="password" required class="form-control" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$">
+                                            <div class="invalid-feedback">
+                                                Password must least 6 char, 2 digit and string
+                                            </div>
+                                            <span class="toggle-password" id="togglePassword1">&#x1F441;</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <div class="input-group"> 
+                                            <input name="repassword" placeholder="Enter confirm password" id="repassword" type="password" class="form-control" required>
+                                            <span class="toggle-password" id="togglePassword2">&#x1F441;</span>
+                                        </div>
+
+                                    </div>
+                                </div>
+
                                 <div class="col-lg-12 m-b30">
-                                    <button action="verifyforgot" type="submit" id="submitForgot" class="btn button-md">Send</button>
+                                    <button action="register" id="registerSubmit" type="submit" class="btn button-md">Sign up</button>
                                 </div>
                             </div>
                         </form>
-                    </div>
-                </div>
-            </div>
+                    </div> 
+                </div> 
+            </div> 
         </div>
-        <!-- External JavaScripts -->
+
         <script src="assets/js/jquery.min.js"></script>
         <script src="assets/vendors/bootstrap/js/popper.min.js"></script>
         <script src="assets/vendors/bootstrap/js/bootstrap.min.js"></script>
@@ -155,6 +186,7 @@
         <script src="assets/js/functions.js"></script>
         <script src="assets/js/contact.js"></script>
         <script src='assets/vendors/switcher/switcher.js'></script>
+        <script src="assets/js/validation.js" type="text/javascript"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
         <script>
@@ -174,7 +206,7 @@
                         }, 3000);
                     }
                     setTimeout(function () {
-                        $("#submitForgot").removeAttr('disabled');
+                        $("#registerSubmit").removeAttr('disabled');
                         $('#toast').text("");
                         $('#toast').toggleClass('show');
                     }, 4000);
@@ -182,46 +214,80 @@
             }
 
             $(document).ready(function () {
-                $('#changeForm').submit(function (event) {
+                $('#togglePassword1').click(function () {
+                    var passwordInput = $('#password');
+                    var icon = $(this);
+
+                    if (passwordInput.attr('type') === 'password') {
+                        passwordInput.attr('type', 'text');
+                        icon.html('&#x1F440;'); // Mắt mở
+                    } else {
+                        passwordInput.attr('type', 'password');
+                        icon.html('&#x1F441;'); // Mắt đóng
+                    }
+                });
+
+                $('#togglePassword2').click(function () {
+                    var passwordInput = $('#repassword');
+                    var icon = $(this);
+
+                    if (passwordInput.attr('type') === 'password') {
+                        passwordInput.attr('type', 'text');
+                        icon.html('&#x1F440;'); // Mắt mở
+                    } else {
+                        passwordInput.attr('type', 'password');
+                        icon.html('&#x1F441;'); // Mắt đóng
+                    }
+                });
+
+
+                $('#registerForm').submit(function (event) {
                     event.preventDefault();
-                    $("#submitForgot").prop("disabled", true);
+                    $("#registerSubmit").prop("disabled", true);
 
-                    toastMessLoading();
-                    var formData = $(this).serialize();
-                    $.ajax({
-                        url: "/SWP391_SE1749_NET_GROUP2/forgot-password",
-                        type: "post",
-                        data: formData,
-                        success: function (data) {
-                            toastMessLoading();
-                            let text = "Send email successfully! Sendirect to verify code...";
-                            let color = "green";
-                            let link = "/SWP391_SE1749_NET_GROUP2/confirmEmail";
+                    var password = $('#password').val();
+                    var confirmPassword = $('#repassword').val();
 
-                            switch (data) {
-                                case "success":
-                                    break;
+                    if (password !== confirmPassword) {
+                        toastMessageAction("Confirm password does not match!", "red");
+                    } else {
+                        toastMessLoading();
+                        var formData = $(this).serialize();
+                        $.ajax({
+                            url: "/SWP391_SE1749_NET_GROUP2/register",
+                            type: "post",
+                            data: formData,
+                            success: function (data) {
+                                toastMessLoading();
+                                let text = "Register successfully! Sendirect verify email...";
+                                let color = "green";
+                                let link = "/SWP391_SE1749_NET_GROUP2/confirmEmail";
 
-                                case "notExisted":
-                                    text = "Email not exist. Please try again!";
-                                    color = "red";
-                                    link = "";
-                                    break;
+                                switch (data) {
+                                    case "success":
+                                        break;
 
-                                case "sendEmailFailed":
-                                    text = "Send email failed!";
-                                    color = "red";
-                                    link = "";
-                                    break;
+                                    case "existed":
+                                        text = "Username or Email existed. Please try again!";
+                                        color = "red";
+                                        link = "";
+                                        break;
+
+                                    case "sendEmailFailed":
+                                        text = "Send email failed!";
+                                        color = "red";
+                                        link = "";
+                                        break;
+                                }
+
+                                toastMessageAction(text, color, link);
+                            },
+                            error: function (err) {
+                                toastMessLoading();
+                                toastMessageAction(err, "red");
                             }
-
-                            toastMessageAction(text, color, link);
-                        },
-                        error: function (err) {
-                            toastMessLoading();
-                            toastMessageAction(err, "red");
-                        }
-                    });
+                        });
+                    }
                 });
             });
         </script>

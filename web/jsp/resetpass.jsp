@@ -44,7 +44,9 @@
         <![endif]-->
 
         <!-- All PLUGINS CSS ============================================= -->
-        <link rel="stylesheet" type="text/css" href="assets/css/assets.css">
+        <link rel="stylesheet" type="text/css" href="./assets/css/assets.css">
+        <link href="./assets/css/assets.css" rel="stylesheet" type="text/css" >
+
 
         <!-- TYPOGRAPHY ============================================= -->
         <link rel="stylesheet" type="text/css" href="assets/css/typography.css">
@@ -57,12 +59,47 @@
         <link class="skin" rel="stylesheet" type="text/css" href="assets/css/color/color-1.css">
         <link rel="stylesheet" type="text/css" href="assets/css/snackbar.css">
         <link rel="stylesheet" type="text/css" href="assets/css/successtoast.css">
+        <style>
+            .input-group {
+                position: relative;
+            }
+            .toggle-password {
+                position: absolute;
+                right: 5px;
+                top: 50%;
+                transform: translateY(-50%);
+                cursor: pointer;
+                z-index: 99;
+            }
 
+            #toast {
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                color : white;
+                padding: 20px 40px;
+                z-index: 9999;
+                box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+                border-radius: 10px;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.7s;
+            }
+
+            .show {
+                opacity: 1 !important;
+                visibility: visible !important;
+            }
+
+
+        </style>
     </head>
     <body id="bg">
         <div class="page-wraper">
-<!--            <div id="failtoast">Fail to reset! check your password</div>
-            <div id="sucesstoast">Reset successful! Redirecting...</div>-->
+
+            <div id="toast"></div>
+
             <div id="loading-icon-bx"></div>
             <div class="account-form">
                 <div class="account-head" style="background-image:url(assets/images/background/bg2.jpg);">
@@ -74,18 +111,17 @@
                             <h2 class="title-head">Reset your <span>Account</span></h2>
                             <p>Have an account? <a href="login">Login</a></p>
                         </div>	
-                        <form id="resetForm" class="contact-bx" action="forgot-password" method="post">
+                        <form id="resetForm" class="contact-bx">
                             <input type="hidden"  name="action" value="changepassword">
-                            <div><b>${mess}</b></div>
 
                             <div class="row placeani">
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <div class="input-group"> 
-                                            <label>Password:</label>
-                                             <input name="password" type="password" required="" class="form-control" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$">
-                                             <div class="invalid-feedback">
-                                                Please enter a valid password.
+                                            <input name="password" type="password" id="password" required="" class="form-control" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$">
+                                            <span class="toggle-password" id="togglePassword1">&#x1F441;</span>
+                                            <div class="invalid-feedback">
+                                                Password must least 6 char, 2 digit and string
                                             </div>
                                         </div>
                                     </div>
@@ -93,30 +129,31 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <div class="input-group"> 
-                                            <label>Repeat password:</label>
-                                            <input  type="password" class="form-control" required="" name="repassword">
-                                        </div>
-                                    </div>
-                                </div>
-<!--                                <div class="col-lg-12">
-                                    <div class="form-group form-forget">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="customControlAutosizing">
-                                            <label class="custom-control-label" for="customControlAutosizing">Remember me</label>
-                                        </div>
+                                            <input  type="password" placeholder="Enter confirm password" id="repassword" class="form-control" required name="repassword">
 
+                                            <span class="toggle-password" id="togglePassword2">&#x1F441;</span>
+                                        </div>
                                     </div>
-                                </div>-->
-                                <div class="col-lg-12 m-b30">
-                                    <button  type="submit" class="btn button-md">save</button>
                                 </div>
-<!--                                <div class="col-lg-12">
-                                    <h6>Login with Social media</h6>
-                                    <div class="d-flex">
-                                        <a class="btn flex-fill m-r5 facebook" href="#"><i class="fa fa-facebook"></i>Facebook</a>
-                                        <a class="btn flex-fill m-l5 google-plus" href="#"><i class="fa fa-google-plus"></i>Google Plus</a>
-                                    </div>
-                                </div>-->
+                                <!--                                <div class="col-lg-12">
+                                                                    <div class="form-group form-forget">
+                                                                        <div class="custom-control custom-checkbox">
+                                                                            <input type="checkbox" class="custom-control-input" id="customControlAutosizing">
+                                                                            <label class="custom-control-label" for="customControlAutosizing">Remember me</label>
+                                                                        </div>
+                                
+                                                                    </div>
+                                                                </div>-->
+                                <div class="col-lg-12 m-b30">
+                                    <button  type="submit" id="savePass" class="btn button-md">save</button>
+                                </div>
+                                <!--                                <div class="col-lg-12">
+                                                                    <h6>Login with Social media</h6>
+                                                                    <div class="d-flex">
+                                                                        <a class="btn flex-fill m-r5 facebook" href="#"><i class="fa fa-facebook"></i>Facebook</a>
+                                                                        <a class="btn flex-fill m-l5 google-plus" href="#"><i class="fa fa-google-plus"></i>Google Plus</a>
+                                                                    </div>
+                                                                </div>-->
                             </div>
 
                         </form>
@@ -140,40 +177,103 @@
         <script src="assets/js/functions.js"></script>
         <script src="assets/js/contact.js"></script>
         <script src='assets/vendors/switcher/switcher.js'></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script>
-             $("#resetForm").submit(function (event) {
-        event.preventDefault(); // Prevent the default form submission
-        var formData = $(this).serialize();
-        $.ajax({
-            type: "GET",
-            url: "usercontroller?action=changepassword", // Use the URL of your AddUserServlet
-            data: formData,
-            success: function (response) {
-                if (response.trim() === 'fail') {
-                    // SHOW SUCCESS TOAST BY JS
-                     var errorToast = document.getElementById("failtoast");
-                    errorToast.style.backgroundColor = "#ff5733"; // Replace with the desired color code
-                    errorToast.className = "show";
+            function toastMessageAction(text, color, link) {
+                if (text && text !== "") {
+                    $('#toast').text(text);
+                    $('#toast').css('background-color', color);
+                    $('#toast').toggleClass('show');
 
-                    // After 3 seconds, remove the show class from DIV
+                    // After 3 seconds, remove the show class from DIV and redirect
+                    if (link) {
+                        setTimeout(function () {
+                            window.location.href = link;
+                        }, 3000);
+                    }
                     setTimeout(function () {
-                        errorToast.className = errorToast.className.replace("show", "");
-                    }, 1000);
-                } else {
-                 var successToast = document.getElementById("sucesstoast");
-                successToast.style.backgroundColor = "#00ff7f"; // Replace with the desired color code
-                successToast.className = "show";
+                        $("#savePass").removeAttr('disabled');
 
-                // After 3 seconds, remove the show class from DIV and redirect
-                setTimeout(function () {
-                    successToast.className = successToast.className.replace("show", "");
-                    window.location.href = "login.jsp";
-                }, 2000);
-                   
+                        $('#toast').text("");
+                        $('#toast').toggleClass('show');
+                    }, 4000);
                 }
             }
-        });
-    });
+
+            $(document).ready(function () {
+                $('#togglePassword1').click(function () {
+                    var passwordInput = $('#password');
+                    var icon = $(this);
+
+                    if (passwordInput.attr('type') === 'password') {
+                        passwordInput.attr('type', 'text');
+                        icon.html('&#x1F440;'); // Mắt mở
+                    } else {
+                        passwordInput.attr('type', 'password');
+                        icon.html('&#x1F441;'); // Mắt đóng
+                    }
+                });
+
+                $('#togglePassword2').click(function () {
+                    var passwordInput = $('#repassword');
+                    var icon = $(this);
+
+                    if (passwordInput.attr('type') === 'password') {
+                        passwordInput.attr('type', 'text');
+                        icon.html('&#x1F440;'); // Mắt mở
+                    } else {
+                        passwordInput.attr('type', 'password');
+                        icon.html('&#x1F441;'); // Mắt đóng
+                    }
+                });
+
+                $('#resetForm').submit(function (event) {
+                    event.preventDefault();
+
+                    // Kiểm tra xem mật khẩu và mật khẩu nhập lại có khớp nhau không
+                    var password = $('#password').val();
+                    var confirmPassword = $('#repassword').val();
+
+                    if (password !== confirmPassword) {
+                        toastMessageAction("Confirm password does not match!", "red");
+
+                    } else {
+                        $("#savePass").prop("disabled", true);
+
+                        $.ajax({
+                            url: "/SWP391_SE1749_NET_GROUP2/resetpassword",
+                            type: "post",
+                            data: {
+                                password: password
+                            },
+                            success: function (data) {
+                                let text = "";
+                                let color = "green";
+                                let link = "";
+
+                                switch (data) {
+                                    case "success":
+                                        text = "Reset password successfully! Sendirect login...";
+                                        link = "/SWP391_SE1749_NET_GROUP2/login";
+                                        break;
+
+                                    case "failed":
+                                        text = "Verification code has expired! Sendirect...";
+                                        color = "red";
+                                        link = "/SWP391_SE1749_NET_GROUP2/forgot-password";
+                                        break;
+                                }
+
+                                toastMessageAction(text, color, link);
+                            },
+                            error: function (err) {
+                                toastMessageAction(err, "red", "");
+                            }
+                        });
+                    }
+                });
+            });
+
         </script>
     </body>
 

@@ -4,9 +4,7 @@
  */
 package Controllers.Common;
 
-import DAOs.QuizDAO;
 import Models.Account;
-import Models.Quiz;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,15 +12,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
 
 /**
  *
- * @author owner
+ * @author admin
  */
-public class HomeController extends HttpServlet {
-    
-    QuizDAO qdao = new QuizDAO();
+@WebServlet(name = "CatalogController", urlPatterns = {"/catalog"})
+public class CatalogController extends HttpServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -36,10 +32,13 @@ public class HomeController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<Quiz> quizzes = qdao.getQuizForGuest();
-        request.setAttribute("quizzes", quizzes);
         Account account = (Account) request.getSession().getAttribute("account");
-        request.getRequestDispatcher("jsp/home.jsp").forward(request, response);
+//        if (account == null) {
+//            response.sendRedirect("login");
+//        } else {
+            request.setAttribute("account", account);
+            request.getRequestDispatcher("jsp/catalog.jsp").forward(request, response);
+//        }
     }
 
     /**

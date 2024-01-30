@@ -1,14 +1,14 @@
 <%-- 
-    Document   : newjsp
-    Created on : Jan 30, 2024, 2:33:13 PM
-    Author     : nghia
+    Document   : quiz-search
+    Created on : Jan 28, 2024, 4:04:15 PM
+    Author     : admin
 --%>
-
+<jsp:useBean id="qdao" class="DAOs.QuizDAO" scope="request"></jsp:useBean>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import = "java.util.*" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="en">
+
 
     <head>
 
@@ -33,7 +33,7 @@
         <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.png" />
 
         <!-- PAGE TITLE HERE ============================================= -->
-        <title>Class detail</title>
+        <title>EduChamp : Education HTML Template </title>
 
         <!-- MOBILE SPECIFIC ============================================= -->
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -45,8 +45,6 @@
 
         <!-- All PLUGINS CSS ============================================= -->
         <link rel="stylesheet" type="text/css" href="assets/css/assets.css">
-        <link href="../assets/css/assets.css" rel="stylesheet" type="text/css"/>
-
 
         <!-- TYPOGRAPHY ============================================= -->
         <link rel="stylesheet" type="text/css" href="assets/css/typography.css">
@@ -59,12 +57,10 @@
         <link class="skin" rel="stylesheet" type="text/css" href="assets/css/color/color-1.css">
 
     </head>
-    <% String id = request.getParameter("id"); %>
-
-
     <body id="bg">
         <div class="page-wraper">
             <div id="loading-icon-bx"></div>
+
             <!-- Header Top ==== -->
             <header class="header rs-nav">
                 <div class="top-bar">
@@ -84,8 +80,8 @@
                                             <option data-icon="flag flag-us">English US</option>
                                         </select>
                                     </li>
-                                    <li><a href="../login">Login</a></li>
-
+                                    <li><a href="login.html">Login</a></li>
+                                    <li><a href="register.html">Register</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -96,7 +92,7 @@
                         <div class="container clearfix">
                             <!-- Header Logo ==== -->
                             <div class="menu-logo">
-                                <a href="index.html"><img src="assets/images/logo.png" alt=""></a>
+                                <a href="home"><img src="assets/images/logo.png" alt=""></a>
                             </div>
                             <!-- Mobile Nav Button ==== -->
                             <button class="navbar-toggler collapsed menuicon justify-content-end" type="button" data-toggle="collapse" data-target="#menuDropdown" aria-controls="menuDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -118,8 +114,10 @@
                             </div>
                             <!-- Search Box ==== -->
                             <div class="nav-search-bar">
-                                <form action="#">
-                                    <input name="search" value="" type="text" class="form-control" placeholder="Type to search">
+                                <form action="quiz-search">
+                                    <input type="hidden" value="${requestScope.pageSaved}" name="page">
+                                    <input type="hidden" value="${requestScope.typeSaved}" name="type">
+                                    <input name="keyword" value="" type="text" class="form-control" placeholder="Type to search">
                                     <span><i class="ti-search"></i></span>
                                 </form>
                                 <span id="search-remove"><i class="ti-close"></i></span>
@@ -127,7 +125,7 @@
                             <!-- Navigation Menu ==== -->
                             <div class="menu-links navbar-collapse collapse justify-content-start" id="menuDropdown">
                                 <div class="menu-logo">
-                                    <a href="index.html"><img src="assets/images/logo.png" alt=""></a>
+                                    <a href="home"><img src="assets/images/logo.png" alt=""></a>
                                 </div>
                                 <ul class="nav navbar-nav">	
                                     <li class="active"><a href="javascript:;">Home <i class="fa fa-chevron-down"></i></a>
@@ -234,10 +232,10 @@
             <!-- Content -->
             <div class="page-content bg-white">
                 <!-- inner page banner -->
-                <div class="page-banner ovbl-dark" style="background-image:url(assets/images/banner/banner2.jpg);">
+                <div class="page-banner ovbl-dark" style="background-image:url(assets/images/banner/banner3.jpg);">
                     <div class="container">
                         <div class="page-banner-entry">
-                            <h1 class="text-white">Courses Details</h1>
+                            <h1 class="text-white">Our Courses</h1>
                         </div>
                     </div>
                 </div>
@@ -246,7 +244,7 @@
                     <div class="container">
                         <ul class="list-inline">
                             <li><a href="#">Home</a></li>
-                            <li>Courses Details</li>
+                            <li>Our Courses</li>
                         </ul>
                     </div>
                 </div>
@@ -256,41 +254,134 @@
                     <!-- About Us -->
                     <div class="section-area section-sp1">
                         <div class="container">
-                            <div class="row d-flex flex-row-reverse">
-                        s
-
-                                <div class="col-lg-9 col-md-8 col-sm-12">
-                                    <div class="courses-post">
-                                        <div class="ttr-post-media media-effect">
-                                            <a href="#"><img src="assets/images/blog/default/thum1.jpg" alt=""></a>
-                                        </div>
-                                        <div class="ttr-post-info">
-                                            <div class="ttr-post-title ">
-                                                <h2 class="post-title">Nvidia and UE4 Technologies Practice</h2>
-                                            </div>
-                                            <div class="ttr-post-text">
-                                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-                                            </div>
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 col-sm-12 m-b30">
+                                    <div class="widget courses-search-bx placeani">
+                                        <div class="form-group">
+                                            <form action="quiz-search">
+                                                <input type="hidden" value="${requestScope.pageSaved}" name="page">
+                                                <input type="hidden" value="${requestScope.typeSaved}" name="type">
+                                                <div class="input-group">
+                                                    <label>Search</label>
+                                                    <input name="keyword" type="text" class="form-control">
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
-                                    <div class="courese-overview" id="overview">
-                                        <h4>Overview</h4>
-                                        <div class="row">
-                                            <div class="col-md-12 col-lg-4">
-                                                <ul class="course-features">
-                                                    <li><i class="ti-book"></i> <span class="label">Lectures</span> <span class="value">8</span></li>
-                                                    <li><i class="ti-help-alt"></i> <span class="label">Quizzes</span> <span class="value">1</span></li>
-                                                    <li><i class="ti-user"></i> <span class="label">Students</span> <span class="value">${numStudent}</span></li>
-                                                    <li><i class="ti-check-box"></i> <span class="label">Assessments</span> <span class="value">Yes</span></li>
+                                    <div class="widget widget_archive">
+                                        <h5 class="widget-title style-1">All FIELDS</h5>
+                                        <ul>
+                                            <li class="${requestScope.typeSaved eq 1 ? 'active' : ''}">
+                                                <a 
+                                                    href="quiz-search?keyword=${requestScope.keywordSaved}&page=${requestScope.pageSaved}&type=1">
+                                                    Quiz
+                                                </a>
+                                            </li>
+                                            <li class="${requestScope.typeSaved eq 2 ? 'active' : ''}">
+                                                <a 
+                                                    href="quiz-search?keyword=${requestScope.keywordSaved}&page=${requestScope.pageSaved}&type=2">
+                                                    Class
+                                                </a>
+                                            </li>
+                                            <li class="${requestScope.typeSaved eq 3 ? 'active' : ''}">
+                                                <a 
+                                                    href="quiz-search?keyword=${requestScope.keywordSaved}&page=${requestScope.pageSaved}&type=3">
+                                                    Question
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="widget">
+                                        <a href="#"><img src="assets/images/adv/adv.jpg" alt=""/></a>
+                                    </div>
+                                </div>
+                                <div class="col-lg-9 col-md-8 col-sm-12">
+                                    <div class="row">
+                                        <!--TIM KIEM QUIZ-->
+                                        <c:if test="${requestScope.typeSaved eq 1}">
+                                            <c:forEach items="${requestScope.quizzes}" var="q">
+                                                <div class="col-md-6 col-lg-4 col-sm-6 m-b30">
+                                                    <div class="cours-bx">
+                                                        <div class="action-box">
+                                                            <img src="https://media.istockphoto.com/id/1322647265/video/quiz-time-for-web-design-quiz-symbol-poster-banner-animated.jpg?s=640x640&k=20&c=S4_3WlgD8Nw3crK3KSAlzXDP1lwW9EzXrg7fmobEjoo=" alt="">
+                                                            <a href="#" class="btn">Take Quiz</a>
+                                                        </div>
+                                                        <div class="info-bx text-center">
+                                                            <h5><a href="#">${q.quizContent}</a></h5>
+                                                        </div>
+                                                        <div class="cours-more-info">
+                                                            <div class="review">
+                                                            </div>
+                                                            <div class="price">
+                                                                <h5>${qdao.getQuestionNum(q.quizId)}</h5>
+                                                                <small>questions</small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </c:forEach>
+                                        </c:if>
+
+                                        <!--TIM KIEM CLASS-->
+                                        <c:if test="${requestScope.typeSaved eq 2}">
+                                            <c:forEach items="${requestScope.classes}" var="cl">
+                                                <div class="col-md-6 col-lg-6 col-sm-6 m-b30">
+                                                    <div class="cours-bx">
+                                                        <div class="info-bx text-center">
+                                                            <h5><a href="#">${cl.className}</a></h5>
+                                                        </div>
+                                                        <div class="cours-more-info">
+                                                            <div class="review">
+                                                            </div>
+                                                            <div class="price">
+                                                                <small>${qdao.getStudentNum(cl.getClassID())} students</small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </c:forEach>
+                                        </c:if>
+
+                                        <!--TIM KIEM QUESTION-->
+                                        <c:if test="${requestScope.typeSaved eq 3}">
+                                            <c:forEach items="${requestScope.questions}" var="qu">
+                                                <div class="col-md-6 col-lg-12 col-sm-6 m-b30">
+                                                    <div class="cours-bx">
+                                                        <div class="info-bx">
+                                                            <span>${qu.subject.subDe.subDeName} | ${qu.subject.subjectName}</span>
+                                                            <h6><a href="#">${qu.questionContent}</a></h6>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </c:forEach>
+                                        </c:if>
+                                        <div class="col-lg-12 m-b20">
+                                            <div class="pagination-bx rounded-sm gray clearfix">
+                                                <ul class="pagination">
+                                                    <c:if test="${pageSaved ne 1}">
+                                                        <li class="previous">
+                                                            <a href="quiz-search?keyword=${keywordSaved}&page=${pageSaved - 1}&type=${typeSaved}">
+                                                                <i class="ti-arrow-left"></i> Prev
+                                                            </a>
+                                                        </li>
+                                                    </c:if>
+                                                    <c:forEach begin="1" end="${noOfPages}" var="i">
+                                                        <li class="${pageSaved eq i ? 'active' : ''}">
+                                                            <a href="quiz-search?keyword=${keywordSaved}&page=${i}&type=${typeSaved}">${i}</a>
+                                                        </li>
+                                                    </c:forEach>
+                                                    <c:if test="${pageSaved ne noOfPages}">
+                                                        <li class="next" >
+                                                            <a href="quiz-search?keyword=${keywordSaved}&page=${pageSaved + 1}&type=${typeSaved}">
+                                                                Next <i class="ti-arrow-right"></i>
+                                                            </a>
+                                                        </li>
+                                                    </c:if>
                                                 </ul>
                                             </div>
-
                                         </div>
                                     </div>
-               
-                                  
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -382,14 +473,14 @@
                                 <div class="widget widget_gallery gallery-grid-4">
                                     <h5 class="footer-title">Our Gallery</h5>
                                     <ul class="magnific-image">
-                                        <li><a href="./assets/images/gallery/pic1.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic1.jpg" alt=""></a></li>
-                                        <li><a href="./assets/images/gallery/pic2.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic2.jpg" alt=""></a></li>
-                                        <li><a href="./assets/images/gallery/pic3.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic3.jpg" alt=""></a></li>
-                                        <li><a href="./assets/images/gallery/pic4.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic4.jpg" alt=""></a></li>
-                                        <li><a href="./assets/images/gallery/pic5.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic5.jpg" alt=""></a></li>
-                                        <li><a href="./assets/images/gallery/pic6.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic6.jpg" alt=""></a></li>
-                                        <li><a href="./assets/images/gallery/pic7.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic7.jpg" alt=""></a></li>
-                                        <li><a href="./assets/images/gallery/pic8.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic8.jpg" alt=""></a></li>
+                                        <li><a href="assets/images/gallery/pic1.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic1.jpg" alt=""></a></li>
+                                        <li><a href="assets/images/gallery/pic2.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic2.jpg" alt=""></a></li>
+                                        <li><a href="assets/images/gallery/pic3.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic3.jpg" alt=""></a></li>
+                                        <li><a href="assets/images/gallery/pic4.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic4.jpg" alt=""></a></li>
+                                        <li><a href="assets/images/gallery/pic5.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic5.jpg" alt=""></a></li>
+                                        <li><a href="assets/images/gallery/pic6.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic6.jpg" alt=""></a></li>
+                                        <li><a href="assets/images/gallery/pic7.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic7.jpg" alt=""></a></li>
+                                        <li><a href="assets/images/gallery/pic8.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic8.jpg" alt=""></a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -399,7 +490,7 @@
                 <div class="footer-bottom">
                     <div class="container">
                         <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 text-center"><a target="_blank" href="https://www.templateshub.net">Templates Hub</a></div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 text-center"> <a target="_blank" href="https://www.templateshub.net">Templates Hub</a></div>
                         </div>
                     </div>
                 </div>
@@ -420,10 +511,9 @@
         <script src="assets/vendors/masonry/masonry.js"></script>
         <script src="assets/vendors/masonry/filter.js"></script>
         <script src="assets/vendors/owl-carousel/owl.carousel.js"></script>
-        <script src="assets/js/jquery.scroller.js"></script>
         <script src="assets/js/functions.js"></script>
         <script src="assets/js/contact.js"></script>
-        <script src="assets/vendors/switcher/switcher.js"></script>
+        <script src='assets/vendors/switcher/switcher.js'></script>
     </body>
 
 </html>
