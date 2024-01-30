@@ -78,7 +78,7 @@
                                         </select>
                                     </li>
                                     <li>${sessionScope.account.getUsername()}</li>
-                                    <li><a href="register.html">Forget Password</a></li>
+                                    <li><a href="resetpass.jsp">Forget Password</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -165,7 +165,7 @@
                                                 <ul>
                                                     <li><a href="courses.html">Courses </a></li>
                                                     <li><a href="courses-details.html">Courses Details</a></li>
-                                                    <li><a href="teacher.jsp">Teacher Profile</a></li>
+                                                    <li><a href="teacherProfile.jsp">Teacher Profile</a></li>
                                                     <li><a href="event.html">Upcoming Event</a></li>
                                                         <c:if test="${sessionScope.account.getRole().getRoleId()==1}" > 
                                                         <li><a href="class">Class </a></li>

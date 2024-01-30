@@ -4,12 +4,11 @@
  */
 package DAOs;
 
+import Models.MyClass;
 import Models.Question;
 import Models.Quiz;
 import Models.Subject;
 import Models.SubjectDemension;
-import Models.MyClass;
-import Ultils.Pagination;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -31,7 +30,7 @@ public class QuizDAO extends DBContext<Quiz> {
      */
     public List<Quiz> getQuizForGuest() {
         List<Quiz> ltQuiz = new ArrayList<>();
-        String sql = "SELECT TOP 4 * "
+        String sql = "SELECT * "
                 + "FROM Quiz q "
                 + "WHERE q.QuizID "
                 + "NOT IN "
@@ -79,12 +78,6 @@ public class QuizDAO extends DBContext<Quiz> {
         return ltSubject;
     }
 
-    /**
-     * Get SubjectDemension By ID
-     *
-     * @param id
-     * @return
-     */
     public SubjectDemension getSubDeById(int id) {
         String sql = "SELECT * "
                 + "FROM SubjectDemension "
@@ -105,13 +98,7 @@ public class QuizDAO extends DBContext<Quiz> {
         }
         return null;
     }
-
-    /**
-     * Get all quizzes for searching
-     * @param keyword
-     * @return 
-     */
-    public List<Quiz> getQuizzes(String keyword) {
+public List<Quiz> getQuizzes(String keyword) {
         List<Quiz> ltQuiz = new ArrayList<>();
         String sql = "SELECT * FROM Quiz WHERE Quiz_Content LIKE ?;";
         try {
@@ -272,11 +259,9 @@ public class QuizDAO extends DBContext<Quiz> {
 
     public static void main(String[] args) {
         QuizDAO q = new QuizDAO();
-        List<MyClass> ltQuiz = q.getClasses("");
-        ltQuiz = new Pagination().paginateRecords(ltQuiz, 1, 5);
-        for (MyClass quiz : ltQuiz) {
+        List<Quiz> ltQuiz = q.getQuizForGuest();
+        for (Quiz quiz : ltQuiz) {
             System.out.println(quiz);
         }
-//        System.out.println(q.getStudentNum(3));
     }
 }
