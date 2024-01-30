@@ -57,7 +57,41 @@
         <!--<link rel="stylesheet" type="text/css" href="./assets/css/style.css">-->
         <link href="./assets/css/style.css" rel="stylesheet" type="text/css"/>
         <link class="skin" rel="stylesheet" type="text/css" href="./assets/css/color/color-1.css">
-        <link href="./assets/css/login.css" rel="stylesheet" type="text/css"/>
+        <style>
+
+            .input-group {
+                position: relative;
+            }
+            .toggle-password {
+                position: absolute;
+                right: 5px;
+                top: 50%;
+                transform: translateY(-50%);
+                cursor: pointer;
+                z-index: 99;
+            }
+
+            #toast {
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                color : white;
+                padding: 20px 40px;
+                z-index: 9999;
+                box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+                border-radius: 10px;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.7s;
+            }
+
+            .show {
+                opacity: 1 !important;
+                visibility: visible !important;
+            }
+
+        </style>
     </head>
     <body id="bg">
         <div class="page-wraper">
@@ -133,7 +167,81 @@
         <script src="assets/js/contact.js"></script>
         <script src='assets/vendors/switcher/switcher.js'></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-        <script src="./assets/js/login.js"></script>
+        <script>
+            function toastMessageAction(text, color, link) {
+                if (text && text !== "") {
+                    $('#toast').text(text);
+                    $('#toast').css('background-color', color);
+                    $('#toast').toggleClass('show');
+
+                    // After 3 seconds, remove the show class from DIV and redirect
+                    if (link && link !== "") {
+                        setTimeout(function () {
+                            window.location.href = link;
+                        }, 3000);
+                    }
+                    setTimeout(function () {
+                        $('#toast').text("");
+                        $('#toast').toggleClass('show');
+                    }, 4000);
+                }
+            }
+
+            $(document).ready(function () {
+                $('#togglePassword').click(function () {
+                    var passwordInput = $('#password');
+                    var icon = $(this);
+
+                    if (passwordInput.attr('type') === 'password') {
+                        passwordInput.attr('type', 'text');
+                        icon.html('&#x1F440;'); // Mắt mở
+                    } else {
+                        passwordInput.attr('type', 'password');
+                        icon.html('&#x1F441;'); // Mắt đóng
+                    }
+                });
+
+
+                $('#loginForm').submit(function (event) {
+                    event.preventDefault();
+
+                    var formData = $(this).serialize();
+                    $.ajax({
+                        url: "/SWP391_SE1749_NET_GROUP2/login",
+                        type: "post",
+                        data: formData,
+                        success: function (data) {
+                            let text = "Login successfully! Sendirect Home...";
+                            let color = "green";
+                            let link = "/SWP391_SE1749_NET_GROUP2/home";
+
+                            switch (data) {
+                                case "success":
+                                    break;
+
+                                case "notCorrect":
+                                    text = "Username or password are not correct. Please try again!";
+                                    color = "red";
+                                    link = "";
+                                    break;
+
+                                case "inActive":
+                                    text = "Your account is inactive. Need verify account";
+                                    color = "red";
+                                    link = "";
+                                    break;
+                            }
+
+                            toastMessageAction(text, color, link);
+                        },
+                        error: function (err) {
+                            toastMessageAction(err, "red", "/SWP391_SE1749_NET_GROUP2/login");
+                        }
+                    });
+                });
+            });
+
+        </script>
     </body>
 
 </html>
