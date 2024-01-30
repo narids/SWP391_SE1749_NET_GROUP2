@@ -4,6 +4,7 @@
     Author     : tudo7
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 
@@ -75,7 +76,7 @@
                 z-index: 99;
             }
 
-            #toast {
+            #toast, #toastLoading {
                 position: fixed;
                 top: 20px;
                 left: 50%;
@@ -88,6 +89,10 @@
                 opacity: 0;
                 visibility: hidden;
                 transition: opacity 0.7s;
+            }
+
+            #toastLoading {
+                background-color: orange;
             }
 
             .show {
@@ -103,6 +108,7 @@
         <div class="page-wraper">
 
             <div id="toast"></div>
+            <div id="toastLoading">Loading...</div>
 
             <div id="loading-icon-bx"></div>
             <div class="account-form">
@@ -113,7 +119,7 @@
                     <div class="account-container">
                         <div class="heading-bx left">
                             <h2 class="title-head">Verify your <span>Account</span></h2>
-                            <p>Change another email address, <a href="register">click here</a></p>
+                            <p>Change another email address, <a href="${sessionScope.type == 'register' ? 'register' : 'forgot-password'}">click here</a></p>
                         </div>	
                         <div class="container">
                             <h2 class="head">Enter Verification Code</h2>
@@ -153,6 +159,9 @@
         <script src='assets/vendors/switcher/switcher.js'></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script>
+            function toastMessLoading() {
+                $('#toastLoading').toggleClass('show');
+            }
             function toastMessageAction(text, color, link) {
                 if (text && text !== "") {
                     $('#toast').text(text);
@@ -168,7 +177,7 @@
                     setTimeout(function () {
                         $("#verifySubmit").removeAttr('disabled');
                         $("#reSendCode").removeAttr('disabled');
-                        
+
                         $('#toast').text("");
                         $('#toast').toggleClass('show');
                     }, 4000);
@@ -178,6 +187,7 @@
             $('#verifyFormfg').submit(function (event) {
                 event.preventDefault();
                 $("#verifySubmit").prop("disabled", true);
+                $("#reSendCode").prop("disabled", true);
 
                 var formData = $(this).serialize();
                 $.ajax({
@@ -185,11 +195,14 @@
                     type: "post",
                     data: formData,
                     success: function (data) {
-                        let text = "Verify successfully! Sendirect Login...";
-                        let color = "green";
-                        let link = "/SWP391_SE1749_NET_GROUP2/login";
+                        const status = data.toString().split("-")[0];
+                        const type = data.toString().split("-")[1];
 
-                        switch (data) {
+                        let text = type === "register" ? "Verify successfully! Sendirect Login..." : "Verify successfully! Sendirect resetpassword...";
+                        let color = "green";
+                        let link = type === "register" ? "/SWP391_SE1749_NET_GROUP2/login" : "/SWP391_SE1749_NET_GROUP2/resetpassword";
+
+                        switch (status) {
                             case "success":
                                 break;
 
@@ -222,21 +235,21 @@
 
             $('#reSendCode').click(function (event) {
                 event.preventDefault();
+                toastMessLoading();
                 $("#verifySubmit").prop("disabled", true);
                 $("#reSendCode").prop("disabled", true);
 
-                var formData = $(this).serialize();
                 $.ajax({
                     url: "/SWP391_SE1749_NET_GROUP2/confirmEmail",
                     type: "post",
                     data: {
-                        code : $("#code").val();
-                        action : "resend"
+                        code: $("#code").val(),
+                        action: "resend"
                     },
                     success: function (data) {
+                        toastMessLoading();
                         let text = "Resend code successfully! Please check email...";
                         let color = "green";
-                        let link = "";
 
                         switch (data) {
                             case "success":
@@ -248,9 +261,10 @@
                                 break;
                         }
 
-                        toastMessageAction(text, color, link);
+                        toastMessageAction(text, color, "");
                     },
                     error: function (err) {
+                        toastMessLoading();
                         toastMessageAction(err, "red", "");
                     }
                 });

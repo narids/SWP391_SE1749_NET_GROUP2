@@ -5,7 +5,6 @@
 package Controllers.Common;
 
 import DAOs.AccountDAO;
-import Ultils.SendEmail;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,13 +12,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import javax.mail.MessagingException;
 
 /**
  *
  * @author owner
  */
-public class RegisterController extends HttpServlet {
+public class ResetPasswordController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,10 +36,10 @@ public class RegisterController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet RegisterController</title>");
+            out.println("<title>Servlet ResetPasswordController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet RegisterController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ResetPasswordController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -59,7 +57,7 @@ public class RegisterController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("jsp/register.jsp").forward(request, response);
+        request.getRequestDispatcher("jsp/resetpass.jsp").forward(request, response);
     }
 
     /**
@@ -73,49 +71,24 @@ public class RegisterController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String action = request.getParameter("action");
         HttpSession session = request.getSession();
         AccountDAO accDAO = new AccountDAO();
-        
-        //kiểm tra tham số action có tồn tại không
-        if (action != null) {
-            switch (action) {
-                case "register":
-                    String emailInput = request.getParameter("email").trim();
-                    String usernameInput = request.getParameter("username").trim();
-                    String passwordInput = request.getParameter("password").trim();
-                    
-                    //kiểm tra tên người dùng hoặc email tồn tại chưa
-                    if (accDAO.checkExistedUser(usernameInput) || accDAO.checkExistedEmail(emailInput)) {
-                        try (PrintWriter out = response.getWriter()) {
-                            out.print("existed");
-                        }
-                    } else {
-                        try {
-                            String vecode = String.valueOf((int) ((Math.random() * (999999 - 100000)) + 100000));
-                            long currentTime = System.currentTimeMillis();
-                            
-                            SendEmail.sendEmail(emailInput, vecode);
-                            
-                            session.setAttribute("email", emailInput);
-                            session.setAttribute("username", usernameInput);
-                            session.setAttribute("password", passwordInput);
-                            session.setAttribute("vecode", vecode);
-                            session.setAttribute("verificationTime", currentTime);
-                            session.setAttribute("type", "register");
-                            
-                            try (PrintWriter out = response.getWriter()) {
-                                out.print("success");
-                            }
-                        } catch (MessagingException ex) {
-                            try (PrintWriter out = response.getWriter()) {
-                                out.print("sendEmailFailed");
-                            }
-                        }
-                        
-                    }
-                    
-                    break;
+
+        String cmail = (String) session.getAttribute("email");
+        String cpass = request.getParameter("password");
+
+        if (!cmail.equals("null")) {
+            accDAO.resetPass(cpass, cmail);
+
+            session.setAttribute("email", null);
+            
+            try (PrintWriter out = response.getWriter()) {
+                out.print("success");
+            }
+
+        } else {
+            try (PrintWriter out = response.getWriter()) {
+                out.print("failed");
             }
         }
     }

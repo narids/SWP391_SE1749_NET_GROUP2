@@ -54,11 +54,9 @@
         <link rel="stylesheet" type="text/css" href="./assets/css/shortcodes/shortcodes.css">
 
         <!-- STYLESHEETS ============================================= -->
-        <!--<link rel="stylesheet" type="text/css" href="./assets/css/style.css">-->
-        <link href="./assets/css/style.css" rel="stylesheet" type="text/css"/>
-        <link class="skin" rel="stylesheet" type="text/css" href="./assets/css/color/color-1.css">
+        <link rel="stylesheet" type="text/css" href="./assets/css/style.css">
+        <link rel="stylesheet" type="text/css" href="./assets/css/color/color-1.css">
         <style>
-
             .input-group {
                 position: relative;
             }
@@ -114,14 +112,20 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <div class="input-group">
-                                            <input name="username" placeholder="Username" value="${requestScope.username}" type="text" required="" class="form-control">
+                                            <input name="username" pattern="^[A-Za-z0-9]{6,}$" placeholder="Enter username" value="${requestScope.username}" type="text" required="" class="form-control">
+                                            <div class="invalid-feedback">
+                                                Username must least 6 char, string and digit only.
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <div class="input-group"> 
-                                            <input name="password" id="password" placeholder="Password" value="${requestScope.password}" type="password" class="form-control" required="">
+                                            <input name="password" id="password" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$" placeholder="Enter password" value="${requestScope.password}" type="password" class="form-control" required="">
+                                            <div class="invalid-feedback">
+                                                Password must least 6 char, 2 digit and string
+                                            </div>
                                             <span class="toggle-password" id="togglePassword">&#x1F441;</span>
                                         </div>
                                     </div>
@@ -141,7 +145,7 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-12 m-b30">
-                                    <button name="submit" type="submit" value="Submit" class="btn button-md">Login</button>
+                                    <button name="submit" id="loginButton" type="submit" value="Submit" class="btn button-md">Login</button>
                                 </div>
 
                             </div>
@@ -181,6 +185,7 @@
                         }, 3000);
                     }
                     setTimeout(function () {
+                        $("#loginButton").removeAttr('disabled');
                         $('#toast').text("");
                         $('#toast').toggleClass('show');
                     }, 4000);
@@ -205,6 +210,7 @@
                 $('#loginForm').submit(function (event) {
                     event.preventDefault();
 
+                    $("#loginButton").prop("disabled", true);
                     var formData = $(this).serialize();
                     $.ajax({
                         url: "/SWP391_SE1749_NET_GROUP2/login",

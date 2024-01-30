@@ -70,7 +70,7 @@
                 z-index: 99;
             }
 
-            #toast {
+            #toast, #toastLoading {
                 position: fixed;
                 top: 20px;
                 left: 50%;
@@ -85,6 +85,10 @@
                 transition: opacity 0.7s;
             }
 
+            #toastLoading {
+                background-color: orange;
+            }
+
             .show {
                 opacity: 1 !important;
                 visibility: visible !important;
@@ -97,6 +101,7 @@
         <div class="page-wraper">
 
             <div id="toast"></div>
+            <div id="toastLoading">Loading...</div>
 
             <div id="loading-icon-bx"></div>
 
@@ -116,11 +121,10 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <div class="input-group">
-                                            <label>User Name</label>
-                                            <input name="username" type="text" required class="form-control" pattern="^[A-Za-z]+(?: [A-Za-z]+)*$">
+                                            <input name="username" placeholder="Enter username" type="text" required class="form-control" pattern="^[A-Za-z0-9]{6,}$">
 
                                             <div class="invalid-feedback">
-                                                Please enter a valid name.
+                                                Username must least 6 char, string and digit only.
                                             </div>
                                         </div>
                                     </div>
@@ -128,8 +132,7 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <div class="input-group">
-                                            <label>Email Address</label>
-                                            <input name="email" type="email" required class="form-control">
+                                            <input name="email" type="email" placeholder="Enter email" required class="form-control">
                                             <div class="invalid-feedback">
                                                 Please enter a valid email.
                                             </div>
@@ -140,10 +143,9 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <div class="input-group"> 
-                                            <label>Password</label>
-                                            <input name="password" id="password" type="password" required class="form-control" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$">
+                                            <input name="password" placeholder="Enter password" id="password" type="password" required class="form-control" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$">
                                             <div class="invalid-feedback">
-                                                Please enter a valid password.
+                                                Password must least 6 char, 2 digit and string
                                             </div>
                                             <span class="toggle-password" id="togglePassword1">&#x1F441;</span>
                                         </div>
@@ -152,8 +154,7 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <div class="input-group"> 
-                                            <label>Confirm Password</label>
-                                            <input name="repassword" id="repassword" type="password" class="form-control" required>
+                                            <input name="repassword" placeholder="Enter confirm password" id="repassword" type="password" class="form-control" required>
                                             <span class="toggle-password" id="togglePassword2">&#x1F441;</span>
                                         </div>
 
@@ -189,6 +190,9 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
         <script>
+            function toastMessLoading() {
+                $('#toastLoading').toggleClass('show');
+            }
             function toastMessageAction(text, color, link) {
                 if (text && text !== "") {
                     $('#toast').text(text);
@@ -244,18 +248,17 @@
                     var password = $('#password').val();
                     var confirmPassword = $('#repassword').val();
 
-
-
                     if (password !== confirmPassword) {
                         toastMessageAction("Confirm password does not match!", "red");
-
                     } else {
+                        toastMessLoading();
                         var formData = $(this).serialize();
                         $.ajax({
                             url: "/SWP391_SE1749_NET_GROUP2/register",
                             type: "post",
                             data: formData,
                             success: function (data) {
+                                toastMessLoading();
                                 let text = "Register successfully! Sendirect verify email...";
                                 let color = "green";
                                 let link = "/SWP391_SE1749_NET_GROUP2/confirmEmail";
@@ -280,6 +283,7 @@
                                 toastMessageAction(text, color, link);
                             },
                             error: function (err) {
+                                toastMessLoading();
                                 toastMessageAction(err, "red");
                             }
                         });

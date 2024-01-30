@@ -58,11 +58,52 @@
         <link rel="stylesheet" type="text/css" href="assets/css/snackbar.css">
         <link rel="stylesheet" type="text/css" href="assets/css/successtoast.css">
 
+        <style>
+            .input-group {
+                position: relative;
+            }
+            .toggle-password {
+                position: absolute;
+                right: 5px;
+                top: 50%;
+                transform: translateY(-50%);
+                cursor: pointer;
+                z-index: 99;
+            }
+
+            #toast, #toastLoading {
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                color : white;
+                padding: 20px 40px;
+                z-index: 9999;
+                box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+                border-radius: 10px;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.7s;
+            }
+
+            #toastLoading {
+                background-color: orange;
+            }
+
+            .show {
+                opacity: 1 !important;
+                visibility: visible !important;
+            }
+
+
+        </style>
+
     </head>
     <body id="bg">
         <div class="page-wraper">
 
             <div id="toast"></div>
+            <div id="toastLoading">Loading...</div>
 
             <div id="loading-icon-bx"></div>
             <div class="account-form">
@@ -81,16 +122,13 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <div class="input-group">
-                                            <label>Your Email Address</label>
-                                            <input name="email" type="email" required="" class="form-control">
+                                            <input name="email" placeholder="Enter email" type="email" required="" class="form-control">
                                             <div class="invalid-feedback">
                                                 Please enter a valid email.
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
-                                <p  style="color: ${messColor};">${mess}</p>
 
                                 <div class="col-lg-12 m-b30">
                                     <button action="verifyforgot" type="submit" id="submitForgot" class="btn button-md">Send</button>
@@ -118,6 +156,75 @@
         <script src="assets/js/contact.js"></script>
         <script src='assets/vendors/switcher/switcher.js'></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+        <script>
+            function toastMessLoading() {
+                $('#toastLoading').toggleClass('show');
+            }
+            function toastMessageAction(text, color, link) {
+                if (text && text !== "") {
+                    $('#toast').text(text);
+                    $('#toast').css('background-color', color);
+                    $('#toast').toggleClass('show');
+
+                    // After 3 seconds, remove the show class from DIV and redirect
+                    if (link && link !== "") {
+                        setTimeout(function () {
+                            window.location.href = link;
+                        }, 3000);
+                    }
+                    setTimeout(function () {
+                        $("#submitForgot").removeAttr('disabled');
+                        $('#toast').text("");
+                        $('#toast').toggleClass('show');
+                    }, 4000);
+                }
+            }
+
+            $(document).ready(function () {
+                $('#changeForm').submit(function (event) {
+                    event.preventDefault();
+                    $("#submitForgot").prop("disabled", true);
+
+                    toastMessLoading();
+                    var formData = $(this).serialize();
+                    $.ajax({
+                        url: "/SWP391_SE1749_NET_GROUP2/forgot-password",
+                        type: "post",
+                        data: formData,
+                        success: function (data) {
+                            toastMessLoading();
+                            let text = "Send email successfully! Sendirect to verify code...";
+                            let color = "green";
+                            let link = "/SWP391_SE1749_NET_GROUP2/confirmEmail";
+
+                            switch (data) {
+                                case "success":
+                                    break;
+
+                                case "notExisted":
+                                    text = "Email not exist. Please try again!";
+                                    color = "red";
+                                    link = "";
+                                    break;
+
+                                case "sendEmailFailed":
+                                    text = "Send email failed!";
+                                    color = "red";
+                                    link = "";
+                                    break;
+                            }
+
+                            toastMessageAction(text, color, link);
+                        },
+                        error: function (err) {
+                            toastMessLoading();
+                            toastMessageAction(err, "red");
+                        }
+                    });
+                });
+            });
+        </script>
     </body>
 
 </html>

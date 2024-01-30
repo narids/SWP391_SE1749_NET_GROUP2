@@ -31,6 +31,10 @@
         <servlet-name>ConfirmEmail</servlet-name>
         <servlet-class>Controllers.Common.ConfirmEmail</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ResetPasswordController</servlet-name>
+        <servlet-class>Controllers.Common.ResetPasswordController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/login</url-pattern>
@@ -58,6 +62,10 @@
     <servlet-mapping>
         <servlet-name>ConfirmEmail</servlet-name>
         <url-pattern>/confirmEmail</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ResetPasswordController</servlet-name>
+        <url-pattern>/resetpassword</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>30</session-timeout>
