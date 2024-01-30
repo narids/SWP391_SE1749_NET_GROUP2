@@ -47,7 +47,7 @@ public class QuizDAO extends DBContext<Quiz> {
                 ltQuiz.add(quiz);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(QuizDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return ltQuiz;
     }
@@ -73,7 +73,7 @@ public class QuizDAO extends DBContext<Quiz> {
                 ltSubject.add(subject);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(QuizDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return ltSubject;
     }
@@ -94,7 +94,7 @@ public class QuizDAO extends DBContext<Quiz> {
                 return subDe;
             }
         } catch (SQLException ex) {
-            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(QuizDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
