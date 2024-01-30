@@ -347,7 +347,7 @@
         <main class="ttr-wrapper">
             <div class="container-fluid">
                 <div class="db-breadcrumb">
-                    <h4 class="breadcrumb-title">Courses</h4>
+                    <h4 class="breadcrumb-title">Classes</h4>
                     <ul class="db-breadcrumb-list">
                         <li><a href="#"><i class="fa fa-home"></i>Home</a></li>
                         <li>Courses</li>
@@ -358,7 +358,7 @@
                     <div class="col-lg-12 m-b30">
                         <div class="widget-box">
                             <div class="wc-title">
-                                <h4>Your Courses</h4>
+                                <h4>Classes</h4>
                             </div>
                             <div class="widget-inner">
                                 <c:forEach var="classes" items="${ClassList}">
@@ -368,7 +368,7 @@
                                         </div>
                                         <div class="card-courses-full-dec">
                                             <div class="card-courses-title">
-                                                <h4><a href="#">${classes.className}</a>  </h4>
+                                                <h4><a href="../ClassDetail?id=${classes.id}">${classes.className}</a>  </h4>
 
                                             </div>
                                             <div class="card-courses-list-bx">
