@@ -35,7 +35,7 @@ public class ClassDetailController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ClassDetailController</title>");            
+            out.println("<title>Servlet ClassDetailController</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet ClassDetailController at " + request.getContextPath() + "</h1>");
@@ -56,16 +56,13 @@ public class ClassDetailController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
-        ClassDAO t = new ClassDAO(); 
-        int ClassID = Integer.parseInt(request.getParameter("id")); 
-        int numStudent = t.getNumberOfStudentInClass(ClassID); 
-        request.setAttribute("numStudent", numStudent);
-          request.getRequestDispatcher("jsp/ClassDetail.jsp").forward(request, response);
-
-        
-        
-        
+         ClassDAO t = new ClassDAO();
+        int ClassID = Integer.parseInt(request.getParameter("id"));
+        int numStudent = t.getNumberOfStudentInClass(ClassID);
+  
+        request.setAttribute("num", numStudent);
+        System.out.println("numStudent: " + request.getAttribute("num"));
+        request.getRequestDispatcher("jsp/ClassDetail.jsp").forward(request, response);
     }
 
     /**
@@ -80,6 +77,9 @@ public class ClassDetailController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+       
+
+        request.getRequestDispatcher("jsp/ClassDetail.jsp").forward(request, response);
     }
 
     /**

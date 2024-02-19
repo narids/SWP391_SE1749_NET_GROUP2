@@ -6,7 +6,6 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import = "java.util.*" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -59,10 +58,13 @@
         <link class="skin" rel="stylesheet" type="text/css" href="assets/css/color/color-1.css">
 
     </head>
-    <% String id = request.getParameter("id"); %>
+   
 
 
     <body id="bg">
+       <% int numStudent = (Integer) request.getAttribute("num");%>
+
+
         <div class="page-wraper">
             <div id="loading-icon-bx"></div>
             <!-- Header Top ==== -->
@@ -266,7 +268,7 @@
                                         </div>
                                         <div class="ttr-post-info">
                                             <div class="ttr-post-title ">
-                                                <h2 class="post-title">Nvidia and UE4 Technologies Practice</h2>
+                                                <h2 class="post-title"></h2>
                                             </div>
                                             <div class="ttr-post-text">
                                                 <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
@@ -280,8 +282,8 @@
                                                 <ul class="course-features">
                                                     <li><i class="ti-book"></i> <span class="label">Lectures</span> <span class="value">8</span></li>
                                                     <li><i class="ti-help-alt"></i> <span class="label">Quizzes</span> <span class="value">1</span></li>
-                                                    <li><i class="ti-user"></i> <span class="label">Students</span> <span class="value">${numStudent}</span></li>
-                                                    <li><i class="ti-check-box"></i> <span class="label">Assessments</span> <span class="value">Yes</span></li>
+                                                    <li><i class="ti-user"></i> <span class="label">Students</span> <span class="value"><%= numStudent %></span></li>
+                                                    <li><i class="ti-check-box"></i> <span class="label">Teachers</span> <span class="value"></span></li>
                                                 </ul>
                                             </div>
 

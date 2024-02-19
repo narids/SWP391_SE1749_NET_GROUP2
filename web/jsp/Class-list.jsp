@@ -368,7 +368,8 @@
                                         </div>
                                         <div class="card-courses-full-dec">
                                             <div class="card-courses-title">
-                                                <h4><a href="../ClassDetail?id=${classes.id}">${classes.className}</a>  </h4>
+                                                <h4><a href="ClassDetail?id=${classes.getClassID()}
+                                                       ">${classes.className}</a>  </h4>
 
                                             </div>
                                             <div class="card-courses-list-bx">
