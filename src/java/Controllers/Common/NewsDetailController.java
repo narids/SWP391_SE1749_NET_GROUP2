@@ -64,7 +64,7 @@ public class NewsDetailController extends HttpServlet {
         int userId = 1;
         Account account = (Account) request.getSession().getAttribute("account");
         if (account != null) {
-            userId = account.getRoleId();
+            userId = account.getRole().getRoleId();
         }
         int newsId = Integer.parseInt(request.getParameter("newsId"));
         String title = request.getParameter("title");

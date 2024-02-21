@@ -81,7 +81,7 @@ public class AddNewsController extends HttpServlet {
         filePart.write(filePath);
 
         if(account != null) {
-            userId = account.getRoleId();
+            userId = account.getRole().getRoleId();
         }
         ndao.addNews(title, summary, content, filePath, userId, 0);
         response.sendRedirect("news-list");
