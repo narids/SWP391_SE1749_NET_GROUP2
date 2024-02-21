@@ -59,9 +59,9 @@
         <!-- STYLESHEETS ============================================= -->
         <link rel="stylesheet" type="text/css" href="assets/css/style.css">
         <link class="skin" rel="stylesheet" type="text/css" href="assets/css/color/color-1.css">
-        <link rel="stylesheet" type="text/css" href="assets/css/verifyform.css"/>
-        <link rel="stylesheet" type="text/css" href="assets/css/snackbar.css">
-        <link rel="stylesheet" type="text/css" href="assets/css/successtoast.css">
+        <!--<link rel="stylesheet" type="text/css" href="assets/css/verifyform.css"/>-->
+        <!--<link rel="stylesheet" type="text/css" href="assets/css/snackbar.css">-->
+        <!--<link rel="stylesheet" type="text/css" href="assets/css/successtoast.css">-->
 
         <style>
             .input-group {
@@ -113,7 +113,7 @@
             <div id="loading-icon-bx"></div>
             <div class="account-form">
                 <div class="account-head" style="background-image:url(assets/images/background/bg2.jpg);">
-                    <a href="index.html"><img src="assets/images/logo-white-2.png" alt=""></a>
+                    <a href="/SWP391_SE1749_NET_GROUP2"><img src="assets/images/logo-white-2.png" alt=""></a>
                 </div>
                 <div class="account-form-inner">
                     <div class="account-container">
@@ -121,20 +121,28 @@
                             <h2 class="title-head">Verify your <span>Account</span></h2>
                             <p>Change another email address, <a href="${sessionScope.type == 'register' ? 'register' : 'forgot-password'}">click here</a></p>
                         </div>	
-                        <div class="container">
-                            <h2 class="head">Enter Verification Code</h2>
+                        <div class="container" style="margin-left: -15px">
+                            <h4 class="">Enter Verification Code</h2>
 
-                            <form id="verifyFormfg" method="post">
-                                <input type="hidden"  name="action" value="confirmEmail">
-                                <input type="text" id="code" name="code" placeholder="Enter 6-digit code" pattern="\d{6}">
-                                <input type="submit" id="verifySubmit" value="Verify">
-                            </form>
+                            <form id="verifyFormfg" class="needs-validation" novalidate method="post">
+                                    <div class="form-group">
+                                        <div class="input-group"> 
+                                            <input type="hidden"  name="action" value="confirmEmail">
+                                            <input name="code" id="code" type="text" pattern="\d{6}" placeholder="Enter 6-digit code" class="form-control" required="">
+                                            <input type="button" id="reSendCode" value="Resent Code" style="cursor: pointer">
+                                            <div class="invalid-feedback">
+                                                Code must be 6 digit
+                                            </div>
+                                        </div>
+                                    </div>
 
-                            <br/>
+                                    <br/>
 
-                            <div class="col-lg-12 m-b30">
-                                <button id="reSendCode" class="btn button-md">Resent Code</button>
-                            </div>
+                                    <div class="col-lg-12 m-b30">
+                                        <!--<button id="reSendCode" class="btn button-md">Resent Code</button>-->
+                                        <button id="verifySubmit" type="submit" class="btn button-md" style="margin-left: -15px">Verify</button>
+                                    </div>
+                                </form>
                         </div>
                     </div>
                 </div>
@@ -158,6 +166,7 @@
         <script src="assets/js/contact.js"></script>
         <script src='assets/vendors/switcher/switcher.js'></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <script>
             function toastMessLoading() {
                 $('#toastLoading').toggleClass('show');
@@ -184,61 +193,70 @@
                 }
             }
 
-            $('#verifyFormfg').submit(function (event) {
-                event.preventDefault();
-                $("#verifySubmit").prop("disabled", true);
-                $("#reSendCode").prop("disabled", true);
+            const forms = document.querySelectorAll('.needs-validation')
 
-                var formData = $(this).serialize();
-                $.ajax({
-                    url: "/SWP391_SE1749_NET_GROUP2/confirmEmail",
-                    type: "post",
-                    data: formData,
-                    success: function (data) {
-                        const status = data.toString().split("-")[0];
-                        const type = data.toString().split("-")[1];
+            // Loop over them and prevent submission
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                    event.preventDefault();
+                    event.stopPropagation();
 
-                        let text = type === "register" ? "Verify successfully! Sendirect Login..." : "Verify successfully! Sendirect resetpassword...";
-                        let color = "green";
-                        let link = type === "register" ? "/SWP391_SE1749_NET_GROUP2/login" : "/SWP391_SE1749_NET_GROUP2/resetpassword";
+                    if (form.checkValidity()) {
+                        $("#verifySubmit").prop("disabled", true);
+                        $("#reSendCode").prop("disabled", true);
+                        var formData = $("#verifyFormfg").serialize();
+                        $.ajax({
+                            url: "/SWP391_SE1749_NET_GROUP2/confirmEmail",
+                            type: "post",
+                            data: formData,
+                            success: function (data) {
+                                const status = data.toString().split("-")[0];
+                                const type = data.toString().split("-")[1];
 
-                        switch (status) {
-                            case "success":
-                                break;
+                                let text = type === "register" ? "Verify successfully! Sendirect Login..." : "Verify successfully! Sendirect resetpassword...";
+                                let color = "green";
+                                let link = type === "register" ? "/SWP391_SE1749_NET_GROUP2/login" : "/SWP391_SE1749_NET_GROUP2/resetpassword";
 
-                            case "failed":
-                                text = "Register failed, please try again";
-                                color = "red";
-                                link = "";
-                                break;
+                                switch (status) {
+                                    case "success":
+                                        break;
 
-                            case "timeout":
-                                text = "Verification code has expired.";
-                                color = "red";
-                                link = "";
-                                break;
+                                    case "failed":
+                                        text = "Register failed, please try again";
+                                        color = "red";
+                                        link = "";
+                                        break;
 
-                            case "invalid":
-                                text = "Invalid verification code.";
-                                color = "red";
-                                link = "";
-                                break;
-                        }
+                                    case "timeout":
+                                        text = "Verification code has expired.";
+                                        color = "red";
+                                        link = "";
+                                        break;
 
-                        toastMessageAction(text, color, link);
-                    },
-                    error: function (err) {
-                        toastMessageAction(err, "red", "");
+                                    case "invalid":
+                                        text = "Invalid verification code.";
+                                        color = "red";
+                                        link = "";
+                                        break;
+                                }
+
+                                toastMessageAction(text, color, link);
+                            },
+                            error: function (err) {
+                                toastMessageAction("Something went wrong", "red", "");
+                            }
+                        });
                     }
-                });
-            });
+
+                    form.classList.add('was-validated')
+                }, false);
+            })
 
             $('#reSendCode').click(function (event) {
                 event.preventDefault();
                 toastMessLoading();
                 $("#verifySubmit").prop("disabled", true);
                 $("#reSendCode").prop("disabled", true);
-
                 $.ajax({
                     url: "/SWP391_SE1749_NET_GROUP2/confirmEmail",
                     type: "post",

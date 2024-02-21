@@ -99,7 +99,7 @@
             <div id="loading-icon-bx"></div>
             <div class="account-form">
                 <div class="account-head" style="background-image:url(assets/images/background/bg2.jpg);">
-                    <a href="index.html"><img src="assets/images/logo-white-2.png" alt=""></a>
+                    <a href="/SWP391_SE1749_NET_GROUP2"><img src="assets/images/logo-white-2.png" alt=""></a>
                 </div>
                 <div class="account-form-inner">
                     <div class="account-container">
@@ -107,14 +107,14 @@
                             <h2 class="title-head">Login to your <span>Account</span></h2>
                             <p>You don't have an account? <a href="register">Register now</a></p>
                         </div>	
-                        <form class="contact-bx" id="loginForm" method="post" action="login">
+                        <form class="contact-bx needs-validation" novalidate id="loginForm" method="post" action="login">
                             <div class="row placeani">
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <div class="input-group">
-                                            <input name="username" pattern="^[A-Za-z0-9]{6,}$" placeholder="Enter username" value="${requestScope.username}" type="text" required="" class="form-control">
+                                            <input name="username" pattern="^[A-Za-z0-9]{6,20}$" placeholder="Enter username" value="${requestScope.username}" type="text" required class="form-control">
                                             <div class="invalid-feedback">
-                                                Username must least 6 char, string and digit only.
+                                                Username must least 6 char, only include string and digit.
                                             </div>
                                         </div>
                                     </div>
@@ -122,11 +122,11 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <div class="input-group"> 
-                                            <input name="password" id="password" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$" placeholder="Enter password" value="${requestScope.password}" type="password" class="form-control" required="">
-                                            <div class="invalid-feedback">
-                                                Password must least 6 char, 2 digit and string
-                                            </div>
+                                            <input style="outline: none" name="password" id="password" pattern="^[A-Za-z0-9]{6,20}$" placeholder="Enter password" value="${requestScope.password}" type="password" class="form-control" required="">
                                             <span class="toggle-password" id="togglePassword">&#x1F441;</span>
+                                            <div class="invalid-feedback">
+                                                Password must least 6 char, only include string and digit.
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -171,6 +171,7 @@
         <script src="assets/js/contact.js"></script>
         <script src='assets/vendors/switcher/switcher.js'></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         <script>
             function toastMessageAction(text, color, link) {
                 if (text && text !== "") {
@@ -207,44 +208,55 @@
                 });
 
 
-                $('#loginForm').submit(function (event) {
-                    event.preventDefault();
+                const forms = document.querySelectorAll('.needs-validation')
 
-                    $("#loginButton").prop("disabled", true);
-                    var formData = $(this).serialize();
-                    $.ajax({
-                        url: "/SWP391_SE1749_NET_GROUP2/login",
-                        type: "post",
-                        data: formData,
-                        success: function (data) {
-                            let text = "Login successfully! Sendirect Home...";
-                            let color = "green";
-                            let link = "/SWP391_SE1749_NET_GROUP2/home";
+                // Loop over them and prevent submission
+                Array.from(forms).forEach(form => {
+                    form.addEventListener('submit', event => {
+                        event.preventDefault()
+                        if (!form.checkValidity()) {
+                            event.stopPropagation()
 
-                            switch (data) {
-                                case "success":
-                                    break;
+                        } else {
+                            $("#loginButton").prop("disabled", true);
+                            var formData = $("#loginForm").serialize();
+                            $.ajax({
+                                url: "/SWP391_SE1749_NET_GROUP2/login",
+                                type: "post",
+                                data: formData,
+                                success: function (data) {
+                                    let text = "Login successfully! Sendirect Home...";
+                                    let color = "green";
+                                    let link = "/SWP391_SE1749_NET_GROUP2/home";
 
-                                case "notCorrect":
-                                    text = "Username or password are not correct. Please try again!";
-                                    color = "red";
-                                    link = "";
-                                    break;
+                                    switch (data) {
+                                        case "success":
+                                            break;
 
-                                case "inActive":
-                                    text = "Your account is inactive. Need verify account";
-                                    color = "red";
-                                    link = "";
-                                    break;
-                            }
+                                        case "notCorrect":
+                                            text = "Username or password are not correct. Please try again!";
+                                            color = "red";
+                                            link = "";
+                                            break;
 
-                            toastMessageAction(text, color, link);
-                        },
-                        error: function (err) {
-                            toastMessageAction(err, "red", "/SWP391_SE1749_NET_GROUP2/login");
+                                        case "inActive":
+                                            text = "Your account is inactive. Need verify account";
+                                            color = "red";
+                                            link = "";
+                                            break;
+                                    }
+
+                                    toastMessageAction(text, color, link);
+                                },
+                                error: function (err) {
+                                    toastMessageAction("Something went wrong", "red", "/SWP391_SE1749_NET_GROUP2/login");
+                                }
+                            });
                         }
-                    });
-                });
+
+                        form.classList.add('was-validated')
+                    }, false)
+                })
             });
 
         </script>
