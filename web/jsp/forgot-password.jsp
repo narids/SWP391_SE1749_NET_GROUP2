@@ -108,7 +108,7 @@
             <div id="loading-icon-bx"></div>
             <div class="account-form">
                 <div class="account-head" style="background-image:url(assets/images/background/bg2.jpg);">
-                    <a href="index.html"><img src="assets/images/logo-white-2.png" alt=""></a>
+                    <a href="/SWP391_SE1749_NET_GROUP2"><img src="assets/images/logo-white-2.png" alt=""></a>
                 </div>
                 <div class="account-form-inner">
                     <div class="account-container">
@@ -116,13 +116,13 @@
                             <h2 class="title-head">Forgot <span>Password</span></h2>
                             <p>Login Your Account, <a href="login">click here</a></p>
                         </div>	
-                        <form id="changeForm" class="contact-bx" action="forgot-password" method="post">
+                        <form id="changeForm" class="contact-bx needs-validation" novalidate action="forgot-password" method="post">
                             <input type="hidden" name="action" value="verifyforgot">
                             <div class="row placeani">
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <div class="input-group">
-                                            <input name="email" placeholder="Enter email" type="email" required="" class="form-control">
+                                            <input name="email" placeholder="Enter email" type="email" required class="form-control">
                                             <div class="invalid-feedback">
                                                 Please enter a valid email.
                                             </div>
@@ -181,49 +181,58 @@
                 }
             }
 
-            $(document).ready(function () {
-                $('#changeForm').submit(function (event) {
-                    event.preventDefault();
-                    $("#submitForgot").prop("disabled", true);
+            const forms = document.querySelectorAll('.needs-validation')
 
-                    toastMessLoading();
-                    var formData = $(this).serialize();
-                    $.ajax({
-                        url: "/SWP391_SE1749_NET_GROUP2/forgot-password",
-                        type: "post",
-                        data: formData,
-                        success: function (data) {
-                            toastMessLoading();
-                            let text = "Send email successfully! Sendirect to verify code...";
-                            let color = "green";
-                            let link = "/SWP391_SE1749_NET_GROUP2/confirmEmail";
+            // Loop over them and prevent submission
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                    event.preventDefault()
+                    if (!form.checkValidity()) {
+                        event.stopPropagation()
 
-                            switch (data) {
-                                case "success":
-                                    break;
+                    } else {
+                        $("#submitForgot").prop("disabled", true);
+                        var formData = $("#changeForm").serialize();
+                        toastMessLoading();
+                        $.ajax({
+                            url: "/SWP391_SE1749_NET_GROUP2/forgot-password",
+                            type: "post",
+                            data: formData,
+                            success: function (data) {
+                                toastMessLoading();
+                                let text = "Send email successfully! Sendirect to verify code...";
+                                let color = "green";
+                                let link = "/SWP391_SE1749_NET_GROUP2/confirmEmail";
 
-                                case "notExisted":
-                                    text = "Email not exist. Please try again!";
-                                    color = "red";
-                                    link = "";
-                                    break;
+                                switch (data) {
+                                    case "success":
+                                        break;
 
-                                case "sendEmailFailed":
-                                    text = "Send email failed!";
-                                    color = "red";
-                                    link = "";
-                                    break;
+                                    case "notExisted":
+                                        text = "Email not exist. Please try again!";
+                                        color = "red";
+                                        link = "";
+                                        break;
+
+                                    case "sendEmailFailed":
+                                        text = "Send email failed!";
+                                        color = "red";
+                                        link = "";
+                                        break;
+                                }
+
+                                toastMessageAction(text, color, link);
+                            },
+                            error: function (err) {
+                                toastMessLoading();
+                                toastMessageAction("Something went wrong", "red");
                             }
+                        });
+                    }
 
-                            toastMessageAction(text, color, link);
-                        },
-                        error: function (err) {
-                            toastMessLoading();
-                            toastMessageAction(err, "red");
-                        }
-                    });
-                });
-            });
+                    form.classList.add('was-validated')
+                }, false)
+            })
         </script>
     </body>
 
