@@ -5,6 +5,7 @@
 package Controllers.Manager;
 
 import DAOs.ClassDAO;
+import Models.MyClass;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -56,12 +57,14 @@ public class ClassDetailController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         ClassDAO t = new ClassDAO();
+        ClassDAO t = new ClassDAO();
         int ClassID = Integer.parseInt(request.getParameter("id"));
         int numStudent = t.getNumberOfStudentInClass(ClassID);
-  
+        MyClass ClassSelected = t.getClassesByID(ClassID);
+//        int ClassSelected= 1; 
+        request.setAttribute("classname", ClassSelected);
         request.setAttribute("num", numStudent);
-        System.out.println("numStudent: " + request.getAttribute("num"));
+
         request.getRequestDispatcher("jsp/ClassDetail.jsp").forward(request, response);
     }
 
@@ -77,7 +80,6 @@ public class ClassDetailController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-       
 
         request.getRequestDispatcher("jsp/ClassDetail.jsp").forward(request, response);
     }

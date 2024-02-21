@@ -13,7 +13,6 @@ public class MyClass extends BaseEntity{
 
     private int classId;
     private String className;
-
     public MyClass() {
     }
 
@@ -23,6 +22,10 @@ public class MyClass extends BaseEntity{
         this.name = name;
     }
 
+    public MyClass(int classId, String className) {
+        this.classId = classId;
+        this.className = className;
+    }
     public int getClassID() {
         return classId;
     }

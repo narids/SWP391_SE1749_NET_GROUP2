@@ -38,7 +38,7 @@ public class ClassDAO extends DBContext<BaseEntity> {
 //        return cls;
 //    }
     public List<MyClass> getAllClasses() {
-        String sql = "SELECT distinct s.ClassID, s.ClassName, a.Username\n"
+        String sql = "SELECT distinct s.ClassID, s.ClassName, a.Username,t.TeacherID, cs.ClassSubjectID\n"
                 + "FROM Class s, ClassSubject cs, Teacher t, Account a\n"
                 + "WHERE s.ClassID = cs.ClassID AND cs.TeacherID = t.TeacherID AND a.UserID = t.UserID";
         List<MyClass> classes = new ArrayList<>();
@@ -57,9 +57,36 @@ public class ClassDAO extends DBContext<BaseEntity> {
         return classes;
     }
 
+   public MyClass getClassesByID(int id) {
+    String sql = "SELECT * FROM Class WHERE ClassID = ?";
+    MyClass myClass = null;
+    try {
+        // Check if connection is null or not
+        if (connection != null) {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, id); // set the parameter for the query
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                myClass = new MyClass(resultSet.getInt("ClassID"), resultSet.getString("ClassName"));
+            }
+            // Close resultSet, statement, and connection (if necessary)
+            resultSet.close();
+            statement.close();
+            // No need to return myClass here, return it after try-catch block
+        } else {
+            System.err.println("Connection is null. Cannot execute query.");
+        }
+    } catch (SQLException ex) {
+        // Log the exception or handle it appropriately
+        ex.printStackTrace();
+    }
+    return myClass; // Moved the return statement outside the try-catch block
+}
+
     public int getNumberOfStudentInClass(int ClassID) {
-        String sql = "select COUNT (*) as count_student_in_class\n" +
-"                from ClassStudent where ClassID = ?";
+        String sql = "select COUNT (*) as count_student_in_class\n"
+                + "                from ClassStudent where ClassID = ?";
         // declare and initialize the number of students in the class
         int numStudents = 0;
 
@@ -116,9 +143,10 @@ public class ClassDAO extends DBContext<BaseEntity> {
     public BaseEntity get(BaseEntity entity) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    public static void main(String[] args){
-        ClassDAO  cd =  new ClassDAO();
-        int num = cd.getNumberOfStudentInClass(1);
+
+    public static void main(String[] args) {
+        ClassDAO cd = new ClassDAO();
+        MyClass num = cd.getClassesByID(1);
         System.out.println(num);
     }
 }
