@@ -3,7 +3,7 @@
     Created on : Jan 28, 2024, 7:38:29 PM
     Author     : admin
 --%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -53,10 +53,45 @@
         <!-- STYLESHEETS ============================================= -->
         <link rel="stylesheet" type="text/css" href="assets/css/style.css">
         <link class="skin" rel="stylesheet" type="text/css" href="assets/css/color/color-1.css">
+        <style>
+            .input-group {
+                position: relative;
+            }
+            .toggle-password {
+                position: absolute;
+                right: 25px;
+                top: 8px;
+                cursor: pointer;
+                z-index: 99;
+            }
 
+            #toast {
+                position: fixed;
+                top: 80px;
+                left: 50%;
+                transform: translateX(-50%);
+                color : white;
+                padding: 20px 40px;
+                z-index: 999;
+                box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+                border-radius: 10px;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.7s;
+            }
+
+            .show {
+                opacity: 1 !important;
+                visibility: visible !important;
+            }
+
+        </style>
     </head>
     <body id="bg">
         <div class="page-wraper">
+
+            <div id="toast"></div>
+
             <div id="loading-icon-bx"></div>
             <!-- Header Top ==== -->
             <header class="header rs-nav">
@@ -71,7 +106,7 @@
                             </div>
                             <div class="topbar-right">
                                 <ul>
-                                    
+
                                     <li><a href="login">Login</a></li>
                                     <li><a href="register">Register</a></li>
                                 </ul>
@@ -79,7 +114,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="sticky-header navbar-expand-lg">
+                <div class="sticky-header navbar-expand-lg" style="z-index: 100">
                     <div class="menu-bar clearfix">
                         <div class="container clearfix">
                             <!-- Header Logo ==== -->
@@ -183,7 +218,7 @@
                                 <div class="col-lg-9 col-md-8 col-sm-12 m-b30">
                                     <div class="profile-content-bx">
                                         <div class="tab-content">
-                                            <div class="tab-pane active" id="courses">
+                                            <div class="tab-pane ${requestScope.tabPane == null ? 'active' : ''}" id="courses">
                                                 <div class="profile-head">
                                                     <h3>My Courses</h3>
                                                     <div class="feature-filters style1 ml-auto">
@@ -609,33 +644,41 @@
                                                     </div>
                                                 </form>
                                             </div>
-                                            <div class="tab-pane" id="change-password">
+                                            <div class="tab-pane ${requestScope.tabPane == "changePassword" ? 'active' : ''}" id="change-password">
                                                 <div class="profile-head">
                                                     <h3>Change Password</h3>
                                                 </div>
-                                                <form class="edit-profile">
+                                                <form class="edit-profile needs-validation" novalidate id="changePassForm" method="post" action="catalog">
+                                                    <input type="hidden" name="action" value="changePassForm">
                                                     <div class="">
                                                         <div class="form-group row">
-                                                            <div class="col-12 col-sm-8 col-md-8 col-lg-9 ml-auto">
-                                                                <h3>Password</h3>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row">
                                                             <label class="col-12 col-sm-4 col-md-4 col-lg-3 col-form-label">Current Password</label>
-                                                            <div class="col-12 col-sm-8 col-md-8 col-lg-7">
-                                                                <input class="form-control" type="password" value="">
+                                                            <div class="col-12 col-sm-8 col-md-8 col-lg-7 input-group">
+                                                                <input name="currentPassword" id="currentPassword" type="password" class="form-control" required="">
+                                                                <span class="toggle-password" id="togglePassword1">&#x1F441;</span>
+                                                                <div class="invalid-feedback">
+                                                                    Password not be empty
+                                                                </div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
                                                             <label class="col-12 col-sm-4 col-md-4 col-lg-3 col-form-label">New Password</label>
-                                                            <div class="col-12 col-sm-8 col-md-8 col-lg-7">
-                                                                <input class="form-control" type="password" value="">
+                                                            <div class="col-12 col-sm-8 col-md-8 col-lg-7 input-group">
+                                                                <input name="newPassword" id="newPassword" pattern="^[A-Za-z0-9]{6,20}$" type="password" class="form-control" required="">
+                                                                <span class="toggle-password" id="togglePassword2">&#x1F441;</span>
+                                                                <div class="invalid-feedback">
+                                                                    Password must least 6 char, only include string and digit.
+                                                                </div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <label class="col-12 col-sm-4 col-md-4 col-lg-3 col-form-label">Re Type New Password</label>
-                                                            <div class="col-12 col-sm-8 col-md-8 col-lg-7">
-                                                                <input class="form-control" type="password" value="">
+                                                            <label class="col-12 col-sm-4 col-md-4 col-lg-3 col-form-label">Confirm Password</label>
+                                                            <div class="col-12 col-sm-8 col-md-8 col-lg-7 input-group">
+                                                                <input name="confirmPassword" id="confirmPassword" type="password" class="form-control" required="">
+                                                                <span class="toggle-password" id="togglePassword3">&#x1F441;</span>
+                                                                <div class="invalid-feedback">
+                                                                    Confirm password not be empty
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -643,8 +686,8 @@
                                                         <div class="col-12 col-sm-4 col-md-4 col-lg-3">
                                                         </div>
                                                         <div class="col-12 col-sm-8 col-md-8 col-lg-7">
-                                                            <button type="reset" class="btn">Save changes</button>
-                                                            <button type="reset" class="btn-secondry">Cancel</button>
+                                                            <button type="submit" id="SaveChangePass" class="btn">Save changes</button>
+                                                            <button type="reset" id="CancelChangePass" class="btn-secondry">Cancel</button>
                                                         </div>
                                                     </div>
 
@@ -784,6 +827,132 @@
         <script src="assets/js/functions.js"></script>
         <script src="assets/js/contact.js"></script>
         <script src='assets/vendors/switcher/switcher.js'></script>
+        <script>
+            function toastMessageAction(text, color, link) {
+                if (text && text !== "") {
+                    $('#toast').text(text);
+                    $('#toast').css('background-color', color);
+                    $('#toast').toggleClass('show');
+
+                    // After 3 seconds, remove the show class from DIV and redirect
+//                    if (link && link !== "") {
+//                        setTimeout(function () {
+//                            window.location.href = link;
+//                        }, 3000);
+//                    }
+                    setTimeout(function () {
+                        $("#SaveChangePass").removeAttr('disabled');
+                        $("#CancelChangePass").removeAttr('disabled');
+                        $('#toast').text("");
+                        $('#toast').toggleClass('show');
+                    }, 4000);
+                }
+            }
+
+            $(document).ready(function () {
+                $('#togglePassword1').click(function () {
+                    var passwordInput = $('#currentPassword');
+                    var icon = $(this);
+
+                    if (passwordInput.attr('type') === 'password') {
+                        passwordInput.attr('type', 'text');
+                        icon.html('&#x1F440;'); // Mắt mở
+                    } else {
+                        passwordInput.attr('type', 'password');
+                        icon.html('&#x1F441;'); // Mắt đóng
+                    }
+                });
+                $('#togglePassword2').click(function () {
+                    var passwordInput = $('#newPassword');
+                    var icon = $(this);
+
+                    if (passwordInput.attr('type') === 'password') {
+                        passwordInput.attr('type', 'text');
+                        icon.html('&#x1F440;'); // Mắt mở
+                    } else {
+                        passwordInput.attr('type', 'password');
+                        icon.html('&#x1F441;'); // Mắt đóng
+                    }
+                });
+                $('#togglePassword3').click(function () {
+                    var passwordInput = $('#confirmPassword');
+                    var icon = $(this);
+
+                    if (passwordInput.attr('type') === 'password') {
+                        passwordInput.attr('type', 'text');
+                        icon.html('&#x1F440;'); // Mắt mở
+                    } else {
+                        passwordInput.attr('type', 'password');
+                        icon.html('&#x1F441;'); // Mắt đóng
+                    }
+                });
+
+
+                const forms = document.querySelectorAll('.needs-validation')
+
+                // Loop over them and prevent submission
+                Array.from(forms).forEach(form => {
+                    form.addEventListener('submit', event => {
+                        event.preventDefault();
+
+                        const currentPassword = $('#currentPassword').val();
+                        const newPassword = $('#newPassword').val();
+                        const confirmPassword = $('#confirmPassword').val();
+
+                        if (!form.checkValidity()) {
+                            event.stopPropagation();
+
+                        } else {
+                            $("#SaveChangePass").prop("disabled", true);
+                            $("#CancelChangePass").prop("disabled", true);
+                            var formData = $("#changePassForm").serialize();
+                            $.ajax({
+                                url: "/SWP391_SE1749_NET_GROUP2/catalog",
+                                type: "post",
+                                data: formData,
+                                success: function (data) {
+                                    let text = "Change password successfully!";
+                                    let color = "green";
+                                    let link = "/SWP391_SE1749_NET_GROUP2/catalog&tabPane=changePassword";
+
+                                    switch (data) {
+                                        case "success":
+                                            $("#changePassForm")[0].reset()
+                                            break;
+
+                                        case "duplicate":
+                                            text = "New password has duplicate!";
+                                            color = "red";
+                                            link = "";
+                                            break;
+
+                                        case "notMatch":
+                                            text = "Confirm password does not match!";
+                                            color = "red";
+                                            link = "";
+                                            break;
+
+                                        case "passNotCorrect":
+                                            text = "Current password not correct!";
+                                            color = "red";
+                                            link = "";
+                                            break;
+                                    }
+
+                                    toastMessageAction(text, color, link);
+                                },
+                                error: function () {
+                                    toastMessageAction("Something went wrong", "red", "/SWP391_SE1749_NET_GROUP2/catalog&tabPane=changePassword");
+                                }
+                            });
+                        }
+
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+            });
+
+        </script>
     </body>
 
 </html>

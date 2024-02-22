@@ -4,6 +4,7 @@
  */
 package Controllers.Common;
 
+import DAOs.AccountDAO;
 import Models.Account;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,6 +13,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
@@ -33,12 +35,12 @@ public class CatalogController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Account account = (Account) request.getSession().getAttribute("account");
-//        if (account == null) {
-//            response.sendRedirect("login");
-//        } else {
+        if (account == null) {
+            response.sendRedirect("login");
+        } else {
             request.setAttribute("account", account);
             request.getRequestDispatcher("jsp/catalog.jsp").forward(request, response);
-//        }
+        }
     }
 
     /**
@@ -52,6 +54,52 @@ public class CatalogController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        AccountDAO adb = new AccountDAO();
+
+        Account account = (Account) session.getAttribute("account");
+
+        if (account == null) {
+            response.sendRedirect("login");
+
+        } else {
+            String action = request.getParameter("action");
+
+            if ("changePassForm".equals(action)) {
+                String currentPassword = request.getParameter("currentPassword");
+                String newPassword = request.getParameter("newPassword");
+                String confirmPassword = request.getParameter("confirmPassword");
+
+                if (currentPassword.equals(newPassword)) {
+                    try (PrintWriter out = response.getWriter()) {
+                        out.print("duplicate");
+                    }
+
+                } else if (!newPassword.equals(confirmPassword)) {
+                    try (PrintWriter out = response.getWriter()) {
+                        out.print("notMatch");
+                    }
+
+                } else {
+                    Account accCheck = adb.getAccount(account.getUsername(), currentPassword);
+
+                    if (accCheck == null) {
+                        try (PrintWriter out = response.getWriter()) {
+                            out.print("passNotCorrect");
+                        }
+                    } else {
+                        adb.resetPass(newPassword, account.getEmail());
+
+                        try (PrintWriter out = response.getWriter()) {
+                            out.print("success");
+                        }
+                    }
+
+                }
+
+            }
+
+        }
     }
 
     /**

@@ -9,6 +9,7 @@ import Models.Role;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -110,7 +111,8 @@ public class AccountDAO extends DBContext<BaseEntity> {
         }
     }
 
-    public Boolean registerUser(Account a) {
+    public int registerUser(Account a) {
+        Integer generatedId = null;
         try {
             String sql = "INSERT INTO [dbo].[Account]\n"
                     + "           ([Username]\n"
@@ -122,7 +124,7 @@ public class AccountDAO extends DBContext<BaseEntity> {
                     + "     VALUES\n"
                     + "           (?,?,?,?,?,?)";
             connection.setAutoCommit(false);
-            PreparedStatement stm = connection.prepareCall(sql);
+            PreparedStatement stm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             stm.setString(1, a.getUsername());
             stm.setString(2, a.getPassword());
@@ -130,6 +132,32 @@ public class AccountDAO extends DBContext<BaseEntity> {
             stm.setString(4, a.getEmail());
             stm.setString(5, a.getAvatar());
             stm.setBoolean(6, a.getStatus());
+
+            int affectedRows = stm.executeUpdate();
+            if (affectedRows > 0) {
+                ResultSet generatedKeys = stm.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    generatedId = generatedKeys.getInt(1);
+                }
+                connection.commit();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return generatedId;
+    }
+
+    public Boolean addToStudentAccounts(int userID) {
+        try {
+            String sql = "INSERT INTO [dbo].[Student]\n"
+                    + "           ([UserID])\n"
+                    + "     VALUES\n"
+                    + "           (?)";
+            connection.setAutoCommit(false);
+            PreparedStatement stm = connection.prepareCall(sql);
+
+            stm.setInt(1, userID);
 
             if (stm.executeUpdate() > 0) {
                 connection.commit();

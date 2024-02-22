@@ -63,8 +63,7 @@
             .toggle-password {
                 position: absolute;
                 right: 5px;
-                top: 50%;
-                transform: translateY(-50%);
+                top: 8px;
                 cursor: pointer;
                 z-index: 99;
             }
@@ -183,13 +182,13 @@
                     if (link && link !== "") {
                         setTimeout(function () {
                             window.location.href = link;
-                        }, 3000);
+                        }, 2000);
                     }
                     setTimeout(function () {
                         $("#loginButton").removeAttr('disabled');
                         $('#toast').text("");
                         $('#toast').toggleClass('show');
-                    }, 4000);
+                    }, 3000);
                 }
             }
 
