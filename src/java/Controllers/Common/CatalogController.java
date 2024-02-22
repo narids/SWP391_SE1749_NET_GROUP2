@@ -89,7 +89,7 @@ public class CatalogController extends HttpServlet {
                         }
                     } else {
                         adb.resetPass(newPassword, account.getEmail());
-
+                        
                         try (PrintWriter out = response.getWriter()) {
                             out.print("success");
                         }

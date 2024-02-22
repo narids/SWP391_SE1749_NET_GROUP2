@@ -200,7 +200,7 @@
                                         <div class="profile-tabnav">
                                             <ul class="nav nav-tabs">
                                                 <li class="nav-item">
-                                                    <a class="nav-link active" data-toggle="tab" href="#courses"><i class="ti-book"></i>Classes</a>
+                                                    <a class="nav-link ${param.tabPane == null ? 'active' : ''}" data-toggle="tab" href="#courses"><i class="ti-book"></i>Classes</a>
                                                 </li>
                                                 <li class="nav-item">
                                                     <a class="nav-link" data-toggle="tab" href="#quiz-results"><i class="ti-bookmark-alt"></i>Quiz Results </a>
@@ -209,7 +209,7 @@
                                                     <a class="nav-link" data-toggle="tab" href="#edit-profile"><i class="ti-pencil-alt"></i>Edit Profile</a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a class="nav-link" data-toggle="tab" href="#change-password"><i class="ti-lock"></i>Change Password</a>
+                                                    <a class="nav-link ${param.tabPane == "changePassword" ? 'active' : ''}" data-toggle="tab" href="#change-password"><i class="ti-lock"></i>Change Password</a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -218,7 +218,7 @@
                                 <div class="col-lg-9 col-md-8 col-sm-12 m-b30">
                                     <div class="profile-content-bx">
                                         <div class="tab-content">
-                                            <div class="tab-pane ${requestScope.tabPane == null ? 'active' : ''}" id="courses">
+                                            <div class="tab-pane ${param.tabPane == null ? 'active' : ''}" id="courses">
                                                 <div class="profile-head">
                                                     <h3>My Courses</h3>
                                                     <div class="feature-filters style1 ml-auto">
@@ -644,7 +644,7 @@
                                                     </div>
                                                 </form>
                                             </div>
-                                            <div class="tab-pane ${requestScope.tabPane == "changePassword" ? 'active' : ''}" id="change-password">
+                                            <div class="tab-pane ${param.tabPane == "changePassword" ? 'active' : ''}" id="change-password">
                                                 <div class="profile-head">
                                                     <h3>Change Password</h3>
                                                 </div>
@@ -913,11 +913,12 @@
                                 success: function (data) {
                                     let text = "Change password successfully!";
                                     let color = "green";
-                                    let link = "/SWP391_SE1749_NET_GROUP2/catalog&tabPane=changePassword";
+                                    let link = "/SWP391_SE1749_NET_GROUP2/catalog?tabPane=changePassword";
 
                                     switch (data) {
                                         case "success":
-                                            $("#changePassForm")[0].reset()
+                                            $("#changePassForm")[0].reset();
+                                            window.location.href = link;
                                             break;
 
                                         case "duplicate":
@@ -942,7 +943,7 @@
                                     toastMessageAction(text, color, link);
                                 },
                                 error: function () {
-                                    toastMessageAction("Something went wrong", "red", "/SWP391_SE1749_NET_GROUP2/catalog&tabPane=changePassword");
+                                    toastMessageAction("Something went wrong", "red", "/SWP391_SE1749_NET_GROUP2/catalog?tabPane=changePassword");
                                 }
                             });
                         }
