@@ -354,7 +354,7 @@
                     </ul>
                 </div>	
                 <div class="row">
-                   
+
                     <div class="col-lg-12 m-b30">
                         <div class="widget-box">
                             <div class="wc-title d-flex justify-content-between align-items-center">
@@ -375,18 +375,22 @@
                                             <th scope="col"></th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody>                                  
                                         <c:forEach  var="n" items="${ClassList}">
                                             <tr>
-                                                <th style="">${n.getClassID()}</th>
-                                                <td style="width:50%; white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;">${n.className}</td>
+
+                                                <th style="">${n.getClassID()}
+                                                </th> 
+
+                                                <td style="width:50%; white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;"><a href="ClassDetail?id=${n.getClassID()}
+                                                                ">${n.className} </a> </td>
                                                 <td style="width:10%">${n.name}</td>
-                                             
+
                                                 <td>
-                                                    <a href="ClassDetail?ClassId=${n.getClassID()}" class="btn btn-sm yellow outline radius-xl ">
+                                                    <a href="ClassDetail?id=${n.getClassID()}" class="btn btn-sm yellow outline radius-xl ">
                                                         <i class="fa fa-pencil"></i>
                                                     </a>
-                                                    <a href="#" class="btn btn-sm red outline radius-xl delete-news" data-toggle="modal" data-target="#deleteModal-${n.ClassId}">
+                                                    <a href="#" class="btn btn-sm red outline radius-xl delete-news" data-toggle="modal" data-target="#deleteModal-${n.getClassID()}">
                                                         <i class="fa fa-trash"></i>
                                                     </a>
                                                 </td>

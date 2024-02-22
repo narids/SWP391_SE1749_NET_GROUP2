@@ -38,7 +38,7 @@ public class ClassDAO extends DBContext<BaseEntity> {
 //        return cls;
 //    }
     public List<MyClass> getAllClasses() {
-        String sql = "SELECT distinct s.ClassID, s.ClassName, a.Username,t.TeacherID, cs.ClassSubjectID\n"
+        String sql = "SELECT distinct s.ClassID, s.ClassName, a.Username\n"
                 + "FROM Class s, ClassSubject cs, Teacher t, Account a\n"
                 + "WHERE s.ClassID = cs.ClassID AND cs.TeacherID = t.TeacherID AND a.UserID = t.UserID";
         List<MyClass> classes = new ArrayList<>();
@@ -57,32 +57,88 @@ public class ClassDAO extends DBContext<BaseEntity> {
         return classes;
     }
 
-   public MyClass getClassesByID(int id) {
-    String sql = "SELECT * FROM Class WHERE ClassID = ?";
-    MyClass myClass = null;
-    try {
-        // Check if connection is null or not
-        if (connection != null) {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, id); // set the parameter for the query
-            ResultSet resultSet = statement.executeQuery();
+    public MyClass getClassesByID(int id) {
+        String sql = "SELECT * FROM Class WHERE ClassID = ?";
+        MyClass myClass = null;
+        try {
+            // Check if connection is null or not
+            if (connection != null) {
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setInt(1, id); // set the parameter for the query
+                ResultSet resultSet = statement.executeQuery();
 
-            while (resultSet.next()) {
-                myClass = new MyClass(resultSet.getInt("ClassID"), resultSet.getString("ClassName"));
+                while (resultSet.next()) {
+                    myClass = new MyClass(resultSet.getInt("ClassID"), resultSet.getString("ClassName"));
+                }
+                // Close resultSet, statement, and connection (if necessary)
+                resultSet.close();
+                statement.close();
+                // No need to return myClass here, return it after try-catch block
+            } else {
+                System.err.println("Connection is null. Cannot execute query.");
             }
-            // Close resultSet, statement, and connection (if necessary)
-            resultSet.close();
-            statement.close();
-            // No need to return myClass here, return it after try-catch block
-        } else {
-            System.err.println("Connection is null. Cannot execute query.");
+        } catch (SQLException ex) {
+            // Log the exception or handle it appropriately
+            ex.printStackTrace();
         }
-    } catch (SQLException ex) {
-        // Log the exception or handle it appropriately
-        ex.printStackTrace();
+        return myClass; // Moved the return statement outside the try-catch block
     }
-    return myClass; // Moved the return statement outside the try-catch block
-}
+
+    public String getTeacherByClassID(int id) {
+        String sql = "select distinct cs.TeacherID from ClassSubject cs, Class c, Teacher t, Account ac "
+                + "where cs.ClassID = c.ClassID and"
+                + " cs.TeacherID = t.TeacherID and t.UserID = ac.UserID and c.ClassID = ? ";
+        String TeacherID = null;
+        try {
+            // Check if connection is null or not
+            if (connection != null) {
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setInt(1, id); // set the parameter for the query
+                ResultSet resultSet = statement.executeQuery();
+
+                if (resultSet.next()) {
+                    TeacherID = resultSet.getString("TeacherID");
+                }
+
+                resultSet.close();
+                statement.close();
+                // No need to return myClass here, return it after try-catch block
+            } else {
+                System.err.println("Connection is null. Cannot execute query.");
+            }
+        } catch (SQLException ex) {
+            // Log the exception or handle it appropriately
+            ex.printStackTrace();
+        }
+        return TeacherID; // Moved the return statement outside the try-catch block
+    }
+
+    public List<String> getTeacherIDs() {
+        String sql = "select distinct cs.TeacherID from ClassSubject cs, Class c, Teacher t, Account ac "
+                + "where cs.ClassID = c.ClassID and"
+                + " cs.TeacherID = t.TeacherID and t.UserID = ac.UserID";
+        List<String> teacherIDs = new ArrayList<>();
+        try {
+            // Check if connection is null or not
+            if (connection != null) {
+                PreparedStatement statement = connection.prepareStatement(sql);
+                ResultSet resultSet = statement.executeQuery();
+
+                while (resultSet.next()) {
+                    teacherIDs.add(resultSet.getString("TeacherID"));
+                }
+
+                resultSet.close();
+                statement.close();
+            } else {
+                System.err.println("Connection is null. Cannot execute query.");
+            }
+        } catch (SQLException ex) {
+            // Log the exception or handle it appropriately
+            ex.printStackTrace();
+        }
+        return teacherIDs;
+    }
 
     public int getNumberOfStudentInClass(int ClassID) {
         String sql = "select COUNT (*) as count_student_in_class\n"
@@ -117,6 +173,19 @@ public class ClassDAO extends DBContext<BaseEntity> {
         // return the number of students in the class
         return numStudents;
 
+    }
+    public void updateClasses(String teacherID, int classID) {
+        try {
+            String strSQL = "UPDATE [ClassSubject] "
+                    + "SET [TeacherID] = ?"          
+                    + "WHERE [ClassID] = ?";
+            PreparedStatement statement = connection.prepareStatement(strSQL);
+            statement.setString(1, teacherID);
+            statement.setInt(2, classID);
+            statement.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("getListUsers:" + e.getMessage());
+        }
     }
 
     @Override
