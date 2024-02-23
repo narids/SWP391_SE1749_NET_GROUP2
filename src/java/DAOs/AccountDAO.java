@@ -6,6 +6,8 @@ package DAOs;
 
 import Models.Account;
 import Models.Role;
+import Models.Student;
+import Models.Teacher;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -32,6 +34,7 @@ public class AccountDAO extends DBContext<BaseEntity> {
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
                 Account account = new Account();
+                account.setUserId(rs.getInt("UserID"));
                 account.setUsername(rs.getString("Username"));
                 account.setEmail(rs.getString("Email"));
                 account.setAvatar(rs.getString("Avatar") != null ? rs.getString("Avatar") : "");
@@ -43,6 +46,47 @@ public class AccountDAO extends DBContext<BaseEntity> {
                 account.setRole(role);
 
                 return account;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public Teacher getTeacher(String id) {
+        try {
+            String sql = "SELECT [UserID],[TeacherID]\n"
+                    + "  FROM [Group2_SWP319_SE1749].[dbo].[Teacher]\n"
+                    + "  where UserID = ?";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setString(1, id);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                Teacher t = new Teacher();
+                t.setuserId(rs.getInt(1));
+                t.setTeacherId(rs.getString(2));
+
+                return t;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    public Student getStudent(String id) {
+        try {
+            String sql = "SELECT [UserID],[StudentID]\n"
+                    + "  FROM [Group2_SWP319_SE1749].[dbo].[Student]\n"
+                    + "  where UserID = ?";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setString(1, id);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                Student t = new Student();
+                t.setUserId(rs.getInt(1));
+                t.setStudentId(rs.getString(2));
+
+                return t;
             }
         } catch (SQLException ex) {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);

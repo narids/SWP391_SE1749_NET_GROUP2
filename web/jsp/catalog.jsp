@@ -4,6 +4,7 @@
     Author     : admin
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -201,6 +202,9 @@
                                             <ul class="nav nav-tabs">
                                                 <li class="nav-item">
                                                     <a class="nav-link ${param.tabPane == null ? 'active' : ''}" data-toggle="tab" href="#courses"><i class="ti-book"></i>Classes</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link ${param.tabPane == "quizTab" ? 'active' : ''}" data-toggle="tab" href="#quiz"><i class="ti-book"></i>Quiz</a>
                                                 </li>
                                                 <li class="nav-item">
                                                     <a class="nav-link" data-toggle="tab" href="#quiz-results"><i class="ti-bookmark-alt"></i>Quiz Results </a>
@@ -493,6 +497,75 @@
                                                                     </div>
                                                                 </div>
                                                             </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane ${param.tabPane == "quizTab" ? 'active' : ''}" id="quiz">
+                                                <div class="profile-head">
+                                                    <h3>My Quiz</h3>
+                                                    <div class="feature-filters style1 ml-auto">
+                                                        <ul class="filters" data-toggle="buttons">
+                                                            <li data-filter="" class="btn active">
+                                                                <input type="radio">
+                                                                <a href="#"><span>All</span></a> 
+                                                            </li>
+                                                            <li data-filter="publish" class="btn">
+                                                                <input type="radio">
+                                                                <a href="#"><span>Publish</span></a> 
+                                                            </li>
+                                                            <li data-filter="pending" class="btn">
+                                                                <input type="radio">
+                                                                <a href="#"><span>Private</span></a> 
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="courses-filter">
+                                                    <div class="clearfix">
+                                                        <ul id="masonry" class="ttr-gallery-listing magnific-image row">
+                                                            <c:forEach var="q" items="${requestScope.quizByTeacher}">
+                                                                <li class="action-card col-xl-4 col-lg-6 col-md-12 col-sm-6 publish">
+                                                                    <div class="cours-bx">
+                                                                        <div class="action-box">
+                                                                            <img src="assets/images/courses/pic1.jpg" alt="">
+                                                                            <a href="quiz/${q.quiz.quizId}" class="btn">Read More</a>
+                                                                        </div>
+                                                                        <div class="info-bx text-center">
+                                                                            <h5><a href="quiz/${q.quiz.quizId}">${fn:toUpperCase(q.quiz.quizName)}</a></h5>
+                                                                            <span>${q.quiz.quizContent}</span>
+                                                                        </div>
+                                                                        <div class="cours-more-info">
+                                                                            <div class="review">
+                                                                                <c:choose>
+                                                                                    <c:when test = "${q.quiz.quizStatus == 0}">
+                                                                                        <span style="color: red">
+                                                                                            Private
+                                                                                        </span>
+                                                                                    </c:when>
+
+                                                                                    <c:when test = "${q.quiz.quizStatus == 1}">
+                                                                                        <span style="color: green">
+                                                                                            Publish
+                                                                                        </span>
+                                                                                    </c:when>
+                                                                                </c:choose>
+                                                                                <ul class="cours-star">
+                                                                                    <li class="active"><i class="fa fa-star"></i></li>
+                                                                                    <li class="active"><i class="fa fa-star"></i></li>
+                                                                                    <li class="active"><i class="fa fa-star"></i></li>
+                                                                                    <li><i class="fa fa-star"></i></li>
+                                                                                    <li><i class="fa fa-star"></i></li>
+                                                                                </ul>
+                                                                            </div>
+                                                                            <div class="price">
+                                                                                <div style="font-size: 14px; margin-top: 5px">${q.subject.subjectName}</div>
+                                                                                <h5>${q.myClass.className}</h5>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </li>
+                                                            </c:forEach>
                                                         </ul>
                                                     </div>
                                                 </div>

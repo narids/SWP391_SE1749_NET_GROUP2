@@ -7,37 +7,39 @@ import java.util.Date;
  *
  * @author khanhlinh date 18/01/2024
  */
-public class Quiz extends BaseEntity {
+public class Quiz{
 
-    /*Entity
-    Table(name = "Quiz")
-     */
-    //GeneratedValue(strategy = GenerationType.IDENTITY)
-    //Column(name = "QuizID")
     private int quizId;
-
-    //Column(name = "Quiz_Content")
+    private String quizName;
     private String quizContent;
-
-    //Column(name = "Created_Day")
-    private Date createdDay;
+    private String createdDate;
+    private int quizStatus;
 
     public Quiz() {
     }
 
-    public Quiz(int quizId, String quizContent, Date createdDay) {
+    public Quiz(int quizId, String quizName, String quizContent, String createdDate, int quizStatus) {
         this.quizId = quizId;
+        this.quizName = quizName;
         this.quizContent = quizContent;
-        this.createdDay = createdDay;
+        this.createdDate = createdDate;
+        this.quizStatus = quizStatus;
     }
 
-    // getters and setters
     public int getQuizId() {
         return quizId;
     }
 
     public void setQuizId(int quizId) {
         this.quizId = quizId;
+    }
+
+    public String getQuizName() {
+        return quizName;
+    }
+
+    public void setQuizName(String quizName) {
+        this.quizName = quizName;
     }
 
     public String getQuizContent() {
@@ -48,17 +50,27 @@ public class Quiz extends BaseEntity {
         this.quizContent = quizContent;
     }
 
-    public Date getCreatedDay() {
-        return createdDay;
+    public String getCreatedDate() {
+        return createdDate;
     }
 
-    public void setCreatedDay(Date createdDay) {
-        this.createdDay = createdDay;
+    public void setCreatedDate(String createdDate) {
+        this.createdDate = createdDate;
     }
 
-    @Override
-    public String toString() {
-        return "Quiz{" + "quizId=" + quizId + ", quizContent=" + quizContent + ", createdDay=" + createdDay + '}';
+    public int getQuizStatus() {
+        return quizStatus;
     }
+
+    public void setQuizStatus(int quizStatus) {
+        this.quizStatus = quizStatus;
+    }
+
+    
+
+    
+
+    
+    
 
 }

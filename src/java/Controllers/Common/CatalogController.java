@@ -5,7 +5,10 @@
 package Controllers.Common;
 
 import DAOs.AccountDAO;
+import DAOs.QuizDAO;
 import Models.Account;
+import Models.ClassSubject;
+import Models.Teacher;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,6 +17,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  *
@@ -38,8 +42,27 @@ public class CatalogController extends HttpServlet {
         if (account == null) {
             response.sendRedirect("login");
         } else {
+            Teacher teacher = (Teacher) request.getSession().getAttribute("teacher");
+
+            if (teacher != null) {
+                QuizDAO quizDAO = new QuizDAO();
+                
+                String quizzesByTeacherIDSQL = "SELECT    Quiz.QuizID, Quiz.QuizName, Quiz.QuizContent, Quiz.CreatedDate, Class.ClassName, Subject.SubjectName, Quiz.QuizStatus\n"
+                        + "FROM         Class INNER JOIN\n"
+                        + "                      ClassSubject ON Class.ClassID = ClassSubject.ClassID INNER JOIN\n"
+                        + "                      Subject ON ClassSubject.SubjectID = Subject.SubjectID INNER JOIN\n"
+                        + "                      Teacher ON ClassSubject.TeacherID = Teacher.TeacherID INNER JOIN\n"
+                        + "                      Quiz ON ClassSubject.QuizID = Quiz.QuizID\n"
+                        + "					  where Teacher.TeacherID = " + String.valueOf(teacher.getTeacherId());
+                
+                List<ClassSubject> quizzesByTeacherID = quizDAO.getQuizzesByTeacherID(quizzesByTeacherIDSQL);
+                
+                request.setAttribute("quizByTeacher", quizzesByTeacherID);
+
+            }
             request.setAttribute("account", account);
             request.getRequestDispatcher("jsp/catalog.jsp").forward(request, response);
+
         }
     }
 
@@ -89,7 +112,7 @@ public class CatalogController extends HttpServlet {
                         }
                     } else {
                         adb.resetPass(newPassword, account.getEmail());
-                        
+
                         try (PrintWriter out = response.getWriter()) {
                             out.print("success");
                         }
