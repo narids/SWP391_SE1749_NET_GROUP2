@@ -6,9 +6,12 @@ package DAOs;
 
 import Models.Account;
 import Models.Role;
+import Models.Student;
+import Models.Teacher;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,6 +34,7 @@ public class AccountDAO extends DBContext<BaseEntity> {
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
                 Account account = new Account();
+                account.setUserId(rs.getInt("UserID"));
                 account.setUsername(rs.getString("Username"));
                 account.setEmail(rs.getString("Email"));
                 account.setAvatar(rs.getString("Avatar") != null ? rs.getString("Avatar") : "");
@@ -42,6 +46,47 @@ public class AccountDAO extends DBContext<BaseEntity> {
                 account.setRole(role);
 
                 return account;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public Teacher getTeacher(String id) {
+        try {
+            String sql = "SELECT [UserID],[TeacherID]\n"
+                    + "  FROM [Group2_SWP319_SE1749].[dbo].[Teacher]\n"
+                    + "  where UserID = ?";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setString(1, id);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                Teacher t = new Teacher();
+                t.setuserId(rs.getInt(1));
+                t.setTeacherId(rs.getString(2));
+
+                return t;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    public Student getStudent(String id) {
+        try {
+            String sql = "SELECT [UserID],[StudentID]\n"
+                    + "  FROM [Group2_SWP319_SE1749].[dbo].[Student]\n"
+                    + "  where UserID = ?";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setString(1, id);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                Student t = new Student();
+                t.setUserId(rs.getInt(1));
+                t.setStudentId(rs.getString(2));
+
+                return t;
             }
         } catch (SQLException ex) {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -110,7 +155,8 @@ public class AccountDAO extends DBContext<BaseEntity> {
         }
     }
 
-    public Boolean registerUser(Account a) {
+    public int registerUser(Account a) {
+        Integer generatedId = null;
         try {
             String sql = "INSERT INTO [dbo].[Account]\n"
                     + "           ([Username]\n"
@@ -122,7 +168,7 @@ public class AccountDAO extends DBContext<BaseEntity> {
                     + "     VALUES\n"
                     + "           (?,?,?,?,?,?)";
             connection.setAutoCommit(false);
-            PreparedStatement stm = connection.prepareCall(sql);
+            PreparedStatement stm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             stm.setString(1, a.getUsername());
             stm.setString(2, a.getPassword());
@@ -130,6 +176,32 @@ public class AccountDAO extends DBContext<BaseEntity> {
             stm.setString(4, a.getEmail());
             stm.setString(5, a.getAvatar());
             stm.setBoolean(6, a.getStatus());
+
+            int affectedRows = stm.executeUpdate();
+            if (affectedRows > 0) {
+                ResultSet generatedKeys = stm.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    generatedId = generatedKeys.getInt(1);
+                }
+                connection.commit();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return generatedId;
+    }
+
+    public Boolean addToStudentAccounts(int userID) {
+        try {
+            String sql = "INSERT INTO [dbo].[Student]\n"
+                    + "           ([UserID])\n"
+                    + "     VALUES\n"
+                    + "           (?)";
+            connection.setAutoCommit(false);
+            PreparedStatement stm = connection.prepareCall(sql);
+
+            stm.setInt(1, userID);
 
             if (stm.executeUpdate() > 0) {
                 connection.commit();

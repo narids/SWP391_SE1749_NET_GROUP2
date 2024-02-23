@@ -6,6 +6,8 @@ package Controllers.Common;
 
 import DAOs.AccountDAO;
 import Models.Account;
+import Models.Student;
+import Models.Teacher;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -143,6 +145,24 @@ public class LoginController extends HttpServlet {
 
             HttpSession session = request.getSession();
             session.setAttribute("account", account);
+
+            switch (account.getRole().getRoleId()) {
+                case 1:
+
+                    break;
+                case 2:
+
+                    break;
+                case 3: // teacher
+                    Teacher teacher = adb.getTeacher(String.valueOf(account.getUserId()));
+                    session.setAttribute("teacher", teacher);
+                    break;
+                case 4: // student
+                    Student student = adb.getStudent(String.valueOf(account.getUserId()));
+                    session.setAttribute("student", student);
+                    break;
+
+            }
 
             try (PrintWriter out = response.getWriter()) {
                 out.print("success");
