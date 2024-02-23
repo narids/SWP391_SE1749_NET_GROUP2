@@ -46,7 +46,7 @@ public class CatalogController extends HttpServlet {
 
             if (teacher != null) {
                 QuizDAO quizDAO = new QuizDAO();
-                
+
                 String quizzesByTeacherIDSQL = "SELECT    Quiz.QuizID, Quiz.QuizName, Quiz.QuizContent, Quiz.CreatedDate, Class.ClassName, Subject.SubjectName, Quiz.QuizStatus\n"
                         + "FROM         Class INNER JOIN\n"
                         + "                      ClassSubject ON Class.ClassID = ClassSubject.ClassID INNER JOIN\n"
@@ -54,9 +54,9 @@ public class CatalogController extends HttpServlet {
                         + "                      Teacher ON ClassSubject.TeacherID = Teacher.TeacherID INNER JOIN\n"
                         + "                      Quiz ON ClassSubject.QuizID = Quiz.QuizID\n"
                         + "					  where Teacher.TeacherID = " + String.valueOf(teacher.getTeacherId());
-                
+
                 List<ClassSubject> quizzesByTeacherID = quizDAO.getQuizzesByTeacherID(quizzesByTeacherIDSQL);
-                
+
                 request.setAttribute("quizByTeacher", quizzesByTeacherID);
 
             }
@@ -118,6 +118,129 @@ public class CatalogController extends HttpServlet {
                         }
                     }
 
+                }
+
+            } else if ("quizTabFilter".equals(action)) {
+                QuizDAO quizDAO = new QuizDAO();
+                Teacher teacher = (Teacher) request.getSession().getAttribute("teacher");
+
+                String filterStatus = request.getParameter("filterStatus");
+                String searchValue = request.getParameter("searchValue") != null ? request.getParameter("searchValue") : "";
+                String searchBy = request.getParameter("searchBy");
+                String sortBy = request.getParameter("sortBy");
+
+                String sql = "SELECT    Quiz.QuizID, Quiz.QuizName, Quiz.QuizContent, Quiz.CreatedDate, Class.ClassName, Subject.SubjectName, Quiz.QuizStatus\n"
+                        + "FROM         Class INNER JOIN\n"
+                        + "                      ClassSubject ON Class.ClassID = ClassSubject.ClassID INNER JOIN\n"
+                        + "                      Subject ON ClassSubject.SubjectID = Subject.SubjectID INNER JOIN\n"
+                        + "                      Teacher ON ClassSubject.TeacherID = Teacher.TeacherID INNER JOIN\n"
+                        + "                      Quiz ON ClassSubject.QuizID = Quiz.QuizID\n"
+                        + "					  where Teacher.TeacherID = " + String.valueOf(teacher.getTeacherId());
+
+                if (searchBy != null) {
+                    switch (searchBy) {
+                        case "QuizName":
+                            sql += " and Quiz.QuizName like '%";
+                            break;
+                        case "QuizContent":
+                            sql += " and Quiz.QuizContent like '%";
+                            break;
+                        case "CreatedDate":
+                            sql += " and Quiz.CreatedDate like '%";
+                            break;
+                        case "ClassName":
+                            sql += " and Class.ClassName like '%";
+                            break;
+                        case "SubjectName":
+                            sql += " and Subject.SubjectName like '%";
+                            break;
+                    }
+
+                    sql += searchValue.trim();
+                    sql += "%'";
+                }
+                if (filterStatus != null) {
+                    switch (filterStatus) {
+                        case "publish":
+                            sql += " and Quiz.QuizStatus = 1";
+                            break;
+                        case "private":
+                            sql += " and Quiz.QuizStatus = 0";
+                            break;
+                    }
+                }
+                if (sortBy != null) {
+                    switch (sortBy) {
+                        case "QuizName":
+                            sql += " order by Quiz.QuizName";
+                            break;
+                        case "QuizContent":
+                            sql += " order by Quiz.QuizContent";
+                            break;
+                        case "CreatedDate":
+                            sql += " order by Quiz.CreatedDate";
+                            break;
+                        case "ClassName":
+                            sql += " order by Class.ClassName";
+                            break;
+                        case "SubjectName":
+                            sql += " order by Subject.SubjectName";
+                            break;
+                    }
+                }
+
+                try {
+                    List<ClassSubject> quizzesByTeacherID = quizDAO.getQuizzesByTeacherID(sql);
+
+                    try (PrintWriter out = response.getWriter()) {
+                        for (ClassSubject q : quizzesByTeacherID) {
+                            String colorStatus = "green";
+                            String valueStatus = "Publish";
+
+                            if (q.getQuiz().getQuizStatus() == 0) {
+                                colorStatus = "red";
+                                valueStatus = "Private";
+                            }
+
+                            out.print(" <li class='action-card col-xl-4 col-lg-6 col-md-12 col-sm-6 publish'>\n"
+                                    + "                                                                    <div class=\"cours-bx\">\n"
+                                    + "                                                                        <div class=\"action-box\">\n"
+                                    + "                                                                            <img src='assets/images/courses/pic1.jpg' alt=\"\">\n"
+                                    + "                                                                            <a href='quiz/" + q.getQuiz().getQuizId() + "' class=\"btn\">Read More</a>\n"
+                                    + "                                                                        </div>\n"
+                                    + "                                                                        <div class=\"info-bx text-center\">\n"
+                                    + "                                                                            <h5><a href='quiz/" + q.getQuiz().getQuizId() + "'>" + q.getQuiz().getQuizName().toUpperCase() + "</a></h5>\n"
+                                    + "                                                                            <span>" + q.getQuiz().getQuizContent() + "</span>\n"
+                                    + "                                                                        </div>\n"
+                                    + "                                                                        <div class=\"cours-more-info\">\n"
+                                    + "                                                                            <div class=\"review\">\n"
+                                    + "                                                                                        <span style='color: " + colorStatus + "'>\n"
+                                    + "                                                                                            " + valueStatus + "\n"
+                                    + "                                                                                        </span>\n"
+                                    + "                                                                                <ul class=\"cours-star\">\n"
+                                    + "                                                                                    <li class=\"active\"><i class=\"fa fa-star\"></i></li>\n"
+                                    + "                                                                                    <li class=\"active\"><i class=\"fa fa-star\"></i></li>\n"
+                                    + "                                                                                    <li class=\"active\"><i class=\"fa fa-star\"></i></li>\n"
+                                    + "                                                                                    <li><i class=\"fa fa-star\"></i></li>\n"
+                                    + "                                                                                    <li><i class=\"fa fa-star\"></i></li>\n"
+                                    + "                                                                                </ul>\n"
+                                    + "                                                                            </div>\n"
+                                    + "                                                                            <div class=\"price\">\n"
+                                    + "                                                                                <div style=\"font-size: 14px; margin-top: 5px\">" + q.getSubject().getSubjectName() + "</div>\n"
+                                    + "                                                                                <h5>" + q.getMyClass().getClassName() + "</h5>\n"
+                                    + "                                                                            </div>\n"
+                                    + "                                                                        </div>\n"
+                                    + "                                                                    </div>\n"
+                                    + "                                                                </li>");
+                        }
+                        
+                        
+                    }
+
+                } catch (Exception e) {
+                    try (PrintWriter out = response.getWriter()) {
+                        out.print("");
+                    }
                 }
 
             }

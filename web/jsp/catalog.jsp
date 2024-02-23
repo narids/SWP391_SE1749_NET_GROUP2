@@ -506,33 +506,55 @@
                                                     <h3>My Quiz</h3>
                                                     <div class="feature-filters style1 ml-auto">
                                                         <ul class="filters" data-toggle="buttons">
-                                                            <li data-filter="" class="btn active">
+                                                            <li data-filter="" class="btn active" id="filterAll">
                                                                 <input type="radio">
-                                                                <a href="#"><span>All</span></a> 
+                                                                <a href=""><span>All</span></a> 
                                                             </li>
-                                                            <li data-filter="publish" class="btn">
+                                                            <li data-filter="publish" class="btn" id="filterPublish">
                                                                 <input type="radio">
-                                                                <a href="#"><span>Publish</span></a> 
+                                                                <a href=""><span>Publish</span></a> 
                                                             </li>
-                                                            <li data-filter="pending" class="btn">
+                                                            <li data-filter="pending" class="btn" id="filterPrivate">
                                                                 <input type="radio">
-                                                                <a href="#"><span>Private</span></a> 
+                                                                <a href=""><span>Private</span></a> 
                                                             </li>
                                                         </ul>
                                                     </div>
                                                 </div>
+                                                <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; padding-top: 10px; padding-right: 15px; padding-bottom: 10px;padding-left: 30px">
+                                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                                        <div style="text-wrap: nowrap;">Sort by</div>
+                                                        <select id="sortQuizBy">
+                                                            <option value="QuizName">Quiz name</option>
+                                                            <option value="QuizContent">Quiz content</option>
+                                                            <option value="CreatedDate">Create date</option>
+                                                            <option value="ClassName">Class name</option>
+                                                            <option value="SubjectName">Subject name</option>
+                                                        </select>
+                                                    </div>
+                                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                                        <input type="text" id="searchQuiz" placeholder="Search by" style='height: 40px; border: 1px; border-color: #e7ecf1; border-style: solid; padding: 5px'/>
+                                                        <select id="searchQuizBy">
+                                                            <option value="QuizName">Quiz name</option>
+                                                            <option value="QuizContent">Quiz content</option>
+                                                            <option value="CreatedDate">Create date</option>
+                                                            <option value="ClassName">Class name</option>
+                                                            <option value="SubjectName">Subject name</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
                                                 <div class="courses-filter">
                                                     <div class="clearfix">
-                                                        <ul id="masonry" class="ttr-gallery-listing magnific-image row">
+                                                        <ul id="masonry" class="ttr-gallery-listing magnific-image row quizzesList">
                                                             <c:forEach var="q" items="${requestScope.quizByTeacher}">
-                                                                <li class="action-card col-xl-4 col-lg-6 col-md-12 col-sm-6 publish">
+                                                                <li class='action-card col-xl-4 col-lg-6 col-md-12 col-sm-6 publish'>
                                                                     <div class="cours-bx">
                                                                         <div class="action-box">
-                                                                            <img src="assets/images/courses/pic1.jpg" alt="">
-                                                                            <a href="quiz/${q.quiz.quizId}" class="btn">Read More</a>
+                                                                            <img src='assets/images/courses/pic1.jpg' alt="">
+                                                                            <a href='quiz/${q.quiz.quizId}' class="btn">Read More</a>
                                                                         </div>
                                                                         <div class="info-bx text-center">
-                                                                            <h5><a href="quiz/${q.quiz.quizId}">${fn:toUpperCase(q.quiz.quizName)}</a></h5>
+                                                                            <h5><a href='quiz/${q.quiz.quizId}'>${fn:toUpperCase(q.quiz.quizName)}</a></h5>
                                                                             <span>${q.quiz.quizContent}</span>
                                                                         </div>
                                                                         <div class="cours-more-info">
@@ -918,7 +940,7 @@
                         $("#CancelChangePass").removeAttr('disabled');
                         $('#toast').text("");
                         $('#toast').toggleClass('show');
-                    }, 4000);
+                    }, 2000);
                 }
             }
 
@@ -1024,6 +1046,106 @@
                         form.classList.add('was-validated')
                     }, false)
                 })
+
+                $("#filterAll").click(function () {
+                    $.ajax({
+                        url: "/SWP391_SE1749_NET_GROUP2/catalog",
+                        type: "post",
+                        data: {
+                            action: "quizTabFilter",
+                            filterStatus: "all"
+                        },
+                        success: function (data) {
+                            if (data !== "") {
+                                var parent = document.getElementsByClassName("quizzesList");
+                                parent[0].innerHTML = data;
+
+                            } 
+                        },
+                        error: function () {
+                        }
+                    });
+                });
+                $("#filterPublish").click(function () {
+                    $.ajax({
+                        url: "/SWP391_SE1749_NET_GROUP2/catalog",
+                        type: "post",
+                        data: {
+                            action: "quizTabFilter",
+                            filterStatus: "publish"
+                        },
+                        success: function (data) {
+                            if (data !== "") {
+                                var parent = document.getElementsByClassName("quizzesList");
+                                parent[0].innerHTML = data;
+                            }
+                        },
+                        error: function () {
+                        }
+                    });
+                });
+                $("#filterPrivate").click(function () {
+                    $.ajax({
+                        url: "/SWP391_SE1749_NET_GROUP2/catalog",
+                        type: "post",
+                        data: {
+                            action: "quizTabFilter",
+                            filterStatus: "private"
+                        },
+                        success: function (data) {
+                            if (data !== "") {
+                                var parent = document.getElementsByClassName("quizzesList");
+                                parent[0].innerHTML = data;
+                            } 
+                        },
+                        error: function () {
+                        }
+                    });
+                });
+
+                $('#sortQuizBy').on('change', function () {
+                    var selectVal = $("#sortQuizBy option:selected").val();
+
+                    $.ajax({
+                        url: "/SWP391_SE1749_NET_GROUP2/catalog",
+                        type: "post",
+                        data: {
+                            action: "quizTabFilter",
+                            sortBy: selectVal
+                        },
+                        success: function (data) {
+                            if (data !== "") {
+                                var parent = document.getElementsByClassName("quizzesList");
+                                parent[0].innerHTML = data;
+                            }
+                        },
+                        error: function () {
+                        }
+                    });
+                });
+                $('#searchQuiz').on('input', function () {
+                    var selectVal = $("#searchQuizBy option:selected").val();
+                    var value = $(this).val();
+
+                    $.ajax({
+                        url: "/SWP391_SE1749_NET_GROUP2/catalog",
+                        type: "post",
+                        data: {
+                            action: "quizTabFilter",
+                            searchBy: selectVal,
+                            searchValue: value
+                        },
+                        success: function (data) {
+                            if (data !== "") {
+                                var parent = document.getElementsByClassName("quizzesList");
+                                parent[0].innerHTML = data;
+
+                            }
+                        },
+                        error: function () {
+                        }
+                    });
+                });
             });
 
         </script>
