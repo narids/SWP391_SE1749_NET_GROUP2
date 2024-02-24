@@ -115,7 +115,7 @@
                             <h2 class="title-head">Register <span>Now</span></h2>
                             <p>Login Your Account <a href="login">Click here</a></p>
                         </div>	
-                        <form id="registerForm" action="register" class="contact-bx needs-validation" method="post">
+                        <form id="registerForm" action="register" class="contact-bx needs-validation" novalidate method="post">
                             <input type="hidden"  name="action" value="register">
                             <div class="row placeani">
                                 <div class="col-lg-12">
@@ -143,9 +143,9 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <div class="input-group"> 
-                                            <input name="password" placeholder="Enter password" id="password" type="password" required class="form-control" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$">
+                                            <input name="password" placeholder="Enter password"  pattern="^[A-Za-z0-9]{6,20}$" id="password" type="password" required class="form-control">
                                             <div class="invalid-feedback">
-                                                Password must least 6 char, 2 digit and string
+                                                Password must least 6 char, digit and string
                                             </div>
                                             <span class="toggle-password" id="togglePassword1">&#x1F441;</span>
                                         </div>
@@ -156,6 +156,9 @@
                                         <div class="input-group"> 
                                             <input name="repassword" placeholder="Enter confirm password" id="repassword" type="password" class="form-control" required>
                                             <span class="toggle-password" id="togglePassword2">&#x1F441;</span>
+                                            <div class="invalid-feedback">
+                                                Confirm password must input
+                                            </div>
                                         </div>
 
                                     </div>
@@ -240,55 +243,65 @@
                     }
                 });
 
+                const forms = document.querySelectorAll('.needs-validation')
 
-                $('#registerForm').submit(function (event) {
-                    event.preventDefault();
-                    $("#registerSubmit").prop("disabled", true);
+                // Loop over them and prevent submission
+                Array.from(forms).forEach(form => {
+                    form.addEventListener('submit', event => {
+                        event.preventDefault();
+                        var password = $('#password').val();
+                        var confirmPassword = $('#repassword').val();
 
-                    var password = $('#password').val();
-                    var confirmPassword = $('#repassword').val();
+                        if (!form.checkValidity()) {
+                            event.stopPropagation()
 
-                    if (password !== confirmPassword) {
-                        toastMessageAction("Confirm password does not match!", "red");
-                    } else {
-                        toastMessLoading();
-                        var formData = $(this).serialize();
-                        $.ajax({
-                            url: "/SWP391_SE1749_NET_GROUP2/register",
-                            type: "post",
-                            data: formData,
-                            success: function (data) {
-                                toastMessLoading();
-                                let text = "Register successfully! Sendirect verify email...";
-                                let color = "green";
-                                let link = "/SWP391_SE1749_NET_GROUP2/confirmEmail";
+                        } else if (password !== confirmPassword) {
+                            toastMessageAction("Confirm password does not match!", "red");
 
-                                switch (data) {
-                                    case "success":
-                                        break;
+                        } else {
+                            $("#registerSubmit").prop("disabled", true);
+                            toastMessLoading();
+                            var formData = $("#registerForm").serialize();
+                            $.ajax({
+                                url: "/SWP391_SE1749_NET_GROUP2/register",
+                                type: "post",
+                                data: formData,
+                                success: function (data) {
+                                    toastMessLoading();
+                                    let text = "Register successfully! Sendirect verify email...";
+                                    let color = "green";
+                                    let link = "/SWP391_SE1749_NET_GROUP2/confirmEmail";
 
-                                    case "existed":
-                                        text = "Username or Email existed. Please try again!";
-                                        color = "red";
-                                        link = "";
-                                        break;
+                                    switch (data) {
+                                        case "success":
+                                            break;
 
-                                    case "sendEmailFailed":
-                                        text = "Send email failed!";
-                                        color = "red";
-                                        link = "";
-                                        break;
+                                        case "existed":
+                                            text = "Username or Email existed. Please try again!";
+                                            color = "red";
+                                            link = "";
+                                            break;
+
+                                        case "sendEmailFailed":
+                                            text = "Send email failed!";
+                                            color = "red";
+                                            link = "";
+                                            break;
+                                    }
+
+                                    toastMessageAction(text, color, link);
+                                },
+                                error: function (err) {
+                                    toastMessLoading();
+                                    toastMessageAction("Something went wrong", "red");
                                 }
+                            });
+                        }
 
-                                toastMessageAction(text, color, link);
-                            },
-                            error: function (err) {
-                                toastMessLoading();
-                                toastMessageAction(err, "red");
-                            }
-                        });
-                    }
-                });
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+
             });
         </script>
     </body>

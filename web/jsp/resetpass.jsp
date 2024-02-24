@@ -111,14 +111,14 @@
                             <h2 class="title-head">Reset your <span>Account</span></h2>
                             <p>Have an account? <a href="login">Login</a></p>
                         </div>	
-                        <form id="resetForm" class="contact-bx">
+                        <form id="resetForm" class="contact-bx needs-validation" novalidate>
                             <input type="hidden"  name="action" value="changepassword">
 
                             <div class="row placeani">
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <div class="input-group"> 
-                                            <input name="password" type="password" id="password" required="" class="form-control" pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$">
+                                            <input name="password" type="password" placeholder="Enter password" id="password" required="" class="form-control" pattern="^[A-Za-z0-9]{6,20}$">
                                             <span class="toggle-password" id="togglePassword1">&#x1F441;</span>
                                             <div class="invalid-feedback">
                                                 Password must least 6 char, 2 digit and string
@@ -132,28 +132,16 @@
                                             <input  type="password" placeholder="Enter confirm password" id="repassword" class="form-control" required name="repassword">
 
                                             <span class="toggle-password" id="togglePassword2">&#x1F441;</span>
+                                            <div class="invalid-feedback">
+                                                Confirm password must input
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <!--                                <div class="col-lg-12">
-                                                                    <div class="form-group form-forget">
-                                                                        <div class="custom-control custom-checkbox">
-                                                                            <input type="checkbox" class="custom-control-input" id="customControlAutosizing">
-                                                                            <label class="custom-control-label" for="customControlAutosizing">Remember me</label>
-                                                                        </div>
-                                
-                                                                    </div>
-                                                                </div>-->
+
                                 <div class="col-lg-12 m-b30">
-                                    <button  type="submit" id="savePass" class="btn button-md">save</button>
+                                    <button  type="submit" id="savePass" class="btn button-md">Save</button>
                                 </div>
-                                <!--                                <div class="col-lg-12">
-                                                                    <h6>Login with Social media</h6>
-                                                                    <div class="d-flex">
-                                                                        <a class="btn flex-fill m-r5 facebook" href="#"><i class="fa fa-facebook"></i>Facebook</a>
-                                                                        <a class="btn flex-fill m-l5 google-plus" href="#"><i class="fa fa-google-plus"></i>Google Plus</a>
-                                                                    </div>
-                                                                </div>-->
                             </div>
 
                         </form>
@@ -227,51 +215,60 @@
                     }
                 });
 
-                $('#resetForm').submit(function (event) {
-                    event.preventDefault();
 
-                    // Kiểm tra xem mật khẩu và mật khẩu nhập lại có khớp nhau không
-                    var password = $('#password').val();
-                    var confirmPassword = $('#repassword').val();
+                const forms = document.querySelectorAll('.needs-validation')
 
-                    if (password !== confirmPassword) {
-                        toastMessageAction("Confirm password does not match!", "red");
+                // Loop over them and prevent submission
+                Array.from(forms).forEach(form => {
+                    form.addEventListener('submit', event => {
+                        event.preventDefault();
+                        var password = $('#password').val();
+                        var confirmPassword = $('#repassword').val();
 
-                    } else {
-                        $("#savePass").prop("disabled", true);
+                        if (!form.checkValidity()) {
+                            event.stopPropagation()
 
-                        $.ajax({
-                            url: "/SWP391_SE1749_NET_GROUP2/resetpassword",
-                            type: "post",
-                            data: {
-                                password: password
-                            },
-                            success: function (data) {
-                                let text = "";
-                                let color = "green";
-                                let link = "";
+                        } else if (password !== confirmPassword) {
+                            toastMessageAction("Confirm password does not match!", "red");
 
-                                switch (data) {
-                                    case "success":
-                                        text = "Reset password successfully! Sendirect login...";
-                                        link = "/SWP391_SE1749_NET_GROUP2/login";
-                                        break;
+                        } else {
+                            $("#savePass").prop("disabled", true);
+                            $.ajax({
+                                url: "/SWP391_SE1749_NET_GROUP2/resetpassword",
+                                type: "post",
+                                data: {
+                                    password: $('#password').val()
+                                },
+                                success: function (data) {
+                                    let text = "";
+                                    let color = "green";
+                                    let link = "";
 
-                                    case "failed":
-                                        text = "Verification code has expired! Sendirect...";
-                                        color = "red";
-                                        link = "/SWP391_SE1749_NET_GROUP2/forgot-password";
-                                        break;
+                                    switch (data) {
+                                        case "success":
+                                            text = "Reset password successfully! Sendirect login...";
+                                            link = "/SWP391_SE1749_NET_GROUP2/login";
+                                            break;
+
+                                        case "failed":
+                                            text = "Verification code has expired! Sendirect...";
+                                            color = "red";
+                                            link = "/SWP391_SE1749_NET_GROUP2/forgot-password";
+                                            break;
+                                    }
+
+                                    toastMessageAction(text, color, link);
+                                },
+                                error: function (err) {
+                                    toastMessageAction("Something went wrong", "red", "");
                                 }
+                            });
+                        }
 
-                                toastMessageAction(text, color, link);
-                            },
-                            error: function (err) {
-                                toastMessageAction(err, "red", "");
-                            }
-                        });
-                    }
-                });
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+
             });
 
         </script>
