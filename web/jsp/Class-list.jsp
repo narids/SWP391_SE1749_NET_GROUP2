@@ -359,7 +359,7 @@
                         <div class="widget-box">
                             <div class="wc-title d-flex justify-content-between align-items-center">
                                 <h4>New list</h4>
-                                <a href="add-news" class="btn btn-sm info ">
+                                <a href="addClass" class="btn btn-sm info ">
                                     Add a class
                                 </a>
                             </div>

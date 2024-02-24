@@ -84,6 +84,25 @@ public class ClassDAO extends DBContext<BaseEntity> {
         return myClass; // Moved the return statement outside the try-catch block
     }
 
+    public void addClassName(String className) {
+        String sql = "INSERT INTO Class (className) VALUES (?)";
+        try {
+            // Insert into Class table
+
+            PreparedStatement statement = connection.prepareStatement(sql);
+           
+            statement.setString(1, className);
+            statement.executeUpdate();
+
+            // Close the statement and the connection
+            statement.close();
+            connection.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public String getTeacherByClassID(int id) {
         String sql = "select distinct cs.TeacherID from ClassSubject cs, Class c, Teacher t, Account ac "
                 + "where cs.ClassID = c.ClassID and"
@@ -114,9 +133,7 @@ public class ClassDAO extends DBContext<BaseEntity> {
     }
 
     public List<String> getTeacherIDs() {
-        String sql = "select distinct cs.TeacherID from ClassSubject cs, Class c, Teacher t, Account ac "
-                + "where cs.ClassID = c.ClassID and"
-                + " cs.TeacherID = t.TeacherID and t.UserID = ac.UserID";
+        String sql = "select TeacherID from Teacher";
         List<String> teacherIDs = new ArrayList<>();
         try {
             // Check if connection is null or not
@@ -174,17 +191,44 @@ public class ClassDAO extends DBContext<BaseEntity> {
         return numStudents;
 
     }
-    public void updateClasses(String teacherID, int classID) {
+
+//    public int updateClasses(String teacherID, int classID) {
+//        int rowsAffected = 0;
+//        try {
+//            String strSQL = "UPDATE [ClassSubject] "
+//                    + "SET [TeacherID] = ?"
+//                    + "WHERE [ClassID] = ?";
+//            PreparedStatement statement = connection.prepareStatement(strSQL);
+//            statement.setString(1, teacherID);
+//            statement.setInt(2, classID);
+//            rowsAffected = statement.executeUpdate();
+//            connection.commit();  // commit the transaction
+//        } catch (Exception e) {
+//            System.out.println("getListUsers:" + e.getMessage());
+//        }
+//        return rowsAffected;
+//    }
+    public void updateClass(String teacherID, int classID) {
         try {
             String strSQL = "UPDATE [ClassSubject] "
-                    + "SET [TeacherID] = ?"          
+                    + "SET [TeacherID] = ? "
                     + "WHERE [ClassID] = ?";
             PreparedStatement statement = connection.prepareStatement(strSQL);
             statement.setString(1, teacherID);
             statement.setInt(2, classID);
             statement.executeUpdate();
+
+            // Commit the changes to the database
+            connection.commit();
         } catch (Exception e) {
-            System.out.println("getListUsers:" + e.getMessage());
+            // Handle exceptions
+            e.printStackTrace();
+            // Rollback changes if necessary
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
     }
 

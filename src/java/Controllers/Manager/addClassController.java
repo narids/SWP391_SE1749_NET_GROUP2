@@ -1,25 +1,21 @@
-/*+
+/*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 package Controllers.Manager;
 
-import DAOs.ClassDAO;
-import Models.Account;
-import Models.MyClass;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
 
 /**
  *
  * @author nghia
  */
-public class ClassDetailController extends HttpServlet {
+public class addClassController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,10 +34,10 @@ public class ClassDetailController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ClassDetailController</title>");
+            out.println("<title>Servlet addClassController</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ClassDetailController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet addClassController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -59,21 +55,8 @@ public class ClassDetailController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ClassDAO t = new ClassDAO();
-        int ClassID = Integer.parseInt(request.getParameter("id"));
-
-        String TeacherID = t.getTeacherByClassID(ClassID);
-        request.setAttribute("TeacherID", TeacherID);
-
-        List<String> TeacherIDs = t.getTeacherIDs();
-        request.setAttribute("TeacherIDs", TeacherIDs);
-
-        MyClass ClassSelected = t.getClassesByID(ClassID);
-        request.setAttribute("classSelected", ClassSelected);
-//        int numStudent = t.getNumberOfStudentInClass(ClassID);
-//        request.setAttribute("num", numStudent);
-
-        request.getRequestDispatcher("jsp/ClassDetail.jsp").forward(request, response);
+//        processRequest(request, response);
+        request.getRequestDispatcher("jsp/add-class.jsp").forward(request, response);
     }
 
     /**
@@ -87,17 +70,7 @@ public class ClassDetailController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ClassDAO t = new ClassDAO();
-        String TeacherID = request.getParameter("HiddenTeacherID");
-        int ClassID = Integer.parseInt(request.getParameter("ClassId"));
-        
-        t.updateClass(TeacherID, ClassID);
-
-        response.sendRedirect("class");
-//        String test = TeacherID; 
-//        request.setAttribute("test", test);
-//    request.getRequestDispatcher("jsp/test.jsp").forward(request, response);
-
+        processRequest(request, response);
     }
 
     /**

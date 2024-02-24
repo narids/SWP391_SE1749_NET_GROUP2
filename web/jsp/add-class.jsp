@@ -254,35 +254,60 @@
                                 <div class="col-lg-9 col-md-8 col-sm-12">
 
 
-                                    <div class="col-lg-12 m-b30">
-                                        <div class="widget-box">
-                                            <div class="wc-title">
-                                                <h4>Class Details</h4>
-                                            </div>
-                                            <div class="widget-inner">
-                                                <form id="ClassForm" class="edit-profile m-b30" action="ClassDetail" method="post">
-                                                    <div class="row">
-                                                        <div class="form-group col-8">
-                                                            <input name="ClassId" class="form-control" type="hidden" value="${param.id}" required/>
-                                                            <label class="col-form-label">Classname <span class="text-red">*</span></label>
-                                                            <input name="ClassName" class="form-control" type="text" value="${classSelected.getClassName()}" required>
-                                                            <label class="col-form-label">Teacher ID <span class="text-red">*</span></label>
-                                                            <select name="TeacherID" id="TeacherID" class="form-control" required>
-                                                                <c:forEach var="teacher" items="${TeacherIDs}">
-                                                                    <option value="${teacher}" ${teacher == TeacherID ? 'selected' : ''}>${teacher}</option>
-                                                                </c:forEach>
-                                                            </select>
-                                                            <input type="hidden" name="HiddenTeacherID" id="hiddenTeacherID">
-                                                        </div>
-                                                        <div class="col-12">
-                                                            <button type="submit" class="btn-secondry add-item m-r5"><i class="fa fa-fw fa-plus-circle"></i> Update</button>
-                                                        </div>
-                                                    </div>
-                                                </form>
+                                   <!--cho nay de content-->
+                                    <!--Main container start -->
+        <main class="ttr-wrapper">
+            <div class="container-fluid">
+               
+                <div class="row">
+                    <!-- Your Profile Views Chart -->
+                    <div class="col-lg-12 m-b30">
+                        <div class="widget-box">
+                            <div class="wc-title">
+                                <h4>Add news</h4>
+                            </div>
+                            <div class="widget-inner">
+                                <form action="add-class" method="POST" class="edit-profile m-b30"  enctype="multipart/form-data" onsubmit="getContent()">
+                                    <div class="row">
+                                        <div class="form-group col-8">
+                                            <label class="col-form-label">Title <span class="text-red">*</span></label>
+                                            <div>
+                                                <input name="title" class="form-control" type="text" required>
                                             </div>
                                         </div>
+                                        <div class="form-group col-4">
+                                            <label class="col-form-label">Thumbnail</label>
+                                            <div>
+                                                <input type="hidden" id="fileNameInput" name="fileName">
+                                                <input type="file" id="fileInput" name="thumbnail" accept="image/*">
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-12">
+                                            <label class="col-form-label">Summary <span class="text-red">*</span></label>
+                                            <div>
+                                                <textarea name="summary" class="form-control" style="width: 100%; min-height: 100px" required></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-12">
+                                            <label class="col-form-label">Content <span class="text-red">*</span></label>
+                                            <div style="width: 100%">
+                                                <div class="summernote" id="summernote"><p></p></div>
+                                                <!-- Hidden input field to store Summernote content -->
+                                                <input type="hidden" name="content" id="summernoteContent">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <button type="submit" class="btn-secondry add-item m-r5"><i class="fa fa-fw fa-plus-circle"></i> Add</button>
+                                        </div>
                                     </div>
-                                    <!-- Your Profile Views Chart END-->
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Your Profile Views Chart END-->
+                </div>
+            </div>
+        </main>
 
                                 </div>
                             </div>
