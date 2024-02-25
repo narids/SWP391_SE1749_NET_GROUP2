@@ -4,12 +4,15 @@
  */
 package Controllers.Manager;
 
+import DAOs.ClassDAO;
+import Models.MyClass;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  *
@@ -34,7 +37,7 @@ public class addClassController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet addClassController</title>");            
+            out.println("<title>Servlet addClassController</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet addClassController at " + request.getContextPath() + "</h1>");
@@ -56,6 +59,9 @@ public class addClassController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 //        processRequest(request, response);
+        ClassDAO t = new ClassDAO();
+       List<String> TeacherIDs = t.getTeacherIDs();
+        request.setAttribute("TeacherIDs", TeacherIDs);
         request.getRequestDispatcher("jsp/add-class.jsp").forward(request, response);
     }
 
@@ -70,7 +76,26 @@ public class addClassController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+//        processRequest(request, response);
+        ClassDAO t = new ClassDAO();
+        String className = request.getParameter("ClassName");
+        String TeacherID = request.getParameter("HiddenTeacherID");
+        String error = "Name had been used, pls try another ones";
+
+        if (t.checkClassName(className)) {
+
+            request.setAttribute("error", error);
+            request.getRequestDispatcher("jsp/add-class.jsp").forward(request, response);
+        } else {
+           
+            int classID =  t.addClassName(className);
+            
+            t.AddClassTeacher(classID,TeacherID);
+            
+            response.sendRedirect("class");
+
+        }
+
     }
 
     /**

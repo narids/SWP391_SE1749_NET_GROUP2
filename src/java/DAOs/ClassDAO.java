@@ -8,6 +8,7 @@ import Models.MyClass;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -57,6 +58,25 @@ public class ClassDAO extends DBContext<BaseEntity> {
         return classes;
     }
 
+    public List<MyClass> getClasses() {
+        String sql = "SELECT *\n"
+                + "FROM Class\n";
+        List<MyClass> classes = new ArrayList<>();
+        try {
+
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                classes.add(new MyClass(resultSet.getInt("ClassID"), resultSet.getString("ClassName")));
+            }
+            return classes;
+        } catch (SQLException ex) {
+            ;
+        }
+        return classes;
+    }
+
     public MyClass getClassesByID(int id) {
         String sql = "SELECT * FROM Class WHERE ClassID = ?";
         MyClass myClass = null;
@@ -84,24 +104,80 @@ public class ClassDAO extends DBContext<BaseEntity> {
         return myClass; // Moved the return statement outside the try-catch block
     }
 
-    public void addClassName(String className) {
-        String sql = "INSERT INTO Class (className) VALUES (?)";
+    public MyClass getClassesByName(String name) {
+        String sql = "SELECT * FROM Class WHERE ClassName = ?";
+        MyClass myClass = null;
         try {
-            // Insert into Class table
+            // Check if connection is null or not
+            if (connection != null) {
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setString(1, name); // set the parameter for the query
+                ResultSet resultSet = statement.executeQuery();
 
-            PreparedStatement statement = connection.prepareStatement(sql);
-           
-            statement.setString(1, className);
-            statement.executeUpdate();
-
-            // Close the statement and the connection
-            statement.close();
-            connection.close();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
+                while (resultSet.next()) {
+                    myClass = new MyClass(resultSet.getInt("ClassID"), resultSet.getString("ClassName"));
+                }
+                // Close resultSet, statement, and connection (if necessary)
+                resultSet.close();
+                statement.close();
+                // No need to return myClass here, return it after try-catch block
+            } else {
+                System.err.println("Connection is null. Cannot execute query.");
+            }
+        } catch (SQLException ex) {
+            // Log the exception or handle it appropriately
+            ex.printStackTrace();
         }
+        return myClass; // Moved the return statement outside the try-catch block
     }
+
+    public boolean checkClassName(String ClassName) {
+        if (getClassesByName(ClassName) == null) {
+            return false;
+        }
+        return true;
+    }
+
+//    public void addClassName(String className) {
+//        String sql = "INSERT INTO Class (className) VALUES (?)";
+//        try {
+//            // Insert into Class table
+//
+//            PreparedStatement statement = connection.prepareStatement(sql);
+//
+//            statement.setString(1, className);
+//            statement.executeUpdate();
+//
+//            // Close the statement and the connection
+//            statement.close();
+//            connection.close();
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//    }
+    public int addClassName(String ClassName) {
+    String sql = "INSERT INTO Class (ClassName) VALUES (?)";
+    int ClassID = 0;
+
+    try (
+        PreparedStatement pst = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+    ) {
+        pst.setString(1, ClassName);
+        pst.executeUpdate();
+
+        try (ResultSet generatedKeys = pst.getGeneratedKeys()) {
+            if (generatedKeys.next()) {
+                ClassID = generatedKeys.getInt(1);
+            }
+        }
+    } catch (SQLException ex) {
+        Logger.getLogger(ClassDAO.class.getName()).log(Level.SEVERE, null, ex);
+    }
+
+    return ClassID;
+}
+
 
     public String getTeacherByClassID(int id) {
         String sql = "select distinct cs.TeacherID from ClassSubject cs, Class c, Teacher t, Account ac "
@@ -232,6 +308,60 @@ public class ClassDAO extends DBContext<BaseEntity> {
         }
     }
 
+    public void AddClassTeacher(int ClassID, String TeacherID) {
+        String sql = "INSERT Into ClassSubject(ClassID, TeacherID) VALUES(?,?)";
+        try {
+            // Insert into Class table
+
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, ClassID);
+            statement.setString(2, TeacherID);
+
+            statement.executeUpdate();
+
+            // Close the statement and the connection
+            statement.close();
+            connection.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+
+    }
+    
+    public int getIDfromClassName(String ClassName){ 
+        String sql ="Select ClassID from Class where ClassName = ?"; 
+        int ClassID = 0; 
+        PreparedStatement pst;
+        try {
+            pst = connection.prepareStatement(sql);
+            // set the parameter value for the ClassID placeholder
+            pst.setString(1, ClassName);
+
+            // declare and initialize the result set object
+            ResultSet rs = pst.executeQuery();
+
+            // check if the result set has any data
+            if (rs.next()) {
+                // assign the value of the ClassID column to the variable
+                ClassID = rs.getInt("ClassID");
+            }
+            // close the result set, prepared statement, and connection objects
+
+            rs.close();
+            pst.close();
+            connection.close();
+         
+        } catch (SQLException ex) {
+            Logger.getLogger(ClassDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        // return the number of students in the class
+        return ClassID;
+        
+    }
+    
     @Override
     public ArrayList<BaseEntity> list() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
