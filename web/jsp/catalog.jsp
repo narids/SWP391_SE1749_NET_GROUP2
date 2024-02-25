@@ -54,6 +54,7 @@
         <!-- STYLESHEETS ============================================= -->
         <link rel="stylesheet" type="text/css" href="assets/css/style.css">
         <link class="skin" rel="stylesheet" type="text/css" href="assets/css/color/color-1.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
         <style>
             .input-group {
                 position: relative;
@@ -84,6 +85,15 @@
             .show {
                 opacity: 1 !important;
                 visibility: visible !important;
+            }
+
+            .quizStatusBtn{
+                color: orange;
+            }
+
+            .quizStatusBtn.noClick {
+                pointer-events: none;
+                color: lightgray;
             }
 
         </style>
@@ -533,7 +543,7 @@
                                                         </select>
                                                     </div>
                                                     <div style="display: flex; align-items: center; gap: 10px;">
-                                                        <input type="text" id="searchQuiz" placeholder="Search by" style='height: 40px; border: 1px; border-color: #e7ecf1; border-style: solid; padding: 5px'/>
+                                                        <input type="text" id="searchQuiz" placeholder="Search by" style='height: 40px; border: 1px; border-color: #e7ecf1; border-style: solid; padding-left: 10px; padding-right: 10px'/>
                                                         <select id="searchQuizBy">
                                                             <option value="QuizName">Quiz name</option>
                                                             <option value="QuizContent">Quiz content</option>
@@ -561,14 +571,14 @@
                                                                             <div class="review">
                                                                                 <c:choose>
                                                                                     <c:when test = "${q.quiz.quizStatus == 0}">
-                                                                                        <span style="color: red">
-                                                                                            Private
+                                                                                        <span id='quizStatusID-${q.quiz.quizId}' style=" display: flex; align-items: center; gap: 8px; justify-content: space-between;">
+                                                                                            <span style="color: red;">Private</span><i onclick="updateStatus(${q.quiz.quizId}, 'toPublish')" class="bi bi-arrow-repeat quizStatusBtn" style="font-size: 19px; cursor: pointer"></i>
                                                                                         </span>
                                                                                     </c:when>
 
                                                                                     <c:when test = "${q.quiz.quizStatus == 1}">
-                                                                                        <span style="color: green">
-                                                                                            Publish
+                                                                                        <span id='quizStatusID-${q.quiz.quizId}' style="display: flex; align-items: center; gap: 8px; justify-content: space-between;">
+                                                                                            <span style="color: green;">Publish</span><i onclick="updateStatus(${q.quiz.quizId}, 'toPrivate')" class="bi bi-arrow-repeat quizStatusBtn" style="font-size: 19px; cursor: pointer"></i>
                                                                                         </span>
                                                                                     </c:when>
                                                                                 </c:choose>
@@ -923,230 +933,264 @@
         <script src="assets/js/contact.js"></script>
         <script src='assets/vendors/switcher/switcher.js'></script>
         <script>
-            function toastMessageAction(text, color, link) {
-                if (text && text !== "") {
-                    $('#toast').text(text);
-                    $('#toast').css('background-color', color);
-                    $('#toast').toggleClass('show');
+                                                                                                function toastMessageAction(text, color, link) {
+                                                                                                    if (text && text !== "") {
+                                                                                                        $('#toast').text(text);
+                                                                                                        $('#toast').css('background-color', color);
+                                                                                                        $('#toast').toggleClass('show');
+                                                                                                        setTimeout(function () {
+                                                                                                            $('#toast').text("");
+                                                                                                            $('#toast').toggleClass('show');
+                                                                                                        }, 2000);
+                                                                                                    }
+                                                                                                }
+                                                                                                function toastChangeStatus(text, color) {
+                                                                                                    if (text && text !== "") {
+                                                                                                        $('#toast').text(text);
+                                                                                                        $('#toast').css('background-color', color);
+                                                                                                        $('#toast').toggleClass('show');
 
-                    // After 3 seconds, remove the show class from DIV and redirect
-//                    if (link && link !== "") {
-//                        setTimeout(function () {
-//                            window.location.href = link;
-//                        }, 3000);
-//                    }
-                    setTimeout(function () {
-                        $("#SaveChangePass").removeAttr('disabled');
-                        $("#CancelChangePass").removeAttr('disabled');
-                        $('#toast').text("");
-                        $('#toast').toggleClass('show');
-                    }, 2000);
-                }
-            }
+                                                                                                        setTimeout(function () {
+                                                                                                            $("i.quizStatusBtn").removeClass("noClick");
+                                                                                                            $('#toast').text("");
+                                                                                                            $('#toast').toggleClass('show');
+                                                                                                        }, 2000);
+                                                                                                    }
+                                                                                                }
+                                                                                                function updateStatus(id, type) {
+                                                                                                    $("i.quizStatusBtn").addClass("noClick");
+                                                                                                    $.ajax({
+                                                                                                        url: "/SWP391_SE1749_NET_GROUP2/catalog",
+                                                                                                        type: "post",
+                                                                                                        data: {
+                                                                                                            action: "changeQuizStatus",
+                                                                                                            id: id,
+                                                                                                            type: type
+                                                                                                        },
+                                                                                                        success: function (data) {
+                                                                                                            let text = "Change status successfully";
+                                                                                                            let color = "green";
 
-            $(document).ready(function () {
-                $('#togglePassword1').click(function () {
-                    var passwordInput = $('#currentPassword');
-                    var icon = $(this);
+                                                                                                            if (data !== "") {
+                                                                                                                let IDString = "quizStatusID-" + id;
+                                                                                                                var parent = document.getElementById(IDString);
+                                                                                                                parent.innerHTML = data;
+                                                                                                            } else {
+                                                                                                                text = "Change status failed";
+                                                                                                                color = "red";
+                                                                                                            }
 
-                    if (passwordInput.attr('type') === 'password') {
-                        passwordInput.attr('type', 'text');
-                        icon.html('&#x1F440;'); // Mắt mở
-                    } else {
-                        passwordInput.attr('type', 'password');
-                        icon.html('&#x1F441;'); // Mắt đóng
-                    }
-                });
-                $('#togglePassword2').click(function () {
-                    var passwordInput = $('#newPassword');
-                    var icon = $(this);
+                                                                                                            toastChangeStatus(text, color);
+                                                                                                        },
+                                                                                                        error: function (err) {
+                                                                                                            toastChangeStatus("Something went wrong", "red");
+                                                                                                        }
+                                                                                                    });
+                                                                                                }
 
-                    if (passwordInput.attr('type') === 'password') {
-                        passwordInput.attr('type', 'text');
-                        icon.html('&#x1F440;'); // Mắt mở
-                    } else {
-                        passwordInput.attr('type', 'password');
-                        icon.html('&#x1F441;'); // Mắt đóng
-                    }
-                });
-                $('#togglePassword3').click(function () {
-                    var passwordInput = $('#confirmPassword');
-                    var icon = $(this);
+                                                                                                $(document).ready(function () {
+                                                                                                    $('#togglePassword1').click(function () {
+                                                                                                        var passwordInput = $('#currentPassword');
+                                                                                                        var icon = $(this);
 
-                    if (passwordInput.attr('type') === 'password') {
-                        passwordInput.attr('type', 'text');
-                        icon.html('&#x1F440;'); // Mắt mở
-                    } else {
-                        passwordInput.attr('type', 'password');
-                        icon.html('&#x1F441;'); // Mắt đóng
-                    }
-                });
+                                                                                                        if (passwordInput.attr('type') === 'password') {
+                                                                                                            passwordInput.attr('type', 'text');
+                                                                                                            icon.html('&#x1F440;'); // Mắt mở
+                                                                                                        } else {
+                                                                                                            passwordInput.attr('type', 'password');
+                                                                                                            icon.html('&#x1F441;'); // Mắt đóng
+                                                                                                        }
+                                                                                                    });
+                                                                                                    $('#togglePassword2').click(function () {
+                                                                                                        var passwordInput = $('#newPassword');
+                                                                                                        var icon = $(this);
 
+                                                                                                        if (passwordInput.attr('type') === 'password') {
+                                                                                                            passwordInput.attr('type', 'text');
+                                                                                                            icon.html('&#x1F440;'); // Mắt mở
+                                                                                                        } else {
+                                                                                                            passwordInput.attr('type', 'password');
+                                                                                                            icon.html('&#x1F441;'); // Mắt đóng
+                                                                                                        }
+                                                                                                    });
+                                                                                                    $('#togglePassword3').click(function () {
+                                                                                                        var passwordInput = $('#confirmPassword');
+                                                                                                        var icon = $(this);
 
-                const forms = document.querySelectorAll('.needs-validation')
+                                                                                                        if (passwordInput.attr('type') === 'password') {
+                                                                                                            passwordInput.attr('type', 'text');
+                                                                                                            icon.html('&#x1F440;'); // Mắt mở
+                                                                                                        } else {
+                                                                                                            passwordInput.attr('type', 'password');
+                                                                                                            icon.html('&#x1F441;'); // Mắt đóng
+                                                                                                        }
+                                                                                                    });
 
-                // Loop over them and prevent submission
-                Array.from(forms).forEach(form => {
-                    form.addEventListener('submit', event => {
-                        event.preventDefault();
+                                                                                                    const forms = document.querySelectorAll('.needs-validation')
 
-                        const currentPassword = $('#currentPassword').val();
-                        const newPassword = $('#newPassword').val();
-                        const confirmPassword = $('#confirmPassword').val();
+                                                                                                    // Loop over them and prevent submission
+                                                                                                    Array.from(forms).forEach(form => {
+                                                                                                        form.addEventListener('submit', event => {
+                                                                                                            event.preventDefault();
 
-                        if (!form.checkValidity()) {
-                            event.stopPropagation();
+                                                                                                            const currentPassword = $('#currentPassword').val();
+                                                                                                            const newPassword = $('#newPassword').val();
+                                                                                                            const confirmPassword = $('#confirmPassword').val();
 
-                        } else {
-                            $("#SaveChangePass").prop("disabled", true);
-                            $("#CancelChangePass").prop("disabled", true);
-                            var formData = $("#changePassForm").serialize();
-                            $.ajax({
-                                url: "/SWP391_SE1749_NET_GROUP2/catalog",
-                                type: "post",
-                                data: formData,
-                                success: function (data) {
-                                    let text = "Change password successfully!";
-                                    let color = "green";
-                                    let link = "/SWP391_SE1749_NET_GROUP2/catalog?tabPane=changePassword";
+                                                                                                            if (!form.checkValidity()) {
+                                                                                                                event.stopPropagation();
 
-                                    switch (data) {
-                                        case "success":
-                                            $("#changePassForm")[0].reset();
-                                            window.location.href = link;
-                                            break;
+                                                                                                            } else {
+                                                                                                                $("#SaveChangePass").prop("disabled", true);
+                                                                                                                $("#CancelChangePass").prop("disabled", true);
+                                                                                                                var formData = $("#changePassForm").serialize();
+                                                                                                                $.ajax({
+                                                                                                                    url: "/SWP391_SE1749_NET_GROUP2/catalog",
+                                                                                                                    type: "post",
+                                                                                                                    data: formData,
+                                                                                                                    success: function (data) {
+                                                                                                                        let text = "Change password successfully!";
+                                                                                                                        let color = "green";
+                                                                                                                        let link = "/SWP391_SE1749_NET_GROUP2/catalog?tabPane=changePassword";
 
-                                        case "duplicate":
-                                            text = "New password has duplicate!";
-                                            color = "red";
-                                            link = "";
-                                            break;
+                                                                                                                        switch (data) {
+                                                                                                                            case "success":
+                                                                                                                                $("#changePassForm")[0].reset();
+                                                                                                                                window.location.href = link;
+                                                                                                                                break;
 
-                                        case "notMatch":
-                                            text = "Confirm password does not match!";
-                                            color = "red";
-                                            link = "";
-                                            break;
+                                                                                                                            case "duplicate":
+                                                                                                                                text = "New password has duplicate!";
+                                                                                                                                color = "red";
+                                                                                                                                link = "";
+                                                                                                                                break;
 
-                                        case "passNotCorrect":
-                                            text = "Current password not correct!";
-                                            color = "red";
-                                            link = "";
-                                            break;
-                                    }
+                                                                                                                            case "notMatch":
+                                                                                                                                text = "Confirm password does not match!";
+                                                                                                                                color = "red";
+                                                                                                                                link = "";
+                                                                                                                                break;
 
-                                    toastMessageAction(text, color, link);
-                                },
-                                error: function () {
-                                    toastMessageAction("Something went wrong", "red", "/SWP391_SE1749_NET_GROUP2/catalog?tabPane=changePassword");
-                                }
-                            });
-                        }
+                                                                                                                            case "passNotCorrect":
+                                                                                                                                text = "Current password not correct!";
+                                                                                                                                color = "red";
+                                                                                                                                link = "";
+                                                                                                                                break;
+                                                                                                                        }
 
-                        form.classList.add('was-validated')
-                    }, false)
-                })
+                                                                                                                        toastMessageAction(text, color, link);
+                                                                                                                    },
+                                                                                                                    error: function () {
+                                                                                                                        toastMessageAction("Something went wrong", "red", "/SWP391_SE1749_NET_GROUP2/catalog?tabPane=changePassword");
+                                                                                                                    }
+                                                                                                                });
+                                                                                                            }
 
-                $("#filterAll").click(function () {
-                    $.ajax({
-                        url: "/SWP391_SE1749_NET_GROUP2/catalog",
-                        type: "post",
-                        data: {
-                            action: "quizTabFilter",
-                            filterStatus: "all"
-                        },
-                        success: function (data) {
-                            if (data !== "") {
-                                var parent = document.getElementsByClassName("quizzesList");
-                                parent[0].innerHTML = data;
+                                                                                                            form.classList.add('was-validated')
+                                                                                                        }, false)
+                                                                                                    })
 
-                            } 
-                        },
-                        error: function () {
-                        }
-                    });
-                });
-                $("#filterPublish").click(function () {
-                    $.ajax({
-                        url: "/SWP391_SE1749_NET_GROUP2/catalog",
-                        type: "post",
-                        data: {
-                            action: "quizTabFilter",
-                            filterStatus: "publish"
-                        },
-                        success: function (data) {
-                            if (data !== "") {
-                                var parent = document.getElementsByClassName("quizzesList");
-                                parent[0].innerHTML = data;
-                            }
-                        },
-                        error: function () {
-                        }
-                    });
-                });
-                $("#filterPrivate").click(function () {
-                    $.ajax({
-                        url: "/SWP391_SE1749_NET_GROUP2/catalog",
-                        type: "post",
-                        data: {
-                            action: "quizTabFilter",
-                            filterStatus: "private"
-                        },
-                        success: function (data) {
-                            if (data !== "") {
-                                var parent = document.getElementsByClassName("quizzesList");
-                                parent[0].innerHTML = data;
-                            } 
-                        },
-                        error: function () {
-                        }
-                    });
-                });
+                                                                                                    $("#filterAll").click(function () {
+                                                                                                        $.ajax({
+                                                                                                            url: "/SWP391_SE1749_NET_GROUP2/catalog",
+                                                                                                            type: "post",
+                                                                                                            data: {
+                                                                                                                action: "quizTabFilter",
+                                                                                                                filterStatus: "all"
+                                                                                                            },
+                                                                                                            success: function (data) {
+                                                                                                                if (data !== "") {
+                                                                                                                    var parent = document.getElementsByClassName("quizzesList");
+                                                                                                                    parent[0].innerHTML = data;
 
-                $('#sortQuizBy').on('change', function () {
-                    var selectVal = $("#sortQuizBy option:selected").val();
+                                                                                                                }
+                                                                                                            },
+                                                                                                            error: function () {
+                                                                                                            }
+                                                                                                        });
+                                                                                                    });
+                                                                                                    $("#filterPublish").click(function () {
+                                                                                                        $.ajax({
+                                                                                                            url: "/SWP391_SE1749_NET_GROUP2/catalog",
+                                                                                                            type: "post",
+                                                                                                            data: {
+                                                                                                                action: "quizTabFilter",
+                                                                                                                filterStatus: "publish"
+                                                                                                            },
+                                                                                                            success: function (data) {
+                                                                                                                if (data !== "") {
+                                                                                                                    var parent = document.getElementsByClassName("quizzesList");
+                                                                                                                    parent[0].innerHTML = data;
+                                                                                                                }
+                                                                                                            },
+                                                                                                            error: function () {
+                                                                                                            }
+                                                                                                        });
+                                                                                                    });
+                                                                                                    $("#filterPrivate").click(function () {
+                                                                                                        $.ajax({
+                                                                                                            url: "/SWP391_SE1749_NET_GROUP2/catalog",
+                                                                                                            type: "post",
+                                                                                                            data: {
+                                                                                                                action: "quizTabFilter",
+                                                                                                                filterStatus: "private"
+                                                                                                            },
+                                                                                                            success: function (data) {
+                                                                                                                if (data !== "") {
+                                                                                                                    var parent = document.getElementsByClassName("quizzesList");
+                                                                                                                    parent[0].innerHTML = data;
+                                                                                                                }
+                                                                                                            },
+                                                                                                            error: function () {
+                                                                                                            }
+                                                                                                        });
+                                                                                                    });
 
-                    $.ajax({
-                        url: "/SWP391_SE1749_NET_GROUP2/catalog",
-                        type: "post",
-                        data: {
-                            action: "quizTabFilter",
-                            sortBy: selectVal
-                        },
-                        success: function (data) {
-                            if (data !== "") {
-                                var parent = document.getElementsByClassName("quizzesList");
-                                parent[0].innerHTML = data;
-                            }
-                        },
-                        error: function () {
-                        }
-                    });
-                });
-                $('#searchQuiz').on('input', function () {
-                    var selectVal = $("#searchQuizBy option:selected").val();
-                    var value = $(this).val();
+                                                                                                    $('#sortQuizBy').on('change', function () {
+                                                                                                        var selectVal = $("#sortQuizBy option:selected").val();
 
-                    $.ajax({
-                        url: "/SWP391_SE1749_NET_GROUP2/catalog",
-                        type: "post",
-                        data: {
-                            action: "quizTabFilter",
-                            searchBy: selectVal,
-                            searchValue: value
-                        },
-                        success: function (data) {
-                            if (data !== "") {
-                                var parent = document.getElementsByClassName("quizzesList");
-                                parent[0].innerHTML = data;
+                                                                                                        $.ajax({
+                                                                                                            url: "/SWP391_SE1749_NET_GROUP2/catalog",
+                                                                                                            type: "post",
+                                                                                                            data: {
+                                                                                                                action: "quizTabFilter",
+                                                                                                                sortBy: selectVal
+                                                                                                            },
+                                                                                                            success: function (data) {
+                                                                                                                if (data !== "") {
+                                                                                                                    var parent = document.getElementsByClassName("quizzesList");
+                                                                                                                    parent[0].innerHTML = data;
+                                                                                                                }
+                                                                                                            },
+                                                                                                            error: function () {
+                                                                                                            }
+                                                                                                        });
+                                                                                                    });
+                                                                                                    $('#searchQuiz').on('input', function () {
+                                                                                                        var selectVal = $("#searchQuizBy option:selected").val();
+                                                                                                        var value = $(this).val();
 
-                            }
-                        },
-                        error: function () {
-                        }
-                    });
-                });
-            });
+                                                                                                        $.ajax({
+                                                                                                            url: "/SWP391_SE1749_NET_GROUP2/catalog",
+                                                                                                            type: "post",
+                                                                                                            data: {
+                                                                                                                action: "quizTabFilter",
+                                                                                                                searchBy: selectVal,
+                                                                                                                searchValue: value
+                                                                                                            },
+                                                                                                            success: function (data) {
+                                                                                                                if (data !== "") {
+                                                                                                                    var parent = document.getElementsByClassName("quizzesList");
+                                                                                                                    parent[0].innerHTML = data;
+
+                                                                                                                }
+                                                                                                            },
+                                                                                                            error: function () {
+                                                                                                            }
+                                                                                                        });
+                                                                                                    });
+
+                                                                                                });
 
         </script>
     </body>

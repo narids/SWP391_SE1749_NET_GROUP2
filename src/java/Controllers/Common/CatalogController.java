@@ -196,10 +196,12 @@ public class CatalogController extends HttpServlet {
                         for (ClassSubject q : quizzesByTeacherID) {
                             String colorStatus = "green";
                             String valueStatus = "Publish";
+                            String typeStatus = "toPrivate";
 
                             if (q.getQuiz().getQuizStatus() == 0) {
                                 colorStatus = "red";
                                 valueStatus = "Private";
+                                typeStatus = "toPublish";
                             }
 
                             out.print(" <li class='action-card col-xl-4 col-lg-6 col-md-12 col-sm-6 publish'>\n"
@@ -214,8 +216,8 @@ public class CatalogController extends HttpServlet {
                                     + "                                                                        </div>\n"
                                     + "                                                                        <div class=\"cours-more-info\">\n"
                                     + "                                                                            <div class=\"review\">\n"
-                                    + "                                                                                        <span style='color: " + colorStatus + "'>\n"
-                                    + "                                                                                            " + valueStatus + "\n"
+                                    + "                                                                                        <span id='quizStatusID-" + q.getQuiz().getQuizId() + "' style=\" display: flex; align-items: center; gap: 8px; justify-content: space-between;\">\n"
+                                    + "                                                                                            " + "<span style=\"color: " + colorStatus + ";\">" + valueStatus + "</span><i onclick=\"updateStatus(" + q.getQuiz().getQuizId() + ", '" + typeStatus + "')\" class=\"bi bi-arrow-repeat quizStatusBtn\" style=\"font-size: 19px; cursor: pointer\"></i>" + "\n"
                                     + "                                                                                        </span>\n"
                                     + "                                                                                <ul class=\"cours-star\">\n"
                                     + "                                                                                    <li class=\"active\"><i class=\"fa fa-star\"></i></li>\n"
@@ -231,15 +233,45 @@ public class CatalogController extends HttpServlet {
                                     + "                                                                            </div>\n"
                                     + "                                                                        </div>\n"
                                     + "                                                                    </div>\n"
-                                    + "                                                                </li>");
+                                    + "                                                                </li>"
+                            );
                         }
-                        
-                        
+
                     }
 
                 } catch (Exception e) {
                     try (PrintWriter out = response.getWriter()) {
                         out.print("");
+                    }
+                }
+
+            } else if ("changeQuizStatus".equals(action)) {
+                QuizDAO quizDAO = new QuizDAO();
+
+                String id = request.getParameter("id");
+                String type = request.getParameter("type");
+
+                String sql = "UPDATE [dbo].[Quiz]\n";
+
+                if (type.equals("toPublish")) {
+                    sql += " SET [QuizStatus] = 1 WHERE QuizID =\n";
+                } else {
+                    sql += " SET [QuizStatus] = 0 WHERE QuizID =\n";
+                }
+
+                sql += id;
+
+                try (PrintWriter out = response.getWriter()) {
+                    if (quizDAO.updateQuizWithSql(sql)) {
+                        if (type.equals("toPublish")) {
+                            out.print("<span style=\"color: green;\">Publish</span> <i onclick=\"updateStatus(" + id + ", 'toPrivate')\" class=\"bi bi-arrow-repeat quizStatusBtn noClick\" style=\"font-size: 19px; cursor: pointer\"></i>");
+                        } else {
+                            out.print("<span style=\"color: red;\">Private</span><i onclick=\"updateStatus(" + id + ", 'toPublish')\" class=\"bi bi-arrow-repeat quizStatusBtn noClick\" style=\"font-size: 19px; cursor: pointer\"></i>");
+                        }
+
+                    } else {
+                        out.print("");
+
                     }
                 }
 

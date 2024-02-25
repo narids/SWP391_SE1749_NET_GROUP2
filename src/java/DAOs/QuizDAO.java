@@ -160,6 +160,22 @@ public class QuizDAO extends DBContext<BaseEntity> {
         }
         return ltQuiz;
     }
+    
+    public Boolean updateQuizWithSql(String sql) {
+        try {
+            connection.setAutoCommit(false);
+            PreparedStatement stm = connection.prepareCall(sql);
+
+            if (stm.executeUpdate() > 0) {
+                connection.commit();
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return false;
+    }
 
     /**
      * Get all questions for searching
