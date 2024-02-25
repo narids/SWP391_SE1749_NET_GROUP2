@@ -354,50 +354,51 @@
                     </ul>
                 </div>	
                 <div class="row">
-                    <!-- Your Profile Views Chart -->
+
                     <div class="col-lg-12 m-b30">
                         <div class="widget-box">
-                            <div class="wc-title">
-                                <h4>Classes</h4>
+                            <div class="wc-title d-flex justify-content-between align-items-center">
+                                <h4>New list</h4>
+                                <a href="addClass" class="btn btn-sm info ">
+                                    Add a class
+                                </a>
                             </div>
                             <div class="widget-inner">
-                                <c:forEach var="classes" items="${ClassList}">
-                                    <div class="card-courses-list admin-courses">
-                                        <div class="card-courses-media">
-                                            <img src="assets/images/courses/pic1.jpg" alt=""/>
-                                        </div>
-                                        <div class="card-courses-full-dec">
-                                            <div class="card-courses-title">
-                                                <h4><a href="ClassDetail?id=${classes.getClassID()}
-                                                       ">${classes.className}</a>  </h4>
+                                <table id="myTable" class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Class Name</th>
+                                            <th scope="col">Teacher</th>
+                                            <th scope="col">Action</th>
+                                            <th scope="col"></th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>                                  
+                                        <c:forEach  var="n" items="${ClassList}">
+                                            <tr>
 
-                                            </div>
-                                            <div class="card-courses-list-bx">
-                                                <ul class="card-courses-view">
-                                                    <li class="card-courses-user">
-                                                        <div class="card-courses-user-pic">
-                                                            <img src="assets/images/testimonials/pic3.jpg" alt=""/>
-                                                        </div>
-                                                        <div class="card-courses-user-info">
-                                                            <h5>Teacher</h5>
-                                                            <h4>${classes.name}</h4>
-                                                        </div>
-                                                    </li>
-                                                    <li class="card-courses-categories">
-                                                        <h5>3 Categories</h5>
-                                                        <h4>Backend</h4>
-                                                    </li>                                                                                                                                            
-                                                </ul>
-                                            </div>
+                                                <th style="">${n.getClassID()}
+                                                </th> 
 
+                                                <td style="width:50%; white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;"><a href="ClassDetail?id=${n.getClassID()}
+                                                                ">${n.className} </a> </td>
+                                                <td style="width:10%">${n.name}</td>
 
-                                        </div>
-
-                                    </div>
-
-                                </c:forEach>
+                                                <td>
+                                                    <a href="ClassDetail?id=${n.getClassID()}" class="btn btn-sm yellow outline radius-xl ">
+                                                        <i class="fa fa-pencil"></i>
+                                                    </a>
+                                                    <a href="#" class="btn btn-sm red outline radius-xl delete-news" data-toggle="modal" data-target="#deleteModal-${n.getClassID()}">
+                                                        <i class="fa fa-trash"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
                             </div>
-
                         </div>
                     </div>
                     <!-- Your Profile Views Chart END-->

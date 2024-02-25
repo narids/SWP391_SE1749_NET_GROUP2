@@ -254,35 +254,50 @@
                                 <div class="col-lg-9 col-md-8 col-sm-12">
 
 
-                                    <div class="col-lg-12 m-b30">
-                                        <div class="widget-box">
-                                            <div class="wc-title">
-                                                <h4>Class Details</h4>
-                                            </div>
-                                            <div class="widget-inner">
-                                                <form id="ClassForm" class="edit-profile m-b30" action="ClassDetail" method="post">
-                                                    <div class="row">
-                                                        <div class="form-group col-8">
-                                                            <input name="ClassId" class="form-control" type="hidden" value="${param.id}" required/>
-                                                            <label class="col-form-label">Classname <span class="text-red">*</span></label>
-                                                            <input name="ClassName" class="form-control" type="text" value="${classSelected.getClassName()}" required>
-                                                            <label class="col-form-label">Teacher ID <span class="text-red">*</span></label>
-                                                            <select name="TeacherID" id="TeacherID" class="form-control" required>
-                                                                <c:forEach var="teacher" items="${TeacherIDs}">
-                                                                    <option value="${teacher}" ${teacher == TeacherID ? 'selected' : ''}>${teacher}</option>
-                                                                </c:forEach>
-                                                            </select>
-                                                            <input type="hidden" name="HiddenTeacherID" id="hiddenTeacherID">
+                                    <!--cho nay de content-->
+                                    <!--Main container start -->
+                                    <main class="ttr-wrapper">
+                                        <div class="container-fluid">
+
+                                            <div class="row">
+                                                <!-- Your Profile Views Chart -->
+                                                <div class="col-lg-12 m-b30">
+                                                    <div class="widget-box">
+                                                        <div class="wc-title">
+                                                            <h4>Add news</h4>
                                                         </div>
-                                                        <div class="col-12">
-                                                            <button type="submit" class="btn-secondry add-item m-r5"><i class="fa fa-fw fa-plus-circle"></i> Update</button>
+                                                        <div class="widget-inner">
+                                                            <form action="addClass" method="POST" class="edit-profile m-b30"  >
+                                                                <div class="row">
+                                                                    <div class="form-group col-8">
+                                                                        <label class="col-form-label">ClassName <span class="text-red">*</span></label>
+                                                                        <div>
+                                                                            <input name="ClassName" class="form-control" type="text" required>
+                                                                            <span class="text-red">${error}</span>
+                                                                            <label class="col-form-label">Teacher <span class="text-red">*</span></label>
+                                                                            <select name="TeacherID" id="TeacherID" class="form-control" required>
+                                                                                <c:forEach var="teacher" items="${TeacherIDs}">
+                                                                                    <option value="${teacher}"}>${teacher}</option>
+                                                                                </c:forEach>
+                                                                                <input type="hidden" name="HiddenTeacherID" id="hiddenTeacherID">
+                                                                                </div>
+
+                                                                            </select>
+
+                                                                        </div>
+
+                                                                        <div class="col-12">
+                                                                            <button type="submit" class="btn-secondry add-item m-r5"><i class="fa fa-fw fa-plus-circle"></i> Add</button>
+                                                                        </div>
+                                                                    </div>
+                                                            </form>
                                                         </div>
                                                     </div>
-                                                </form>
+                                                </div>
+                                                <!-- Your Profile Views Chart END-->
                                             </div>
                                         </div>
-                                    </div>
-                                    <!-- Your Profile Views Chart END-->
+                                    </main>
 
                                 </div>
                             </div>
