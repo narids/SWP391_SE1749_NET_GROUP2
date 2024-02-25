@@ -276,25 +276,22 @@
                                                                             <span class="text-red">${error}</span>
                                                                             <label class="col-form-label">Student Email<span class="text-red">*</span></label>
                                                                             <input name="StudentEmail" class="form-control" type="text" required>
-
-                                                                            </select>
-
                                                                         </div>
-                                                                         <input type="hidden" name="HiddenClassID" id="HiddenClassID" value="${param.Classid}">
+                                                                        <input type="hidden" name="HiddenClassID" id="HiddenClassID" value="${param.Classid}">
 
 
                                                                         <div class="col-12">
                                                                             <button type="submit" class="btn-secondry add-item m-r5"><i class="fa fa-fw fa-plus-circle"></i> Add</button>
                                                                         </div>
-                                                                        
+
                                                                     </div>
+                                                                </div>
                                                             </form>
                                                         </div>
                                                     </div>
+                                                    <!-- Your Profile Views Chart END-->
                                                 </div>
-                                                <!-- Your Profile Views Chart END-->
                                             </div>
-                                        </div>
                                     </main>
 
                                 </div>

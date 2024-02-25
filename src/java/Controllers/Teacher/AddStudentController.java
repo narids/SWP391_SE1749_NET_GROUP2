@@ -87,8 +87,7 @@ public class AddStudentController extends HttpServlet {
         StudentDAO s = new StudentDAO();
         String StudentID = s.getStudentIdByEmail(email);
         s.addStudentToClass(StudentID, ClassID);
-        request.setAttribute("Classid", ClassID);
-        request.getRequestDispatcher("StudentList").forward(request, response);
+        response.sendRedirect("StudentList");
     }
 
     /**

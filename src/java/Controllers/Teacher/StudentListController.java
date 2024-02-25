@@ -13,6 +13,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -58,7 +59,9 @@ public class StudentListController extends HttpServlet {
             throws ServletException, IOException {
 //        processRequest(request, response);
         StudentDAO s = new StudentDAO();
-        int ClassID = Integer.parseInt(request.getParameter("Classid"));
+//        int ClassID = Integer.parseInt(request.getParameter("Classid"));
+        HttpSession session = request.getSession();
+        int ClassID = (int) session.getAttribute("Classid");
         List<Student> StudentList = s.getStudentIdByClassID(ClassID);
         request.setAttribute("StudentList", StudentList);
         request.getRequestDispatcher("jsp/Student-list.jsp").forward(request, response);
@@ -75,21 +78,21 @@ public class StudentListController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        processRequest(request, response);
         String action = request.getParameter("action");
-        StudentDAO s = new StudentDAO();
-        switch (action) {
-            case "delete":
-                String id = request.getParameter("StudentID");
-                s.removeStudentFromClassByStudentID(id);
-                int ClassID = Integer.parseInt(request.getParameter("Classid"));
-                request.setAttribute("Classid", ClassID);
-                request.getRequestDispatcher("StudentList").forward(request, response);
-                break;
-            default:
-                throw new AssertionError();
+        if (action != null) {
+            StudentDAO s = new StudentDAO();
+            switch (action) {
+                case "delete":
+                    HttpSession session = request.getSession();
+                    int ClassID = (int) session.getAttribute("Classid");
+                    String id = request.getParameter("StudentID");
+                    s.removeStudentFromClassByStudentID(id, ClassID);
+                    response.sendRedirect("StudentList");
+                    break;
+                default:
+                    throw new AssertionError();
+            }
         }
-
     }
 
     /**

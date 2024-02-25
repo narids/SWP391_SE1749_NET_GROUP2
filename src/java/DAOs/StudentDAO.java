@@ -97,7 +97,7 @@ public class StudentDAO extends DBContext<BaseEntity> {
     }
 
     public List<Student> getStudentIdByClassID(int ClassID) {
-        String sql = "SELECT a.UserID,s.StudentID,a.Fullname from ClassStudent cs,Student s,ClassSubject csj,Account a\n"
+        String sql = "SELECT distinct a.UserID,s.StudentID,a.Fullname from ClassStudent cs,Student s,ClassSubject csj,Account a\n"
                 + "where cs.ClassID = csj.ClassID and cs.StudentID = s.StudentID and a.UserID =s.UserID\n"
                 + "and cs.ClassID =?";
         List<Student> StudentList = new ArrayList<>();
@@ -146,7 +146,6 @@ public class StudentDAO extends DBContext<BaseEntity> {
             statement.executeUpdate();
 
             // Commit the transaction
-            connection.commit();
         } catch (SQLException e) {
             // Rollback the transaction if an error occurs
             try {
@@ -158,12 +157,13 @@ public class StudentDAO extends DBContext<BaseEntity> {
         }
     }
 
-    public void removeStudentFromClassByStudentID(String id) {
+    public void removeStudentFromClassByStudentID(String id, int classId) {
         try {
             // Delete from ClassStudent table
-            String strSQL = "DELETE FROM ClassStudent WHERE StudentID = ?";
+            String strSQL = "DELETE FROM ClassStudent WHERE StudentID = ? and ClassID = ?";
             PreparedStatement statement = connection.prepareStatement(strSQL);
             statement.setString(1, id);
+            statement.setInt(2, classId);
             statement.executeUpdate();
 
             statement.executeUpdate();
