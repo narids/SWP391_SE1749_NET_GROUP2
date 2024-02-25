@@ -359,38 +359,37 @@
                         <div class="widget-box">
                             <div class="wc-title d-flex justify-content-between align-items-center">
                                 <h4>New list</h4>
-                                <a href="addClass" class="btn btn-sm info ">
-                                    Add a class
+                                <a href="addStudent" class="btn btn-sm info ">
+                                    Add Student
                                 </a>
                             </div>
                             <div class="widget-inner">
                                 <table id="myTable" class="table table-hover">
                                     <thead>
                                         <tr>
-                                            <th scope="col">#</th>
-                                            <th scope="col">Class Name</th>
-                                            <th scope="col">Teacher</th>
+                                            <th scope="col">ID</th>
+                                            <th scope="col">Student Name</th>
+                                          
                                             <th scope="col">Action</th>
                                             <th scope="col"></th>
                                             <th scope="col"></th>
                                         </tr>
                                     </thead>
                                     <tbody>                                  
-                                        <c:forEach  var="n" items="${ClassList}">
+                                        <c:forEach  var="n" items="${StudentList}">
                                             <tr>
 
-                                                <th style="">${n.getClassID()}
+                                                <th style="">${n.getStudentId()}
                                                 </th> 
 
-                                                <td style="width:50%; white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;"><a href="ClassDetail?id=${n.getClassID()}
-                                                                ">${n.className} </a> </td>
-                                                <td style="width:10%">${n.name}</td>
-
+                                                <td style="width:50%; white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;">
+                                                                ${n.name}  </td>
+                                             
                                                 <td>
-                                                    <a href="ClassDetail?id=${n.getClassID()}" class="btn btn-sm yellow outline radius-xl ">
+                                                    <a href="StudentDetail?id=${n.getStudentId()}" class="btn btn-sm yellow outline radius-xl ">
                                                         <i class="fa fa-pencil"></i>
                                                     </a>
-                                                    <a href="#" class="btn btn-sm red outline radius-xl delete-news" data-toggle="modal" data-target="#deleteModal-${n.getClassID()}">
+                                                    <a href="#" class="btn btn-sm red outline radius-xl delete-news" data-toggle="modal" data-target="#deleteModal-${n.getStudentId()}">
                                                         <i class="fa fa-trash"></i>
                                                     </a>
                                                 </td>
@@ -406,8 +405,8 @@
             </div>
         </main>
         <        <div class="ttr-overlay"></div>
-        <c:forEach items="${ClassList}" var="n">
-            <div class="modal fade" id="deleteModal-${n.getClassID()}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <c:forEach items="${StudentList}" var="n">
+            <div class="modal fade" id="deleteModal-${n.getStudentId()}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <form action="class" method="post">
                         <div class="modal-content">
@@ -419,7 +418,7 @@
                             </div>
                             <div class="modal-body">
                                 <input type="hidden" id="newsIdToDelete" name="action" value="delete">
-                                <input type="hidden" id="newsIdToDelete" name="ClassID" value="${n.getClassID()}">
+                                <input type="hidden" id="newsIdToDelete" name="ClassID" value="${n.getStudentId()}">
                                 Are you sure you want to delete this news: ?
                             </div>
                             <div class="modal-footer">

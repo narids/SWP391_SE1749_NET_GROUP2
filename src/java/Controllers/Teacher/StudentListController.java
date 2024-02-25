@@ -2,10 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controllers.Manager;
+package Controllers.Teacher;
 
-import DAOs.ClassDAO;
-import Models.MyClass;
+import DAOs.StudentDAO;
+import Models.Student;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -18,7 +18,7 @@ import java.util.List;
  *
  * @author nghia
  */
-public class ClassController extends HttpServlet {
+public class StudentListController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,10 +37,10 @@ public class ClassController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ClassController</title>");
+            out.println("<title>Servlet StudentList</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ClassController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet StudentList at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -58,10 +58,11 @@ public class ClassController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ClassDAO t = new ClassDAO();
-        List<MyClass> ClassList = t.getAllClasses();
-        request.setAttribute("ClassList", ClassList);
-        request.getRequestDispatcher("jsp/Class-list.jsp").forward(request, response);
+//        processRequest(request, response);
+        StudentDAO s = new StudentDAO(); 
+        List<Student> StudentList = s.getStudentList(); 
+        request.setAttribute("StudentList", StudentList);
+        request.getRequestDispatcher("jsp/Student-list.jsp").forward(request, response);
     }
 
     /**
@@ -75,17 +76,10 @@ public class ClassController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String action = request.getParameter("action");
-        ClassDAO t = new ClassDAO(); 
-        switch (action) {
-            case "delete":
-                int id = Integer.parseInt(request.getParameter("ClassID"));
-                t.deleteClass(id);
-                response.sendRedirect("class");
-                break;
-            default:
-                throw new AssertionError();
-        }
+//        processRequest(request, response);
+
+
+            
     }
 
     /**
