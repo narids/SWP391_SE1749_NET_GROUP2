@@ -358,8 +358,8 @@
                     <div class="col-lg-12 m-b30">
                         <div class="widget-box">
                             <div class="wc-title d-flex justify-content-between align-items-center">
-                                <h4>New list</h4>
-                                <a href="addStudent" class="btn btn-sm info ">
+                                <h4>Student list</h4>
+                                <a href="AddStudent?Classid=${param.Classid}" class="btn btn-sm info ">
                                     Add Student
                                 </a>
                             </div>
@@ -408,7 +408,7 @@
         <c:forEach items="${StudentList}" var="n">
             <div class="modal fade" id="deleteModal-${n.getStudentId()}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
-                    <form action="class" method="post">
+                    <form action="StudentList" method="post">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="deleteModalLabel">Delete News</h5>
@@ -418,8 +418,8 @@
                             </div>
                             <div class="modal-body">
                                 <input type="hidden" id="newsIdToDelete" name="action" value="delete">
-                                <input type="hidden" id="newsIdToDelete" name="ClassID" value="${n.getStudentId()}">
-                                Are you sure you want to delete this news: ?
+                                <input type="hidden" id="newsIdToDelete" name="StudentID" value="${n.getStudentId()}">
+                                Are you sure you want to delete this news: 
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>

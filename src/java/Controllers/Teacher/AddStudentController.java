@@ -6,20 +6,21 @@ package Controllers.Teacher;
 
 import DAOs.ClassDAO;
 import DAOs.StudentDAO;
-import Models.Student;
+import Models.MyClass;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
 
 /**
  *
  * @author nghia
  */
-public class StudentListController extends HttpServlet {
+@WebServlet(name = "AddStudentController", urlPatterns = {"/AddStudent"})
+public class AddStudentController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,12 +36,15 @@ public class StudentListController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try ( PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-
-//            StudentDAO s = new StudentDAO();
-//            int ClassID = Integer.parseInt(request.getParameter("Classid"));
-//            List<Student> StudentList = s.getStudentIdByClassID(ClassID);
-//            request.setAttribute("StudentList", StudentList);
-//            request.getRequestDispatcher("jsp/Student-list.jsp").forward(request, response);
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet AddStudentController</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet AddStudentController at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
         }
     }
 
@@ -57,11 +61,13 @@ public class StudentListController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 //        processRequest(request, response);
-        StudentDAO s = new StudentDAO();
+        ClassDAO t = new ClassDAO();
         int ClassID = Integer.parseInt(request.getParameter("Classid"));
-        List<Student> StudentList = s.getStudentIdByClassID(ClassID);
-        request.setAttribute("StudentList", StudentList);
-        request.getRequestDispatcher("jsp/Student-list.jsp").forward(request, response);
+        MyClass ClassSelected = t.getClassesByID(ClassID);
+        String ClassName = ClassSelected.getClassName();
+        request.setAttribute("ClassName", ClassName);
+        request.getRequestDispatcher("jsp/add-student.jsp").forward(request, response);
+
     }
 
     /**
@@ -76,20 +82,13 @@ public class StudentListController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 //        processRequest(request, response);
-        String action = request.getParameter("action");
+        String email = request.getParameter("StudentEmail");
+        int ClassID = Integer.parseInt(request.getParameter("HiddenClassID"));
         StudentDAO s = new StudentDAO();
-        switch (action) {
-            case "delete":
-                String id = request.getParameter("StudentID");
-                s.removeStudentFromClassByStudentID(id);
-                int ClassID = Integer.parseInt(request.getParameter("Classid"));
-                request.setAttribute("Classid", ClassID);
-                request.getRequestDispatcher("StudentList").forward(request, response);
-                break;
-            default:
-                throw new AssertionError();
-        }
-
+        String StudentID = s.getStudentIdByEmail(email);
+        s.addStudentToClass(StudentID, ClassID);
+        request.setAttribute("Classid", ClassID);
+        request.getRequestDispatcher("StudentList").forward(request, response);
     }
 
     /**
