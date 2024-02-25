@@ -13,6 +13,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -61,7 +62,9 @@ public class ClassDetailController extends HttpServlet {
             throws ServletException, IOException {
         ClassDAO t = new ClassDAO();
         int ClassID = Integer.parseInt(request.getParameter("id"));
-
+        
+        HttpSession session = request.getSession();
+        
         String TeacherID = t.getTeacherByClassID(ClassID);
         request.setAttribute("TeacherID", TeacherID);
 
@@ -70,6 +73,8 @@ public class ClassDetailController extends HttpServlet {
 
         MyClass ClassSelected = t.getClassesByID(ClassID);
         request.setAttribute("classSelected", ClassSelected);
+        
+        session.setAttribute("Classid", ClassID);
 //        int numStudent = t.getNumberOfStudentInClass(ClassID);
 //        request.setAttribute("num", numStudent);
 

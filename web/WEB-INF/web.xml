@@ -39,6 +39,10 @@
         <servlet-name>addClassController</servlet-name>
         <servlet-class>Controllers.Manager.addClassController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>StudentListController</servlet-name>
+        <servlet-class>Controllers.Teacher.StudentListController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/login</url-pattern>
@@ -74,6 +78,10 @@
     <servlet-mapping>
         <servlet-name>addClassController</servlet-name>
         <url-pattern>/addClass</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>StudentListController</servlet-name>
+        <url-pattern>/StudentList</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>3000</session-timeout>

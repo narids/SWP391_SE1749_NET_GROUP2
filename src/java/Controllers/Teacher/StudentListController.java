@@ -2,23 +2,25 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controllers.Manager;
+package Controllers.Teacher;
 
 import DAOs.ClassDAO;
-import Models.MyClass;
+import DAOs.StudentDAO;
+import Models.Student;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 
 /**
  *
  * @author nghia
  */
-public class ClassController extends HttpServlet {
+public class StudentListController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,15 +36,12 @@ public class ClassController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try ( PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ClassController</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ClassController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+
+//            StudentDAO s = new StudentDAO();
+//            int ClassID = Integer.parseInt(request.getParameter("Classid"));
+//            List<Student> StudentList = s.getStudentIdByClassID(ClassID);
+//            request.setAttribute("StudentList", StudentList);
+//            request.getRequestDispatcher("jsp/Student-list.jsp").forward(request, response);
         }
     }
 
@@ -58,10 +57,14 @@ public class ClassController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ClassDAO t = new ClassDAO();
-        List<MyClass> ClassList = t.getAllClasses();
-        request.setAttribute("ClassList", ClassList);
-        request.getRequestDispatcher("jsp/Class-list.jsp").forward(request, response);
+//        processRequest(request, response);
+        StudentDAO s = new StudentDAO();
+//        int ClassID = Integer.parseInt(request.getParameter("Classid"));
+        HttpSession session = request.getSession();
+        int ClassID = (int) session.getAttribute("Classid");
+        List<Student> StudentList = s.getStudentIdByClassID(ClassID);
+        request.setAttribute("StudentList", StudentList);
+        request.getRequestDispatcher("jsp/Student-list.jsp").forward(request, response);
     }
 
     /**
@@ -76,15 +79,19 @@ public class ClassController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
-        ClassDAO t = new ClassDAO(); 
-        switch (action) {
-            case "delete":
-                int id = Integer.parseInt(request.getParameter("ClassID"));
-                t.deleteClass(id);
-                response.sendRedirect("class");
-                break;
-            default:
-                throw new AssertionError();
+        if (action != null) {
+            StudentDAO s = new StudentDAO();
+            switch (action) {
+                case "delete":
+                    HttpSession session = request.getSession();
+                    int ClassID = (int) session.getAttribute("Classid");
+                    String id = request.getParameter("StudentID");
+                    s.removeStudentFromClassByStudentID(id, ClassID);
+                    response.sendRedirect("StudentList");
+                    break;
+                default:
+                    throw new AssertionError();
+            }
         }
     }
 

@@ -262,6 +262,14 @@
                                             <div class="widget-inner">
                                                 <form id="ClassForm" class="edit-profile m-b30" action="ClassDetail" method="post">
                                                     <div class="row">
+                                                        <div class="col-12">
+                                                            <a href ="StudentList?Classid=${param.id}"> 
+                                                                <button type="button" class="btn btn-info" id="update-student-list">
+                                                                    <i class="fas fa-sync-alt"></i> Update Student List
+                                                                </button>
+                                                            </a>
+
+                                                        </div>
                                                         <div class="form-group col-8">
                                                             <input name="ClassId" class="form-control" type="hidden" value="${param.id}" required/>
                                                             <label class="col-form-label">Classname <span class="text-red">*</span></label>

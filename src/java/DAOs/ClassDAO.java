@@ -5,6 +5,7 @@
 package DAOs;
 
 import Models.MyClass;
+import Models.Student;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -72,7 +73,7 @@ public class ClassDAO extends DBContext<BaseEntity> {
             }
             return classes;
         } catch (SQLException ex) {
-            ;
+            ex.printStackTrace();;
         }
         return classes;
     }
@@ -157,27 +158,25 @@ public class ClassDAO extends DBContext<BaseEntity> {
 //        }
 //    }
     public int addClassName(String ClassName) {
-    String sql = "INSERT INTO Class (ClassName) VALUES (?)";
-    int ClassID = 0;
+        String sql = "INSERT INTO Class (ClassName) VALUES (?)";
+        int ClassID = 0;
 
-    try (
-        PreparedStatement pst = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-    ) {
-        pst.setString(1, ClassName);
-        pst.executeUpdate();
+        try (
+                 PreparedStatement pst = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);) {
+            pst.setString(1, ClassName);
+            pst.executeUpdate();
 
-        try (ResultSet generatedKeys = pst.getGeneratedKeys()) {
-            if (generatedKeys.next()) {
-                ClassID = generatedKeys.getInt(1);
+            try ( ResultSet generatedKeys = pst.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    ClassID = generatedKeys.getInt(1);
+                }
             }
+        } catch (SQLException ex) {
+            Logger.getLogger(ClassDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-    } catch (SQLException ex) {
-        Logger.getLogger(ClassDAO.class.getName()).log(Level.SEVERE, null, ex);
+
+        return ClassID;
     }
-
-    return ClassID;
-}
-
 
     public String getTeacherByClassID(int id) {
         String sql = "select distinct cs.TeacherID from ClassSubject cs, Class c, Teacher t, Account ac "
@@ -284,6 +283,31 @@ public class ClassDAO extends DBContext<BaseEntity> {
 //        }
 //        return rowsAffected;
 //    }
+    
+    public void deleteClass(int classID) {
+        try {
+            // Delete from ClassStudent table
+            String strSQL = "DELETE FROM ClassStudent WHERE ClassID = ?";
+            PreparedStatement statement = connection.prepareStatement(strSQL);
+            statement.setInt(1, classID);
+            statement.executeUpdate();
+
+            // Delete from ClassSubject table
+            strSQL = "DELETE FROM ClassSubject WHERE ClassID = ?";
+            statement = connection.prepareStatement(strSQL);
+            statement.setInt(1, classID);
+            statement.executeUpdate();
+
+            // Delete from Class table
+            strSQL = "DELETE FROM Class WHERE ClassID = ?";
+            statement = connection.prepareStatement(strSQL);
+            statement.setInt(1, classID);
+            statement.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("deleteClass:" + e.getMessage());
+        }
+    }
+
     public void updateClass(String teacherID, int classID) {
         try {
             String strSQL = "UPDATE [ClassSubject] "
@@ -326,13 +350,12 @@ public class ClassDAO extends DBContext<BaseEntity> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        
 
     }
-    
-    public int getIDfromClassName(String ClassName){ 
-        String sql ="Select ClassID from Class where ClassName = ?"; 
-        int ClassID = 0; 
+
+    public int getIDfromClassName(String ClassName) {
+        String sql = "Select ClassID from Class where ClassName = ?";
+        int ClassID = 0;
         PreparedStatement pst;
         try {
             pst = connection.prepareStatement(sql);
@@ -352,16 +375,16 @@ public class ClassDAO extends DBContext<BaseEntity> {
             rs.close();
             pst.close();
             connection.close();
-         
+
         } catch (SQLException ex) {
             Logger.getLogger(ClassDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         // return the number of students in the class
         return ClassID;
-        
+
     }
-    
+
     @Override
     public ArrayList<BaseEntity> list() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody

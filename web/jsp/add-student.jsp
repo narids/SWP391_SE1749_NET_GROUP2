@@ -267,38 +267,31 @@
                                                             <h4>Add news</h4>
                                                         </div>
                                                         <div class="widget-inner">
-                                                            <form action="addClass" method="POST" class="edit-profile m-b30"  >
+                                                            <form action="AddStudent" method="POST" class="edit-profile m-b30"  >
                                                                 <div class="row">
                                                                     <div class="form-group col-8">
                                                                         <label class="col-form-label">ClassName <span class="text-red">*</span></label>
                                                                         <div>
-                                                                            <input name="ClassName" class="form-control" type="text" required>
+                                                                            <input name="ClassName" class="form-control" type="text" value="${ClassName}" readonly required>
                                                                             <span class="text-red">${error}</span>
-                                                                            <label class="col-form-label">Teacher <span class="text-red">*</span></label>
-                                                                            <select name="TeacherID" id="TeacherID" class="form-control" required>
-                                                                                <c:forEach var="teacher" items="${TeacherIDs}">
-                                                                                    <option value="${teacher}"}>${teacher}</option>
-                                                                                </c:forEach>
-                                                                                <input type="hidden" name="HiddenTeacherID" id="hiddenTeacherID">
-                                                                                </div>
-
-                                                                            </select>
-
+                                                                            <label class="col-form-label">Student Email<span class="text-red">*</span></label>
+                                                                            <input name="StudentEmail" class="form-control" type="text" required>
                                                                         </div>
-                                                                        
+                                                                        <input type="hidden" name="HiddenClassID" id="HiddenClassID" value="${param.Classid}">
 
 
                                                                         <div class="col-12">
                                                                             <button type="submit" class="btn-secondry add-item m-r5"><i class="fa fa-fw fa-plus-circle"></i> Add</button>
                                                                         </div>
+
                                                                     </div>
+                                                                </div>
                                                             </form>
                                                         </div>
                                                     </div>
+                                                    <!-- Your Profile Views Chart END-->
                                                 </div>
-                                                <!-- Your Profile Views Chart END-->
                                             </div>
-                                        </div>
                                     </main>
 
                                 </div>
