@@ -358,7 +358,7 @@
                     <div class="col-lg-12 m-b30">
                         <div class="widget-box">
                             <div class="wc-title d-flex justify-content-between align-items-center">
-                                <h4>New list</h4>
+                                <h4>Class list</h4>
                                 <a href="addClass" class="btn btn-sm info ">
                                     Add a class
                                 </a>
@@ -412,7 +412,7 @@
                     <form action="class" method="post">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="deleteModalLabel">Delete News</h5>
+                                <h5 class="modal-title" id="deleteModalLabel">Delete Class</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>

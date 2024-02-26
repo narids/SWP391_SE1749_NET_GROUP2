@@ -85,7 +85,7 @@ public class addClassController extends HttpServlet {
         if (t.checkClassName(className)) {
 
             request.setAttribute("error", error);
-            request.getRequestDispatcher("jsp/add-class.jsp").forward(request, response);
+            response.sendRedirect("class");
         } else {
            
             int classID =  t.addClassName(className);
