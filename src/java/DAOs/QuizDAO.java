@@ -4,11 +4,13 @@
  */
 package DAOs;
 
+import Models.ClassSubject;
 import Models.MyClass;
 import Models.Question;
 import Models.Quiz;
 import Models.Subject;
 import Models.SubjectDemension;
+import Models.Teacher;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,7 +23,7 @@ import java.util.logging.Logger;
  *
  * @author admin
  */
-public class QuizDAO extends DBContext<Quiz> {
+public class QuizDAO extends DBContext<BaseEntity> {
 
     /**
      * Get 4 quizzes that haven't been assigned in order to show in homepage
@@ -42,8 +44,9 @@ public class QuizDAO extends DBContext<Quiz> {
             while (rs.next()) {
                 Quiz quiz = new Quiz();
                 quiz.setQuizId(rs.getInt("QuizID"));
-                quiz.setQuizContent(rs.getString("Quiz_Content"));
-                quiz.setCreatedDay(rs.getDate("Created_Day"));
+                quiz.setQuizName(rs.getString("QuizName"));
+                quiz.setQuizContent(rs.getString("QuizContent"));
+                quiz.setCreatedDate(rs.getString("CreatedDate"));
                 ltQuiz.add(quiz);
             }
         } catch (SQLException ex) {
@@ -98,18 +101,25 @@ public class QuizDAO extends DBContext<Quiz> {
         }
         return null;
     }
-public List<Quiz> getQuizzes(String keyword) {
+
+    public List<Quiz> getQuizzes(String sql) {
         List<Quiz> ltQuiz = new ArrayList<>();
-        String sql = "SELECT * FROM Quiz WHERE Quiz_Content LIKE ?;";
+
+        if (sql == null) {
+            sql = "SELECT * FROM Quiz";
+//             WHERE Quiz_Content LIKE ?;
+//            stm.setString(1, "%" + keyword + "%");
+        }
+
         try {
             PreparedStatement stm = connection.prepareStatement(sql);
-            stm.setString(1, "%" + keyword + "%");
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 Quiz quiz = new Quiz();
                 quiz.setQuizId(rs.getInt("QuizID"));
-                quiz.setQuizContent(rs.getString("Quiz_Content"));
-                quiz.setCreatedDay(rs.getDate("Created_Day"));
+                quiz.setQuizName(rs.getString("QuizName"));
+                quiz.setQuizContent(rs.getString("QuizContent"));
+                quiz.setCreatedDate(rs.getString("CreatedDate"));
                 ltQuiz.add(quiz);
             }
         } catch (SQLException ex) {
@@ -117,11 +127,61 @@ public List<Quiz> getQuizzes(String keyword) {
         }
         return ltQuiz;
     }
+    public List<ClassSubject> getQuizzesByTeacherID(String sql) {
+        List<ClassSubject> ltQuiz = new ArrayList<>();
+
+        try {
+            PreparedStatement stm = connection.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                ClassSubject cs = new ClassSubject();
+                Quiz quiz = new Quiz();
+                MyClass myClass =new MyClass();
+                Subject subject = new Subject();
+                
+                
+                quiz.setQuizId(rs.getInt(1));
+                quiz.setQuizName(rs.getString(2));
+                quiz.setQuizContent(rs.getString(3));
+                quiz.setCreatedDate(rs.getString(4));
+                quiz.setQuizStatus(rs.getInt(7));
+                
+                myClass.setClassName(rs.getString(5));
+                subject.setSubjectName(rs.getString(6));
+                
+                cs.setQuiz(quiz);
+                cs.setMyClass(myClass);
+                cs.setSubject(subject);
+                
+                ltQuiz.add(cs);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(QuizDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ltQuiz;
+    }
+    
+    public Boolean updateQuizWithSql(String sql) {
+        try {
+            connection.setAutoCommit(false);
+            PreparedStatement stm = connection.prepareCall(sql);
+
+            if (stm.executeUpdate() > 0) {
+                connection.commit();
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return false;
+    }
 
     /**
      * Get all questions for searching
+     *
      * @param keyword
-     * @return 
+     * @return
      */
     public List<Question> getQuestions(String keyword) {
         List<Question> ltQuestion = new ArrayList<>();
@@ -145,8 +205,9 @@ public List<Quiz> getQuizzes(String keyword) {
 
     /**
      * Get all classes for searching
+     *
      * @param keyword
-     * @return 
+     * @return
      */
     public List<MyClass> getClasses(String keyword) {
         List<MyClass> ltClass = new ArrayList<>();
@@ -169,8 +230,9 @@ public List<Quiz> getQuizzes(String keyword) {
 
     /**
      * Get subject by SubjectID
+     *
      * @param id
-     * @return 
+     * @return
      */
     public Subject getSubjectById(int id) {
         String sql = "SELECT * "
@@ -196,7 +258,8 @@ public List<Quiz> getQuizzes(String keyword) {
 
     /**
      * Get number of questions in a quiz
-     * @return 
+     *
+     * @return
      */
     public int getQuestionNum(int quizId) {
         String sql = "SELECT COUNT(*) FROM QuizQuestion WHERE QuizID = ?";
@@ -212,11 +275,12 @@ public List<Quiz> getQuizzes(String keyword) {
         }
         return 0;
     }
-    
+
     /**
      * Get number of students in a class
+     *
      * @param classId
-     * @return 
+     * @return
      */
     public int getStudentNum(int classId) {
         String sql = "SELECT COUNT(*) FROM ClassStudent WHERE ClassID = ?";
@@ -231,30 +295,6 @@ public List<Quiz> getQuizzes(String keyword) {
             Logger.getLogger(QuizDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return 0;
-    } 
-    @Override
-    public ArrayList<Quiz> list() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public void insert(Quiz entity) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public void update(Quiz entity) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public void delete(Quiz entity) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public Quiz get(Quiz entity) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     public static void main(String[] args) {
@@ -263,5 +303,30 @@ public List<Quiz> getQuizzes(String keyword) {
         for (Quiz quiz : ltQuiz) {
             System.out.println(quiz);
         }
+    }
+
+    @Override
+    public void insert(BaseEntity entity) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void update(BaseEntity entity) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void delete(BaseEntity entity) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public BaseEntity get(BaseEntity entity) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public ArrayList<BaseEntity> list() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

@@ -64,8 +64,7 @@
             .toggle-password {
                 position: absolute;
                 right: 5px;
-                top: 50%;
-                transform: translateY(-50%);
+                top: 8px;
                 cursor: pointer;
                 z-index: 99;
             }
@@ -77,7 +76,7 @@
                 transform: translateX(-50%);
                 color : white;
                 padding: 20px 40px;
-                z-index: 9999;
+                z-index: 999999999;
                 box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
                 border-radius: 10px;
                 opacity: 0;
@@ -107,7 +106,7 @@
 
             <div class="account-form">
                 <div class="account-head" style="background-image:url(assets/images/background/bg2.jpg);">
-                    <a href="index.html"><img src="assets/images/logo-white-2.png" alt=""></a>
+                    <a href="/SWP391_SE1749_NET_GROUP2"><img src="assets/images/logo-white-2.png" alt=""></a>
                 </div>
                 <div class="account-form-inner">
                     <div class="account-container">

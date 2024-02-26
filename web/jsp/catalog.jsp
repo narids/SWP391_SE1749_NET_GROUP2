@@ -3,7 +3,8 @@
     Created on : Jan 28, 2024, 7:38:29 PM
     Author     : admin
 --%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -53,10 +54,55 @@
         <!-- STYLESHEETS ============================================= -->
         <link rel="stylesheet" type="text/css" href="assets/css/style.css">
         <link class="skin" rel="stylesheet" type="text/css" href="assets/css/color/color-1.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        <style>
+            .input-group {
+                position: relative;
+            }
+            .toggle-password {
+                position: absolute;
+                right: 25px;
+                top: 8px;
+                cursor: pointer;
+                z-index: 99;
+            }
 
+            #toast {
+                position: fixed;
+                top: 80px;
+                left: 50%;
+                transform: translateX(-50%);
+                color : white;
+                padding: 20px 40px;
+                z-index: 999;
+                box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+                border-radius: 10px;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.7s;
+            }
+
+            .show {
+                opacity: 1 !important;
+                visibility: visible !important;
+            }
+
+            .quizStatusBtn{
+                color: orange;
+            }
+
+            .quizStatusBtn.noClick {
+                pointer-events: none;
+                color: lightgray;
+            }
+
+        </style>
     </head>
     <body id="bg">
         <div class="page-wraper">
+
+            <div id="toast"></div>
+
             <div id="loading-icon-bx"></div>
             <!-- Header Top ==== -->
             <header class="header rs-nav">
@@ -71,7 +117,7 @@
                             </div>
                             <div class="topbar-right">
                                 <ul>
-                                    
+
                                     <li><a href="login">Login</a></li>
                                     <li><a href="register">Register</a></li>
                                 </ul>
@@ -79,7 +125,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="sticky-header navbar-expand-lg">
+                <div class="sticky-header navbar-expand-lg" style="z-index: 100">
                     <div class="menu-bar clearfix">
                         <div class="container clearfix">
                             <!-- Header Logo ==== -->
@@ -165,7 +211,10 @@
                                         <div class="profile-tabnav">
                                             <ul class="nav nav-tabs">
                                                 <li class="nav-item">
-                                                    <a class="nav-link active" data-toggle="tab" href="#courses"><i class="ti-book"></i>Classes</a>
+                                                    <a class="nav-link ${param.tabPane == null ? 'active' : ''}" data-toggle="tab" href="#courses"><i class="ti-book"></i>Classes</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link ${param.tabPane == "quizTab" ? 'active' : ''}" data-toggle="tab" href="#quiz"><i class="ti-book"></i>Quiz</a>
                                                 </li>
                                                 <li class="nav-item">
                                                     <a class="nav-link" data-toggle="tab" href="#quiz-results"><i class="ti-bookmark-alt"></i>Quiz Results </a>
@@ -174,7 +223,7 @@
                                                     <a class="nav-link" data-toggle="tab" href="#edit-profile"><i class="ti-pencil-alt"></i>Edit Profile</a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a class="nav-link" data-toggle="tab" href="#change-password"><i class="ti-lock"></i>Change Password</a>
+                                                    <a class="nav-link ${param.tabPane == "changePassword" ? 'active' : ''}" data-toggle="tab" href="#change-password"><i class="ti-lock"></i>Change Password</a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -183,7 +232,7 @@
                                 <div class="col-lg-9 col-md-8 col-sm-12 m-b30">
                                     <div class="profile-content-bx">
                                         <div class="tab-content">
-                                            <div class="tab-pane active" id="courses">
+                                            <div class="tab-pane ${param.tabPane == null ? 'active' : ''}" id="courses">
                                                 <div class="profile-head">
                                                     <h3>My Courses</h3>
                                                     <div class="feature-filters style1 ml-auto">
@@ -462,6 +511,97 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="tab-pane ${param.tabPane == "quizTab" ? 'active' : ''}" id="quiz">
+                                                <div class="profile-head">
+                                                    <h3>My Quiz</h3>
+                                                    <div class="feature-filters style1 ml-auto">
+                                                        <ul class="filters" data-toggle="buttons">
+                                                            <li data-filter="" class="btn active" id="filterAll">
+                                                                <input type="radio">
+                                                                <a href=""><span>All</span></a> 
+                                                            </li>
+                                                            <li data-filter="publish" class="btn" id="filterPublish">
+                                                                <input type="radio">
+                                                                <a href=""><span>Publish</span></a> 
+                                                            </li>
+                                                            <li data-filter="pending" class="btn" id="filterPrivate">
+                                                                <input type="radio">
+                                                                <a href=""><span>Private</span></a> 
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; padding-top: 10px; padding-right: 15px; padding-bottom: 10px;padding-left: 30px">
+                                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                                        <div style="text-wrap: nowrap;">Sort by</div>
+                                                        <select id="sortQuizBy">
+                                                            <option value="QuizName">Quiz name</option>
+                                                            <option value="QuizContent">Quiz content</option>
+                                                            <option value="CreatedDate">Create date</option>
+                                                            <option value="ClassName">Class name</option>
+                                                            <option value="SubjectName">Subject name</option>
+                                                        </select>
+                                                    </div>
+                                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                                        <input type="text" id="searchQuiz" placeholder="Search by" style='height: 40px; border: 1px; border-color: #e7ecf1; border-style: solid; padding-left: 10px; padding-right: 10px'/>
+                                                        <select id="searchQuizBy">
+                                                            <option value="QuizName">Quiz name</option>
+                                                            <option value="QuizContent">Quiz content</option>
+                                                            <option value="CreatedDate">Create date</option>
+                                                            <option value="ClassName">Class name</option>
+                                                            <option value="SubjectName">Subject name</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="courses-filter">
+                                                    <div class="clearfix">
+                                                        <ul id="masonry" class="ttr-gallery-listing magnific-image row quizzesList">
+                                                            <c:forEach var="q" items="${requestScope.quizByTeacher}">
+                                                                <li class='action-card col-xl-4 col-lg-6 col-md-12 col-sm-6 publish'>
+                                                                    <div class="cours-bx">
+                                                                        <div class="action-box">
+                                                                            <img src='assets/images/courses/pic1.jpg' alt="">
+                                                                            <a href='quiz/${q.quiz.quizId}' class="btn">Read More</a>
+                                                                        </div>
+                                                                        <div class="info-bx text-center">
+                                                                            <h5><a href='quiz/${q.quiz.quizId}'>${fn:toUpperCase(q.quiz.quizName)}</a></h5>
+                                                                            <span>${q.quiz.quizContent}</span>
+                                                                        </div>
+                                                                        <div class="cours-more-info">
+                                                                            <div class="review">
+                                                                                <c:choose>
+                                                                                    <c:when test = "${q.quiz.quizStatus == 0}">
+                                                                                        <span id='quizStatusID-${q.quiz.quizId}' style=" display: flex; align-items: center; gap: 8px; justify-content: space-between;">
+                                                                                            <span style="color: red;">Private</span><i onclick="updateStatus(${q.quiz.quizId}, 'toPublish')" class="bi bi-arrow-repeat quizStatusBtn" style="font-size: 19px; cursor: pointer"></i>
+                                                                                        </span>
+                                                                                    </c:when>
+
+                                                                                    <c:when test = "${q.quiz.quizStatus == 1}">
+                                                                                        <span id='quizStatusID-${q.quiz.quizId}' style="display: flex; align-items: center; gap: 8px; justify-content: space-between;">
+                                                                                            <span style="color: green;">Publish</span><i onclick="updateStatus(${q.quiz.quizId}, 'toPrivate')" class="bi bi-arrow-repeat quizStatusBtn" style="font-size: 19px; cursor: pointer"></i>
+                                                                                        </span>
+                                                                                    </c:when>
+                                                                                </c:choose>
+                                                                                <ul class="cours-star">
+                                                                                    <li class="active"><i class="fa fa-star"></i></li>
+                                                                                    <li class="active"><i class="fa fa-star"></i></li>
+                                                                                    <li class="active"><i class="fa fa-star"></i></li>
+                                                                                    <li><i class="fa fa-star"></i></li>
+                                                                                    <li><i class="fa fa-star"></i></li>
+                                                                                </ul>
+                                                                            </div>
+                                                                            <div class="price">
+                                                                                <div style="font-size: 14px; margin-top: 5px">${q.subject.subjectName}</div>
+                                                                                <h5>${q.myClass.className}</h5>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </li>
+                                                            </c:forEach>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="tab-pane" id="quiz-results">
                                                 <div class="profile-head">
                                                     <h3>Quiz Results</h3>
@@ -609,33 +749,41 @@
                                                     </div>
                                                 </form>
                                             </div>
-                                            <div class="tab-pane" id="change-password">
+                                            <div class="tab-pane ${param.tabPane == "changePassword" ? 'active' : ''}" id="change-password">
                                                 <div class="profile-head">
                                                     <h3>Change Password</h3>
                                                 </div>
-                                                <form class="edit-profile">
+                                                <form class="edit-profile needs-validation" novalidate id="changePassForm" method="post" action="catalog">
+                                                    <input type="hidden" name="action" value="changePassForm">
                                                     <div class="">
                                                         <div class="form-group row">
-                                                            <div class="col-12 col-sm-8 col-md-8 col-lg-9 ml-auto">
-                                                                <h3>Password</h3>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row">
                                                             <label class="col-12 col-sm-4 col-md-4 col-lg-3 col-form-label">Current Password</label>
-                                                            <div class="col-12 col-sm-8 col-md-8 col-lg-7">
-                                                                <input class="form-control" type="password" value="">
+                                                            <div class="col-12 col-sm-8 col-md-8 col-lg-7 input-group">
+                                                                <input name="currentPassword" id="currentPassword" type="password" class="form-control" required="">
+                                                                <span class="toggle-password" id="togglePassword1">&#x1F441;</span>
+                                                                <div class="invalid-feedback">
+                                                                    Password not be empty
+                                                                </div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
                                                             <label class="col-12 col-sm-4 col-md-4 col-lg-3 col-form-label">New Password</label>
-                                                            <div class="col-12 col-sm-8 col-md-8 col-lg-7">
-                                                                <input class="form-control" type="password" value="">
+                                                            <div class="col-12 col-sm-8 col-md-8 col-lg-7 input-group">
+                                                                <input name="newPassword" id="newPassword" pattern="^[A-Za-z0-9]{6,20}$" type="password" class="form-control" required="">
+                                                                <span class="toggle-password" id="togglePassword2">&#x1F441;</span>
+                                                                <div class="invalid-feedback">
+                                                                    Password must least 6 char, only include string and digit.
+                                                                </div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <label class="col-12 col-sm-4 col-md-4 col-lg-3 col-form-label">Re Type New Password</label>
-                                                            <div class="col-12 col-sm-8 col-md-8 col-lg-7">
-                                                                <input class="form-control" type="password" value="">
+                                                            <label class="col-12 col-sm-4 col-md-4 col-lg-3 col-form-label">Confirm Password</label>
+                                                            <div class="col-12 col-sm-8 col-md-8 col-lg-7 input-group">
+                                                                <input name="confirmPassword" id="confirmPassword" type="password" class="form-control" required="">
+                                                                <span class="toggle-password" id="togglePassword3">&#x1F441;</span>
+                                                                <div class="invalid-feedback">
+                                                                    Confirm password not be empty
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -643,8 +791,8 @@
                                                         <div class="col-12 col-sm-4 col-md-4 col-lg-3">
                                                         </div>
                                                         <div class="col-12 col-sm-8 col-md-8 col-lg-7">
-                                                            <button type="reset" class="btn">Save changes</button>
-                                                            <button type="reset" class="btn-secondry">Cancel</button>
+                                                            <button type="submit" id="SaveChangePass" class="btn">Save changes</button>
+                                                            <button type="reset" id="CancelChangePass" class="btn-secondry">Cancel</button>
                                                         </div>
                                                     </div>
 
@@ -784,6 +932,267 @@
         <script src="assets/js/functions.js"></script>
         <script src="assets/js/contact.js"></script>
         <script src='assets/vendors/switcher/switcher.js'></script>
+        <script>
+                                                                                                function toastMessageAction(text, color, link) {
+                                                                                                    if (text && text !== "") {
+                                                                                                        $('#toast').text(text);
+                                                                                                        $('#toast').css('background-color', color);
+                                                                                                        $('#toast').toggleClass('show');
+                                                                                                        setTimeout(function () {
+                                                                                                            $('#toast').text("");
+                                                                                                            $('#toast').toggleClass('show');
+                                                                                                        }, 2000);
+                                                                                                    }
+                                                                                                }
+                                                                                                function toastChangeStatus(text, color) {
+                                                                                                    if (text && text !== "") {
+                                                                                                        $('#toast').text(text);
+                                                                                                        $('#toast').css('background-color', color);
+                                                                                                        $('#toast').toggleClass('show');
+
+                                                                                                        setTimeout(function () {
+                                                                                                            $("i.quizStatusBtn").removeClass("noClick");
+                                                                                                            $('#toast').text("");
+                                                                                                            $('#toast').toggleClass('show');
+                                                                                                        }, 2000);
+                                                                                                    }
+                                                                                                }
+                                                                                                function updateStatus(id, type) {
+                                                                                                    $("i.quizStatusBtn").addClass("noClick");
+                                                                                                    $.ajax({
+                                                                                                        url: "/SWP391_SE1749_NET_GROUP2/catalog",
+                                                                                                        type: "post",
+                                                                                                        data: {
+                                                                                                            action: "changeQuizStatus",
+                                                                                                            id: id,
+                                                                                                            type: type
+                                                                                                        },
+                                                                                                        success: function (data) {
+                                                                                                            let text = "Change status successfully";
+                                                                                                            let color = "green";
+
+                                                                                                            if (data !== "") {
+                                                                                                                let IDString = "quizStatusID-" + id;
+                                                                                                                var parent = document.getElementById(IDString);
+                                                                                                                parent.innerHTML = data;
+                                                                                                            } else {
+                                                                                                                text = "Change status failed";
+                                                                                                                color = "red";
+                                                                                                            }
+
+                                                                                                            toastChangeStatus(text, color);
+                                                                                                        },
+                                                                                                        error: function (err) {
+                                                                                                            toastChangeStatus("Something went wrong", "red");
+                                                                                                        }
+                                                                                                    });
+                                                                                                }
+
+                                                                                                $(document).ready(function () {
+                                                                                                    $('#togglePassword1').click(function () {
+                                                                                                        var passwordInput = $('#currentPassword');
+                                                                                                        var icon = $(this);
+
+                                                                                                        if (passwordInput.attr('type') === 'password') {
+                                                                                                            passwordInput.attr('type', 'text');
+                                                                                                            icon.html('&#x1F440;'); // Mắt mở
+                                                                                                        } else {
+                                                                                                            passwordInput.attr('type', 'password');
+                                                                                                            icon.html('&#x1F441;'); // Mắt đóng
+                                                                                                        }
+                                                                                                    });
+                                                                                                    $('#togglePassword2').click(function () {
+                                                                                                        var passwordInput = $('#newPassword');
+                                                                                                        var icon = $(this);
+
+                                                                                                        if (passwordInput.attr('type') === 'password') {
+                                                                                                            passwordInput.attr('type', 'text');
+                                                                                                            icon.html('&#x1F440;'); // Mắt mở
+                                                                                                        } else {
+                                                                                                            passwordInput.attr('type', 'password');
+                                                                                                            icon.html('&#x1F441;'); // Mắt đóng
+                                                                                                        }
+                                                                                                    });
+                                                                                                    $('#togglePassword3').click(function () {
+                                                                                                        var passwordInput = $('#confirmPassword');
+                                                                                                        var icon = $(this);
+
+                                                                                                        if (passwordInput.attr('type') === 'password') {
+                                                                                                            passwordInput.attr('type', 'text');
+                                                                                                            icon.html('&#x1F440;'); // Mắt mở
+                                                                                                        } else {
+                                                                                                            passwordInput.attr('type', 'password');
+                                                                                                            icon.html('&#x1F441;'); // Mắt đóng
+                                                                                                        }
+                                                                                                    });
+
+                                                                                                    const forms = document.querySelectorAll('.needs-validation')
+
+                                                                                                    // Loop over them and prevent submission
+                                                                                                    Array.from(forms).forEach(form => {
+                                                                                                        form.addEventListener('submit', event => {
+                                                                                                            event.preventDefault();
+
+                                                                                                            const currentPassword = $('#currentPassword').val();
+                                                                                                            const newPassword = $('#newPassword').val();
+                                                                                                            const confirmPassword = $('#confirmPassword').val();
+
+                                                                                                            if (!form.checkValidity()) {
+                                                                                                                event.stopPropagation();
+
+                                                                                                            } else {
+                                                                                                                $("#SaveChangePass").prop("disabled", true);
+                                                                                                                $("#CancelChangePass").prop("disabled", true);
+                                                                                                                var formData = $("#changePassForm").serialize();
+                                                                                                                $.ajax({
+                                                                                                                    url: "/SWP391_SE1749_NET_GROUP2/catalog",
+                                                                                                                    type: "post",
+                                                                                                                    data: formData,
+                                                                                                                    success: function (data) {
+                                                                                                                        let text = "Change password successfully!";
+                                                                                                                        let color = "green";
+                                                                                                                        let link = "/SWP391_SE1749_NET_GROUP2/catalog?tabPane=changePassword";
+
+                                                                                                                        switch (data) {
+                                                                                                                            case "success":
+                                                                                                                                $("#changePassForm")[0].reset();
+                                                                                                                                window.location.href = link;
+                                                                                                                                break;
+
+                                                                                                                            case "duplicate":
+                                                                                                                                text = "New password has duplicate!";
+                                                                                                                                color = "red";
+                                                                                                                                link = "";
+                                                                                                                                break;
+
+                                                                                                                            case "notMatch":
+                                                                                                                                text = "Confirm password does not match!";
+                                                                                                                                color = "red";
+                                                                                                                                link = "";
+                                                                                                                                break;
+
+                                                                                                                            case "passNotCorrect":
+                                                                                                                                text = "Current password not correct!";
+                                                                                                                                color = "red";
+                                                                                                                                link = "";
+                                                                                                                                break;
+                                                                                                                        }
+
+                                                                                                                        toastMessageAction(text, color, link);
+                                                                                                                    },
+                                                                                                                    error: function () {
+                                                                                                                        toastMessageAction("Something went wrong", "red", "/SWP391_SE1749_NET_GROUP2/catalog?tabPane=changePassword");
+                                                                                                                    }
+                                                                                                                });
+                                                                                                            }
+
+                                                                                                            form.classList.add('was-validated')
+                                                                                                        }, false)
+                                                                                                    })
+
+                                                                                                    $("#filterAll").click(function () {
+                                                                                                        $.ajax({
+                                                                                                            url: "/SWP391_SE1749_NET_GROUP2/catalog",
+                                                                                                            type: "post",
+                                                                                                            data: {
+                                                                                                                action: "quizTabFilter",
+                                                                                                                filterStatus: "all"
+                                                                                                            },
+                                                                                                            success: function (data) {
+                                                                                                                if (data !== "") {
+                                                                                                                    var parent = document.getElementsByClassName("quizzesList");
+                                                                                                                    parent[0].innerHTML = data;
+
+                                                                                                                }
+                                                                                                            },
+                                                                                                            error: function () {
+                                                                                                            }
+                                                                                                        });
+                                                                                                    });
+                                                                                                    $("#filterPublish").click(function () {
+                                                                                                        $.ajax({
+                                                                                                            url: "/SWP391_SE1749_NET_GROUP2/catalog",
+                                                                                                            type: "post",
+                                                                                                            data: {
+                                                                                                                action: "quizTabFilter",
+                                                                                                                filterStatus: "publish"
+                                                                                                            },
+                                                                                                            success: function (data) {
+                                                                                                                if (data !== "") {
+                                                                                                                    var parent = document.getElementsByClassName("quizzesList");
+                                                                                                                    parent[0].innerHTML = data;
+                                                                                                                }
+                                                                                                            },
+                                                                                                            error: function () {
+                                                                                                            }
+                                                                                                        });
+                                                                                                    });
+                                                                                                    $("#filterPrivate").click(function () {
+                                                                                                        $.ajax({
+                                                                                                            url: "/SWP391_SE1749_NET_GROUP2/catalog",
+                                                                                                            type: "post",
+                                                                                                            data: {
+                                                                                                                action: "quizTabFilter",
+                                                                                                                filterStatus: "private"
+                                                                                                            },
+                                                                                                            success: function (data) {
+                                                                                                                if (data !== "") {
+                                                                                                                    var parent = document.getElementsByClassName("quizzesList");
+                                                                                                                    parent[0].innerHTML = data;
+                                                                                                                }
+                                                                                                            },
+                                                                                                            error: function () {
+                                                                                                            }
+                                                                                                        });
+                                                                                                    });
+
+                                                                                                    $('#sortQuizBy').on('change', function () {
+                                                                                                        var selectVal = $("#sortQuizBy option:selected").val();
+
+                                                                                                        $.ajax({
+                                                                                                            url: "/SWP391_SE1749_NET_GROUP2/catalog",
+                                                                                                            type: "post",
+                                                                                                            data: {
+                                                                                                                action: "quizTabFilter",
+                                                                                                                sortBy: selectVal
+                                                                                                            },
+                                                                                                            success: function (data) {
+                                                                                                                if (data !== "") {
+                                                                                                                    var parent = document.getElementsByClassName("quizzesList");
+                                                                                                                    parent[0].innerHTML = data;
+                                                                                                                }
+                                                                                                            },
+                                                                                                            error: function () {
+                                                                                                            }
+                                                                                                        });
+                                                                                                    });
+                                                                                                    $('#searchQuiz').on('input', function () {
+                                                                                                        var selectVal = $("#searchQuizBy option:selected").val();
+                                                                                                        var value = $(this).val();
+
+                                                                                                        $.ajax({
+                                                                                                            url: "/SWP391_SE1749_NET_GROUP2/catalog",
+                                                                                                            type: "post",
+                                                                                                            data: {
+                                                                                                                action: "quizTabFilter",
+                                                                                                                searchBy: selectVal,
+                                                                                                                searchValue: value
+                                                                                                            },
+                                                                                                            success: function (data) {
+                                                                                                                if (data !== "") {
+                                                                                                                    var parent = document.getElementsByClassName("quizzesList");
+                                                                                                                    parent[0].innerHTML = data;
+
+                                                                                                                }
+                                                                                                            },
+                                                                                                            error: function () {
+                                                                                                            }
+                                                                                                        });
+                                                                                                    });
+
+                                                                                                });
+
+        </script>
     </body>
 
 </html>

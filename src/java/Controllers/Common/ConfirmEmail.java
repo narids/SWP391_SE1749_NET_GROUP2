@@ -110,7 +110,9 @@ public class ConfirmEmail extends HttpServlet {
                                 role.setRoleId(4); // student
                                 acc.setRole(role);
 
-                                if (accDAO.registerUser(acc)) {
+                                int userID = accDAO.registerUser(acc);
+
+                                if (userID > 0 && accDAO.addToStudentAccounts(userID)) {
                                     try (PrintWriter out = response.getWriter()) {
                                         out.print("success-register");
                                     }
