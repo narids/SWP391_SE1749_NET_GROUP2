@@ -73,6 +73,7 @@ public class AccountDAO extends DBContext<BaseEntity> {
         }
         return null;
     }
+
     public Student getStudent(String id) {
         try {
             String sql = "SELECT [UserID],[StudentID]\n"
@@ -87,6 +88,50 @@ public class AccountDAO extends DBContext<BaseEntity> {
                 t.setStudentId(rs.getString(2));
 
                 return t;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public String getTeacherFullname(int id) {
+        try {
+            String sql = "SELECT Teacher.UserID, Teacher.TeacherID, Account.Username, Account.Firstname, Account.Lastname\n"
+                    + "FROM Account INNER JOIN Teacher\n"
+                    + "ON Account.UserID = Teacher.UserID\n"
+                    + "where Teacher.TeacherID = ?";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, id);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                String f = rs.getString("Firstname");
+                String l = rs.getString("Lastname");
+                String full = f + " " + l;
+
+                return full;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public String getStudentFullname(int id) {
+        try {
+            String sql = "SELECT Student.UserID, Student.StudentID, Account.Firstname, Account.Lastname\n"
+                    + "FROM  Account INNER JOIN Student \n"
+                    + "ON Account.UserID = Student.UserID\n"
+                    + "where Student.StudentID = ?";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, id);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                String f = rs.getString("Firstname");
+                String l = rs.getString("Lastname");
+                String full = f + " " + l;
+
+                return full;
             }
         } catch (SQLException ex) {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
