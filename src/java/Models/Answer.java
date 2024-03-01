@@ -14,17 +14,16 @@ public class Answer {
     private int questionId;
     private boolean isCorrect;
     private String answerContent;
-    private QuizQuestion quizQuestion;
+    private Question question;
 
     public Answer() {
     }
 
-    public Answer(int answerId, int questionId, boolean isCorrect, String answerContent, QuizQuestion quizQuestion) {
+    public Answer(int answerId, int questionId, boolean isCorrect, String answerContent) {
         this.answerId = answerId;
         this.questionId = questionId;
         this.isCorrect = isCorrect;
         this.answerContent = answerContent;
-        this.quizQuestion = quizQuestion;
     }
 
     public int getAnswerId() {
@@ -59,17 +58,9 @@ public class Answer {
         this.answerContent = answerContent;
     }
 
-    public QuizQuestion getQuizQuestion() {
-        return quizQuestion;
-    }
-
-    public void setQuizQuestion(QuizQuestion quizQuestion) {
-        this.quizQuestion = quizQuestion;
-    }
-
     @Override
     public String toString() {
-        return "Answer{" + "answerId=" + answerId + ", questionId=" + questionId + ", isCorrect=" + isCorrect + ", answerContent=" + answerContent + ", quizQuestion=" + quizQuestion + '}';
+        return "Answer{" + "answerId=" + answerId + ", questionId=" + questionId + ", isCorrect=" + isCorrect + ", answerContent=" + answerContent +   '}';
     }
 
 }

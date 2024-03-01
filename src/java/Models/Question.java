@@ -4,13 +4,14 @@
  */
 package Models;
 
+import DAOs.BaseEntity;
 import java.util.Date;
 
 /**
  *
  * @author khanhlinh
  */
-public class Question {
+public class Question extends BaseEntity{
 
     private int questionId;
     private int answerId;

@@ -12,6 +12,26 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <%@ page import="java.util.List" %>
+
+<%
+    List<String> userList = (List<String>) request.getAttribute("userList");
+
+    if (userList != null && !userList.isEmpty()) {
+        for (String username : userList) {
+            %>
+            <tr>
+                <td><%= username %></td>
+            </tr>
+            <%
+        }
+    } else {
+        %>
+        <tr>
+            <td colspan="1">Không tìm thấy kết quả nào.</td>
+        </tr>
+        <%
+    }
+%>
     </body>
 </html>
