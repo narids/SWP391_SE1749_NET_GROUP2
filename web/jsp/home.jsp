@@ -126,6 +126,8 @@
                                 <ul class="nav navbar-nav">	
                                     <li class="active"><a href="javascript:;">Home</a>
                                     </li>
+                                    <li class=""><a href="quizzes">Quizzes</a>
+                                    </li>
                                     <li class=""><a href="catalog">Your library</a>
                                     </li>
                                 </ul>

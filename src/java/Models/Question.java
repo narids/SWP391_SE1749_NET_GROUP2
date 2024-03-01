@@ -5,6 +5,7 @@
 package Models;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -13,7 +14,7 @@ import java.util.Date;
 public class Question {
 
     private int questionId;
-    private int answerId;
+    private List<Answer> answers;
     private String questionContent;
     private Date createdDay;
     private String imageUrl;
@@ -26,8 +27,9 @@ public class Question {
     }
 
     // Parameterized constructor
-    public Question(int answerId, String questionContent, Date createdDay, String imageUrl, String explain, int subjectId, Subject subject) {
-        this.answerId = answerId;
+    public Question(int questionId, List<Answer> answers, String questionContent, Date createdDay, String imageUrl, String explain, int subjectId, Subject subject) {
+        this.questionId = questionId;
+        this.answers = answers;
         this.questionContent = questionContent;
         this.createdDay = createdDay;
         this.imageUrl = imageUrl;
@@ -36,7 +38,6 @@ public class Question {
         this.subject = subject;
     }
 
-    // Getters and setters
     public int getQuestionId() {
         return questionId;
     }
@@ -45,12 +46,12 @@ public class Question {
         this.questionId = questionId;
     }
 
-    public int getAnswerId() {
-        return answerId;
+    public List<Answer> getAnswers() {
+        return answers;
     }
 
-    public void setAnswerId(int answerId) {
-        this.answerId = answerId;
+    public void setAnswers(List<Answer> answers) {
+        this.answers = answers;
     }
 
     public String getQuestionContent() {
@@ -67,14 +68,6 @@ public class Question {
 
     public void setCreatedDay(Date createdDay) {
         this.createdDay = createdDay;
-    }
-
-    public String getImageURL() {
-        return imageUrl;
-    }
-
-    public void setImageURL(String imageUrl) {
-        this.imageUrl = imageUrl;
     }
 
     public String getImageUrl() {
@@ -107,11 +100,6 @@ public class Question {
 
     public void setSubject(Subject subject) {
         this.subject = subject;
-    }
-
-    @Override
-    public String toString() {
-        return "Question{" + "questionId=" + questionId + ", answerId=" + answerId + ", questionContent=" + questionContent + ", createdDay=" + createdDay + ", imageUrl=" + imageUrl + ", explain=" + explain + ", subjectId=" + subjectId + ", subject=" + subject + '}';
     }
 
 }

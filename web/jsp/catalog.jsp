@@ -69,7 +69,7 @@
 
             #toast {
                 position: fixed;
-                top: 80px;
+                top: 140px;
                 left: 50%;
                 transform: translateX(-50%);
                 color : white;
@@ -163,6 +163,8 @@
                                 <ul class="nav navbar-nav">	
                                     <li class=""><a href="home">Home</a>
                                     </li>
+                                    <li class=""><a href="quizzes">Quizzes</a>
+                                    </li>
                                     <li class="active"><a href="javascript:;">Your library</a>
                                     </li>
                                 </ul>
@@ -175,15 +177,6 @@
             <!-- header END ==== -->
             <!-- Content -->
             <div class="page-content bg-white">
-                <!-- inner page banner -->
-                <div class="page-banner ovbl-dark" style="background-image:url(assets/images/banner/banner1.jpg);">
-                    <div class="container">
-                        <div class="page-banner-entry">
-                            <h1 class="text-white">Your library</h1>
-                        </div>
-                    </div>
-                </div>
-                <!-- Breadcrumb row -->
                 <div class="breadcrumb-row">
                     <div class="container">
                         <ul class="list-inline">
@@ -214,7 +207,7 @@
                                                     <a class="nav-link ${param.tabPane == null ? 'active' : ''}" data-toggle="tab" href="#courses"><i class="ti-book"></i>Classes</a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a class="nav-link ${param.tabPane == "quizTab" ? 'active' : ''}" data-toggle="tab" href="#quiz"><i class="ti-book"></i>Quiz</a>
+                                                    <a class="nav-link ${param.tabPane == "quizTab" ? 'active' : ''}" data-toggle="tab" href="#quiz"><i class="bi bi-card-checklist"></i>Quizzes</a>
                                                 </li>
                                                 <li class="nav-item">
                                                     <a class="nav-link" data-toggle="tab" href="#quiz-results"><i class="ti-bookmark-alt"></i>Quiz Results </a>
@@ -513,21 +506,23 @@
                                             </div>
                                             <div class="tab-pane ${param.tabPane == "quizTab" ? 'active' : ''}" id="quiz">
                                                 <div class="profile-head">
-                                                    <h3>My Quiz</h3>
+                                                    <h3>My Quizzes</h3>
                                                     <div class="feature-filters style1 ml-auto">
                                                         <ul class="filters" data-toggle="buttons">
-                                                            <li data-filter="" class="btn active" id="filterAll">
-                                                                <input type="radio">
-                                                                <a href=""><span>All</span></a> 
-                                                            </li>
-                                                            <li data-filter="publish" class="btn" id="filterPublish">
-                                                                <input type="radio">
-                                                                <a href=""><span>Publish</span></a> 
-                                                            </li>
-                                                            <li data-filter="pending" class="btn" id="filterPrivate">
-                                                                <input type="radio">
-                                                                <a href=""><span>Private</span></a> 
-                                                            </li>
+                                                            <c:if test="${sessionScope.account.role.roleId != 4}">
+                                                                <li data-filter="" class="btn active" id="filterAll">
+                                                                    <input type="radio">
+                                                                    <a href=""><span>All</span></a> 
+                                                                </li>
+                                                                <li data-filter="publish" class="btn" id="filterPublish">
+                                                                    <input type="radio">
+                                                                    <a href=""><span>Publish</span></a> 
+                                                                </li>
+                                                                <li data-filter="pending" class="btn" id="filterPrivate">
+                                                                    <input type="radio">
+                                                                    <a href=""><span>Private</span></a> 
+                                                                </li>
+                                                            </c:if>
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -556,15 +551,15 @@
                                                 <div class="courses-filter">
                                                     <div class="clearfix">
                                                         <ul id="masonry" class="ttr-gallery-listing magnific-image row quizzesList">
-                                                            <c:forEach var="q" items="${requestScope.quizByTeacher}">
+                                                            <c:forEach var="q" items="${requestScope.quizzes}">
                                                                 <li class='action-card col-xl-4 col-lg-6 col-md-12 col-sm-6 publish'>
                                                                     <div class="cours-bx">
                                                                         <div class="action-box">
                                                                             <img src='assets/images/courses/pic1.jpg' alt="">
-                                                                            <a href='quiz/${q.quiz.quizId}' class="btn">Read More</a>
+                                                                            <a href='quizzes?quizID=${q.quiz.quizId}' class="btn">View More</a>
                                                                         </div>
                                                                         <div class="info-bx text-center">
-                                                                            <h5><a href='quiz/${q.quiz.quizId}'>${fn:toUpperCase(q.quiz.quizName)}</a></h5>
+                                                                            <h5><a href='quizzes?quizID=${q.quiz.quizId}'>${fn:toUpperCase(q.quiz.quizName)}</a></h5>
                                                                             <span>${q.quiz.quizContent}</span>
                                                                         </div>
                                                                         <div class="cours-more-info">
@@ -572,14 +567,14 @@
                                                                                 <c:choose>
                                                                                     <c:when test = "${q.quiz.quizStatus == 0}">
                                                                                         <span id='quizStatusID-${q.quiz.quizId}' style=" display: flex; align-items: center; gap: 8px; justify-content: space-between;">
-                                                                                            <span style="color: red;">Private</span><i onclick="updateStatus(${q.quiz.quizId}, 'toPublish')" class="bi bi-arrow-repeat quizStatusBtn" style="font-size: 19px; cursor: pointer"></i>
-                                                                                        </span>
+                                                                                            <span style="color: red;">Private</span><c:if test="${sessionScope.account.role.roleId != 4}"><i onclick="updateStatus(${q.quiz.quizId}, 'toPublish')" class="bi bi-arrow-repeat quizStatusBtn" style="font-size: 19px; cursor: pointer"></c:if></i>
+                                                                                            </span>
                                                                                     </c:when>
 
                                                                                     <c:when test = "${q.quiz.quizStatus == 1}">
                                                                                         <span id='quizStatusID-${q.quiz.quizId}' style="display: flex; align-items: center; gap: 8px; justify-content: space-between;">
-                                                                                            <span style="color: green;">Publish</span><i onclick="updateStatus(${q.quiz.quizId}, 'toPrivate')" class="bi bi-arrow-repeat quizStatusBtn" style="font-size: 19px; cursor: pointer"></i>
-                                                                                        </span>
+                                                                                            <span style="color: green;">Publish</span><c:if test="${sessionScope.account.role.roleId != 4}"><i onclick="updateStatus(${q.quiz.quizId}, 'toPrivate')" class="bi bi-arrow-repeat quizStatusBtn" style="font-size: 19px; cursor: pointer"></i></c:if>
+                                                                                            </span>
                                                                                     </c:when>
                                                                                 </c:choose>
                                                                                 <ul class="cours-star">
@@ -762,7 +757,7 @@
                                                                 <input name="currentPassword" id="currentPassword" type="password" class="form-control" required="">
                                                                 <span class="toggle-password" id="togglePassword1">&#x1F441;</span>
                                                                 <div class="invalid-feedback">
-                                                                    Password not be empty
+                                                                    Password not be empty !
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -782,7 +777,7 @@
                                                                 <input name="confirmPassword" id="confirmPassword" type="password" class="form-control" required="">
                                                                 <span class="toggle-password" id="togglePassword3">&#x1F441;</span>
                                                                 <div class="invalid-feedback">
-                                                                    Confirm password not be empty
+                                                                    Confirm password not be empty !
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -941,6 +936,8 @@
                                                                                                         setTimeout(function () {
                                                                                                             $('#toast').text("");
                                                                                                             $('#toast').toggleClass('show');
+                                                                                                            $("#SaveChangePass").removeProp("disabled");
+                                                                                                            $("#CancelChangePass").removeProp("disabled");
                                                                                                         }, 2000);
                                                                                                     }
                                                                                                 }
@@ -1056,7 +1053,8 @@
                                                                                                                         switch (data) {
                                                                                                                             case "success":
                                                                                                                                 $("#changePassForm")[0].reset();
-                                                                                                                                window.location.href = link;
+                                                                                                                                form.classList.remove('was-validated');
+//                                                                                                                                window.location.href = link;
                                                                                                                                 break;
 
                                                                                                                             case "duplicate":

@@ -127,6 +127,7 @@ public class QuizDAO extends DBContext<BaseEntity> {
         }
         return ltQuiz;
     }
+
     public List<ClassSubject> getQuizzesByTeacherID(String sql) {
         List<ClassSubject> ltQuiz = new ArrayList<>();
 
@@ -136,31 +137,79 @@ public class QuizDAO extends DBContext<BaseEntity> {
             while (rs.next()) {
                 ClassSubject cs = new ClassSubject();
                 Quiz quiz = new Quiz();
-                MyClass myClass =new MyClass();
+                MyClass myClass = new MyClass();
                 Subject subject = new Subject();
-                
-                
+                Teacher teacher = new Teacher();
+
                 quiz.setQuizId(rs.getInt(1));
                 quiz.setQuizName(rs.getString(2));
                 quiz.setQuizContent(rs.getString(3));
                 quiz.setCreatedDate(rs.getString(4));
-                quiz.setQuizStatus(rs.getInt(7));
-                
-                myClass.setClassName(rs.getString(5));
-                subject.setSubjectName(rs.getString(6));
-                
+                quiz.setQuizStatus(rs.getInt(5));
+
+                myClass.setClassName(rs.getString(6));
+                subject.setSubjectName(rs.getString(7));
+                teacher.setTeacherId((String.valueOf(rs.getInt(8))));
+
+                myClass.setClassID(rs.getInt("ClassID"));
+                subject.setSubjectId(rs.getInt("SubjectID"));
+
                 cs.setQuiz(quiz);
                 cs.setMyClass(myClass);
                 cs.setSubject(subject);
-                
+                cs.setTeacher(teacher);
+
                 ltQuiz.add(cs);
             }
+
+            return ltQuiz;
         } catch (SQLException ex) {
             Logger.getLogger(QuizDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return ltQuiz;
+        return null;
     }
-    
+
+    public List<ClassSubject> getQuizzesByStudentID(String sql) {
+        List<ClassSubject> ltQuiz = new ArrayList<>();
+
+        try {
+            PreparedStatement stm = connection.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                ClassSubject cs = new ClassSubject();
+                Quiz quiz = new Quiz();
+                MyClass myClass = new MyClass();
+                Subject subject = new Subject();
+                Teacher teacher = new Teacher();
+
+                quiz.setQuizId(rs.getInt(1));
+                quiz.setQuizName(rs.getString(2));
+                quiz.setQuizContent(rs.getString(3));
+                quiz.setCreatedDate(rs.getString(4));
+                quiz.setQuizStatus(rs.getInt(5));
+
+                myClass.setClassName(rs.getString(6));
+                subject.setSubjectName(rs.getString(7));
+                teacher.setTeacherId((String.valueOf(rs.getInt(8))));
+
+                myClass.setClassID(rs.getInt("ClassID"));
+                subject.setSubjectId(rs.getInt("SubjectID"));
+
+                cs.setQuiz(quiz);
+                cs.setMyClass(myClass);
+                cs.setSubject(subject);
+                cs.setTeacher(teacher);
+
+                ltQuiz.add(cs);
+            }
+
+            return ltQuiz;
+        } catch (SQLException ex) {
+            Logger.getLogger(QuizDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
     public Boolean updateQuizWithSql(String sql) {
         try {
             connection.setAutoCommit(false);
@@ -201,6 +250,32 @@ public class QuizDAO extends DBContext<BaseEntity> {
             Logger.getLogger(QuizDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return ltQuestion;
+    }
+
+    public Quiz getQuizById(String id) {
+        String sql = "SELECT * FROM Quiz where QuizID = '" + id + "'";
+
+        if (id.trim().isEmpty()) {
+            return null;
+        }
+
+        try {
+            PreparedStatement stm = connection.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                Quiz q = new Quiz();
+                q.setQuizId(rs.getInt(1));
+                q.setQuizName(rs.getString(2));
+                q.setQuizContent(rs.getString(3));
+                q.setCreatedDate(rs.getString(4));
+                q.setQuizStatus(rs.getInt(5));
+
+                return q;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     /**
