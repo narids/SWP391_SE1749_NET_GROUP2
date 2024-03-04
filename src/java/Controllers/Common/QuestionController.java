@@ -21,6 +21,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -69,7 +70,7 @@ QuestionDAO queD = new QuestionDAO();
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-     List<Question> lit = queD.getListNew();
+         ArrayList<Question> lit = queD.getQuesList();
         request.setAttribute("lst", lit);
         request.getRequestDispatcher("jsp/question.jsp").forward(request, response);
     }

@@ -311,7 +311,7 @@
                                                                         <a href="#" class="btn">Read More</a>
                                                                     </div>
                                                                     <div class="info-bx text-center">
-                                                                        <h5><a href="#">Introduction EduChamp – LMS plugin</a></h5>
+                                                                        <h5><a href="#">{$Scope}</a></h5>
                                                                         <span>Programming</span>
                                                                     </div>
                                                                     <div class="cours-more-info">

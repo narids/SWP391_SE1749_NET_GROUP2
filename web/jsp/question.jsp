@@ -4,6 +4,7 @@
     Author     : User
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -298,33 +299,33 @@
                                 </a>
                             </div>
                             <div class="widget-inner">
-                                <table id="myTable" class="table table-hover">
+                                <table>
                                     <thead>
                                         <tr>
                                             <th scope="col">#</th>
-                                            <th scope="col">Subject</th>
                                             <th scope="col">Content</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach items="${lst}" var="ab">
+                                    <c:forEach items="${requestScope.lst}" var="ab">
                                             <tr>
-                                                <th style="">${ab.questionID}</th>
-                                                <td style="width:50%; white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;">${ab.subject.subjectName}</td>
+                                                <th style="">${ab.questionId}</th>
                                                 <td style="width:10%">${ab.questionContent}</td>
                                                 <td>
-                                                    <a href="questiondetail?questionID=${ab.questionID}" class="btn btn-sm yellow outline radius-xl ">
+                                                    <a href="questiondetail?questionID=${ab.questionId}" class="btn btn-sm yellow outline radius-xl ">
                                                         <i class="fa fa-pencil"></i>
                                                     </a>
-                                                    <a href="#" class="btn btn-sm red outline radius-xl delete-news" data-toggle="modal" data-target="#deleteModal-${ab.questionID}">
+                                                    <a href="#" class="btn btn-sm red outline radius-xl delete-question" data-toggle="modal" data-target="#deleteModal-${ab.questionId}">
                                                         <i class="fa fa-trash"></i>
                                                     </a>
                                                 </td>
                                             </tr>
                                         </c:forEach>
                                     </tbody>
+                                </table>
+                            </div>
                                     <c:forEach items="${lst}" var="n">
-            <div class="modal fade" id="deleteModal-${n.newsId}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal fade" id="deleteModal-${n.questionID}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <form action="question" method="post">
                         <div class="modal-content">

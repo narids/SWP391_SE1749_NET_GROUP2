@@ -243,7 +243,7 @@
                     </div>
                 </div>
                 <div class="widget-inner">
-                                <form action="add-news" method="POST" class="edit-profile m-b30"  enctype="multipart/form-data" onsubmit="getContent()">
+                                <form action="addques" method="POST" class="edit-profile m-b30"  enctype="multipart/form-data" onsubmit="getContent()">
                                     <div class="row">
                                         <div class="form-group col-8">
                                             <label class="col-form-label">Content <span class="text-red">*</span></label>

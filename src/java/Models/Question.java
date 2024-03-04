@@ -14,12 +14,10 @@ import java.util.Date;
 public class Question extends BaseEntity{
 
     private int questionId;
-    private int answerId;
     private String questionContent;
     private Date createdDay;
     private String imageUrl;
     private String explain;
-    private int subjectId;
     private Subject subject;
 
     // Default constructor
@@ -27,13 +25,11 @@ public class Question extends BaseEntity{
     }
 
     // Parameterized constructor
-    public Question(int answerId, String questionContent, Date createdDay, String imageUrl, String explain, int subjectId, Subject subject) {
-        this.answerId = answerId;
+    public Question( String questionContent, Date createdDay, String imageUrl, String explain, Subject subject) {
         this.questionContent = questionContent;
         this.createdDay = createdDay;
         this.imageUrl = imageUrl;
         this.explain = explain;
-        this.subjectId = subjectId;
         this.subject = subject;
     }
 
@@ -46,13 +42,6 @@ public class Question extends BaseEntity{
         this.questionId = questionId;
     }
 
-    public int getAnswerId() {
-        return answerId;
-    }
-
-    public void setAnswerId(int answerId) {
-        this.answerId = answerId;
-    }
 
     public String getQuestionContent() {
         return questionContent;
@@ -94,13 +83,6 @@ public class Question extends BaseEntity{
         this.explain = explain;
     }
 
-    public int getSubjectId() {
-        return subjectId;
-    }
-
-    public void setSubjectId(int subjectId) {
-        this.subjectId = subjectId;
-    }
 
     public Subject getSubject() {
         return subject;
@@ -112,7 +94,7 @@ public class Question extends BaseEntity{
 
     @Override
     public String toString() {
-        return "Question{" + "questionId=" + questionId + ", answerId=" + answerId + ", questionContent=" + questionContent + ", createdDay=" + createdDay + ", imageUrl=" + imageUrl + ", explain=" + explain + ", subjectId=" + subjectId + ", subject=" + subject + '}';
+        return "Question{" + "questionId=" + questionId +  ", questionContent=" + questionContent + ", createdDay=" + createdDay + ", imageUrl=" + imageUrl + ", explain=" + explain + ", subject=" + subject + '}';
     }
 
 }

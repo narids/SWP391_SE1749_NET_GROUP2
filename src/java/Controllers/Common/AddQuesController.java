@@ -6,6 +6,7 @@ package Controllers.Common;
 
 import DAOs.QuestionDAO;
 import Models.Account;
+import Models.Question;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -55,7 +56,7 @@ public class AddQuesController extends HttpServlet {
         String fileName = getSubmittedFileName(filePart); // Get the file name
 
 // Specify the directory to save the file
-        String uploadPath = getServletContext().getRealPath("assets") + File.separator + "image";
+        String uploadPath = getServletContext().getRealPath("assets") + File.separator + "question-image";
         File folder = new File(uploadPath);
         if (!folder.exists()) {
             folder.mkdirs();
@@ -68,6 +69,11 @@ public class AddQuesController extends HttpServlet {
         filePart.write(filePath);
         String explain = request.getParameter("explain");
         quesD.addQuestion(content, filePath, explain);
+        Question questions = new Question();
+        questions.setQuestionContent(content);
+        questions.setImageURL(fileName);
+        questions.setExplain(explain);
+        request.setAttribute("questions", questions);
         response.sendRedirect("question");
     }
 

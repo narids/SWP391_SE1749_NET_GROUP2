@@ -4,6 +4,7 @@
  */
 package DAOs;
 
+import Models.Answer;
 import Models.News;
 import Models.Question;
 import Models.Subject;
@@ -46,7 +47,6 @@ public class QuestionDAO extends DBContext<Question> {
     public Question get(Question entity) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-
     public Question getQuestionByID(int id) {
         String sql = "SELECT q.QuestionID,q.Question_Content,q.Created_Day,q.ImageURL,a.Answer_Content,s.SubjectID,s.SubjectName\n"
                 + "FROM [Question] q INNER JOIN [Answer] a ON q.QuestionID=a.QuestionID\n"
@@ -58,7 +58,7 @@ public class QuestionDAO extends DBContext<Question> {
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 Question ques = new Question();
-                ques.setQuestionId(rs.getInt("NewsID"));
+                ques.setQuestionId(rs.getInt("QuestionID"));
                 ques.setQuestionContent(rs.getString("Content"));
                 ques.setCreatedDay(rs.getDate("Created_Day"));
                 ques.setImageURL(rs.getString("ImageURL"));
@@ -66,7 +66,6 @@ public class QuestionDAO extends DBContext<Question> {
                 sub.setSubjectId(rs.getInt("SubjectID"));
                 sub.setSubjectName(rs.getString("SubjectName"));
                 ques.setSubject(sub);
-
                 return ques;
             }
         } catch (SQLException ex) {
@@ -77,14 +76,15 @@ public class QuestionDAO extends DBContext<Question> {
 
     public void addQuestion(String content, String image, String explain) {
         try {
-            String strSQL = "INSERT INTO [dbo].[News]"
+            String strSQL = "INSERT INTO [dbo].[Question]"
                     + "([Question_Content],[Created_Day],"
                     + "[ImageURL],[Explain],[SubjectId],"
                     + "[AnswerID]) "
                     + "VALUES(?,?,?,?,?,?)";
             PreparedStatement statement = connection.prepareStatement(strSQL);
             statement.setString(1, content);
-
+            
+            
             statement.setString(2, new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
             statement.setString(3, image);
             statement.setString(4, explain);
@@ -98,7 +98,7 @@ public class QuestionDAO extends DBContext<Question> {
 
     public void deleteQue(int id) {
         try {
-            String strSQL = "DELETE FROM [Quuestion] WHERE QuestionID = ?";
+            String strSQL = "DELETE FROM [Question] WHERE QuestionID = ?";
             PreparedStatement statement = connection.prepareStatement(strSQL);
             statement.setInt(1, id);
             statement.executeUpdate();
@@ -107,31 +107,21 @@ public class QuestionDAO extends DBContext<Question> {
         }
     }
 
-    public ArrayList<Question> getListNew() {
-        ArrayList<Question> newList = new ArrayList<Question>();
+    public ArrayList<Question> getQuesList() {
+        ArrayList<Question> newList = new ArrayList<>();
 
         try {
-            String strSQL = "select * from Question";
+            String strSQL = "select q.QuestionID,q.Question_Content,q.Explain,q.ImageURL,q.Created_Day,s.SubjectName from Question q Inner join Subject s on q.SubjectId = s.SubjectID  ";
             PreparedStatement statement = connection.prepareStatement(strSQL);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Question news = new Question();
-                int NewsID = resultSet.getInt(1);
-                String Content = resultSet.getString(2);
-                Date Created_Day = resultSet.getDate(3);
-//                SimpleDateFormat f = new SimpleDateFormat("dd-MM-yyyy");
-//                String birthDate = "";
-//                if (resultSet.getDate(5) != null) {
-//                    birthDate = f.format(resultSet.getDate(5));
-//                }
-                String Thumbnail = resultSet.getString(4);
-                String Explain = resultSet.getString(5);
-                                int SubjectID = resultSet.getInt(6);
-                news.setAnswerId(NewsID);
-                news.setQuestionContent(Content);
-                news.setCreatedDay(Created_Day);
-                news.setImageURL(Thumbnail);
-                news.setExplain(Explain);
+                
+                news.setQuestionId(resultSet.getInt("QuestionID"));
+                news.setQuestionContent(resultSet.getString("Question_Content"));
+                news.setCreatedDay(resultSet.getDate("Created_Day"));
+                news.setImageURL(resultSet.getString("ImageURL"));
+                news.setExplain(resultSet.getString("Explain"));
                 Subject sub = new Subject();
                 sub.setSubjectId(resultSet.getInt("SubjectID"));
                 sub.setSubjectName(resultSet.getString("SubjectName"));
