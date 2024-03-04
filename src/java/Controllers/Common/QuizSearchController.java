@@ -46,10 +46,11 @@ public class QuizSearchController extends HttpServlet {
         if (keyword == null) {
             keyword = "";
         }
-        if (request.getParameter("page") != null) {
+        String temp = request.getParameter("page");
+        if (request.getParameter("page") != null || request.getParameter("page") == "") {
             page = Integer.parseInt(request.getParameter("page"));
         }
-        if (request.getParameter("type") != null) {
+        if (request.getParameter("type") != null || request.getParameter("type") == "") {
             type = Integer.parseInt(request.getParameter("type"));
         }
         int noOfPages = 1;

@@ -19,6 +19,7 @@ public class Account extends BaseEntity {
     private String avatar;
     private Role role;
     private boolean status;
+    private int roleId;
 
     public Account() {
     }
@@ -88,6 +89,16 @@ public class Account extends BaseEntity {
     public void setStatus(boolean status) {
         this.status = status;
     }
+
+    public int getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
+    }
+    
+    
 
     @Override
     public String toString() {
