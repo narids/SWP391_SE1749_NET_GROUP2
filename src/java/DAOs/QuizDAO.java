@@ -11,10 +11,12 @@ import Models.Quiz;
 import Models.Subject;
 import Models.SubjectDemension;
 import Models.Teacher;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -372,12 +374,40 @@ public class QuizDAO extends DBContext<BaseEntity> {
         return 0;
     }
 
+    public List<Quiz> getQuizList(int quizId, int quizContent, Date createdDay) {
+        List<Quiz> quizList = new ArrayList<>();
+
+        String sql = "SELECT [QuizID]\n"
+                + "      ,[Quiz_Content]\n"
+                + "      ,[Created_Day]\n"
+                + "  FROM [dbo].[Quiz]";
+
+        try {
+            PreparedStatement stm = connection.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Quiz quiz = new Quiz();
+                quiz.setQuizId(rs.getInt("QuizID"));
+                quiz.setQuizContent(rs.getString("QuizContent"));
+                quiz.setCreatedDate(rs.getString("CreatedDate"));
+                quizList.add(quiz);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(QuizDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return quizList;
+    }
+
     public static void main(String[] args) {
         QuizDAO q = new QuizDAO();
         List<Quiz> ltQuiz = q.getQuizForGuest();
         for (Quiz quiz : ltQuiz) {
             System.out.println(quiz);
         }
+//        List<Quiz> quizList = q.getQuizList(0, 0, createdDay);
+//        for (Quiz quiz : quizList) {
+//            System.out.println(quiz);
+//        }
     }
 
     @Override
