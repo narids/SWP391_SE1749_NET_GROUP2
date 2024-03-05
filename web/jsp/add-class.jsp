@@ -264,7 +264,7 @@
                                                 <div class="col-lg-12 m-b30">
                                                     <div class="widget-box">
                                                         <div class="wc-title">
-                                                            <h4>Add news</h4>
+                                                            <h4>Add Class</h4>
                                                         </div>
                                                         <div class="widget-inner">
                                                             <form action="addClass" method="POST" class="edit-profile m-b30"  >

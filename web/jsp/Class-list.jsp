@@ -420,7 +420,7 @@
                             <div class="modal-body">
                                 <input type="hidden" id="newsIdToDelete" name="action" value="delete">
                                 <input type="hidden" id="newsIdToDelete" name="ClassID" value="${n.getClassID()}">
-                                Are you sure you want to delete this news: ?
+                                Are you sure you want to delete this class: ?
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
