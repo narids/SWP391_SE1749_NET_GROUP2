@@ -69,7 +69,7 @@
 
             #toast {
                 position: fixed;
-                top: 80px;
+                top: 140px;
                 left: 50%;
                 transform: translateX(-50%);
                 color : white;
@@ -105,104 +105,29 @@
 
             <div id="loading-icon-bx"></div>
             <!-- Header Top ==== -->
-            <header class="header rs-nav">
-                <div class="top-bar">
-                    <div class="container">
-                        <div class="row d-flex justify-content-between">
-                            <div class="topbar-left">
-                                <ul>
-                                    <li><a href="faq-1.html"><i class="fa fa-question-circle"></i>Ask a Question</a></li>
-                                    <li><a href="javascript:;"><i class="fa fa-envelope-o"></i>Support@website.com</a></li>
-                                </ul>
-                            </div>
-                            <div class="topbar-right">
-                                <ul>
-
-                                    <li><a href="login">Login</a></li>
-                                    <li><a href="register">Register</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="sticky-header navbar-expand-lg" style="z-index: 100">
-                    <div class="menu-bar clearfix">
-                        <div class="container clearfix">
-                            <!-- Header Logo ==== -->
-                            <div class="menu-logo">
-                                <a href="home"><img src="assets/images/logo.png" alt=""></a>
-                            </div>
-                            <!-- Mobile Nav Button ==== -->
-                            <button class="navbar-toggler collapsed menuicon justify-content-end" type="button" data-toggle="collapse" data-target="#menuDropdown" aria-controls="menuDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                            </button>
-                            <!-- Author Nav ==== -->
-                            <div class="secondary-menu">
-                                <div class="secondary-inner">
-                                    <ul>
-                                        <!-- Search Button ==== -->
-                                        <li class="search-btn"><button id="quik-search-btn" type="button" class="btn-link"><i class="fa fa-search"></i></button></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <!-- Search Box ==== -->
-                            <div class="nav-search-bar">
-                                <form action="quiz-search">
-                                    <input name="keyword" value="" type="text" class="form-control" placeholder="Type to search">
-                                    <span><i class="ti-search"></i></span>
-                                </form>
-                                <span id="search-remove"><i class="ti-close"></i></span>
-                            </div>
-                            <!-- Navigation Menu ==== -->
-                            <div class="menu-links navbar-collapse collapse justify-content-start" id="menuDropdown">
-                                <div class="menu-logo">
-                                    <a href="home"><img src="assets/images/logo.png" alt=""></a>
-                                </div>
-                                <ul class="nav navbar-nav">	
-                                    <li class=""><a href="home">Home</a>
-                                    </li>
-                                    <li class="active"><a href="javascript:;">Your library</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <!-- Navigation Menu END ==== -->
-                        </div>
-                    </div>
-                </div>
-            </header>
-            <!-- header END ==== -->
-            <!-- Content -->
-            <div class="page-content bg-white">
-                <!-- inner page banner -->
-                <div class="page-banner ovbl-dark" style="background-image:url(assets/images/banner/banner1.jpg);">
-                    <div class="container">
-                        <div class="page-banner-entry">
-                            <h1 class="text-white">Your library</h1>
-                        </div>
-                    </div>
-                </div>
-                <!-- Breadcrumb row -->
-                <div class="breadcrumb-row">
-                    <div class="container">
-                        <ul class="list-inline">
-                            <li><a href="home">Home</a></li>
-                            <li>Catalog</li>
-                        </ul>
-                    </div>
-                </div>
-                <!-- Breadcrumb row END -->
-                <!-- inner page banner END -->
-                <div class="content-block">
-                    <!-- About Us -->
-                    <div class="section-area section-sp1">
+            <jsp:include page="components/header.jsp"></jsp:include>
+                <!-- header END ==== -->
+                <!-- Content -->
+                <div class="page-content bg-white">
+                    <div class="breadcrumb-row">
                         <div class="container">
-                            <div class="row">
-                                <div class="col-lg-3 col-md-4 col-sm-12 m-b30">
-                                    <div class="profile-bx text-center">
-                                        <div class="user-profile-thumb">
-                                            <img src="${requestScope.account.avatar}" alt=""/>
+                            <ul class="list-inline">
+                                <li><a href="home">Home</a></li>
+                                <li>Catalog</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- Breadcrumb row END -->
+                    <!-- inner page banner END -->
+                    <div class="content-block">
+                        <!-- About Us -->
+                        <div class="section-area section-sp1">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 col-sm-12 m-b30">
+                                        <div class="profile-bx text-center">
+                                            <div class="user-profile-thumb">
+                                                <img src="${requestScope.account.avatar}" alt=""/>
                                         </div>
                                         <div class="profile-info">
                                             <h4>${requestScope.account.username}</h4>
@@ -214,7 +139,7 @@
                                                     <a class="nav-link ${param.tabPane == null ? 'active' : ''}" data-toggle="tab" href="#courses"><i class="ti-book"></i>Classes</a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a class="nav-link ${param.tabPane == "quizTab" ? 'active' : ''}" data-toggle="tab" href="#quiz"><i class="ti-book"></i>Quiz</a>
+                                                    <a class="nav-link ${param.tabPane == "quizTab" ? 'active' : ''}" data-toggle="tab" href="#quiz"><i class="bi bi-card-checklist"></i>Quizzes</a>
                                                 </li>
                                                 <li class="nav-item">
                                                     <a class="nav-link" data-toggle="tab" href="#quiz-results"><i class="ti-bookmark-alt"></i>Quiz Results </a>
@@ -513,21 +438,23 @@
                                             </div>
                                             <div class="tab-pane ${param.tabPane == "quizTab" ? 'active' : ''}" id="quiz">
                                                 <div class="profile-head">
-                                                    <h3>My Quiz</h3>
+                                                    <h3>My Quizzes</h3>
                                                     <div class="feature-filters style1 ml-auto">
                                                         <ul class="filters" data-toggle="buttons">
-                                                            <li data-filter="" class="btn active" id="filterAll">
-                                                                <input type="radio">
-                                                                <a href=""><span>All</span></a> 
-                                                            </li>
-                                                            <li data-filter="publish" class="btn" id="filterPublish">
-                                                                <input type="radio">
-                                                                <a href=""><span>Publish</span></a> 
-                                                            </li>
-                                                            <li data-filter="pending" class="btn" id="filterPrivate">
-                                                                <input type="radio">
-                                                                <a href=""><span>Private</span></a> 
-                                                            </li>
+                                                            <c:if test="${sessionScope.account.role.roleId != 4}">
+                                                                <li data-filter="" class="btn active" id="filterAll">
+                                                                    <input type="radio">
+                                                                    <a href=""><span>All</span></a> 
+                                                                </li>
+                                                                <li data-filter="publish" class="btn" id="filterPublish">
+                                                                    <input type="radio">
+                                                                    <a href=""><span>Publish</span></a> 
+                                                                </li>
+                                                                <li data-filter="pending" class="btn" id="filterPrivate">
+                                                                    <input type="radio">
+                                                                    <a href=""><span>Private</span></a> 
+                                                                </li>
+                                                            </c:if>
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -556,15 +483,15 @@
                                                 <div class="courses-filter">
                                                     <div class="clearfix">
                                                         <ul id="masonry" class="ttr-gallery-listing magnific-image row quizzesList">
-                                                            <c:forEach var="q" items="${requestScope.quizByTeacher}">
+                                                            <c:forEach var="q" items="${requestScope.quizzes}">
                                                                 <li class='action-card col-xl-4 col-lg-6 col-md-12 col-sm-6 publish'>
                                                                     <div class="cours-bx">
                                                                         <div class="action-box">
                                                                             <img src='assets/images/courses/pic1.jpg' alt="">
-                                                                            <a href='quiz/${q.quiz.quizId}' class="btn">Read More</a>
+                                                                            <a href='quizzes?quizID=${q.quiz.quizId}' class="btn">View More</a>
                                                                         </div>
                                                                         <div class="info-bx text-center">
-                                                                            <h5><a href='quiz/${q.quiz.quizId}'>${fn:toUpperCase(q.quiz.quizName)}</a></h5>
+                                                                            <h5><a href='quizzes?quizID=${q.quiz.quizId}'>${fn:toUpperCase(q.quiz.quizName)}</a></h5>
                                                                             <span>${q.quiz.quizContent}</span>
                                                                         </div>
                                                                         <div class="cours-more-info">
@@ -572,14 +499,14 @@
                                                                                 <c:choose>
                                                                                     <c:when test = "${q.quiz.quizStatus == 0}">
                                                                                         <span id='quizStatusID-${q.quiz.quizId}' style=" display: flex; align-items: center; gap: 8px; justify-content: space-between;">
-                                                                                            <span style="color: red;">Private</span><i onclick="updateStatus(${q.quiz.quizId}, 'toPublish')" class="bi bi-arrow-repeat quizStatusBtn" style="font-size: 19px; cursor: pointer"></i>
-                                                                                        </span>
+                                                                                            <span style="color: red;">Private</span><c:if test="${sessionScope.account.role.roleId != 4}"><i onclick="updateStatus(${q.quiz.quizId}, 'toPublish')" class="bi bi-arrow-repeat quizStatusBtn" style="font-size: 19px; cursor: pointer"></c:if></i>
+                                                                                            </span>
                                                                                     </c:when>
 
                                                                                     <c:when test = "${q.quiz.quizStatus == 1}">
                                                                                         <span id='quizStatusID-${q.quiz.quizId}' style="display: flex; align-items: center; gap: 8px; justify-content: space-between;">
-                                                                                            <span style="color: green;">Publish</span><i onclick="updateStatus(${q.quiz.quizId}, 'toPrivate')" class="bi bi-arrow-repeat quizStatusBtn" style="font-size: 19px; cursor: pointer"></i>
-                                                                                        </span>
+                                                                                            <span style="color: green;">Publish</span><c:if test="${sessionScope.account.role.roleId != 4}"><i onclick="updateStatus(${q.quiz.quizId}, 'toPrivate')" class="bi bi-arrow-repeat quizStatusBtn" style="font-size: 19px; cursor: pointer"></i></c:if>
+                                                                                            </span>
                                                                                     </c:when>
                                                                                 </c:choose>
                                                                                 <ul class="cours-star">
@@ -762,7 +689,7 @@
                                                                 <input name="currentPassword" id="currentPassword" type="password" class="form-control" required="">
                                                                 <span class="toggle-password" id="togglePassword1">&#x1F441;</span>
                                                                 <div class="invalid-feedback">
-                                                                    Password not be empty
+                                                                    Password not be empty !
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -782,7 +709,7 @@
                                                                 <input name="confirmPassword" id="confirmPassword" type="password" class="form-control" required="">
                                                                 <span class="toggle-password" id="togglePassword3">&#x1F441;</span>
                                                                 <div class="invalid-feedback">
-                                                                    Confirm password not be empty
+                                                                    Confirm password not be empty !
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -809,110 +736,7 @@
             </div>
             <!-- Content END-->
             <!-- Footer ==== -->
-            <footer>
-                <div class="footer-top">
-                    <div class="pt-exebar">
-                        <div class="container">
-                            <div class="d-flex align-items-stretch">
-                                <div class="pt-logo mr-auto">
-                                    <a href="index.html"><img src="assets/images/logo-white.png" alt=""/></a>
-                                </div>
-                                <div class="pt-social-link">
-                                    <ul class="list-inline m-a0">
-                                        <li><a href="#" class="btn-link"><i class="fa fa-facebook"></i></a></li>
-                                        <li><a href="#" class="btn-link"><i class="fa fa-twitter"></i></a></li>
-                                        <li><a href="#" class="btn-link"><i class="fa fa-linkedin"></i></a></li>
-                                        <li><a href="#" class="btn-link"><i class="fa fa-google-plus"></i></a></li>
-                                    </ul>
-                                </div>
-                                <div class="pt-btn-join">
-                                    <a href="#" class="btn ">Join Now</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-4 col-md-12 col-sm-12 footer-col-4">
-                                <div class="widget">
-                                    <h5 class="footer-title">Sign Up For A Newsletter</h5>
-                                    <p class="text-capitalize m-b20">Weekly Breaking news analysis and cutting edge advices on job searching.</p>
-                                    <div class="subscribe-form m-b20">
-                                        <form class="subscription-form" action="http://educhamp.themetrades.com/demo/assets/script/mailchamp.php" method="post">
-                                            <div class="ajax-message"></div>
-                                            <div class="input-group">
-                                                <input name="email" required="required"  class="form-control" placeholder="Your Email Address" type="email">
-                                                <span class="input-group-btn">
-                                                    <button name="submit" value="Submit" type="submit" class="btn"><i class="fa fa-arrow-right"></i></button>
-                                                </span> 
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-lg-5 col-md-7 col-sm-12">
-                                <div class="row">
-                                    <div class="col-4 col-lg-4 col-md-4 col-sm-4">
-                                        <div class="widget footer_widget">
-                                            <h5 class="footer-title">Company</h5>
-                                            <ul>
-                                                <li><a href="index.html">Home</a></li>
-                                                <li><a href="about-1.html">About</a></li>
-                                                <li><a href="faq-1.html">FAQs</a></li>
-                                                <li><a href="contact-1.html">Contact</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="col-4 col-lg-4 col-md-4 col-sm-4">
-                                        <div class="widget footer_widget">
-                                            <h5 class="footer-title">Get In Touch</h5>
-                                            <ul>
-                                                <li><a href="http://educhamp.themetrades.com/admin/index.html">Dashboard</a></li>
-                                                <li><a href="blog-classic-grid.html">Blog</a></li>
-                                                <li><a href="portfolio.html">Portfolio</a></li>
-                                                <li><a href="event.html">Event</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="col-4 col-lg-4 col-md-4 col-sm-4">
-                                        <div class="widget footer_widget">
-                                            <h5 class="footer-title">Courses</h5>
-                                            <ul>
-                                                <li><a href="courses.html">Courses</a></li>
-                                                <li><a href="courses-details.html">Details</a></li>
-                                                <li><a href="membership.html">Membership</a></li>
-                                                <li><a href="profile.html">Profile</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-lg-3 col-md-5 col-sm-12 footer-col-4">
-                                <div class="widget widget_gallery gallery-grid-4">
-                                    <h5 class="footer-title">Our Gallery</h5>
-                                    <ul class="magnific-image">
-                                        <li><a href="assets/images/gallery/pic1.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic1.jpg" alt=""></a></li>
-                                        <li><a href="assets/images/gallery/pic2.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic2.jpg" alt=""></a></li>
-                                        <li><a href="assets/images/gallery/pic3.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic3.jpg" alt=""></a></li>
-                                        <li><a href="assets/images/gallery/pic4.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic4.jpg" alt=""></a></li>
-                                        <li><a href="assets/images/gallery/pic5.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic5.jpg" alt=""></a></li>
-                                        <li><a href="assets/images/gallery/pic6.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic6.jpg" alt=""></a></li>
-                                        <li><a href="assets/images/gallery/pic7.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic7.jpg" alt=""></a></li>
-                                        <li><a href="assets/images/gallery/pic8.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic8.jpg" alt=""></a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="footer-bottom">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 text-center"> <a target="_blank" href="https://www.templateshub.net">Templates Hub</a></div>
-                        </div>
-                    </div>
-                </div>
-            </footer>
+            <jsp:include page="components/footer.jsp"></jsp:include>
             <!-- Footer END ==== -->
             <button class="back-to-top fa fa-chevron-up" ></button>
         </div>
@@ -941,6 +765,8 @@
                                                                                                         setTimeout(function () {
                                                                                                             $('#toast').text("");
                                                                                                             $('#toast').toggleClass('show');
+                                                                                                            $("#SaveChangePass").removeProp("disabled");
+                                                                                                            $("#CancelChangePass").removeProp("disabled");
                                                                                                         }, 2000);
                                                                                                     }
                                                                                                 }
@@ -1056,7 +882,8 @@
                                                                                                                         switch (data) {
                                                                                                                             case "success":
                                                                                                                                 $("#changePassForm")[0].reset();
-                                                                                                                                window.location.href = link;
+                                                                                                                                form.classList.remove('was-validated');
+//                                                                                                                                window.location.href = link;
                                                                                                                                 break;
 
                                                                                                                             case "duplicate":

@@ -66,138 +66,70 @@
         <div class="page-wraper">
             <div id="loading-icon-bx"></div>
             <!-- Header Top ==== -->
-            <header class="header rs-nav">
-                <div class="top-bar">
-                    <div class="container">
-                        <div class="row d-flex justify-content-between">
-                            <div class="topbar-left">
-                                <ul>
-                                    <li><a href="faq-1.html"><i class="fa fa-question-circle"></i>Ask a Question</a></li>
-                                    <li><a href="javascript:;"><i class="fa fa-envelope-o"></i>Support@website.com</a></li>
-                                </ul>
-                            </div>
-                            <div class="topbar-right">
-                                <ul>
-                                    
-                                    <li><a href="login">Login</a></li>
-                                    <li><a href="register">Register</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="sticky-header navbar-expand-lg">
-                    <div class="menu-bar clearfix">
-                        <div class="container clearfix">
-                            <!-- Header Logo ==== -->
-                            <div class="menu-logo">
-                                <a href="home"><img src="assets/images/logo.png" alt=""></a>
-                            </div>
-                            <!-- Mobile Nav Button ==== -->
-                            <button class="navbar-toggler collapsed menuicon justify-content-end" type="button" data-toggle="collapse" data-target="#menuDropdown" aria-controls="menuDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                            </button>
-                            <!-- Author Nav ==== -->
-                            <div class="secondary-menu">
-                                <div class="secondary-inner">
-                                    <ul>
-                                        <!-- Search Button ==== -->
-                                        <li class="search-btn"><button id="quik-search-btn" type="button" class="btn-link"><i class="fa fa-search"></i></button></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <!-- Search Box ==== -->
-                            <div class="nav-search-bar">
-                                <form action="quiz-search">
-                                    <input type="hidden" value="${requestScope.pageSaved}" name="page">
-                                    <input type="hidden" value="${requestScope.typeSaved}" name="type">
-                                    <input name="keyword" value="" type="text" class="form-control" placeholder="Type to search">
-                                    <span><i class="ti-search"></i></span>
-                                </form>
-                                <span id="search-remove"><i class="ti-close"></i></span>
-                            </div>
-                            <!-- Navigation Menu ==== -->
-                            <div class="menu-links navbar-collapse collapse justify-content-start" id="menuDropdown">
-                                <div class="menu-logo">
-                                    <a href="home"><img src="assets/images/logo.png" alt=""></a>
-                                </div>
-                                <ul class="nav navbar-nav">	
-                                    <li class="active"><a href="javascript:;">Home</a>
-                                    </li>
-                                    <li class=""><a href="catalog">Your library</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <!-- Navigation Menu END ==== -->
-                        </div>
-                    </div>
-                </div>
-            </header>
-            <!-- Header Top END ==== -->
-            <!-- Content -->
-            <div class="page-content bg-white">
-                <!-- Main Slider -->
-                <div class="section-area section-sp1 ovpr-dark bg-fix online-cours" style="background-image:url(assets/images/background/bg1.jpg);">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-12 text-center text-white">
-                                <h2>Online Quizzes To Study</h2>
-                                <h5>94% of students who use Test helps them get better grades</h5>
-                                <form class="cours-search" action="quiz-search">
-                                    <div class="input-group">
-                                        <input type="text" name="keyword" class="form-control" placeholder="What do you want to learn today?	">
-                                        <div class="input-group-append">
-                                            <button class="btn" type="submit">Search</button> 
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                        <div class="mw800 m-auto">
-                            <div class="row">
-                                <div class="col-md-4 col-sm-6">
-                                    <div class="cours-search-bx m-b30">
-                                        <div class="icon-box">
-                                            <h3><i class="ti-user"></i><span class="counter">5</span>M</h3>
-                                        </div>
-                                        <span class="cours-search-text">Over 5 thousands student</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 col-sm-6">
-                                    <div class="cours-search-bx m-b30">
-                                        <div class="icon-box">
-                                            <h3><i class="ti-book"></i><span class="counter">100</span></h3>
-                                        </div>
-                                        <span class="cours-search-text">100 Quizzes.</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 col-sm-12">
-                                    <div class="cours-search-bx m-b30">
-                                        <div class="icon-box">
-                                            <h3><i class="ti-layout-list-post"></i><span class="counter">20</span>K</h3>
-                                        </div>
-                                        <span class="cours-search-text">Learn Anythink Online.</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Main Slider -->
-                <div class="content-block">
-                    <!-- Popular Quizzes -->
-                    <div class="section-area section-sp2 popular-courses-bx">
+            <jsp:include page="components/header.jsp"></jsp:include>
+                <!-- Header Top END ==== -->
+                <!-- Content -->
+                <div class="page-content bg-white">
+                    <!-- Main Slider -->
+                    <div class="section-area section-sp1 ovpr-dark bg-fix online-cours" style="background-image:url(assets/images/background/bg1.jpg);">
                         <div class="container">
                             <div class="row">
-                                <div class="col-md-12 heading-bx left">
-                                    <h2 class="title-head">Popular <span>Quizzes</span></h2>
-                                    <p>As you answer more questions correctly, you're advanced from easier multiple choice questions to harder, written ones. Be ready for test day with Learn.</p>
+                                <div class="col-md-12 text-center text-white">
+                                    <h2>Online Quizzes To Study</h2>
+                                    <h5>94% of students who use Test helps them get better grades</h5>
+                                    <form class="cours-search" action="quiz-search">
+                                        <div class="input-group">
+                                            <input type="text" name="keyword" class="form-control" placeholder="What do you want to learn today?	">
+                                            <div class="input-group-append">
+                                                <button class="btn" type="submit">Search</button> 
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="courses-carousel owl-carousel owl-btn-1 col-12 p-lr0">
+                            <div class="mw800 m-auto">
+                                <div class="row">
+                                    <div class="col-md-4 col-sm-6">
+                                        <div class="cours-search-bx m-b30">
+                                            <div class="icon-box">
+                                                <h3><i class="ti-user"></i><span class="counter">5</span>M</h3>
+                                            </div>
+                                            <span class="cours-search-text">Over 5 thousands student</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6">
+                                        <div class="cours-search-bx m-b30">
+                                            <div class="icon-box">
+                                                <h3><i class="ti-book"></i><span class="counter">100</span></h3>
+                                            </div>
+                                            <span class="cours-search-text">100 Quizzes.</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-12">
+                                        <div class="cours-search-bx m-b30">
+                                            <div class="icon-box">
+                                                <h3><i class="ti-layout-list-post"></i><span class="counter">20</span>K</h3>
+                                            </div>
+                                            <span class="cours-search-text">Learn Anythink Online.</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Main Slider -->
+                    <div class="content-block">
+                        <!-- Popular Quizzes -->
+                        <div class="section-area section-sp2 popular-courses-bx">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-12 heading-bx left">
+                                        <h2 class="title-head">Popular <span>Quizzes</span></h2>
+                                        <p>As you answer more questions correctly, you're advanced from easier multiple choice questions to harder, written ones. Be ready for test day with Learn.</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="courses-carousel owl-carousel owl-btn-1 col-12 p-lr0">
                                     <c:forEach items="${qdao.quizForGuest}" var="q" >
                                         <div class="item">
                                             <div class="cours-bx">
@@ -415,114 +347,11 @@
             </div>
             <!-- Content END-->
             <!-- Footer ==== -->
-            <footer>
-                <div class="footer-top">
-                    <div class="pt-exebar">
-                        <div class="container">
-                            <div class="d-flex align-items-stretch">
-                                <div class="pt-logo mr-auto">
-                                    <a href="index.html"><img src="assets/images/logo-white.png" alt=""/></a>
-                                </div>
-                                <div class="pt-social-link">
-                                    <ul class="list-inline m-a0">
-                                        <li><a href="#" class="btn-link"><i class="fa fa-facebook"></i></a></li>
-                                        <li><a href="#" class="btn-link"><i class="fa fa-twitter"></i></a></li>
-                                        <li><a href="#" class="btn-link"><i class="fa fa-linkedin"></i></a></li>
-                                        <li><a href="#" class="btn-link"><i class="fa fa-google-plus"></i></a></li>
-                                    </ul>
-                                </div>
-                                <div class="pt-btn-join">
-                                    <a href="#" class="btn ">Join Now</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-4 col-md-12 col-sm-12 footer-col-4">
-                                <div class="widget">
-                                    <h5 class="footer-title">Sign Up For A Newsletter</h5>
-                                    <p class="text-capitalize m-b20">Weekly Breaking news analysis and cutting edge advices on job searching.</p>
-                                    <div class="subscribe-form m-b20">
-                                        <form class="subscription-form" action="http://educhamp.themetrades.com/demo/assets/script/mailchamp.php" method="post">
-                                            <div class="ajax-message"></div>
-                                            <div class="input-group">
-                                                <input name="email" required="required"  class="form-control" placeholder="Your Email Address" type="email">
-                                                <span class="input-group-btn">
-                                                    <button name="submit" value="Submit" type="submit" class="btn"><i class="fa fa-arrow-right"></i></button>
-                                                </span> 
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-lg-5 col-md-7 col-sm-12">
-                                <div class="row">
-                                    <div class="col-4 col-lg-4 col-md-4 col-sm-4">
-                                        <div class="widget footer_widget">
-                                            <h5 class="footer-title">Company</h5>
-                                            <ul>
-                                                <li><a href="index.html">Home</a></li>
-                                                <li><a href="about-1.html">About</a></li>
-                                                <li><a href="faq-1.html">FAQs</a></li>
-                                                <li><a href="contact-1.html">Contact</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="col-4 col-lg-4 col-md-4 col-sm-4">
-                                        <div class="widget footer_widget">
-                                            <h5 class="footer-title">Get In Touch</h5>
-                                            <ul>
-                                                <li><a href="http://educhamp.themetrades.com/admin/index.html">Dashboard</a></li>
-                                                <li><a href="blog-classic-grid.html">Blog</a></li>
-                                                <li><a href="portfolio.html">Portfolio</a></li>
-                                                <li><a href="event.html">Event</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="col-4 col-lg-4 col-md-4 col-sm-4">
-                                        <div class="widget footer_widget">
-                                            <h5 class="footer-title">Courses</h5>
-                                            <ul>
-                                                <li><a href="courses.html">Courses</a></li>
-                                                <li><a href="courses-details.html">Details</a></li>
-                                                <li><a href="membership.html">Membership</a></li>
-                                                <li><a href="profile.html">Profile</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-lg-3 col-md-5 col-sm-12 footer-col-4">
-                                <div class="widget widget_gallery gallery-grid-4">
-                                    <h5 class="footer-title">Our Gallery</h5>
-                                    <ul class="magnific-image">
-                                        <li><a href="assets/images/gallery/pic1.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic1.jpg" alt=""></a></li>
-                                        <li><a href="assets/images/gallery/pic2.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic2.jpg" alt=""></a></li>
-                                        <li><a href="assets/images/gallery/pic3.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic3.jpg" alt=""></a></li>
-                                        <li><a href="assets/images/gallery/pic4.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic4.jpg" alt=""></a></li>
-                                        <li><a href="assets/images/gallery/pic5.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic5.jpg" alt=""></a></li>
-                                        <li><a href="assets/images/gallery/pic6.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic6.jpg" alt=""></a></li>
-                                        <li><a href="assets/images/gallery/pic7.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic7.jpg" alt=""></a></li>
-                                        <li><a href="assets/images/gallery/pic8.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic8.jpg" alt=""></a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="footer-bottom">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 text-center"><a target="_blank" href="https://www.templateshub.net">Templates Hub</a></div>
-                        </div>
-                    </div>
-                </div>
-            </footer>
-            <!-- Footer END ==== -->
-            <button class="back-to-top fa fa-chevron-up" ></button>
-        </div>
-        <!-- TakeQuiz Modal -->
+            <jsp:include page="components/footer.jsp"></jsp:include>
+                <!-- Footer END ==== -->
+                <button class="back-to-top fa fa-chevron-up" ></button>
+            </div>
+            <!-- TakeQuiz Modal -->
         <c:forEach items="${qdao.quizForGuest}" var="q">
             <jsp:include page="../assets/components/take-quiz-modal.jsp">
                 <jsp:param name="quizId" value="${q.quizId}"></jsp:param>

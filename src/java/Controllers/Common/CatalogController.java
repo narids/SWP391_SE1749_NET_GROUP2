@@ -8,6 +8,7 @@ import DAOs.AccountDAO;
 import DAOs.QuizDAO;
 import Models.Account;
 import Models.ClassSubject;
+import Models.Student;
 import Models.Teacher;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -43,11 +44,12 @@ public class CatalogController extends HttpServlet {
             response.sendRedirect("login");
         } else {
             Teacher teacher = (Teacher) request.getSession().getAttribute("teacher");
+            Student student = (Student) request.getSession().getAttribute("student");
 
             if (teacher != null) {
                 QuizDAO quizDAO = new QuizDAO();
 
-                String quizzesByTeacherIDSQL = "SELECT    Quiz.QuizID, Quiz.QuizName, Quiz.QuizContent, Quiz.CreatedDate, Class.ClassName, Subject.SubjectName, Quiz.QuizStatus\n"
+                String quizzesByTeacherIDSQL = "SELECT Quiz.QuizID, Quiz.QuizName, Quiz.QuizContent, Quiz.CreatedDate, Quiz.QuizStatus, Class.ClassName, Subject.SubjectName, Teacher.TeacherID, Class.ClassID, Subject.SubjectID\n"
                         + "FROM         Class INNER JOIN\n"
                         + "                      ClassSubject ON Class.ClassID = ClassSubject.ClassID INNER JOIN\n"
                         + "                      Subject ON ClassSubject.SubjectID = Subject.SubjectID INNER JOIN\n"
@@ -57,8 +59,26 @@ public class CatalogController extends HttpServlet {
 
                 List<ClassSubject> quizzesByTeacherID = quizDAO.getQuizzesByTeacherID(quizzesByTeacherIDSQL);
 
-                request.setAttribute("quizByTeacher", quizzesByTeacherID);
+                request.setAttribute("quizzes", quizzesByTeacherID);
 
+            }
+
+            if (student != null) {
+                QuizDAO quizDAO = new QuizDAO();
+
+                String quizzesByStudentIDSQL = "SELECT    Quiz.QuizID, Quiz.QuizName, Quiz.QuizContent, Quiz.CreatedDate, Quiz.QuizStatus, Class.ClassName, Subject.SubjectName, Teacher.TeacherID, Student.StudentID, Class.ClassID, Subject.SubjectID\n"
+                        + "FROM         ClassStudent INNER JOIN\n"
+                        + "Class ON ClassStudent.ClassID = Class.ClassID INNER JOIN\n"
+                        + "ClassSubject ON Class.ClassID = ClassSubject.ClassID INNER JOIN\n"
+                        + "Quiz ON ClassSubject.QuizID = Quiz.QuizID INNER JOIN\n"
+                        + "Student ON ClassStudent.StudentID = Student.StudentID INNER JOIN\n"
+                        + "Subject ON ClassSubject.SubjectID = Subject.SubjectID INNER JOIN\n"
+                        + "Teacher ON ClassSubject.TeacherID = Teacher.TeacherID\n"
+                        + "where Quiz.QuizStatus = 1 and Student.StudentID = " + String.valueOf(student.getStudentId());
+
+                List<ClassSubject> quizzesByStudentID = quizDAO.getQuizzesByStudentID(quizzesByStudentIDSQL);
+
+                request.setAttribute("quizzes", quizzesByStudentID);
             }
             request.setAttribute("account", account);
             request.getRequestDispatcher("jsp/catalog.jsp").forward(request, response);
@@ -122,20 +142,46 @@ public class CatalogController extends HttpServlet {
 
             } else if ("quizTabFilter".equals(action)) {
                 QuizDAO quizDAO = new QuizDAO();
-                Teacher teacher = (Teacher) request.getSession().getAttribute("teacher");
 
                 String filterStatus = request.getParameter("filterStatus");
                 String searchValue = request.getParameter("searchValue") != null ? request.getParameter("searchValue") : "";
                 String searchBy = request.getParameter("searchBy");
                 String sortBy = request.getParameter("sortBy");
 
-                String sql = "SELECT    Quiz.QuizID, Quiz.QuizName, Quiz.QuizContent, Quiz.CreatedDate, Class.ClassName, Subject.SubjectName, Quiz.QuizStatus\n"
+                String sql = "SELECT Quiz.QuizID, Quiz.QuizName, Quiz.QuizContent, Quiz.CreatedDate, Quiz.QuizStatus, Class.ClassName, Subject.SubjectName, Teacher.TeacherID, Class.ClassID, Subject.SubjectID\n"
                         + "FROM         Class INNER JOIN\n"
                         + "                      ClassSubject ON Class.ClassID = ClassSubject.ClassID INNER JOIN\n"
                         + "                      Subject ON ClassSubject.SubjectID = Subject.SubjectID INNER JOIN\n"
                         + "                      Teacher ON ClassSubject.TeacherID = Teacher.TeacherID INNER JOIN\n"
                         + "                      Quiz ON ClassSubject.QuizID = Quiz.QuizID\n"
-                        + "					  where Teacher.TeacherID = " + String.valueOf(teacher.getTeacherId());
+                        + "                      where ";
+
+                switch (account.getRole().getRoleId()) {
+                    case 3: // teacher
+                        Teacher teacher = (Teacher) request.getSession().getAttribute("teacher");
+                        sql = sql + "Teacher.TeacherID =" + String.valueOf(teacher.getTeacherId());
+                        break;
+
+                    case 4: // student
+                        Student student = (Student) request.getSession().getAttribute("student");
+                        sql = "SELECT    Quiz.QuizID, Quiz.QuizName, Quiz.QuizContent, Quiz.CreatedDate, Quiz.QuizStatus, Class.ClassName, Subject.SubjectName, Teacher.TeacherID, Student.StudentID, Class.ClassID, Subject.SubjectID\n"
+                                + "FROM         ClassStudent INNER JOIN\n"
+                                + "Class ON ClassStudent.ClassID = Class.ClassID INNER JOIN\n"
+                                + "ClassSubject ON Class.ClassID = ClassSubject.ClassID INNER JOIN\n"
+                                + "Quiz ON ClassSubject.QuizID = Quiz.QuizID INNER JOIN\n"
+                                + "Student ON ClassStudent.StudentID = Student.StudentID INNER JOIN\n"
+                                + "Subject ON ClassSubject.SubjectID = Subject.SubjectID INNER JOIN\n"
+                                + "Teacher ON ClassSubject.TeacherID = Teacher.TeacherID\n"
+                                + "where Quiz.QuizStatus = 1 and Student.StudentID =";
+
+                        sql += String.valueOf(student.getStudentId());
+                        break;
+
+                    default:
+                        sql += "Quiz.QuizID like '%%'";
+                        break;
+
+                }
 
                 if (searchBy != null) {
                     switch (searchBy) {
@@ -159,7 +205,7 @@ public class CatalogController extends HttpServlet {
                     sql += searchValue.trim();
                     sql += "%'";
                 }
-                if (filterStatus != null) {
+                if (account.getRole().getRoleId() != 4 && filterStatus != null) {
                     switch (filterStatus) {
                         case "publish":
                             sql += " and Quiz.QuizStatus = 1";
@@ -190,13 +236,21 @@ public class CatalogController extends HttpServlet {
                 }
 
                 try {
-                    List<ClassSubject> quizzesByTeacherID = quizDAO.getQuizzesByTeacherID(sql);
+                    List<ClassSubject> quizzes;
+                    if (account.getRole().getRoleId() != 4) {
+                        quizzes = quizDAO.getQuizzesByTeacherID(sql);
+                    } else {
+                        quizzes = quizDAO.getQuizzesByStudentID(sql);
+                    }
 
                     try (PrintWriter out = response.getWriter()) {
-                        for (ClassSubject q : quizzesByTeacherID) {
+                        String dataPrint = "";
+
+                        for (ClassSubject q : quizzes) {
                             String colorStatus = "green";
                             String valueStatus = "Publish";
                             String typeStatus = "toPrivate";
+                            String dataPrintTemp = "";
 
                             if (q.getQuiz().getQuizStatus() == 0) {
                                 colorStatus = "red";
@@ -204,21 +258,26 @@ public class CatalogController extends HttpServlet {
                                 typeStatus = "toPublish";
                             }
 
-                            out.print(" <li class='action-card col-xl-4 col-lg-6 col-md-12 col-sm-6 publish'>\n"
+                            dataPrintTemp = dataPrintTemp + " <li class='action-card col-xl-4 col-lg-6 col-md-12 col-sm-6 publish'>\n"
                                     + "                                                                    <div class=\"cours-bx\">\n"
                                     + "                                                                        <div class=\"action-box\">\n"
                                     + "                                                                            <img src='assets/images/courses/pic1.jpg' alt=\"\">\n"
-                                    + "                                                                            <a href='quiz/" + q.getQuiz().getQuizId() + "' class=\"btn\">Read More</a>\n"
+                                    + "                                                                            <a href='quizzes?quizID=" + q.getQuiz().getQuizId() + "' class=\"btn\">View More</a>\n"
                                     + "                                                                        </div>\n"
                                     + "                                                                        <div class=\"info-bx text-center\">\n"
-                                    + "                                                                            <h5><a href='quiz/" + q.getQuiz().getQuizId() + "'>" + q.getQuiz().getQuizName().toUpperCase() + "</a></h5>\n"
+                                    + "                                                                            <h5><a href='quizzes?quizID=" + q.getQuiz().getQuizId() + "'>" + q.getQuiz().getQuizName().toUpperCase() + "</a></h5>\n"
                                     + "                                                                            <span>" + q.getQuiz().getQuizContent() + "</span>\n"
                                     + "                                                                        </div>\n"
                                     + "                                                                        <div class=\"cours-more-info\">\n"
                                     + "                                                                            <div class=\"review\">\n"
                                     + "                                                                                        <span id='quizStatusID-" + q.getQuiz().getQuizId() + "' style=\" display: flex; align-items: center; gap: 8px; justify-content: space-between;\">\n"
-                                    + "                                                                                            " + "<span style=\"color: " + colorStatus + ";\">" + valueStatus + "</span><i onclick=\"updateStatus(" + q.getQuiz().getQuizId() + ", '" + typeStatus + "')\" class=\"bi bi-arrow-repeat quizStatusBtn\" style=\"font-size: 19px; cursor: pointer\"></i>" + "\n"
-                                    + "                                                                                        </span>\n"
+                                    + "                                                                                              <span style=\"color: " + colorStatus + ";\">" + valueStatus + "</span>";
+
+                            if (account.getRole().getRoleId() != 4) {
+                                dataPrintTemp = dataPrintTemp + "<i onclick=\"updateStatus(" + q.getQuiz().getQuizId() + ", '" + typeStatus + "')\" class=\"bi bi-arrow-repeat quizStatusBtn\" style=\"font-size: 19px; cursor: pointer\"></i>";
+                            }
+
+                            dataPrintTemp = dataPrintTemp + "                                                                                        \n</span>\n"
                                     + "                                                                                <ul class=\"cours-star\">\n"
                                     + "                                                                                    <li class=\"active\"><i class=\"fa fa-star\"></i></li>\n"
                                     + "                                                                                    <li class=\"active\"><i class=\"fa fa-star\"></i></li>\n"
@@ -233,10 +292,12 @@ public class CatalogController extends HttpServlet {
                                     + "                                                                            </div>\n"
                                     + "                                                                        </div>\n"
                                     + "                                                                    </div>\n"
-                                    + "                                                                </li>"
-                            );
+                                    + "                                                                </li>\n";
+                            
+                            dataPrint += dataPrintTemp;
                         }
 
+                        out.print(dataPrint);
                     }
 
                 } catch (Exception e) {
