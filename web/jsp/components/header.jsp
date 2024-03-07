@@ -1,3 +1,4 @@
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <header class="header rs-nav">
     <div class="top-bar">
         <div class="container">
@@ -11,7 +12,9 @@
                 <div class="topbar-right">
                     <ul>
                         <li><a href="profile">${sessionScope.account.getUsername()}</a></li>
-                        <li><a href="news-list"></i>Administration</a></li>
+                            <c:if test="${sessionScope.account.getRoleId() eq 1}">
+                            <li><a href="news-list"></i>Administration</a></li>
+                            </c:if>
                         <li><a href="logout"></i>Log out</a></li>
                     </ul>
                 </div>
