@@ -11,11 +11,16 @@
                 </div>
                 <div class="topbar-right">
                     <ul>
+                        <% if(sessionScope.account != null) { %>
                         <li><a href="profile">${sessionScope.account.getUsername()}</a></li>
                             <c:if test="${sessionScope.account.getRoleId() eq 1}">
                             <li><a href="news-list"></i>Administration</a></li>
                             </c:if>
                         <li><a href="logout"></i>Log out</a></li>
+                            <% } else { %>
+                        <li><a href="register"></i>Register</a></li>
+                        <li><a href="login"></i>Login</a></li>
+                        <% } %>
                     </ul>
                 </div>
             </div>
