@@ -56,6 +56,7 @@
         <link rel="stylesheet" type="text/css" href="assets/css/style.css">
         <link class="skin" rel="stylesheet" type="text/css" href="assets/css/color/color-1.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
         <style>
             .input-group {
                 position: relative;
@@ -75,7 +76,7 @@
                 transform: translateX(-50%);
                 color : white;
                 padding: 20px 40px;
-                z-index: 999;
+                z-index: 999999;
                 box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
                 border-radius: 10px;
                 opacity: 0;
@@ -83,7 +84,7 @@
                 transition: opacity 0.7s;
             }
 
-            .show {
+            .toast.show {
                 opacity: 1 !important;
                 visibility: visible !important;
             }
@@ -97,10 +98,43 @@
                 color: lightgray;
             }
 
+            .questionCard{
+                display: flex;
+                gap: 35px;
+                padding-left: 30px;
+                padding-right: 30px;
+                background-color: #f9f9f9;
+                border-radius: 20px;
+                padding-top: 15px;
+                padding-bottom: 15px;
+                position: relative;
+                overflow-x: hidden;
+            }
+            .questionCardAction{
+                position: absolute;
+                right: 0;
+                width: 35px;
+                background-color: #2f2e2e;
+                height: 100%;
+                top: 0;
+                border-top-right-radius: 20px;
+                border-bottom-right-radius: 20px;
+                display: flex;
+                flex-direction: column;
+                transition: 0.2s all;
+                transform: translateX(37px);
+                cursor: pointer;
+            }
+            .questionCard:hover .questionCardAction{
+                transform: translateX(0);
+            }
         </style>
     </head>
     <body id="bg">
         <div class="page-wraper">
+
+            <div id="toast" class="toast"></div>
+
             <div id="loading-icon-bx"></div>
             <!-- Header Top ==== -->
             <header class="header rs-nav">
@@ -194,24 +228,25 @@
                 <!-- inner page banner END -->
                 <div class="content-block">
                     <!-- About Us -->
-                    <div class="section-area section-sp1">
+                    <div class="section-area section-sp1" style="padding-top: 30px">
                         <div class="container">
                             <div class="row d-flex flex-row-reverse">
                                 <div class="col-lg-3 col-md-4 col-sm-12 m-b30">
                                     <div class="course-detail-bx">
                                         <div class="course-buy-now text-center">
-                                            <a class="btn radius-xl text-uppercase">Add to favorite</a>
+                                            <c:choose>
+                                                <c:when test = "${sessionScope.account.role.roleId != 4}">
+                                                    <a class="btn radius-xl text-uppercase" onclick="getQuizID(${quiz.quiz.quizId})" data-bs-toggle="modal" data-bs-target="#updateQuizModal">Update quiz</a>
+                                                </c:when>
+
+                                                <c:otherwise>
+                                                    <a class="btn radius-xl text-uppercase" id="addFavorite">Add to favorites</a>
+                                                </c:otherwise>
+                                            </c:choose>
                                         </div>
                                         <div class="teacher-bx">
-                                            <div class="teacher-info">
-                                                <div class="teacher-thumb">
-                                                    <img src="assets/images/testimonials/pic1.jpg" alt=""/>
-                                                </div>
-                                                <div class="teacher-name">
-                                                    <h5>${teacherFullname}</h5>
-                                                    <span>Teacher</span>
-                                                </div>
-                                            </div>
+                                            <h5 title="Quiz name" class="text-center">${quiz.quiz.quizName}</h5>
+                                            <div title="Quiz descriptions" class="text-center">${quiz.quiz.quizContent}</div>
                                         </div>
                                         <div class="cours-more-info">
                                             <div class="review">
@@ -237,13 +272,13 @@
                                                 </ul>
                                             </div>
                                             <div class="price categories">
-                                                <a href="subjects?subjectID=${requestScope.quiz.subject.subjectId}"><span>${requestScope.quiz.subject.subjectName}</span></a>
-                                                <a href="classes?classID=${requestScope.quiz.myClass.classID}"><h5 class="text-primary">${requestScope.quiz.myClass.className}</h5></a>
+                                                <a title="Subject" href="subjects?subjectID=${requestScope.quiz.subject.subjectId}"><span>${requestScope.quiz.subject.subjectName}</span></a>
+                                                <a title="Class" href="classes?classID=${requestScope.quiz.myClass.classID}"><h5 class="text-primary">${requestScope.quiz.myClass.className}</h5></a>
                                             </div>
                                         </div>
                                         <div class="course-info-list scroll-page">
                                             <ul class="navbar">
-                                                <li><a class="nav-link" href="#curriculum"><i class="ti-bookmark-alt"></i>Question & Answers</a></li>
+                                                <li><a class="nav-link" href="#quizzes"><i class="ti-bookmark-alt"></i>Question & Answers</a></li>
                                                 <li><a class="nav-link" href="#instructor"><i class="ti-user"></i>Creator</a></li>
                                                 <li><a class="nav-link" href="#reviews"><i class="ti-comments"></i>Reviews</a></li>
                                             </ul>
@@ -252,40 +287,47 @@
                                 </div>
 
                                 <div class="col-lg-9 col-md-8 col-sm-12">
-                                    <div class="m-b30" id="curriculum">
-                                        <h4>Question & Answers</h4>
+                                    <div class="m-b30" id="quizzes">
+                                        <h4>Question & Answers (${questions.size()})</h4>
                                         <ul class="curriculum-list">
                                             <c:forEach var="q" items="${questions}" varStatus="loop">
-                                                <li style="display: flex;
-                                                    gap: 35px;
-                                                    padding-left: 30px;
-                                                    padding-right: 30px;
-                                                    background-color: #f9f9f9;
-                                                    border-radius: 20px;
-                                                    padding-top: 15px;
-                                                    padding-bottom: 15px;"
-                                                    >
-                                                    <h5  style="width: 100px; border-right: 1px solid lightgray;">A</h5>
-                                                    <div>
+                                                <li class="questionCard ${q.questionId}">
+                                                    <c:set var="correctAnswer" value=""/>
+                                                    <div style="width: 100%; min-width: 135px">
                                                         <h5><span>${loop.count}, </span>${q.questionContent}</h5>
                                                         <ul>
                                                             <li style="padding: 15px 0 0 0; border: none">
                                                                 <div class="curriculum-list-box">
                                                                     <c:forEach var="a" items="${q.answers}" varStatus="loop">
-                                                                        <div>
-                                                                            <c:choose>
-                                                                                <c:when test="${loop.count == 1}">A</c:when>
-                                                                                <c:when test="${loop.count == 2}">B</c:when>
-                                                                                <c:when test="${loop.count == 3}">C</c:when>
-                                                                                <c:when test="${loop.count == 4}">D</c:when>
-                                                                                <c:when test="${loop.count == 5}">E</c:when>
-                                                                            </c:choose>. ${a.answerContent}
+                                                                        <div style="display: flex; gap: 10px">
+                                                                            <c:set var="type" value="&\#${(loop.index+97)}" />
+                                                                            <h5>${type}.</h5> ${a.answerContent}
                                                                         </div>
+
+                                                                        <c:if test="${a.isCorrect == true}">
+                                                                            <c:choose>
+                                                                                <c:when test = "${empty correctAnswer}">
+                                                                                    <c:set var="correctAnswer" value="&\#${(loop.index+97)}"/>
+                                                                                </c:when>
+
+                                                                                <c:otherwise>
+                                                                                    <c:set var="correctAnswer" value="${correctAnswer}, &\#${(loop.index+97)}"/>
+                                                                                </c:otherwise>
+                                                                            </c:choose>
+                                                                        </c:if>
                                                                     </c:forEach>
                                                                 </div>
                                                             </li>
                                                         </ul>
                                                     </div>
+                                                    <h5 style="color: green; border-left: 1px solid lightgray; padding: 0 35px; min-width: 120px; width: 120px">${correctAnswer}</h5>
+
+                                                    <c:if test="${sessionScope.account.role.roleId != 4}">
+                                                        <div class="questionCardAction">
+                                                            <i onclick="updateQuestionBtnClick(${q.questionId}, ${quiz.quiz.quizId})" data-bs-toggle="modal" data-bs-target="#updateCardModal" title="Update" class="bi bi-pencil-fill" style="color: orange; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid #cccccc"></i>
+                                                            <i onclick="deleteQuestionBtnClick(${q.questionId}, ${quiz.quiz.quizId})" data-bs-toggle="modal" data-bs-target="#deleteCardModal" title="Delete" class="bi bi-trash3-fill" style="color: red; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center"></i>
+                                                        </div>
+                                                    </c:if>
                                                 </li>
                                             </c:forEach>
 
@@ -306,7 +348,6 @@
                                                     <li><a href="#" class="btn sharp-sm linkedin"><i class="fa fa-linkedin"></i></a></li>
                                                     <li><a href="#" class="btn sharp-sm google-plus"><i class="fa fa-google-plus"></i></a></li>
                                                 </ul>
-                                                <p class="m-b0">${quiz.quiz.quizContent}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -512,6 +553,159 @@
             </footer>
             <!-- Footer END ==== -->
             <button class="back-to-top fa fa-chevron-up" ></button>
+
+            <div class="modal fade" id="updateCardModal" tabindex="-1" aria-labelledby="updateCardModal" aria-hidden="true">
+                <div class="modal-dialog modal-lg" style="margin: 8.75rem auto;">
+                    <div class="modal-content" style="border-radius: 20px">
+                        <div class="modal-header">
+                            <h4 class="modal-title fs-5" id="exampleModalLabel">Update Question</h1>
+                                <i class="bi bi-x-lg" data-bs-dismiss="modal" aria-label="Close" style="cursor: pointer"></i>
+                        </div>
+                        <div class="modal-body" style="height: 320px;">
+                            <form id="updateQuestionForm" class="needs-validation" novalidate method="post">
+                                <div class="row placeani">
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <div class="">Question:</div>
+                                            <div class="input-group">
+                                                <input name="question" id="questionInput" placeholder="Enter question" value="" minlength="6" type="text" required class="form-control">
+                                                <div class="invalid-feedback">
+                                                    Question must least 6 char
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row placeani">
+                                    <div class="col-lg-12" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px">
+                                        <div>Answers:</div>
+                                        <button class="btn radius-xl text-uppercase" style="font-size: 10px; padding: 7px 15px;" id="addAnswer">Add answer</button>
+                                    </div>
+                                    <div class="col-lg-12" id="answersWrapper">
+                                        <div class="form-group" style="display: flex; align-items: center; gap: 17px;">
+                                            <input type="checkbox" id="option1" name="options[]" class="checkbox">
+                                            <span>A,</span>
+                                            <span class="input-group">
+                                                <input name="answer" placeholder="Enter answer" value="" minlength="6" type="text" required class="form-control">
+                                                <div class="invalid-feedback">
+                                                    Answer must least 6 char
+                                                </div>
+                                            </span>
+                                        </div>
+                                        <div class="form-group" style="display: flex; align-items: center; gap: 17px;">
+                                            <input type="checkbox" id="option1" name="options[]" class="checkbox">
+                                            <span>A,</span>
+                                            <span class="input-group">
+                                                <input name="answer" placeholder="Enter answer" value="" minlength="6" type="text" required class="form-control">
+                                                <div class="invalid-feedback">
+                                                    Answer must least 6 char
+                                                </div>
+                                            </span>
+                                        </div>
+                                        <div class="form-group" style="display: flex; align-items: center; gap: 17px;">
+                                            <input type="checkbox" id="option1" name="options[]" class="checkbox">
+                                            <span>A,</span>
+                                            <span class="input-group">
+                                                <input name="answer" placeholder="Enter answer" value="" minlength="6" type="text" required class="form-control">
+                                                <div class="invalid-feedback">
+                                                    Answer must least 6 char
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" id="updateQuestionSubmit" class="btn btn-primary">Update</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="updateQuizModal" tabindex="-1" aria-labelledby="updateQuizModal" aria-hidden="true">
+                <div class="modal-dialog modal-lg" style="margin: 8.75rem auto;">
+                    <div class="modal-content" style="border-radius: 20px">
+                        <div class="modal-header">
+                            <h4 class="modal-title fs-5" id="exampleModalLabel">Update Quiz</h1>
+                                <i class="bi bi-x-lg" data-bs-dismiss="modal" aria-label="Close" style="cursor: pointer"></i>
+                        </div>
+                        <div class="modal-body">
+                            <form id="verifyFormfg" class="needs-validation" novalidate method="post">
+
+                                <div class="row placeani">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <div class="">Quiz name:</div>
+                                            <div class="input-group">
+                                                <input name="username" pattern="^[A-Za-z0-9]{6,20}$" placeholder="Enter username" value="${requestScope.username}" type="text" required class="form-control">
+                                                <div class="invalid-feedback">
+                                                    Username must least 6 char, only include string and digit.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <div class="">Quiz descriptions:</div>
+                                            <div class="input-group"> 
+                                                <input style="outline: none" name="password" id="password" pattern="^[A-Za-z0-9]{6,20}$" placeholder="Enter password" value="${requestScope.password}" type="password" class="form-control" required="">
+                                                <span class="toggle-password" id="togglePassword">&#x1F441;</span>
+                                                <div class="invalid-feedback">
+                                                    Password must least 6 char, only include string and digit.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" id="updateSubmit" class="btn btn-primary">Update</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="deleteCardModal" tabindex="-1" aria-labelledby="deleteCardModal" aria-hidden="true">
+                <div class="modal-dialog" style="margin: 8.75rem auto;">
+                    <div class="modal-content" style="border-radius: 20px">
+                        <div class="modal-header">
+                            <h4 class="modal-title fs-5" id="exampleModalLabel">Delete Question</h1>
+                                <i class="bi bi-x-lg" data-bs-dismiss="modal" aria-label="Close" style="cursor: pointer"></i>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure delete question?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" id="deleteQuestionSubmit" class="btn btn-primary">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="deleteAnswerModal" tabindex="-1" aria-labelledby="deleteAnswerModal" aria-hidden="true">
+                <div class="modal-dialog" style="margin: 8.75rem auto;">
+                    <div class="modal-content" style="border-radius: 20px">
+                        <div class="modal-header">
+                            <h4 class="modal-title fs-5" id="exampleModalLabel">Delete Answer</h1>
+                                <i class="bi bi-x-lg" data-bs-dismiss="modal" aria-label="Close" style="cursor: pointer"></i>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure delete answer?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" id="deleteAnswerSubmit" class="btn btn-primary">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- External JavaScripts -->
         <script src="assets/js/jquery.min.js"></script>
@@ -530,6 +724,308 @@
         <script src="assets/js/functions.js"></script>
         <script src="assets/js/contact.js"></script>
         <script src="assets/vendors/switcher/switcher.js"></script>
+        <script>
+                                                                let questionID = "";
+                                                                let quizID = "";
+                                                                let indexAnswerDelete = 0;
+                                                                let answersDelete = [];
+                                                                let answerDeleteID = 0;
+
+                                                                function getQuizID(quizID1) {
+                                                                    quizID = quizID1;
+                                                                }
+                                                                function deleteQuestionBtnClick(questionID1, quizID1) {
+                                                                    questionID = questionID1;
+                                                                    quizID = quizID1;
+                                                                }
+                                                                function updateQuestionBtnClick(questionID1, quizID1) {
+                                                                    questionID = questionID1;
+                                                                    quizID = quizID1;
+
+                                                                    $.ajax({
+                                                                        url: "/SWP391_SE1749_NET_GROUP2/quizzes",
+                                                                        type: "post",
+                                                                        data: {
+                                                                            questionID: questionID,
+                                                                            action: "getQuestion"
+                                                                        },
+                                                                        success: function (data) {
+                                                                            if (data !== "") {
+                                                                                $("#updateQuestionForm").empty();
+                                                                                let parent = document.getElementById("updateQuestionForm");
+                                                                                parent.insertAdjacentHTML('beforeend', data);
+
+                                                                            } else {
+                                                                                toastMessageAction("Get Question failed!", "red");
+                                                                            }
+
+                                                                        },
+                                                                        error: function () {
+                                                                            toastMessageAction("Something went wrong", "red");
+                                                                        }
+                                                                    });
+                                                                }
+
+                                                                function toastMessageAction(text, color, link) {
+                                                                    if (text && text !== "") {
+                                                                        $('#toast').text(text);
+                                                                        $('#toast').css('background-color', color);
+                                                                        $('#toast').toggleClass('show');
+                                                                        // After 3 seconds, remove the show class from DIV and redirect
+                                                                        if (link && link !== "") {
+                                                                            setTimeout(function () {
+                                                                                window.location.href = link;
+                                                                            }, 2000);
+                                                                        }
+                                                                        setTimeout(function () {
+                                                                            $("#loginButton").removeAttr('disabled');
+                                                                            $('#toast').text("");
+                                                                            $('#toast').toggleClass('show');
+                                                                        }, 3000);
+                                                                    }
+                                                                }
+                                                                function reloadListAnswers(resultArray, index) {
+                                                                    resultArray.splice(index - 1, 1);
+
+                                                                    let parent = document.getElementById("answersWrapper");
+
+                                                                    if (resultArray.length < 6) {
+                                                                        $("#addAnswer").show();
+                                                                    } else {
+                                                                        $("#addAnswer").hide();
+                                                                    }
+
+                                                                    let data = "";
+                                                                    for (let i = 0; i < resultArray.length; i++) {
+                                                                        const type = String.fromCharCode(i + 1 + 64);
+                                                                        const checked = resultArray[i].checked ? "checked" : "";
+                                                                        const count = i + 1;
+
+                                                                        data += "<div class=\"form-group\" style=\"display: flex; align-items: center; gap: 17px;\">\n"
+                                                                                + "                                            <input type=\"text\" hidden value='" + resultArray[i].id + "' name='answerID' class=\"answerID\">\n"
+                                                                                + "                                            <input " + checked + " type=\"checkbox\" id=\"option1\" name=\"options[]\" class=\"checkbox\">\n"
+                                                                                + "                                            <span>" + type + ",</span>\n"
+                                                                                + "                                            <span class=\"input-group\">\n"
+                                                                                + "                                                <input name=\"answer\" placeholder=\"Enter answer\" value='" + resultArray[i].value + "' minlength=\"6\" type=\"text\" required class=\"form-control\">\n"
+                                                                                + "                                                <div class=\"invalid-feedback\">\n"
+                                                                                + "                                                    Answer must least 6 char\n"
+                                                                                + "                                                </div>\n"
+                                                                                + "                                            </span>\n"
+                                                                                + "                                        <i onclick='removeAnswer(" + count + ")' style='cursor:pointer; color: red;' class=\"bi bi-dash-circle-fill deleteAnswer\"></i>\n"
+                                                                                + "                                        </div>";
+                                                                    }
+
+                                                                    $("#answersWrapper").empty();
+                                                                    parent.insertAdjacentHTML('beforeend', data);
+
+                                                                    indexAnswerDelete = 0;
+                                                                    answersDelete = [];
+                                                                }
+
+                                                                function addAnswerInUpdateModal() {
+                                                                    let parent = document.getElementById("answersWrapper");
+                                                                    var numberAnswers = document.querySelectorAll('#answersWrapper .form-group').length;
+                                                                    const type = String.fromCharCode(numberAnswers + 1 + 64);
+
+                                                                    if (numberAnswers < 5) {
+                                                                        $("#addAnswer").show();
+                                                                    } else {
+                                                                        $("#addAnswer").hide();
+
+                                                                    }
+
+                                                                    let data = "<div class=\"form-group\" style=\"display: flex; align-items: center; gap: 17px;\">\n"
+                                                                            + "                                            <input type=\"text\" hidden value='-1' name='answerID' class=\"answerID\">\n"
+                                                                            + "                                            <input type=\"checkbox\" id=\"option1\" name=\"options[]\" class=\"checkbox\">\n"
+                                                                            + "                                            <span>" + type + ",</span>\n"
+                                                                            + "                                            <span class=\"input-group\">\n"
+                                                                            + "                                                <input name=\"answer\" placeholder=\"Enter answer\" value=\"\" minlength=\"6\" type=\"text\" required class=\"form-control\">\n"
+                                                                            + "                                                <div class=\"invalid-feedback\">\n"
+                                                                            + "                                                    Answer must least 6 char\n"
+                                                                            + "                                                </div>\n"
+                                                                            + "                                            </span>\n"
+                                                                            + "                                        <i onclick='removeAnswer(" + (numberAnswers + 1) + ")' style='cursor:pointer; color: red;' class=\"bi bi-dash-circle-fill deleteAnswer\"></i>"
+                                                                            + "                                        </div>";
+                                                                    parent.insertAdjacentHTML('beforeend', data);
+                                                                }
+                                                                function removeAnswer(index) {
+                                                                    let resultArray = [];
+
+                                                                    // Lặp qua mỗi form-group
+                                                                    $('#answersWrapper .form-group').each(function () {
+                                                                        // Lấy giá trị của checkbox (true hoặc false)
+                                                                        const checkboxValue = $(this).find('.checkbox').prop('checked');
+
+                                                                        // Lấy giá trị của input có name="answer"
+                                                                        const answerID = $(this).find('input[name="answerID"]').val();
+                                                                        const answerValue = $(this).find('input[name="answer"]').val();
+
+                                                                        // Thêm cặp giá trị vào mảng
+                                                                        if (checkboxValue !== undefined) {
+                                                                            resultArray.push({checked: checkboxValue, id: answerID, value: answerValue});
+                                                                        }
+                                                                    });
+
+
+
+                                                                    if (resultArray.at(index - 1).id == -1) {
+                                                                        reloadListAnswers(resultArray, index);
+                                                                    } else {
+                                                                        indexAnswerDelete = index;
+                                                                        answersDelete = [...resultArray];
+                                                                        answerDeleteID = resultArray.at(index - 1).id;
+
+                                                                        $('#deleteAnswerModal').modal('show');
+                                                                    }
+
+
+                                                                }
+
+                                                                $('#deleteAnswerSubmit').click(function () {
+                                                                    let questionClass = ".questionCard." + questionID;
+                                                                    const indexOfQuestionUpdate = $(questionClass).index() + 1;
+
+                                                                    $.ajax({
+                                                                        url: "/SWP391_SE1749_NET_GROUP2/quizzes",
+                                                                        type: "post",
+                                                                        data: {
+                                                                            answerID: answerDeleteID,
+                                                                            questionID: questionID,
+                                                                            countQuestionUpdate: indexOfQuestionUpdate,
+                                                                            action: "deleteAnswer"
+                                                                        },
+                                                                        success: function (data) {
+                                                                            let text = "Delete answer successfully!";
+                                                                            let color = "green";
+
+                                                                            if (data === "failed") {
+                                                                                text = "Delete failed!";
+                                                                                color = "red";
+                                                                            } else {
+                                                                                reloadListAnswers(answersDelete, indexAnswerDelete);
+                                                                                $('#deleteAnswerModal').modal('hide');
+
+                                                                                let parent = document.getElementsByClassName("questionCard")[indexOfQuestionUpdate - 1];
+
+                                                                                $(questionClass).empty();
+                                                                                parent.insertAdjacentHTML('beforeend', data);
+                                                                            }
+
+                                                                            toastMessageAction(text, color);
+                                                                        },
+                                                                        error: function () {
+                                                                            toastMessageAction("Something went wrong", "red");
+                                                                        }
+                                                                    });
+                                                                });
+                                                                $('#deleteQuestionSubmit').click(function () {
+                                                                    $.ajax({
+                                                                        url: "/SWP391_SE1749_NET_GROUP2/quizzes",
+                                                                        type: "post",
+                                                                        data: {
+                                                                            questionID: questionID,
+                                                                            quizID: quizID,
+                                                                            action: "deleteQuestion"
+                                                                        },
+                                                                        success: function (data) {
+                                                                            let text = "Delete question successfully!";
+                                                                            let color = "green";
+
+                                                                            switch (data) {
+                                                                                case "failed":
+                                                                                    text = "Delete failed!";
+                                                                                    color = "red";
+                                                                                    break;
+
+                                                                                default :
+                                                                                    let parent = document.getElementById("quizzes");
+
+                                                                                    $("#quizzes").empty();
+                                                                                    parent.insertAdjacentHTML('beforeend', data);
+
+                                                                                    $('#deleteCardModal').modal('hide');
+                                                                                    break;
+                                                                            }
+
+                                                                            toastMessageAction(text, color);
+                                                                        },
+                                                                        error: function () {
+                                                                            toastMessageAction("Something went wrong", "red");
+                                                                        }
+                                                                    });
+                                                                });
+                                                                $("#updateQuestionSubmit").click(function () {
+                                                                    const answerCount = $('#answersWrapper .form-group').length;
+
+                                                                    if (answerCount === 0) {
+                                                                        toastMessageAction("Must be at least 1 answer", "red");
+                                                                    } else {
+                                                                        const questionValue = $('#updateQuestionForm #questionInput').val();
+                                                                        let questionClass = ".questionCard." + questionID;
+                                                                        const indexOfQuestionUpdate = $(questionClass).index() + 1;
+                                                                        let arr = [];
+
+                                                                        // Lặp qua mỗi form-group
+                                                                        $('#answersWrapper .form-group').each(function () {
+                                                                            // Lấy giá trị của checkbox (true hoặc false)
+                                                                            const checkboxValue = $(this).find('.checkbox').prop('checked');
+
+                                                                            // Lấy giá trị của input có name="answer"
+                                                                            const answerID = $(this).find('input[name="answerID"]').val();
+                                                                            const answerValue = $(this).find('input[name="answer"]').val();
+
+                                                                            // Thêm cặp giá trị vào mảng
+                                                                            if (checkboxValue !== undefined) {
+                                                                                arr.push({isCorrect: checkboxValue, answerId: answerID, answerContent: answerValue, questionId: questionID});
+                                                                            }
+                                                                        });
+
+                                                                        $.ajax({
+                                                                            url: "/SWP391_SE1749_NET_GROUP2/quizzes",
+                                                                            type: "post",
+                                                                            data: {
+                                                                                action: "updateQuestion",
+                                                                                quizID: quizID,
+                                                                                questionID: questionID,
+                                                                                questionValue: questionValue,
+                                                                                answers: JSON.stringify(arr),
+                                                                                countQuestionUpdate: indexOfQuestionUpdate
+                                                                            },
+                                                                            success: function (data) {
+                                                                                let text = "Update question and answers successfully!";
+                                                                                let color = "green";
+
+                                                                                switch (data) {
+                                                                                    case "answers_failed":
+                                                                                        text = "Update answers failed!";
+                                                                                        color = "red";
+                                                                                        break;
+                                                                                    case "question_failed":
+                                                                                        text = "Update question failed!";
+                                                                                        color = "red";
+                                                                                        break;
+
+                                                                                    default:
+                                                                                        let parent = document.getElementsByClassName("questionCard")[indexOfQuestionUpdate - 1];
+
+                                                                                        $(questionClass).empty();
+                                                                                        parent.insertAdjacentHTML('beforeend', data);
+
+                                                                                        $('#updateCardModal').modal('hide');
+                                                                                        break;
+                                                                                }
+
+                                                                                toastMessageAction(text, color);
+                                                                            },
+                                                                            error: function () {
+                                                                                toastMessageAction("Something went wrong", "red");
+                                                                            }
+                                                                        });
+                                                                    }
+                                                                });
+
+
+        </script>
     </body>
 
 </html>

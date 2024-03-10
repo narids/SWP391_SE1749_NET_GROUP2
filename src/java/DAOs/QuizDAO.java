@@ -4,6 +4,7 @@
  */
 package DAOs;
 
+import Models.Answer;
 import Models.ClassSubject;
 import Models.MyClass;
 import Models.Question;
@@ -226,6 +227,129 @@ public class QuizDAO extends DBContext<BaseEntity> {
         }
 
         return false;
+    }
+
+    public Boolean removeQuestionInQuiz(String quizID, String questionID) {
+        String sql = "DELETE FROM [dbo].[QuizQuestion]\n"
+                + "      WHERE QuizID = ? and QuestionID = ?";
+        try {
+            connection.setAutoCommit(false);
+            PreparedStatement stm = connection.prepareCall(sql);
+            stm.setString(1, quizID);
+            stm.setString(2, questionID);
+
+            if (stm.executeUpdate() > 0) {
+                connection.commit();
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return false;
+    }
+
+    public Boolean removeAnswerById(String answerID) {
+        String sql = "DELETE FROM [dbo].[Answer]\n"
+                + "      WHERE AnswerID = ?";
+        try {
+            connection.setAutoCommit(false);
+            PreparedStatement stm = connection.prepareCall(sql);
+            stm.setString(1, answerID);
+
+            if (stm.executeUpdate() > 0) {
+                connection.commit();
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return false;
+    }
+
+    public Boolean updateQuestionInQuiz(String questionID, String questionValue) {
+        String sql = "UPDATE [dbo].[Question]\n"
+                + "SET [Question_Content] = ?\n"
+                + "WHERE QuestionID = ?";
+        try {
+            connection.setAutoCommit(false);
+            PreparedStatement stm = connection.prepareCall(sql);
+            stm.setString(1, questionValue);
+            stm.setString(2, questionID);
+
+            if (stm.executeUpdate() > 0) {
+                connection.commit();
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return false;
+    }
+
+    public Boolean updateAnswers(List<Answer> answers) {
+        String sql = "";
+
+        for (Answer a : answers) {
+            int correct = a.isIsCorrect() ? 1 : 0;
+
+            if (a.getAnswerId() != -1) {
+                sql = sql + "UPDATE [dbo].[Answer] SET [IsCorrect] = " + correct + ",[Answer_Content] = '" + a.getAnswerContent() + "' WHERE AnswerID = " + a.getAnswerId() + " \n";
+            } else {
+                sql = sql + "INSERT INTO [dbo].[Answer] ([QuestionID], [IsCorrect], [Answer_Content]) VALUES (" + a.getQuestionId() + ", " + correct + " , '" + a.getAnswerContent() + "' ) \n";
+            }
+        }
+
+        try {
+            connection.setAutoCommit(false);
+            PreparedStatement stm = connection.prepareCall(sql);
+
+            if (stm.executeUpdate() > 0) {
+                connection.commit();
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return false;
+    }
+
+    public Question getQuestionById(String id) {
+        String sql = "SELECT Question.*, Answer.AnswerID, Answer.Answer_Content, Answer.IsCorrect\n"
+                + "FROM Answer INNER JOIN Question \n"
+                + "ON Answer.QuestionID = Question.QuestionID\n"
+                + "where Question.QuestionID = ?";
+        try {
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setString(1, id);
+            ResultSet rs = stm.executeQuery();
+            Question q = new Question();
+            List<Answer> answers = new ArrayList<>();
+
+            while (rs.next()) {
+                q.setQuestionId(rs.getInt("QuestionID"));
+                q.setQuestionContent(rs.getString("Question_Content"));
+                q.setExplain(rs.getString("Explain") != null ? rs.getString("Explain") : "");
+                q.setImageUrl(rs.getString("ImageURL") != null ? rs.getString("ImageURL") : "");
+
+                Answer a = new Answer();
+                a.setAnswerId(rs.getInt("AnswerID"));
+                a.setAnswerContent(rs.getString("Answer_Content"));
+                a.setIsCorrect(rs.getBoolean("IsCorrect"));
+
+                answers.add(a);
+            }
+
+            q.setAnswers(answers);
+
+            return q;
+        } catch (SQLException ex) {
+            Logger.getLogger(QuizDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     /**

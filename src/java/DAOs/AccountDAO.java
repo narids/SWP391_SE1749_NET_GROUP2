@@ -8,11 +8,13 @@ import Models.Account;
 import Models.Role;
 import Models.Student;
 import Models.Teacher;
+import java.security.SecureRandom;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -174,8 +176,8 @@ public class AccountDAO extends DBContext<BaseEntity> {
                 + "where Username = ? OR Email = ?";
         try {
             PreparedStatement stm = connection.prepareStatement(sql);
-            stm.setString(1, email);
-            stm.setString(2, username);
+            stm.setString(1, username);
+            stm.setString(2, email);
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
                 return true;
@@ -259,7 +261,6 @@ public class AccountDAO extends DBContext<BaseEntity> {
         return false;
     }
 
- 
 //    @Override
 //    public ArrayList<Account> list() {
 //

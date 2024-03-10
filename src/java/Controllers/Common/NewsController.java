@@ -38,7 +38,6 @@ public class NewsController extends HttpServlet {
     throws ServletException, IOException {
         List<News> ltNews = ndao.getListNew();
         request.setAttribute("ltNews", ltNews);
-        
         request.getRequestDispatcher("jsp/news-list.jsp").forward(request, response);
     } 
 
