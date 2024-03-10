@@ -72,10 +72,10 @@
             <main class="ttr-wrapper">
                 <div class="container-fluid">
                     <div class="db-breadcrumb">
-                        <h4 class="breadcrumb-title">New list</h4>
+                        <h4 class="breadcrumb-title">News list</h4>
                         <ul class="db-breadcrumb-list">
                             <li><a href="#"><i class="fa fa-home"></i>Home</a></li>
-                            <li>New list</li>
+                            <li>News list</li>
                         </ul>
                     </div>	
                     <div class="row">
@@ -83,7 +83,7 @@
                         <div class="col-lg-12 m-b30">
                             <div class="widget-box">
                                 <div class="wc-title d-flex justify-content-between align-items-center">
-                                    <h4>New list</h4>
+                                    <h4>News list</h4>
                                     <a href="add-news" class="btn btn-sm info ">
                                         Add a news
                                     </a>
@@ -109,10 +109,10 @@
                                                 <td style="width:10%">${ndao.getFullnameById(n.createdBy)}</td>
                                                 <td style="width:10%">${n.status eq 1 ? 'Publish' : 'Draft'}</td>
                                                 <td>
-                                                    <a href="news-detail?newsId=${n.newsId}" class="btn btn-sm yellow outline radius-xl ">
+                                                    <a href="news-detail?newsId=${n.newsId}" class="btn btn-sm yellow outline radius-xl" style="padding: 5px 10px">
                                                         <i class="fa fa-pencil"></i>
                                                     </a>
-                                                    <a href="#" class="btn btn-sm red outline radius-xl delete-news" data-toggle="modal" data-target="#deleteModal-${n.newsId}">
+                                                    <a href="#" class="btn btn-sm red outline radius-xl delete-news" data-toggle="modal" data-target="#deleteModal-${n.newsId}" style="padding: 5px 10px">
                                                         <i class="fa fa-trash"></i>
                                                     </a>
                                                 </td>
@@ -175,7 +175,10 @@
         <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 
         <script>
-            let table = new DataTable('#myTable');
+            let table = new DataTable('#myTable' , {
+                lengthChange: false,
+                length: 5
+            });
         </script>
         <script>
             // Pricing add
