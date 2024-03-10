@@ -57,35 +57,20 @@ public class AddNewsController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int userId = 1;
         Account account = (Account) request.getSession().getAttribute("account");
         String title = request.getParameter("title");
         String summary = request.getParameter("summary");
         String content = request.getParameter("content");
-
-// Get the uploaded file
         Part filePart = request.getPart("thumbnail");
-        String fileName = getSubmittedFileName(filePart); // Get the file name
-
-// Specify the directory to save the file
+        String fileName = getSubmittedFileName(filePart);
         String uploadPath = getServletContext().getRealPath("assets") + File.separator + "news-thumbnail";
         File folder = new File(uploadPath);
         if (!folder.exists()) {
             folder.mkdirs();
         }
-
-// Construct the file path where the uploaded file will be saved
         String filePath = uploadPath + File.separator + fileName;
-
-// Save the uploaded file to the specified file path
         filePart.write(filePath);
-
-        if(account != null) {
-
-            userId = account.getRole().getRoleId();
-
-        }
-        ndao.addNews(title, summary, content, filePath, userId, 0);
+        ndao.addNews(title, summary, content, filePath, account.getUserId(), 0);
         response.sendRedirect("news-list");
     }
 

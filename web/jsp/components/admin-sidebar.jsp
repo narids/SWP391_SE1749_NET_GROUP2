@@ -28,6 +28,12 @@
                     </a>
                 </li>
                 <li>
+                    <a href="news-list" class="ttr-material-button">
+                        <span class="ttr-icon"><i class="ti-email"></i></span>
+                        <span class="ttr-label">News List</span>
+                    </a>
+                </li>
+                <li>
                     <a href="#" class="ttr-material-button">
                         <span class="ttr-icon"><i class="ti-email"></i></span>
                         <span class="ttr-label">Mailbox</span>
@@ -70,12 +76,6 @@
                     <a href="review.html" class="ttr-material-button">
                         <span class="ttr-icon"><i class="ti-comments"></i></span>
                         <span class="ttr-label">Review</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="add-listing.html" class="ttr-material-button">
-                        <span class="ttr-icon"><i class="ti-layout-accordion-list"></i></span>
-                        <span class="ttr-label">New list</span>
                     </a>
                 </li>
                 <li>
