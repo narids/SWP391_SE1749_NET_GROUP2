@@ -1,26 +1,25 @@
-/*+
+/*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controllers.Manager;
+package Controllers.Common;
 
-import DAOs.ClassDAO;
+import DAOs.NewsDAO;
 import Models.Account;
-import Models.MyClass;
+import Models.NewsComment;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import java.util.List;
 
 /**
  *
  * @author nghia
  */
-public class ClassDetailController extends HttpServlet {
+public class NewsCommentController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,15 +33,15 @@ public class ClassDetailController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
+        try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ClassDetailController</title>");
+            out.println("<title>Servlet NewsCommentController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ClassDetailController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet NewsCommentController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,25 +59,8 @@ public class ClassDetailController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ClassDAO t = new ClassDAO();
-        int ClassID = Integer.parseInt(request.getParameter("id"));
-        
-        HttpSession session = request.getSession();
-        
-        String TeacherID = t.getTeacherByClassID(ClassID);
-        request.setAttribute("TeacherID", TeacherID);
-
-        List<Integer> TeacherIDs = t.getTeacherIDs();
-        request.setAttribute("TeacherIDs", TeacherIDs);
-
-        MyClass ClassSelected = t.getClassesByID(ClassID);
-        request.setAttribute("classSelected", ClassSelected);
-        
-        session.setAttribute("Classid", ClassID);
-//        int numStudent = t.getNumberOfStudentInClass(ClassID);
-//        request.setAttribute("num", numStudent);
-
-        request.getRequestDispatcher("jsp/ClassDetail.jsp").forward(request, response);
+//        processRequest(request, response);
+        Account account = (Account) request.getSession().getAttribute("account");
     }
 
     /**
@@ -92,17 +74,28 @@ public class ClassDetailController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ClassDAO t = new ClassDAO();
-        String TeacherID = request.getParameter("HiddenTeacherID");
-        int ClassID = Integer.parseInt(request.getParameter("ClassId"));
-        
-        t.updateClass(TeacherID, ClassID);
+        Account account = (Account) request.getSession().getAttribute("account");
+        NewsDAO n = new NewsDAO();
+        int UserID;
+        if (account != null) {
+            UserID = account.getUserId();
+        } else {
+            // If account is null, set UserID to 0
+            UserID = 4;
+        }
 
-        response.sendRedirect("class");
-//        String test = TeacherID; 
-//        request.setAttribute("test", test);
-//    request.getRequestDispatcher("jsp/test.jsp").forward(request, response);
+        String content = request.getParameter("content");
+        int ParentID;
+        if (request.getParameter("parentId") != null) {
+            ParentID = Integer.parseInt(request.getParameter("parentId"));
 
+        }else{ 
+            ParentID = 0;
+        }
+        int newsID = Integer.parseInt(request.getParameter("newsId"));
+
+        n.addComment(content, UserID, newsID, ParentID);
+        response.sendRedirect("news-display-detail?newsId=" + newsID);
     }
 
     /**

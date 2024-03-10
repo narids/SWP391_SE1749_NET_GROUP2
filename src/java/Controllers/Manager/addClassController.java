@@ -60,7 +60,7 @@ public class addClassController extends HttpServlet {
             throws ServletException, IOException {
 //        processRequest(request, response);
         ClassDAO t = new ClassDAO();
-       List<String> TeacherIDs = t.getTeacherIDs();
+       List<Integer> TeacherIDs = t.getTeacherIDs();
         request.setAttribute("TeacherIDs", TeacherIDs);
         request.getRequestDispatcher("jsp/add-class.jsp").forward(request, response);
     }

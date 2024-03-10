@@ -259,6 +259,7 @@ public class AccountDAO extends DBContext<BaseEntity> {
         return false;
     }
 
+ 
 //    @Override
 //    public ArrayList<Account> list() {
 //
@@ -337,6 +338,7 @@ public class AccountDAO extends DBContext<BaseEntity> {
 //    public void delete(Account model) {
 //        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
 //    }
+
     @Override
     public ArrayList<BaseEntity> list() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
