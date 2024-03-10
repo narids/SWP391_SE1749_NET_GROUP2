@@ -3,7 +3,7 @@
     Created on : Feb 18, 2024, 4:00:27 PM
     Author     : win
 --%>
-
+<%@page import="Ultils.ConvertTime" %>
 <jsp:useBean id="adao" class="DAOs.AnswerDAO" scope="request"></jsp:useBean>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -271,16 +271,7 @@
                                                 </c:if>
                                             </c:forEach>
                                             <div>Correct questions: <%= i %>/${requestScope.ltQuestion.size()}</div>
-                                            <div>Time: ${time}</div>
-                                        </div>
-                                        <div class="course-info-list">
-                                            <ul class="navbar">
-                                                <li>
-                                                    <a class="nav-link" href="quiz-history"
-                                                       ><i class="ti-zip"></i>History</a
-                                                    >
-                                                </li>
-                                            </ul>
+                                            <div>Time: ${ConvertTime.secondsToTime(time)}</div>
                                         </div>
                                         <div style="margin-top: 10px" class="scroll-page">
                                             <% i = 1; %>
