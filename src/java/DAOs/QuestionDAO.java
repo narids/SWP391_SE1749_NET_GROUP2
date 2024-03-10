@@ -54,6 +54,32 @@ public class QuestionDAO extends DBContext<BaseEntity> {
         }
         return null;
     }
+    
+    public List<Question> getQuestionByQuiz(int quizId) {
+        List<Question> ltQuestion = new ArrayList<>();
+        try {
+            String strSelect = "SELECT q1.*, QuizID FROM Question q1 \n" +
+"                    LEFT JOIN QuizQuestion q2 \n" +
+"                    ON q1.QuestionID = q2.QuestionID \n" +
+"                    WHERE QuizID = ?";
+            PreparedStatement stm = connection.prepareStatement(strSelect);
+            stm.setInt(1, quizId); 
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Question question = new Question();
+                
+                question.setQuestionId(rs.getInt("QuestionId"));
+                question.setQuestionContent(rs.getString("Question_Content"));
+                question.setExplain(rs.getString("Explain"));
+                question.setImageUrl(rs.getString("ImageURL"));
+                question.setSubjectId(rs.getInt("SubjectId"));         
+                ltQuestion.add(question);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return ltQuestion;
+    }
 
     public List<Answer> getAnswersByQuestionID(int id) {
         List<Answer> list = new ArrayList<>();
@@ -80,6 +106,28 @@ public class QuestionDAO extends DBContext<BaseEntity> {
             Logger.getLogger(QuizDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+    
+    public int numQuestionInQuiz(int quizId) {
+        try {
+            String strSelect = "SELECT COUNT(*) FROM QuizQuestion WHERE QuizId = ?";
+            PreparedStatement stm = connection.prepareStatement(strSelect);
+            stm.setInt(1, quizId);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return -1;
+    }
+    
+    public static void main(String[] args) {
+        List<Question> lt = new QuestionDAO().getQuestionByQuiz(2);
+        for (Question question : lt) {
+            System.out.println(question);
+        }
     }
 
     @Override
