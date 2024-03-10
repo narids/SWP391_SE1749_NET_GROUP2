@@ -881,8 +881,6 @@
 
                                                                 }
 
-
-
                                                                 $('#deleteAnswerSubmit').click(function () {
                                                                     let questionClass = ".questionCard." + questionID;
                                                                     const indexOfQuestionUpdate = $(questionClass).index() + 1;
@@ -934,12 +932,18 @@
                                                                             let color = "green";
 
                                                                             switch (data) {
-                                                                                case "success":
-                                                                                    $('#deleteCardModal').modal('hide');
-                                                                                    break;
                                                                                 case "failed":
                                                                                     text = "Delete failed!";
                                                                                     color = "red";
+                                                                                    break;
+
+                                                                                default :
+                                                                                    let parent = document.getElementById("quizzes");
+
+                                                                                    $("#quizzes").empty();
+                                                                                    parent.insertAdjacentHTML('beforeend', data);
+
+                                                                                    $('#deleteCardModal').modal('hide');
                                                                                     break;
                                                                             }
 

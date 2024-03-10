@@ -341,11 +341,64 @@ public class QuizController extends HttpServlet {
                         break;
                     case "deleteQuestion":
                         if (quizDAO.removeQuestionInQuiz(quizID, questionID)) {
-                            out.print("success");
+                            QuestionDAO questionDAO = new QuestionDAO();
+                            List<Question> questions = questionDAO.getQuestionAndAnswersByQuizId(quizID);
+
+                            out.print("<h4>Question & Answers (" + questions.size() + ")</h4>\n"
+                                    + "                                        <ul class=\"curriculum-list\">\n");
+
+                            for (int i = 0; i < questions.size(); i++) {
+                                Question q2 = questions.get(i);
+                                List<Answer> listAnswers = questions.get(i).getAnswers();
+                                String correctAnswer4 = "";
+                                char type4 = (char) ('A' + i);
+
+                                out.print("                                                <li class=\"questionCard " + q2.getQuestionId() + "\">\n"
+                                        + "                                                    <div style=\"width: 100%; min-width: 135px\">\n"
+                                        + "                                                        <h5><span>" + (i + 1) + ", </span>" + q2.getQuestionContent() + "</h5>\n"
+                                        + "                                                        <ul>\n"
+                                        + "                                                            <li style=\"padding: 15px 0 0 0; border: none\">\n"
+                                        + "                                                                <div class=\"curriculum-list-box\">\n");
+
+                                for (int j = 0; j < listAnswers.size(); j++) {
+                                    Answer a4 = listAnswers.get(i);
+
+                                    out.print("                                                                        <div style=\"display: flex; gap: 10px\">\n"
+                                            + "                                                                            <h5>" + type4 + ".</h5> " + a4.getAnswerContent() + "\n"
+                                            + "                                                                        </div>\n");
+
+                                    if (a4.isIsCorrect()) {
+                                        if (correctAnswer4 == "") {
+                                            correctAnswer4 += type4;
+                                        } else {
+                                            correctAnswer4 = correctAnswer4 + ", " + type4;
+                                        }
+                                    }
+                                }
+
+                                out.print("                                                                </div>\n"
+                                        + "                                                            </li>\n"
+                                        + "                                                        </ul>\n"
+                                        + "                                                    </div>\n"
+                                        + "                                                    <h5 style=\"color: green; border-left: 1px solid lightgray; padding: 0 35px; min-width: 120px; width: 120px\">" + correctAnswer4 + "</h5>\n");
+
+                                if (account.getRole().getRoleId() != 4) {
+                                    out.print("                                                        <div class=\"questionCardAction\">\n"
+                                            + "                                                            <i onclick=\"updateQuestionBtnClick(" + q2.getQuestionId() + ", " + quizID + ")\" data-bs-toggle=\"modal\" data-bs-target=\"#updateCardModal\" title=\"Update\" class=\"bi bi-pencil-fill\" style=\"color: orange; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid #cccccc\"></i>\n"
+                                            + "                                                            <i onclick=\"deleteQuestionBtnClick(" + q2.getQuestionId() + ", " + quizID + ")\" data-bs-toggle=\"modal\" data-bs-target=\"#deleteCardModal\" title=\"Delete\" class=\"bi bi-trash3-fill\" style=\"color: red; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center\"></i>\n"
+                                            + "                                                        </div>\n");
+                                }
+
+                                out.print("                                                </li>\n");
+                            }
+
+                            out.print("                                        </ul>");
+
                         } else {
                             out.print("failed");
                         }
                         break;
+
                     default:
                         throw new AssertionError();
                 }
