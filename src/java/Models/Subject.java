@@ -8,19 +8,19 @@ package Models;
  *
  * @author owner
  */
-public class Subject {
+public class Subject extends BaseEntity{
 
     private int subjectId;
     private String subjectName;
     private int subDeId;
     private String subDetail;
 
-    private SubjectDemension subDe;
+    private SubjectDimension subDe;
 
     public Subject() {
     }
 
-    public Subject(int subjectId, String subjectName, int subDeId, String subDetail, SubjectDemension subDe) {
+    public Subject(int subjectId, String subjectName, int subDeId, String subDetail, SubjectDimension subDe) {
         this.subjectId = subjectId;
         this.subjectName = subjectName;
         this.subDeId = subDeId;
@@ -60,11 +60,11 @@ public class Subject {
         this.subDetail = subDetail;
     }
 
-    public SubjectDemension getSubDe() {
+    public SubjectDimension getSubDe() {
         return subDe;
     }
 
-    public void setSubDe(SubjectDemension subDe) {
+    public void setSubDe(SubjectDimension subDe) {
         this.subDe = subDe;
     }
 

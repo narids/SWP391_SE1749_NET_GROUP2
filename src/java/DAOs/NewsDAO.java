@@ -4,6 +4,7 @@
  */
 package DAOs;
 
+import Models.BaseEntity;
 import Models.News;
 import Models.NewsComment;
 import java.io.File;

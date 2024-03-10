@@ -1,0 +1,45 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package Controllers.Common;
+
+import DAOs.SubjectDeDAO;
+import Models.SubjectDimension;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
+
+/**
+ *
+ * @author User
+ */
+@WebServlet(name = "SubDimensionDetailController", urlPatterns = {"/subdidetail"})
+
+public class SubDimensionDetailController extends HttpServlet {
+
+    SubjectDeDAO subde = new SubjectDeDAO();
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int id = Integer.parseInt(request.getParameter("subjectdeid"));
+        SubjectDimension subd = subde.getbyID(id);
+        request.setAttribute("subdedetail", subd);
+        request.getRequestDispatcher("jsp/subdedetail.jsp").forward(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String content = request.getParameter("subdiname");
+        String explain = request.getParameter("subdidetail");
+        int id = Integer.parseInt(request.getParameter("subjectdeid"));
+        SubjectDeDAO sub = new SubjectDeDAO();
+        sub.updateDi(content, explain, id);
+        response.sendRedirect("subdelist");
+    }
+
+}

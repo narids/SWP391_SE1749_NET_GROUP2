@@ -2,11 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package DAOs;
+package Models;
 
 /**
  *
- * @author admin
+ * @author User
  */
 public abstract class BaseEntity {
     public String name;
@@ -25,6 +25,4 @@ public abstract class BaseEntity {
     public void setName(String name) {
         this.name = name;
     }
-    
-    
 }
