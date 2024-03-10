@@ -71,7 +71,9 @@ public class QuestionDAO extends DBContext<Question> {
                 question.setQuestionContent(rs.getString("Question_Content"));
                 question.setExplain(rs.getString("Explain"));
                 question.setImageUrl(rs.getString("ImageURL"));
-                question.setSubjectId(rs.getInt("SubjectId"));         
+                Subject sub = new Subject();
+                sub.setSubjectId(rs.getInt("SubjectId"));
+                question.setSubject(sub);
                 ltQuestion.add(question);
             }
         } catch (SQLException e) {

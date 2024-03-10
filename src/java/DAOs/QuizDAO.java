@@ -4,6 +4,7 @@
  */
 package DAOs;
 
+import Models.Answer;
 import Models.BaseEntity;
 import Models.ClassSubject;
 import Models.MyClass;

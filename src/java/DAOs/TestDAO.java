@@ -4,6 +4,7 @@
  */
 package DAOs;
 
+import Models.BaseEntity;
 import Models.Test;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
