@@ -5,12 +5,12 @@
 package Models;
 
 import java.util.Date;
-
-/**
+import DAOs.BaseEntity;
+/*
  *
  * @author admin
  */
-public class News {
+public class News extends BaseEntity{
 
     private int newsId;
     private String title;

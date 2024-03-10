@@ -3,14 +3,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Models;
-
+import DAOs.BaseEntity;
 import java.util.Date;
 
 /**
  *
  * @author admin
  */
-public class NewsComment {
+public class NewsComment extends BaseEntity {
 
     private int commentId;
     private String content;
@@ -33,6 +33,15 @@ public class NewsComment {
         this.newsId = newsId;
         this.news = news;
     }
+//        public NewsComment(int commentId, String content, int parentId, Date createdDay,String name, int newsId, News news) {
+//        this.commentId = commentId;
+//        this.content = content;
+//        this.parentId = parentId;
+//        this.createdDay = createdDay;
+//        this.name=name;
+//        this.newsId = newsId;
+//        this.news = news;
+//    }
 
     public int getCommentId() {
         return commentId;
