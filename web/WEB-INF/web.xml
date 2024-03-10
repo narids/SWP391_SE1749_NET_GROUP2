@@ -55,6 +55,10 @@
         <servlet-name>NewsCommentController</servlet-name>
         <servlet-class>Controllers.Common.NewsCommentController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>NewsDeleteController</servlet-name>
+        <servlet-class>Controllers.Common.NewsDeleteController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/login</url-pattern>
@@ -106,6 +110,10 @@
     <servlet-mapping>
         <servlet-name>NewsCommentController</servlet-name>
         <url-pattern>/NewsComment</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NewsDeleteController</servlet-name>
+        <url-pattern>/DeleteComment</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>3000</session-timeout>

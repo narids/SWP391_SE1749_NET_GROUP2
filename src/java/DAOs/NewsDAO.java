@@ -311,6 +311,30 @@ public class NewsDAO extends DBContext<BaseEntity> {
         }
     }
 
+    public void deleteCommentByParentID(int ParentID) {
+        try {
+            String strSQL = "DELETE FROM [NewsComment] WHERE ParentID = ?";
+
+            PreparedStatement statement = connection.prepareStatement(strSQL);
+            statement.setInt(1, ParentID);
+            statement.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("getListUsers:" + e.getMessage());
+        }
+    }
+
+    public void deleteCommentByCommentID(int CommentID) {
+        try {
+            String strSQL = "DELETE FROM [NewsComment] WHERE CommentID = ?";
+
+            PreparedStatement statement = connection.prepareStatement(strSQL);
+            statement.setInt(1, CommentID);
+            statement.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("getListUsers:" + e.getMessage());
+        }
+    }
+
     public News getNewsById(int id) {
         String sql = "SELECT * FROM News WHERE NewsID = ?";
         try {
@@ -402,6 +426,21 @@ public class NewsDAO extends DBContext<BaseEntity> {
             statement.setInt(4, status);
             statement.setInt(5, newsId);
             statement.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("getListUsers:" + e.getMessage());
+        }
+    }
+
+    public void updateComment(String content, int commentID) {
+        try {
+            String strSQL = "UPDATE [NewsComment] SET [Content] = ? where [CommentID] = ?";
+            PreparedStatement statement = connection.prepareStatement(strSQL);
+
+            statement.setString(1, content);
+            statement.setInt(2, commentID);
+
+            // Execute the update
+            int rowsUpdated = statement.executeUpdate();
         } catch (Exception e) {
             System.out.println("getListUsers:" + e.getMessage());
         }

@@ -120,7 +120,7 @@
                     <div class="comment-form">
                         <h2>Comment</h2>
                         <form action="NewsComment" method="post">
-                             <input type="hidden" name="newsId" id="newsId" value="${param.newsId}">
+                            <input type="hidden" name="newsId" id="newsId" value="${param.newsId}">
                             <textarea id="comment" name="content" rows="4" required></textarea>
                             <br>
                             <button type="submit">Submit Comment</button>
@@ -128,29 +128,58 @@
 
                         </form>
                     </div>
-  
+
                     <ul>
                         <% for(NewsComment parentComment : commentList) {
-        if(parentComment.getParentId() == 0) { %>
+                            if(parentComment.getParentId() == 0) { %>
                         <li>
-                            <strong><%= parentComment.getContent() %></strong>
+                            <strong><%= parentComment.getName() %>: <%= parentComment.getContent() %></strong>
 
                             <!-- Reply form for parent comment -->
                             <div class="reply-form">
                                 <form action="NewsComment" method="post">
-                                     <input type="hidden" name="newsId" id="newsId" value="${param.newsId}">
+                                    <input type="hidden" name="newsId" id="newsId" value="${param.newsId}">
                                     <input type="hidden" name="parentId" value="<%= parentComment.getCommentId() %>">
                                     <textarea id="reply" name="content" rows="2" required></textarea>
                                     <button type="submit">Reply</button>
                                 </form>
                             </div>
-
+                            <!-- Delete and Update buttons for parent comment -->
+                            <div class="comment-actions">
+                                <form action="DeleteComment" method="post">
+                                    <input type="hidden" name="newsId" id="newsId" value="${param.newsId}">
+                                    <input type="hidden" name="commentId" value="<%= parentComment.getCommentId() %>">
+                                    <button type="submit">Delete</button>
+                                </form> 
+                                <button class="toggle-update">Update</button>
+                                <form action="UpdateComment" method="post" class="update-form" style="display:none;">
+                                    <input type="hidden" name="newsId" id="newsId" value="${param.newsId}">
+                                    <input type="hidden" name="commentId" value="<%= parentComment.getCommentId() %>">
+                                    <input id="updateComment" name="content"  value="<%= parentComment.getContent() %>" required>
+                                    <button type="submit">Update</button>
+                                </form>
+                            </div>
                             <ul>
                                 <% for(NewsComment childComment : commentList) {
                         if(childComment.getParentId() == parentComment.getCommentId()) { %>
                                 <li>
-                                    <strong><%= childComment.getContent() %></strong>
+                                    <strong><%= childComment.getName() %>: <%= childComment.getContent() %></strong>
                                     <!-- No reply form for child comment -->
+                                    <!-- Delete and Update buttons for child comment -->
+                                    <div class="comment-actions">
+                                        <form action="DeleteComment" method="post">
+                                            <input type="hidden" name="newsId" id="newsId" value="${param.newsId}">
+                                            <input type="hidden" name="commentId" value="<%= childComment.getCommentId() %>">
+                                            <button type="submit">Delete</button>
+                                        </form>
+                                        <button class="toggle-update">Update</button>
+                                        <form action="UpdateComment" method="post" class="update-form" style="display:none;">
+                                            <input type="hidden" name="newsId" id="newsId" value="${param.newsId}">
+                                            <input type="hidden" name="commentId" value="<%= childComment.getCommentId() %>">
+                                            <input id="content" name="content" value="<%= childComment.getContent() %>" required>
+                                            <button type="submit">Update</button>
+                                        </form>
+                                    </div>
                                 </li>
                                 <% }
                     } %>
@@ -159,7 +188,7 @@
                         <% }
     } %>
                     </ul>
-                   
+
                     </body>
                     <!-- contact area END -->
 
@@ -275,6 +304,20 @@
             </div>
             <!-- External JavaScripts -->
             <script src="assets/js/jquery.min.js"></script>
+            <script>
+                // JavaScript to toggle update form visibility
+                var toggleButtons = document.querySelectorAll('.toggle-update');
+                toggleButtons.forEach(function (button) {
+                    button.addEventListener('click', function () {
+                        var updateForm = this.nextElementSibling; // Assuming the update form is the next element
+                        if (updateForm.style.display === 'none' || updateForm.style.display === '') {
+                            updateForm.style.display = 'block';
+                        } else {
+                            updateForm.style.display = 'none';
+                        }
+                    });
+                });
+            </script>
             <script src="assets/vendors/bootstrap/js/popper.min.js"></script>
             <script src="assets/vendors/bootstrap/js/bootstrap.min.js"></script>
             <script src="assets/vendors/bootstrap-select/bootstrap-select.min.js"></script>
