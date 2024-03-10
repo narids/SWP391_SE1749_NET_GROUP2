@@ -6,10 +6,12 @@ package Controllers.Common;
 
 import DAOs.AccountDAO;
 import DAOs.QuizDAO;
+import DAOs.TestDAO;
 import Models.Account;
 import Models.ClassSubject;
 import Models.Student;
 import Models.Teacher;
+import Models.Test;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -80,6 +82,8 @@ public class CatalogController extends HttpServlet {
 
                 request.setAttribute("quizzes", quizzesByStudentID);
             }
+            List<Test> ltScore = new TestDAO().getListScore(account.getUserId());
+            request.setAttribute("ltScore", ltScore);
             request.setAttribute("account", account);
             request.getRequestDispatcher("jsp/catalog.jsp").forward(request, response);
 
@@ -114,12 +118,12 @@ public class CatalogController extends HttpServlet {
                 String confirmPassword = request.getParameter("confirmPassword");
 
                 if (currentPassword.equals(newPassword)) {
-                    try (PrintWriter out = response.getWriter()) {
+                    try ( PrintWriter out = response.getWriter()) {
                         out.print("duplicate");
                     }
 
                 } else if (!newPassword.equals(confirmPassword)) {
-                    try (PrintWriter out = response.getWriter()) {
+                    try ( PrintWriter out = response.getWriter()) {
                         out.print("notMatch");
                     }
 
@@ -127,13 +131,13 @@ public class CatalogController extends HttpServlet {
                     Account accCheck = adb.getAccount(account.getUsername(), currentPassword);
 
                     if (accCheck == null) {
-                        try (PrintWriter out = response.getWriter()) {
+                        try ( PrintWriter out = response.getWriter()) {
                             out.print("passNotCorrect");
                         }
                     } else {
                         adb.resetPass(newPassword, account.getEmail());
 
-                        try (PrintWriter out = response.getWriter()) {
+                        try ( PrintWriter out = response.getWriter()) {
                             out.print("success");
                         }
                     }
@@ -243,7 +247,7 @@ public class CatalogController extends HttpServlet {
                         quizzes = quizDAO.getQuizzesByStudentID(sql);
                     }
 
-                    try (PrintWriter out = response.getWriter()) {
+                    try ( PrintWriter out = response.getWriter()) {
                         String dataPrint = "";
 
                         for (ClassSubject q : quizzes) {
@@ -293,7 +297,7 @@ public class CatalogController extends HttpServlet {
                                     + "                                                                        </div>\n"
                                     + "                                                                    </div>\n"
                                     + "                                                                </li>\n";
-                            
+
                             dataPrint += dataPrintTemp;
                         }
 
@@ -301,7 +305,7 @@ public class CatalogController extends HttpServlet {
                     }
 
                 } catch (Exception e) {
-                    try (PrintWriter out = response.getWriter()) {
+                    try ( PrintWriter out = response.getWriter()) {
                         out.print("");
                     }
                 }
@@ -322,7 +326,7 @@ public class CatalogController extends HttpServlet {
 
                 sql += id;
 
-                try (PrintWriter out = response.getWriter()) {
+                try ( PrintWriter out = response.getWriter()) {
                     if (quizDAO.updateQuizWithSql(sql)) {
                         if (type.equals("toPublish")) {
                             out.print("<span style=\"color: green;\">Publish</span> <i onclick=\"updateStatus(" + id + ", 'toPrivate')\" class=\"bi bi-arrow-repeat quizStatusBtn noClick\" style=\"font-size: 19px; cursor: pointer\"></i>");
