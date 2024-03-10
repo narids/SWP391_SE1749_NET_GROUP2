@@ -5,7 +5,6 @@
 package Models;
 
 import java.util.Date;
-import DAOs.BaseEntity;
 /*
  *
  * @author admin
