@@ -5,16 +5,15 @@
 package DAOs;
 
 import Models.Answer;
-import Models.ClassSubject;
-import Models.MyClass;
+
 import Models.Question;
-import Models.Quiz;
 import Models.Subject;
-import Models.Teacher;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,7 +22,7 @@ import java.util.logging.Logger;
  *
  * @author owner
  */
-public class QuestionDAO extends DBContext<BaseEntity> {
+public class QuestionDAO extends DBContext<Question> {
 
     public List<Question> getQuestionAndAnswersByQuizId(String id) {
         List<Question> ltQuestion = new ArrayList<>();
@@ -82,28 +81,70 @@ public class QuestionDAO extends DBContext<BaseEntity> {
         return null;
     }
 
+    public void addQuestion(String content, String image, String explain, String subname) {
+        try {
+            String sql = "insert into Question (Question_Content,Created_Day,ImageURL,Explain,SubjectId) \n"
+                    + "values (?,?,?,?,?)";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, content);
+            statement.setString(2, new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+            statement.setString(3, image);
+            statement.setString(4, explain);
+            SubjectDAO sub = new SubjectDAO();
+            int subid = sub.getIDbyName(subname);
+            statement.setInt(5, subid);
+            statement.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("getListUsers:" + e.getMessage());
+        }
+    }
+
     @Override
-    public ArrayList<BaseEntity> list() {
+    public ArrayList<Question> list() {
+        ArrayList<Question> lis = new ArrayList<>();
+        try {
+            String sql = "Select q.QuestionID, q.Question_Content,s.SubjectName \n"
+                    + "from  Question q Inner join Subject s \n"
+                    + "on q.SubjectId = s.SubjectID";
+            if (connection != null && !connection.isClosed()) {
+                PreparedStatement statement = connection.prepareStatement(sql);
+                ResultSet rs = statement.executeQuery();
+                while (rs.next()) {
+                    Question ques = new Question();
+                    ques.setQuestionId(rs.getInt("QuestionID"));
+                    ques.setQuestionContent(rs.getString("Question_Content"));
+                    Subject sub = new Subject();
+                    sub.setSubjectName(rs.getString("SubjectName"));
+                    ques.setSubject(sub);
+                    lis.add(ques);
+                }
+                // Other database operations
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(QuestionDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return lis;
+    }
+
+    @Override
+    public void insert(Question entity) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public void insert(BaseEntity entity) {
+    public void update(Question entity) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public void update(BaseEntity entity) {
+    public void delete(Question entity) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public void delete(BaseEntity entity) {
+    public Question get(Question entity) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    @Override
-    public BaseEntity get(BaseEntity entity) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 }

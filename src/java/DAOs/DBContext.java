@@ -1,5 +1,6 @@
 package DAOs;
 
+import Models.BaseEntity;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -16,9 +17,9 @@ public abstract class DBContext<T extends BaseEntity> {
 
     public DBContext() {
         try {
-            String url = "jdbc:sqlserver://NGHIAHOANGPHU\\SQLEXPRESS:1433;databaseName=Group2_SWP319_SE1749";
-            String user = "sa";
-            String pass = "123";
+            String url = "jdbc:sqlserver://LAPTEO\\SQLEXPRESS:1433;databaseName=Group2_SWP319_SE1749";
+            String user = "hung";
+            String pass = "1234";
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             connection = DriverManager.getConnection(url, user, pass);
         } catch (ClassNotFoundException ex) {

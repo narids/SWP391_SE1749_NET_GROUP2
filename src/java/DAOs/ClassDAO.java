@@ -4,6 +4,7 @@
  */
 package DAOs;
 
+import Models.BaseEntity;
 import Models.MyClass;
 import Models.Student;
 import java.sql.PreparedStatement;

@@ -1,6 +1,5 @@
 package Models;
 
-import DAOs.BaseEntity;
 import java.util.Date;
 
 /**

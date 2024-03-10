@@ -4,12 +4,13 @@
  */
 package DAOs;
 
+import Models.BaseEntity;
 import Models.ClassSubject;
 import Models.MyClass;
 import Models.Question;
 import Models.Quiz;
 import Models.Subject;
-import Models.SubjectDemension;
+import Models.SubjectDimension;
 import Models.Teacher;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -81,7 +82,7 @@ public class QuizDAO extends DBContext<BaseEntity> {
         return ltSubject;
     }
 
-    public SubjectDemension getSubDeById(int id) {
+    public SubjectDimension getSubDeById(int id) {
         String sql = "SELECT * "
                 + "FROM SubjectDemension "
                 + "WHERE SubDeID = ?";
@@ -90,7 +91,7 @@ public class QuizDAO extends DBContext<BaseEntity> {
             stm.setInt(1, id);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
-                SubjectDemension subDe = new SubjectDemension(
+                SubjectDimension subDe = new SubjectDimension(
                         rs.getInt("SubDeID"),
                         rs.getString("SubDeName"),
                         rs.getString("SubDeDetail"));

@@ -11,7 +11,7 @@ import java.util.List;
  *
  * @author khanhlinh
  */
-public class Question {
+public class Question extends BaseEntity{
 
     private int questionId;
     private List<Answer> answers;
@@ -19,7 +19,6 @@ public class Question {
     private Date createdDay;
     private String imageUrl;
     private String explain;
-    private int subjectId;
     private Subject subject;
 
     // Default constructor
@@ -27,14 +26,13 @@ public class Question {
     }
 
     // Parameterized constructor
-    public Question(int questionId, List<Answer> answers, String questionContent, Date createdDay, String imageUrl, String explain, int subjectId, Subject subject) {
+    public Question(int questionId, List<Answer> answers, String questionContent, Date createdDay, String imageUrl, String explain, Subject subject) {
         this.questionId = questionId;
         this.answers = answers;
         this.questionContent = questionContent;
         this.createdDay = createdDay;
         this.imageUrl = imageUrl;
         this.explain = explain;
-        this.subjectId = subjectId;
         this.subject = subject;
     }
 
@@ -84,14 +82,6 @@ public class Question {
 
     public void setExplain(String explain) {
         this.explain = explain;
-    }
-
-    public int getSubjectId() {
-        return subjectId;
-    }
-
-    public void setSubjectId(int subjectId) {
-        this.subjectId = subjectId;
     }
 
     public Subject getSubject() {

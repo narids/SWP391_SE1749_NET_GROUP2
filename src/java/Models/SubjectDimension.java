@@ -8,16 +8,16 @@ package Models;
  *
  * @author owner
  */
-public class SubjectDemension {
+public class SubjectDimension extends BaseEntity{
 
     private int subDeId;
     private String subDeName;
     private String subDeDetail;
 
-    public SubjectDemension() {
+    public SubjectDimension() {
     }
 
-    public SubjectDemension(int subDeId, String subDeName, String subDeDetail) {
+    public SubjectDimension(int subDeId, String subDeName, String subDeDetail) {
         this.subDeId = subDeId;
         this.subDeName = subDeName;
         this.subDeDetail = subDeDetail;

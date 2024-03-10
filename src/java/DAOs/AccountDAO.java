@@ -5,6 +5,7 @@
 package DAOs;
 
 import Models.Account;
+import Models.BaseEntity;
 import Models.Role;
 import Models.Student;
 import Models.Teacher;
@@ -85,7 +86,7 @@ public class AccountDAO extends DBContext<BaseEntity> {
             if (rs.next()) {
                 Student t = new Student();
                 t.setUserId(rs.getInt(1));
-                t.setStudentId(rs.getString(2));
+                t.setStudentId(rs.getInt(2));
 
                 return t;
             }
@@ -95,6 +96,42 @@ public class AccountDAO extends DBContext<BaseEntity> {
         return null;
     }
 
+    public int getTeacherByUserID(int id){
+        try {
+            String sql = "SELECT [TeacherID]\n"
+                    + "  FROM [Teacher]\n"
+                    + "  where UserID = ?";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, id);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                
+               int t = rs.getInt("TeacherID");
+                return t;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+    public Student getStudentByUserID(int id){
+        try {
+            String sql = "SELECT [StudentID]\n"
+                    + "  FROM [Student]\n"
+                    + "  where UserID = ?";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, id);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                Student t = new Student();
+                t.setStudentId(rs.getInt("StudentID"));
+                return t;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
     public String getTeacherFullname(int id) {
         try {
             String sql = "SELECT Teacher.UserID, Teacher.TeacherID, Account.Username, Account.Firstname, Account.Lastname\n"
