@@ -1,26 +1,24 @@
-/*+
+/*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controllers.Manager;
+package Controllers.Common;
 
-import DAOs.ClassDAO;
-import Models.Account;
-import Models.MyClass;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.List;
 
 /**
  *
- * @author nghia
+ * @author admin
  */
-public class ClassDetailController extends HttpServlet {
+@WebServlet(name = "LogoutController", urlPatterns = {"/logout"})
+public class LogoutController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,19 +31,8 @@ public class ClassDetailController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ClassDetailController</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ClassDetailController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+        request.getSession().invalidate();
+        request.getRequestDispatcher("jsp/login.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -60,25 +47,7 @@ public class ClassDetailController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ClassDAO t = new ClassDAO();
-        int ClassID = Integer.parseInt(request.getParameter("id"));
-        
-        HttpSession session = request.getSession();
-        
-        String TeacherID = t.getTeacherByClassID(ClassID);
-        request.setAttribute("TeacherID", TeacherID);
-
-        List<Integer> TeacherIDs = t.getTeacherIDs();
-        request.setAttribute("TeacherIDs", TeacherIDs);
-
-        MyClass ClassSelected = t.getClassesByID(ClassID);
-        request.setAttribute("classSelected", ClassSelected);
-        
-        session.setAttribute("Classid", ClassID);
-//        int numStudent = t.getNumberOfStudentInClass(ClassID);
-//        request.setAttribute("num", numStudent);
-
-        request.getRequestDispatcher("jsp/ClassDetail.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /**
@@ -92,17 +61,7 @@ public class ClassDetailController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ClassDAO t = new ClassDAO();
-        String TeacherID = request.getParameter("HiddenTeacherID");
-        int ClassID = Integer.parseInt(request.getParameter("ClassId"));
-        
-        t.updateClass(TeacherID, ClassID);
-
-        response.sendRedirect("class");
-//        String test = TeacherID; 
-//        request.setAttribute("test", test);
-//    request.getRequestDispatcher("jsp/test.jsp").forward(request, response);
-
+        processRequest(request, response);
     }
 
     /**

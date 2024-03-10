@@ -83,7 +83,7 @@
                 transition: opacity 0.7s;
             }
 
-            .show {
+            .toast.show {
                 opacity: 1 !important;
                 visibility: visible !important;
             }
@@ -93,7 +93,7 @@
     <body id="bg">
         <div class="page-wraper">
 
-            <div id="toast"></div>
+            <div id="toast" class="toast"></div>
 
             <div id="loading-icon-bx"></div>
             <div class="account-form">

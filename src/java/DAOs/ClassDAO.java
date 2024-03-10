@@ -208,9 +208,9 @@ public class ClassDAO extends DBContext<BaseEntity> {
         return TeacherID; // Moved the return statement outside the try-catch block
     }
 
-    public List<String> getTeacherIDs() {
+    public List<Integer> getTeacherIDs() {
         String sql = "select TeacherID from Teacher";
-        List<String> teacherIDs = new ArrayList<>();
+        List<Integer> teacherIDs = new ArrayList<>();
         try {
             // Check if connection is null or not
             if (connection != null) {
@@ -218,7 +218,7 @@ public class ClassDAO extends DBContext<BaseEntity> {
                 ResultSet resultSet = statement.executeQuery();
 
                 while (resultSet.next()) {
-                    teacherIDs.add(resultSet.getString("TeacherID"));
+                    teacherIDs.add(resultSet.getInt("TeacherID"));
                 }
 
                 resultSet.close();

@@ -8,11 +8,14 @@ import DAOs.AccountDAO;
 import DAOs.QuestionDAO;
 import DAOs.QuizDAO;
 import Models.Account;
+import Models.Answer;
 import Models.ClassSubject;
 import Models.Question;
 import Models.Quiz;
 import Models.Student;
 import Models.Teacher;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -21,6 +24,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -122,10 +127,10 @@ public class QuizController extends HttpServlet {
 
                 if (quizzes != null && quizzes.size() > 0) {
                     QuestionDAO questionDAO = new QuestionDAO();
-                    
+
                     ClassSubject quiz = quizzes.get(0);
                     List<Question> questions = questionDAO.getQuestionAndAnswersByQuizId(id);
-                    
+
                     request.setAttribute("teacherFullname", adb.getTeacherFullname(Integer.parseInt(quizzes.get(0).getTeacher().getTeacherId())));
                     request.setAttribute("quiz", quiz);
                     request.setAttribute("questions", questions);
@@ -152,7 +157,254 @@ public class QuizController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        HttpSession session = request.getSession();
+        Account account = (Account) session.getAttribute("account");
+
+        if (account == null) {
+            response.sendRedirect("login");
+
+        } else {
+            QuizDAO quizDAO = new QuizDAO();
+
+            String action = request.getParameter("action");
+            String quizID = request.getParameter("quizID");
+            String questionID = request.getParameter("questionID");
+            String countQuestionUpdate = request.getParameter("countQuestionUpdate");
+
+            try (PrintWriter out = response.getWriter()) {
+                switch (action) {
+                    case "getQuestion":
+                        Question q = quizDAO.getQuestionById(questionID);
+
+                        if (q != null) {
+                            List<Answer> answers = q.getAnswers();
+                            int index = 1;
+                            String showAddBtn = answers.size() > 6 ? " display: none;" : "";
+
+                            out.print("<div class=\"row placeani\">\n"
+                                    + "                                    <div class=\"col-lg-12\">\n"
+                                    + "                                        <div class=\"form-group\">\n"
+                                    + "                                            <div class=\"\">Question:</div>\n"
+                                    + "                                            <div class=\"input-group\">\n"
+                                    + "                                                <input id='questionInput' name=\"question\" placeholder=\"Enter question\" value='" + q.getQuestionContent() + "' minlength=\"6\" type=\"text\" required class=\"form-control\">\n"
+                                    + "                                                <div class=\"invalid-feedback\">\n"
+                                    + "                                                    Question must least 6 char\n"
+                                    + "                                                </div>\n"
+                                    + "                                            </div>\n"
+                                    + "                                        </div>\n"
+                                    + "                                    </div>\n"
+                                    + "                                </div>\n"
+                                    + "                                <div class=\"row placeani\">\n"
+                                    + "                                        <div class=\"col-lg-12\" style=\"display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px\">\n"
+                                    + "                                            <div>Answers:</div>\n"
+                                    + "                                            <a class=\"btn radius-xl text-uppercase\" style=\"font-size: 10px;" + showAddBtn + " padding: 7px 15px;\" onclick='addAnswerInUpdateModal()' id=\"addAnswer\">Add answer</a>\n"
+                                    + "                                        </div>"
+                                    + "                                    <div id=\"answersWrapper\" class=\"col-lg-12\" style='overflow-y: auto; height: 176px;'>\n"
+                            );
+
+                            for (Answer a : answers) {
+                                String checked = a.isIsCorrect() ? "checked" : "";
+                                char type = (char) ('A' + index - 1);
+                                out.print("<div class=\"form-group\" style=\"display: flex; align-items: center; gap: 17px;\">\n"
+                                        + "                                            <input type=\"text\" hidden name='answerID' value='" + a.getAnswerId() + "' class=\"answerID\">\n"
+                                        + "                                            <input " + checked + " type=\"checkbox\" id=\"option1\" name=\"options[]\" class=\"checkbox\">\n"
+                                        + "                                            <span>" + type + ",</span>\n"
+                                        + "                                            <span class=\"input-group\">\n"
+                                        + "                                                <input name=\"answer\" placeholder=\"Enter answer\" value='" + a.getAnswerContent() + "' minlength=\"6\" type=\"text\" required class=\"form-control\">\n"
+                                        + "                                                <div class=\"invalid-feedback\">\n"
+                                        + "                                                    Answer must least 6 char\n"
+                                        + "                                                </div>\n"
+                                        + "                                            </span>\n"
+                                        + "                                            <i onclick='removeAnswer(" + index + ")' style='cursor:pointer; color: red;' class=\"bi bi-dash-circle-fill deleteAnswer\"></i>\n"
+                                        + "                                        </div>");
+
+                                index++;
+                            }
+
+                            out.print("</div>\n"
+                                    + "                                </div>");
+                        } else {
+                            out.print("faild");
+                        }
+
+                        break;
+                    case "updateQuiz":
+
+                        break;
+                    case "updateQuestion":
+                        String questionValue = request.getParameter("questionValue");
+                        String answersJson = request.getParameter("answers");
+
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<List<Answer>>() {
+                        }.getType();
+                        List<Answer> answers = gson.fromJson(answersJson, type);
+
+                        if (quizDAO.updateQuestionInQuiz(questionID, questionValue)) {
+                            if (quizDAO.updateAnswers(answers)) {
+                                Question q2 = quizDAO.getQuestionById(questionID);
+                                List<Answer> answers2 = q2.getAnswers();
+                                String correctAnswer = "";
+
+                                out.print("<div style=\"width: 100%; min-width: 135px\">\n"
+                                        + "                                                        <h5><span>" + countQuestionUpdate + ", </span>" + q2.getQuestionContent() + "</h5>\n"
+                                        + "                                                        <ul>\n"
+                                        + "                                                            <li style=\"padding: 15px 0 0 0; border: none\">\n"
+                                        + "                                                                <div class=\"curriculum-list-box\">\n");
+
+                                for (int i = 0; i < answers2.size(); i++) {
+                                    Answer a2 = answers2.get(i);
+                                    char type2 = (char) ('A' + i);
+
+                                    out.print("                                                                        <div style=\"display: flex; gap: 10px\">\n"
+                                            + "                                                                            <h5>" + type2 + ".</h5> " + a2.getAnswerContent() + "\n"
+                                            + "                                                                        </div>");
+
+                                    if (a2.isIsCorrect()) {
+                                        if (correctAnswer == "") {
+                                            correctAnswer += type2;
+                                        } else {
+                                            correctAnswer = correctAnswer + ", " + type2;
+                                        }
+                                    }
+                                }
+
+                                out.print("                                                                </div>\n"
+                                        + "                                                            </li>\n"
+                                        + "                                                        </ul>\n"
+                                        + "                                                    </div>\n"
+                                        + "                                                    <h5 style=\"color: green; border-left: 1px solid lightgray; padding: 0 35px; min-width: 120px; width: 120px\">" + correctAnswer + "</h5>\n"
+                                );
+
+                                if (account.getRole().getRoleId() != 4) {
+                                    out.print("                                                        <div class=\"questionCardAction\">\n"
+                                            + "                                                            <i onclick=\"updateQuestionBtnClick(" + questionID + ", " + quizID + ")\" data-bs-toggle=\"modal\" data-bs-target=\"#updateCardModal\" title=\"Update\" class=\"bi bi-pencil-fill\" style=\"color: orange; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid #cccccc\"></i>\n"
+                                            + "                                                            <i onclick=\"deleteQuestionBtnClick(" + questionID + ", " + quizID + ")\" data-bs-toggle=\"modal\" data-bs-target=\"#deleteCardModal\" title=\"Delete\" class=\"bi bi-trash3-fill\" style=\"color: red; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center\"></i>\n"
+                                            + "                                                        </div>\n");
+                                }
+
+                            } else {
+                                out.print("answers_failed");
+                            }
+                        } else {
+                            out.print("question_failed");
+                        }
+
+                        break;
+                    case "deleteAnswer":
+                        String answerID = request.getParameter("answerID");
+                        if (quizDAO.removeAnswerById(answerID)) {
+                            Question q3 = quizDAO.getQuestionById(questionID);
+                            List<Answer> answers3 = q3.getAnswers();
+                            String correctAnswer = "";
+
+                            out.print("<div style=\"width: 100%; min-width: 135px\">\n"
+                                    + "                                                        <h5><span>" + countQuestionUpdate + ", </span>" + q3.getQuestionContent() + "</h5>\n"
+                                    + "                                                        <ul>\n"
+                                    + "                                                            <li style=\"padding: 15px 0 0 0; border: none\">\n"
+                                    + "                                                                <div class=\"curriculum-list-box\">\n");
+
+                            for (int i = 0; i < answers3.size(); i++) {
+                                Answer a3 = answers3.get(i);
+                                char type3 = (char) ('A' + i);
+
+                                out.print("                                                                        <div style=\"display: flex; gap: 10px\">\n"
+                                        + "                                                                            <h5>" + type3 + ".</h5> " + a3.getAnswerContent() + "\n"
+                                        + "                                                                        </div>");
+
+                                if (a3.isIsCorrect()) {
+                                    if (correctAnswer == "") {
+                                        correctAnswer += type3;
+                                    } else {
+                                        correctAnswer = correctAnswer + ", " + type3;
+                                    }
+                                }
+                            }
+
+                            out.print("                                                                </div>\n"
+                                    + "                                                            </li>\n"
+                                    + "                                                        </ul>\n"
+                                    + "                                                    </div>\n"
+                                    + "                                                    <h5 style=\"color: green; border-left: 1px solid lightgray; padding: 0 35px; min-width: 120px; width: 120px\">" + correctAnswer + "</h5>\n"
+                            );
+
+                            if (account.getRole().getRoleId() != 4) {
+                                out.print("                                                        <div class=\"questionCardAction\">\n"
+                                        + "                                                            <i onclick=\"updateQuestionBtnClick(" + questionID + ", " + quizID + ")\" data-bs-toggle=\"modal\" data-bs-target=\"#updateCardModal\" title=\"Update\" class=\"bi bi-pencil-fill\" style=\"color: orange; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid #cccccc\"></i>\n"
+                                        + "                                                            <i onclick=\"deleteQuestionBtnClick(" + questionID + ", " + quizID + ")\" data-bs-toggle=\"modal\" data-bs-target=\"#deleteCardModal\" title=\"Delete\" class=\"bi bi-trash3-fill\" style=\"color: red; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center\"></i>\n"
+                                        + "                                                        </div>\n");
+                            }
+
+                        } else {
+                            out.print("failed");
+                        }
+                        break;
+                    case "deleteQuestion":
+                        if (quizDAO.removeQuestionInQuiz(quizID, questionID)) {
+                            QuestionDAO questionDAO = new QuestionDAO();
+                            List<Question> questions = questionDAO.getQuestionAndAnswersByQuizId(quizID);
+
+                            out.print("<h4>Question & Answers (" + questions.size() + ")</h4>\n"
+                                    + "                                        <ul class=\"curriculum-list\">\n");
+
+                            for (int i = 0; i < questions.size(); i++) {
+                                Question q2 = questions.get(i);
+                                List<Answer> listAnswers = questions.get(i).getAnswers();
+                                String correctAnswer4 = "";
+                                char type4 = (char) ('A' + i);
+
+                                out.print("                                                <li class=\"questionCard " + q2.getQuestionId() + "\">\n"
+                                        + "                                                    <div style=\"width: 100%; min-width: 135px\">\n"
+                                        + "                                                        <h5><span>" + (i + 1) + ", </span>" + q2.getQuestionContent() + "</h5>\n"
+                                        + "                                                        <ul>\n"
+                                        + "                                                            <li style=\"padding: 15px 0 0 0; border: none\">\n"
+                                        + "                                                                <div class=\"curriculum-list-box\">\n");
+
+                                for (int j = 0; j < listAnswers.size(); j++) {
+                                    Answer a4 = listAnswers.get(i);
+
+                                    out.print("                                                                        <div style=\"display: flex; gap: 10px\">\n"
+                                            + "                                                                            <h5>" + type4 + ".</h5> " + a4.getAnswerContent() + "\n"
+                                            + "                                                                        </div>\n");
+
+                                    if (a4.isIsCorrect()) {
+                                        if (correctAnswer4 == "") {
+                                            correctAnswer4 += type4;
+                                        } else {
+                                            correctAnswer4 = correctAnswer4 + ", " + type4;
+                                        }
+                                    }
+                                }
+
+                                out.print("                                                                </div>\n"
+                                        + "                                                            </li>\n"
+                                        + "                                                        </ul>\n"
+                                        + "                                                    </div>\n"
+                                        + "                                                    <h5 style=\"color: green; border-left: 1px solid lightgray; padding: 0 35px; min-width: 120px; width: 120px\">" + correctAnswer4 + "</h5>\n");
+
+                                if (account.getRole().getRoleId() != 4) {
+                                    out.print("                                                        <div class=\"questionCardAction\">\n"
+                                            + "                                                            <i onclick=\"updateQuestionBtnClick(" + q2.getQuestionId() + ", " + quizID + ")\" data-bs-toggle=\"modal\" data-bs-target=\"#updateCardModal\" title=\"Update\" class=\"bi bi-pencil-fill\" style=\"color: orange; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid #cccccc\"></i>\n"
+                                            + "                                                            <i onclick=\"deleteQuestionBtnClick(" + q2.getQuestionId() + ", " + quizID + ")\" data-bs-toggle=\"modal\" data-bs-target=\"#deleteCardModal\" title=\"Delete\" class=\"bi bi-trash3-fill\" style=\"color: red; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center\"></i>\n"
+                                            + "                                                        </div>\n");
+                                }
+
+                                out.print("                                                </li>\n");
+                            }
+
+                            out.print("                                        </ul>");
+
+                        } else {
+                            out.print("failed");
+                        }
+                        break;
+
+                    default:
+                        throw new AssertionError();
+                }
+            }
+        }
+
     }
 
     /**

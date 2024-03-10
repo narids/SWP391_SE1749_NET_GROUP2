@@ -6,6 +6,7 @@ package DAOs;
 
 import Models.BaseEntity;
 import Models.News;
+import Models.NewsComment;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -255,6 +256,7 @@ public class NewsDAO extends DBContext<BaseEntity> {
     }
 
     public void addNews(String title, String summary, String content, String thumbnail, int userId, int status) {
+
         try {
             String strSQL = "INSERT INTO [dbo].[News]"
                     + "([Title],[Content],[Created_Day],"
@@ -271,6 +273,27 @@ public class NewsDAO extends DBContext<BaseEntity> {
             statement.setInt(7, userId);
             statement.setInt(8, 0);
             statement.setInt(9, status);
+
+            statement.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("getListUsers:" + e.getMessage());
+        }
+    }
+
+    public void addComment(String content, int userId, int newsId, int ParentId) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String formattedDate = dateFormat.format(new Date());
+        try {
+            String strSQL = "INSERT INTO [NewsComment]"
+                    + "([Content],[Created_Day],"
+                    + "[Created_By],[ParentID],[NewsID]) "
+                    + "VALUES(?,?,?,?,?)";
+            PreparedStatement statement = connection.prepareStatement(strSQL);
+            statement.setString(1, content);
+            statement.setDate(2, java.sql.Date.valueOf(formattedDate));
+            statement.setInt(3, userId);
+            statement.setInt(4, ParentId);
+            statement.setInt(5, newsId);
 
             statement.executeUpdate();
         } catch (Exception e) {
@@ -315,6 +338,34 @@ public class NewsDAO extends DBContext<BaseEntity> {
         return null;
     }
 
+    public List<News> getNewsByStatus(int status) {
+        String sql = "SELECT * FROM News WHERE status = ?";
+        List<News> PublicNews = new ArrayList<>();
+        try {
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, status);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                News news = new News();
+                news.setNewsId(rs.getInt("NewsID"));
+                news.setTitle(rs.getString("Title"));
+                news.setContent(rs.getString("Content"));
+                news.setCreatedDay(rs.getDate("Created_Day"));
+                news.setThumbnail(rs.getString("Thumbnail"));
+                news.setSummary(rs.getString("Summary"));
+                news.setNumberCommment(rs.getInt("NumberComment"));
+                news.setCreatedBy(rs.getInt("Created_By"));
+                news.setViewsCount(rs.getInt("ViewsCount"));
+                news.setStatus(rs.getInt("Status"));
+                PublicNews.add(news);
+            }
+            return PublicNews;
+        } catch (SQLException ex) {
+            Logger.getLogger(QuizDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
     public void updateNews(String title, String summary, String content, String thumbnail, int userId, int status, int newsId) {
         try {
             String strSQL = "UPDATE [dbo].[News] "
@@ -336,7 +387,7 @@ public class NewsDAO extends DBContext<BaseEntity> {
             System.out.println("getListUsers:" + e.getMessage());
         }
     }
-    
+
     public void updateNews(String title, String summary, String content, int userId, int status, int newsId) {
         try {
             String strSQL = "UPDATE [dbo].[News] "
@@ -357,7 +408,58 @@ public class NewsDAO extends DBContext<BaseEntity> {
         }
     }
 
-    
+    public List<NewsComment> getCommentByUserID(int id) {
+        String sql = "select * from NewsComment where UserID = ?";
+        List<NewsComment> commentList = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.prepareCall(sql);
+            statement.setInt(1, id);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                NewsComment comment = new NewsComment();
+                comment.setCommentId(rs.getInt("CommentID"));
+                comment.setContent(rs.getString("Content"));
+                comment.setCreatedDay(rs.getDate("Created_Day"));
+                comment.setCreatedBy(rs.getInt("Created_By"));
+                comment.setParentId(rs.getInt("ParentID"));
+                comment.setNewsId(rs.getInt("NewsID"));
+
+                commentList.add(comment);
+            }
+            return commentList;
+        } catch (SQLException ex) {
+            Logger.getLogger(NewsDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public List<NewsComment> getCommentByNewsID(int id) {
+        String sql = "select  NewsComment.CommentID\n"
+                + ",NewsComment.Content, NewsComment.Created_Day,NewsComment.ParentID, NewsComment.NewsID,Account.Username "
+                + "from NewsComment,Account where NewsID = ?"
+                + " and NewsComment.Created_By = Account.UserID";
+        List<NewsComment> commentList = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.prepareCall(sql);
+            statement.setInt(1, id);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                NewsComment comment = new NewsComment();
+                comment.setCommentId(rs.getInt("CommentID"));
+                comment.setContent(rs.getString("Content"));
+                comment.setCreatedDay(rs.getDate("Created_Day"));
+                comment.setName(rs.getString("Username"));
+                comment.setParentId(rs.getInt("ParentID"));
+                comment.setNewsId(rs.getInt("NewsID"));
+
+                commentList.add(comment);
+            }
+            return commentList;
+        } catch (SQLException ex) {
+            Logger.getLogger(NewsDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 
     public static void main(String[] args) {
         new NewsDAO().updateNews("1", "2", "3", 1, 0, 1);

@@ -61,19 +61,13 @@ public class NewsDetailController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int userId = 1;
         Account account = (Account) request.getSession().getAttribute("account");
-        if (account != null) {
-
-            userId = account.getRole().getRoleId();
-
-        }
+        int userId = account.getUserId();
         int newsId = Integer.parseInt(request.getParameter("newsId"));
         String title = request.getParameter("title");
         String summary = request.getParameter("summary");
         String content = request.getParameter("content");
         int status = Integer.parseInt(request.getParameter("rbStatus"));
-
         // Handle file upload
         Part filePart = request.getPart("thumbnail");
         String fileName = getSubmittedFileName(filePart);
@@ -83,9 +77,9 @@ public class NewsDetailController extends HttpServlet {
             // Save the file to the specified directory
             String filePath = uploadPath + File.separator + fileName;
             filePart.write(filePath);
-            ndao.updateNews(title, summary, content, filePath, userId, 1, newsId);
+            ndao.updateNews(title, summary, content, filePath, userId, status, newsId);
         } else {
-            ndao.updateNews(title, summary, content, userId, 1, newsId);
+            ndao.updateNews(title, summary, content, userId, status, newsId);
         }
         response.sendRedirect("news-list");
 
