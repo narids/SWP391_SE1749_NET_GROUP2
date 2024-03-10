@@ -20,11 +20,12 @@ public class Account extends BaseEntity {
     private Role role;
     private boolean status;
     private int roleId;
+    private String fullName;
 
     public Account() {
     }
 
-    public Account(int userId, String username, String email, String password, String avatar, Role role, boolean status) {
+    public Account(int userId, String username, String email, String password, String avatar, Role role, boolean status, int roleId, String fullName) {
         this.userId = userId;
         this.username = username;
         this.email = email;
@@ -32,6 +33,8 @@ public class Account extends BaseEntity {
         this.avatar = avatar;
         this.role = role;
         this.status = status;
+        this.roleId = roleId;
+        this.fullName = fullName;
     }
 
     public int getUserId() {
@@ -97,12 +100,18 @@ public class Account extends BaseEntity {
     public void setRoleId(int roleId) {
         this.roleId = roleId;
     }
-    
-    
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
 
     @Override
     public String toString() {
-        return "Account{" + "userId=" + userId + ", username=" + username + ", email=" + email + ", password=" + password + ", avatar=" + avatar + ", role=" + role + ", status=" + status + '}';
+        return "Account{" + "userId=" + userId + ", username=" + username + ", email=" + email + ", password=" + password + ", avatar=" + avatar + ", role=" + role + ", status=" + status + ", roleId=" + roleId + ", fullName=" + fullName + '}';
     }
 
 }
