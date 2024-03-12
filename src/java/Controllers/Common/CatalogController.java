@@ -5,9 +5,11 @@
 package Controllers.Common;
 
 import DAOs.AccountDAO;
+import DAOs.ClassDAO;
 import DAOs.QuizDAO;
 import Models.Account;
 import Models.ClassSubject;
+import Models.MyClass;
 import Models.Student;
 import Models.Teacher;
 import java.io.IOException;
@@ -80,6 +82,15 @@ public class CatalogController extends HttpServlet {
 
                 request.setAttribute("quizzes", quizzesByStudentID);
             }
+
+            int userID = account.getUserId();
+            ClassDAO c = new ClassDAO();
+            List<MyClass> classes = c.getClassByUserID(userID);
+            
+            request.setAttribute("classes", classes);
+//            int classID = c.getClassIdByUserId(userID);
+//            int numberOfStudent = c.getNumberOfStudentInClass(classID);
+//            request.setAttribute("numberOfStudent", numberOfStudent);
             request.setAttribute("account", account);
             request.getRequestDispatcher("jsp/catalog.jsp").forward(request, response);
 
@@ -293,7 +304,7 @@ public class CatalogController extends HttpServlet {
                                     + "                                                                        </div>\n"
                                     + "                                                                    </div>\n"
                                     + "                                                                </li>\n";
-                            
+
                             dataPrint += dataPrintTemp;
                         }
 

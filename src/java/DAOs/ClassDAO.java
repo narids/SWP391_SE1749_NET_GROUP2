@@ -39,6 +39,79 @@ public class ClassDAO extends DBContext<BaseEntity> {
 //        }
 //        return cls;
 //    }
+    public List<MyClass> getClassByUserID(int ID) {
+        String sql = "SELECT distinct c.ClassName, c.ClassID,a.Username\n"
+                + "FROM Class c\n"
+                + "JOIN ClassSubject cs ON c.ClassID = cs.ClassID\n"
+                + "LEFT JOIN ClassStudent css ON c.ClassID = css.ClassID\n"
+                + "LEFT JOIN Student s ON css.StudentID = s.StudentID\n"
+                + "LEFT JOIN Teacher t ON cs.TeacherID = t.TeacherID\n"
+                + "JOIN Account a ON (s.UserID = a.UserID OR t.UserID = a.UserID)\n"
+                + "WHERE a.UserID = ?;";
+        List<MyClass> classes = new ArrayList<>();
+        try {
+            // Check if connection is null or not
+            if (connection != null) {
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setInt(1, ID); // set the parameter for the query
+                ResultSet resultSet = statement.executeQuery();
+
+                while (resultSet.next()) {
+                    classes.
+                    add(new MyClass(resultSet.getInt("ClassID"), 
+                            resultSet.getString("ClassName"), 
+                            resultSet.getString("Username")));
+
+                }
+                // Close resultSet, statement, and connection (if necessary)
+                resultSet.close();
+                statement.close();
+                // No need to return myClass here, return it after try-catch block
+            } else {
+                System.err.println("Connection is null. Cannot execute query.");
+            }
+        } catch (SQLException ex) {
+            // Log the exception or handle it appropriately
+            ex.printStackTrace();
+        }
+        return classes; // Moved the return statement outside the try-catch block
+
+    }
+
+//    public int getClassIdByUserId(int ID) {
+//        String sql = "SELECT distinct c.ClassID\n"
+//                + "FROM Class c\n"
+//                + "JOIN ClassSubject cs ON c.ClassID = cs.ClassID\n"
+//                + "LEFT JOIN ClassStudent css ON c.ClassID = css.ClassID\n"
+//                + "LEFT JOIN Student s ON css.StudentID = s.StudentID\n"
+//                + "LEFT JOIN Teacher t ON cs.TeacherID = t.TeacherID\n"
+//                + "JOIN Account a ON (s.UserID = a.UserID OR t.UserID = a.UserID)\n"
+//                + "WHERE a.UserID = ?;";
+//        int classID = 0;
+//        try {
+//            // Check if connection is null or not
+//            if (connection != null) {
+//                PreparedStatement statement = connection.prepareStatement(sql);
+//                statement.setInt(1, ID); // set the parameter for the query
+//                ResultSet resultSet = statement.executeQuery();
+//
+//                while (resultSet.next()) {
+//                    classID = resultSet.getInt("ClassID");
+//                }
+//                // Close resultSet, statement, and connection (if necessary)
+//                resultSet.close();
+//                statement.close();
+//                // No need to return myClass here, return it after try-catch block
+//            } else {
+//                System.err.println("Connection is null. Cannot execute query.");
+//            }
+//        } catch (SQLException ex) {
+//            // Log the exception or handle it appropriately
+//            ex.printStackTrace();
+//        }
+//        return classID; // Moved the return statement outside the try-catch block
+//
+//    }
     public List<MyClass> getAllClasses() {
         String sql = "SELECT distinct s.ClassID, s.ClassName, a.Username\n"
                 + "FROM Class s, ClassSubject cs, Teacher t, Account a\n"
@@ -162,11 +235,11 @@ public class ClassDAO extends DBContext<BaseEntity> {
         int ClassID = 0;
 
         try (
-                 PreparedStatement pst = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);) {
+                PreparedStatement pst = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);) {
             pst.setString(1, ClassName);
             pst.executeUpdate();
 
-            try ( ResultSet generatedKeys = pst.getGeneratedKeys()) {
+            try (ResultSet generatedKeys = pst.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     ClassID = generatedKeys.getInt(1);
                 }
@@ -283,7 +356,6 @@ public class ClassDAO extends DBContext<BaseEntity> {
 //        }
 //        return rowsAffected;
 //    }
-    
     public void deleteClass(int classID) {
         try {
             // Delete from ClassStudent table
