@@ -230,6 +230,16 @@ public class QuizController extends HttpServlet {
 
                         break;
                     case "updateQuiz":
+                        String quizName = request.getParameter("quizName");
+                        String quizContent = request.getParameter("quizContent");
+                        String sql = "UPDATE [dbo].[Quiz] SET [QuizName] = '" + quizName + "' ,[QuizContent] = '" + quizContent + "' WHERE QuizID = " + quizID;
+
+                        if (quizDAO.updateQuizWithSql(sql)) {
+                            out.print("success");
+                        } else {
+                            out.print("failed");
+
+                        }
 
                         break;
                     case "updateQuestion":
