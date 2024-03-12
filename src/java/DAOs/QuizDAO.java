@@ -234,6 +234,25 @@ public class QuizDAO extends DBContext<BaseEntity> {
         return false;
     }
 
+    public Boolean addQuizQuestion(String quizID, String questionID) {
+        String sql = "INSERT INTO [dbo].[QuizQuestion] ([QuizID] ,[QuestionID]) VALUES  (?,?)";
+        try {
+            connection.setAutoCommit(false);
+            PreparedStatement stm = connection.prepareCall(sql);
+            stm.setString(1, quizID);
+            stm.setString(2, questionID);
+
+            if (stm.executeUpdate() > 0) {
+                connection.commit();
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return false;
+    }
+
     public Boolean removeQuestionInQuiz(String quizID, String questionID) {
         String sql = "DELETE FROM [dbo].[QuizQuestion]\n"
                 + "      WHERE QuizID = ? and QuestionID = ?";

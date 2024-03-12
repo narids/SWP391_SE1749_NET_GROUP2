@@ -132,6 +132,41 @@ public class QuestionDAO extends DBContext<Question> {
         return null;
     }
 
+    public List<Question> getQuestionAndAnswersBySubjectId(String quizID, String subjectID) {
+        List<Question> ltQuestion = new ArrayList<>();
+
+        String sql = "SELECT Question.QuestionID, Question.Question_Content, Question.Created_Day, Question.ImageURL, Question.Explain, Subject.SubjectID, Subject.SubjectName\n"
+                + "FROM Question INNER JOIN Subject \n"
+                + "ON Question.SubjectId = Subject.SubjectID\n"
+                + "where Subject.SubjectID = " + subjectID
+                + " AND NOT EXISTS ( SELECT  1 FROM QuizQuestion WHERE QuizQuestion.QuizID = " + quizID
+                + " AND QuizQuestion.QuestionID = Question.QuestionID)";
+        try {
+            PreparedStatement stm = connection.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Question question = new Question();
+                Subject s = new Subject();
+
+                question.setQuestionId(rs.getInt("QuestionID"));
+                question.setQuestionContent(rs.getString("Question_Content"));
+                question.setImageUrl(rs.getString("ImageURL"));
+                question.setExplain(rs.getString("Explain"));
+
+                question.setAnswers(getAnswersByQuestionID(rs.getInt("QuestionID")));
+
+                s.setSubjectId(rs.getInt("SubjectID"));
+                s.setSubjectName(rs.getString("SubjectName"));
+                question.setSubject(s);
+
+                ltQuestion.add(question);
+            }
+            return ltQuestion;
+        } catch (SQLException ex) {
+            return null;
+        }
+    }
+
     public List<Answer> getAnswersByQuestionID(int id) {
         List<Answer> list = new ArrayList<>();
 
@@ -240,22 +275,26 @@ public class QuestionDAO extends DBContext<Question> {
 
     @Override
     public void insert(Question entity) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from
+                                                                       // nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public void update(Question entity) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from
+                                                                       // nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public void delete(Question entity) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from
+                                                                       // nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public Question get(Question entity) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from
+                                                                       // nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }
