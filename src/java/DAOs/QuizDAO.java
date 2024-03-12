@@ -157,7 +157,7 @@ public class QuizDAO extends DBContext<BaseEntity> {
 
                 myClass.setClassName(rs.getString(6));
                 subject.setSubjectName(rs.getString(7));
-                teacher.setTeacherId((String.valueOf(rs.getInt(8))));
+                teacher.setTeacherId(rs.getInt(8));
 
                 myClass.setClassID(rs.getInt("ClassID"));
                 subject.setSubjectId(rs.getInt("SubjectID"));
@@ -198,7 +198,7 @@ public class QuizDAO extends DBContext<BaseEntity> {
 
                 myClass.setClassName(rs.getString(6));
                 subject.setSubjectName(rs.getString(7));
-                teacher.setTeacherId((String.valueOf(rs.getInt(8))));
+                teacher.setTeacherId(rs.getInt("SubjectID"));
 
                 myClass.setClassID(rs.getInt("ClassID"));
                 subject.setSubjectId(rs.getInt("SubjectID"));
@@ -222,6 +222,25 @@ public class QuizDAO extends DBContext<BaseEntity> {
         try {
             connection.setAutoCommit(false);
             PreparedStatement stm = connection.prepareCall(sql);
+
+            if (stm.executeUpdate() > 0) {
+                connection.commit();
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return false;
+    }
+
+    public Boolean addQuizQuestion(String quizID, String questionID) {
+        String sql = "INSERT INTO [dbo].[QuizQuestion] ([QuizID] ,[QuestionID]) VALUES  (?,?)";
+        try {
+            connection.setAutoCommit(false);
+            PreparedStatement stm = connection.prepareCall(sql);
+            stm.setString(1, quizID);
+            stm.setString(2, questionID);
 
             if (stm.executeUpdate() > 0) {
                 connection.commit();

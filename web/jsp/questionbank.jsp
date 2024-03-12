@@ -375,6 +375,14 @@
                                         <td>
                                             ${a.questionContent}
                                         </td>
+                                        <td>
+                                                    <a href="questiondetail?questionid=${a.questionId}" class="btn btn-sm yellow outline radius-xl" style="padding: 5px 10px">
+                                                        <i class="fa fa-pencil"></i>
+                                                    </a>
+                                                    <a href="#" class="btn btn-sm red outline radius-xl delete-news" data-toggle="modal" data-target="#deleteModal-${a.questionId}" style="padding: 5px 10px">
+                                                        <i class="fa fa-trash"></i>
+                                                    </a>
+                                                </td>
                                     </tr>   
                                 </c:forEach>
                             </table>
@@ -388,18 +396,18 @@
         <c:forEach items="${queslist}" var="n">
             <div class="modal fade" id="deleteModal-${n.questionId}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
-                    <form action="news-list" method="post">
+                    <form action="questionbank" method="post">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="deleteModalLabel">Delete News</h5>
+                                <h5 class="modal-title" id="deleteModalLabel">Delete Question</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <input type="hidden" id="newsIdToDelete" name="action" value="delete">
-                                <input type="hidden" id="newsIdToDelete" name="newsId" value="${n.newsId}">
-                                Are you sure you want to delete this news: ?
+                                <input type="hidden" id="newsIdToDelete" name="quesaction" value="delete">
+                                <input type="hidden" id="newsIdToDelete" name="questionid" value="${n.questionId}">
+                                Are you sure you want to delete this Question ?
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
