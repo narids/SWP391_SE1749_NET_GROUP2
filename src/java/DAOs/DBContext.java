@@ -17,9 +17,9 @@ public abstract class DBContext<T extends BaseEntity> {
 
     public DBContext() {
         try {
-            String url = "jdbc:sqlserver://LAPTEO\\SQLEXPRESS:1433;databaseName=Group2_SWP319_SE1749";
-            String user = "hung";
-            String pass = "1234";
+            String url = "jdbc:sqlserver://DESKTOP-0PDSAP2\\SQLEXPRESS:1433;databaseName=Group2_SWP319_SE1749";
+            String user = "sa";
+            String pass = "123";
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             connection = DriverManager.getConnection(url, user, pass);
         } catch (ClassNotFoundException ex) {
