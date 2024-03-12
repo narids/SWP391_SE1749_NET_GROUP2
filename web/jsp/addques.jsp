@@ -48,74 +48,71 @@
         <body>
             <div class="form-container">
                 <h2>Create a Question</h2>
-                <form action="addques" method="post">
+                <form action="addques" method="POST">
                     <div class="form-group">
                         <label for="content">Content: </label>
-                        <input type="text" id="content" name="content" placeholder="Enter your Content" required>
+                        <input type="text" id="quescontent" name="quescontent" placeholder="Enter your Content" required>
                     </div>
                     <div class="form-group">
                         <label for="explain">Explain: </label>
-                        <input type="text" id="explain" name="explain" placeholder="Enter your Explain" required>
+                        <input type="text" id="quesexplain" name="quesexplain" placeholder="Enter your Explain" required>
                     </div>
 
                     <label for="subjects">Choose a subject:</label>
-                    <select>
+                    <input list="subjects" name="subject" id="subject">
+                    <datalist id="subjects">
                         <c:forEach items="${requestScope.sublist}" var="ba">
-                            <option>
-
-                                ${ba.subjectName}                
-
-                            </option>
-                        </c:forEach>
-                    </select>
+                            <option value="${ba.subjectName}" >
+                            </c:forEach>
+                    </datalist>
                     <div id="options">
                         <div class="option">
-                            <label for="option1">Answer 1:</label>
+                            <label for="option1">Option 1:</label>
                             <input type="text" class="option-text" name="option[]" required>
                             <input type="checkbox" class="correct-checkbox" name="correct[]" value="1">
                             <label for="correct1">Correct</label><br>
                         </div>
                     </div>
-                    <button type="button" onclick="addOption()">Add Answer</button><br><br>
 
-                    <button type="submit">Submit</button>
+                    <button type="button" onclick="addOption()">Add Option</button><br><br>
+
+                    <input type="submit" value="Submit">
                 </form>
-            </div>
-            <script>
-                function addOption() {
-                    var optionsDiv = document.getElementById('options');
-                    var optionCount = optionsDiv.getElementsByClassName('option').length + 1;
 
-                    var newOptionDiv = document.createElement('div');
-                    newOptionDiv.className = 'option';
+                <script>
+                    function addOption() {
+                        var optionsDiv = document.getElementById('options');
+                        var optionCount = optionsDiv.getElementsByClassName('option').length + 1;
 
-                    var optionLabel = document.createElement('label');
-                    optionLabel.htmlFor = 'option' + optionCount;
-                    optionLabel.textContent = 'Answer ' + optionCount + ':';
-                    newOptionDiv.appendChild(optionLabel);
+                        var newOptionDiv = document.createElement('div');
+                        newOptionDiv.className = 'option';
 
-                    var optionInput = document.createElement('input');
-                    optionInput.type = 'text';
-                    optionInput.className = 'option-text';
-                    optionInput.name = 'option[]';
-                    optionInput.required = true;
-                    newOptionDiv.appendChild(optionInput);
+                        var optionLabel = document.createElement('label');
+                        optionLabel.htmlFor = 'option' + optionCount;
+                        optionLabel.textContent = 'Option ' + optionCount + ':';
+                        newOptionDiv.appendChild(optionLabel);
 
-                    var correctCheckbox = document.createElement('input');
-                    correctCheckbox.type = 'checkbox';
-                    correctCheckbox.className = 'correct-checkbox';
-                    correctCheckbox.name = 'correct[]';
-                    correctCheckbox.value = optionCount;
-                    newOptionDiv.appendChild(correctCheckbox);
+                        var optionInput = document.createElement('input');
+                        optionInput.type = 'text';
+                        optionInput.className = 'option-text';
+                        optionInput.name = 'option[]';
+                        optionInput.required = true;
+                        newOptionDiv.appendChild(optionInput);
 
-                    var correctLabel = document.createElement('label');
-                    correctLabel.htmlFor = 'correct' + optionCount;
-                    correctLabel.textContent = 'Correct';
-                    newOptionDiv.appendChild(correctLabel);
+                        var correctCheckbox = document.createElement('input');
+                        correctCheckbox.type = 'checkbox';
+                        correctCheckbox.className = 'correct-checkbox';
+                        correctCheckbox.name = 'correct[]';
+                        correctCheckbox.value = optionCount;
+                        newOptionDiv.appendChild(correctCheckbox);
 
-                    optionsDiv.appendChild(newOptionDiv);
-                }
-            </script>
+                        var correctLabel = document.createElement('label');
+                        correctLabel.htmlFor = 'correct' + optionCount;
+                        correctLabel.textContent = 'Correct';
+                        newOptionDiv.appendChild(correctLabel);
 
+                        optionsDiv.appendChild(newOptionDiv);
+                    }
+                </script>
         </body>
     </html>

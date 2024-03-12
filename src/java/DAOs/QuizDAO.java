@@ -157,7 +157,7 @@ public class QuizDAO extends DBContext<BaseEntity> {
 
                 myClass.setClassName(rs.getString(6));
                 subject.setSubjectName(rs.getString(7));
-                teacher.setTeacherId((String.valueOf(rs.getInt(8))));
+                teacher.setTeacherId(rs.getInt(8));
 
                 myClass.setClassID(rs.getInt("ClassID"));
                 subject.setSubjectId(rs.getInt("SubjectID"));
@@ -198,7 +198,7 @@ public class QuizDAO extends DBContext<BaseEntity> {
 
                 myClass.setClassName(rs.getString(6));
                 subject.setSubjectName(rs.getString(7));
-                teacher.setTeacherId((String.valueOf(rs.getInt(8))));
+                teacher.setTeacherId(rs.getInt("SubjectID"));
 
                 myClass.setClassID(rs.getInt("ClassID"));
                 subject.setSubjectId(rs.getInt("SubjectID"));

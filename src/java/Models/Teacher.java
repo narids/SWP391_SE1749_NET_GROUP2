@@ -11,12 +11,12 @@ package Models;
 public class Teacher {
 
     private int userId;
-    private String teacherId;
+    private int teacherId;
 
     public Teacher() {
     }
 
-    public Teacher(int userId, String teacherId) {
+    public Teacher(int userId, int teacherId) {
         this.userId = userId;
         this.teacherId = teacherId;
     }
@@ -29,11 +29,11 @@ public class Teacher {
         this.userId = userId;
     }
 
-    public String getTeacherId() {
+    public int getTeacherId() {
         return teacherId;
     }
 
-    public void setTeacherId(String teacherId) {
+    public void setTeacherId(int teacherId) {
         this.teacherId = teacherId;
     }
 

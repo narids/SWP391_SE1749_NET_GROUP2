@@ -1,13 +1,15 @@
 <%-- 
-    Document   : subjectList
-    Created on : Mar 8, 2024, 8:16:31 AM
+    Document   : addsubject
+    Created on : Mar 11, 2024, 7:59:57 PM
     Author     : User
 --%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
+    <!-- Mirrored from educhamp.themetrades.com/demo/admin/add-listing.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 22 Feb 2019 13:09:05 GMT -->
     <head>
 
         <!-- META ============================================= -->
@@ -44,6 +46,8 @@
         <!-- All PLUGINS CSS ============================================= -->
         <link rel="stylesheet" type="text/css" href="admin/assets/css/assets.css">
         <link rel="stylesheet" type="text/css" href="admin/assets/vendors/calendar/fullcalendar.css">
+        <link rel="stylesheet" type="text/css" href="admin/assets/vendors/summernote/summernote.css">
+        <link rel="stylesheet" type="text/css" href="admin/assets/vendors/file-upload/imageuploadify.min.css">
 
         <!-- TYPOGRAPHY ============================================= -->
         <link rel="stylesheet" type="text/css" href="admin/assets/css/typography.css">
@@ -55,7 +59,7 @@
         <link rel="stylesheet" type="text/css" href="admin/assets/css/style.css">
         <link rel="stylesheet" type="text/css" href="admin/assets/css/dashboard.css">
         <link class="skin" rel="stylesheet" type="text/css" href="admin/assets/css/color/color-1.css">
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+
     </head>
     <body class="ttr-opened-sidebar ttr-pinned-sidebar">
 
@@ -313,7 +317,7 @@
                         <li>
                             <a href="add-listing.html" class="ttr-material-button">
                                 <span class="ttr-icon"><i class="ti-layout-accordion-list"></i></span>
-                                <span class="ttr-label">New list</span>
+                                <span class="ttr-label">Add listing</span>
                             </a>
                         </li>
                         <li>
@@ -343,187 +347,50 @@
         <!--Main container start -->
         <main class="ttr-wrapper">
             <div class="container-fluid">
-                <div class="db-breadcrumb">
-                    <h4 class="breadcrumb-title">New list</h4>
-                    <ul class="db-breadcrumb-list">
-                        <li><a href="#"><i class="fa fa-home"></i>Home</a></li>
-                        <li>New list</li>
-                    </ul>
-                </div>	
+              
                 <div class="row">
                     <!-- Your Profile Views Chart -->
                     <div class="col-lg-12 m-b30">
                         <div class="widget-box">
-                            <div class="wc-title d-flex justify-content-between align-items-center">
-                                <h4>Subject </h4>
-                                <a href="addsubject?subjectdeid=${subdiid}" class="btn btn-sm info ">
-                                    Add a Subject
-                                </a>
+                            
+                            <div class="widget-inner">
+                                <form action="addsubject" method="POST" >
+                                    <div class="row">
+                                        <div class="form-group col">
+                                            <label class="col-form-label">Subject Dimension <span class="text-red">*</span></label>
+                                            <div>
+                                                <input name="subjectdiid" class="form-control" type="text" required value="${subjectdimension.subDeId}">
+                                                ${subjectdimension.subDeName}
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-8">
+                                            <label class="col-form-label">Name <span class="text-red">*</span></label>
+                                            <div>
+                                                <input name="addsubjectname" class="form-control" type="text" required>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group col-12">
+                                            <label class="col-form-label">Detail <span class="text-red">*</span></label>
+                                            <div>
+                                                <textarea name="addsubjectdetail" class="form-control" style="width: 100%; min-height: 100px" required></textarea>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-12">
+                                            <button type="submit" > Add</button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
-                            <table border="1px"> 
-                                <tr>
-                                    <td>#</td>
-                                    <td>Name</td>
-                                    <td>Detail</td>
-                                </tr>
-                                <c:forEach items="${requestScope.sublistbyid}" var="a">
-                                    <tr>
-
-                                        <td>${a.subjectId}
-                                        </td>
-                                        <td><a href="quizlist?subjectid=${a.subjectId}" >
-                                                ${a.subjectName}</a>
-                                        </td>
-                                        <td>
-                                            ${a.subDetail}
-                                        </td>
-                                        <td>
-                                            <a href="subjectdetail?subjectid=${a.subjectId}" class="btn btn-sm yellow outline radius-xl" style="padding: 5px 10px">
-                                                        <i class="fa fa-pencil"></i>
-                                                    </a>
-                                            <a href="#" class="btn btn-sm red outline radius-xl delete-" data-toggle="modal" data-target="#deleteM-${a.subjectId}" style="padding: 5px 10px">
-                                                <i class="fa fa-trash"></i>
-                                            </a>
-                                        </td>
-                                    </tr>   
-                                </c:forEach>
-                            </table>
                         </div>
                     </div>
                     <!-- Your Profile Views Chart END-->
                 </div>
             </div>
         </main>
+        <div class="ttr-overlay"></div>
 
-        <c:forEach items="${sublistbyid}" var="n">
-            <div class="modal fade" id="deleteM-${n.subjectId}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <form action="subjectlist" method="POST">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="deleteModalLabel">Delete Question</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <input type="hidden" id="subidtodelete" name="subaction" value="delete">
-                                <input type="hidden" id="subidtodelete" name="subjectId" value="${n.subjectId}">
-                                Are you sure you want to delete this Subject ?
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                <button type="submit" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </c:forEach>
-        <footer>
-            <div class="footer-top">
-                <div class="pt-exebar">
-                    <div class="container">
-                        <div class="d-flex align-items-stretch">
-                            <div class="pt-logo mr-auto">
-                                <a href="index.html"></a>
-                            </div>
-                            <div class="pt-social-link">
-                                <ul class="list-inline m-a0">
-                                    <li><a href="#" class="btn-link"><i class="fa fa-facebook"></i></a></li>
-                                    <li><a href="#" class="btn-link"><i class="fa fa-twitter"></i></a></li>
-                                    <li><a href="#" class="btn-link"><i class="fa fa-linkedin"></i></a></li>
-                                    <li><a href="#" class="btn-link"><i class="fa fa-google-plus"></i></a></li>
-                                </ul>
-                            </div>
-                            <div class="pt-btn-join">
-                                <a href="#" class="btn ">Join Now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-4 col-md-12 col-sm-12 footer-col-4">
-                            <div class="widget">
-                                <h5 class="footer-title">Sign Up For A Newsletter</h5>
-                                <p class="text-capitalize m-b20">Weekly Breaking news analysis and cutting edge advices on job searching.</p>
-                                <div class="subscribe-form m-b20">
-                                    <form class="subscription-form" action="http://educhamp.themetrades.com/demo/assets/script/mailchamp.php" method="post">
-                                        <div class="ajax-message"></div>
-                                        <div class="input-group">
-                                            <input name="email" required="required"  class="form-control" placeholder="Your Email Address" type="email">
-                                            <span class="input-group-btn">
-                                                <button name="submit" value="Submit" type="submit" class="btn"><i class="fa fa-arrow-right"></i></button>
-                                            </span> 
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-lg-5 col-md-7 col-sm-12">
-                            <div class="row">
-                                <div class="col-4 col-lg-4 col-md-4 col-sm-4">
-                                    <div class="widget footer_widget">
-                                        <h5 class="footer-title">Company</h5>
-                                        <ul>
-                                            <li><a href="index.html">Home</a></li>
-                                            <li><a href="about-1.html">About</a></li>
-                                            <li><a href="faq-1.html">FAQs</a></li>
-                                            <li><a href="contact-1.html">Contact</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="col-4 col-lg-4 col-md-4 col-sm-4">
-                                    <div class="widget footer_widget">
-                                        <h5 class="footer-title">Get In Touch</h5>
-                                        <ul>
-                                            <li><a href="http://educhamp.themetrades.com/admin/index.html">Dashboard</a></li>
-                                            <li><a href="blog-classic-grid.html">Blog</a></li>
-                                            <li><a href="portfolio.html">Portfolio</a></li>
-                                            <li><a href="event.html">Event</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="col-4 col-lg-4 col-md-4 col-sm-4">
-                                    <div class="widget footer_widget">
-                                        <h5 class="footer-title">Courses</h5>
-                                        <ul>
-                                            <li><a href="courses.html">Courses</a></li>
-                                            <li><a href="courses-details.html">Details</a></li>
-                                            <li><a href="membership.html">Membership</a></li>
-                                            <li><a href="profile.html">Profile</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-lg-3 col-md-5 col-sm-12 footer-col-4">
-                            <div class="widget widget_gallery gallery-grid-4">
-                                <h5 class="footer-title">Our Gallery</h5>
-                                <ul class="magnific-image">
-                                    <li><a href="assets/images/gallery/pic1.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic1.jpg" alt=""></a></li>
-                                    <li><a href="assets/images/gallery/pic2.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic2.jpg" alt=""></a></li>
-                                    <li><a href="assets/images/gallery/pic3.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic3.jpg" alt=""></a></li>
-                                    <li><a href="assets/images/gallery/pic4.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic4.jpg" alt=""></a></li>
-                                    <li><a href="assets/images/gallery/pic5.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic5.jpg" alt=""></a></li>
-                                    <li><a href="assets/images/gallery/pic6.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic6.jpg" alt=""></a></li>
-                                    <li><a href="assets/images/gallery/pic7.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic7.jpg" alt=""></a></li>
-                                    <li><a href="assets/images/gallery/pic8.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic8.jpg" alt=""></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-12 col-md-12 col-sm-12 text-center"> <a target="_blank" href="https://www.templateshub.net">Templates Hub</a></div>
-                    </div>
-                </div>
-            </div>
-        </footer>
         <!-- External JavaScripts -->
         <script src="admin/assets/js/jquery.min.js"></script>
         <script src="admin/assets/vendors/bootstrap/js/popper.min.js"></script>
@@ -541,8 +408,9 @@
         <script src="admin/assets/js/functions.js"></script>
         <script src="admin/assets/vendors/chart/chart.min.js"></script>
         <script src="admin/assets/js/admin.js"></script>
+        <script src="admin/assets/vendors/summernote/summernote.js"></script>
+        <script src="admin/assets/vendors/file-upload/imageuploadify.min.js"></script>
         <script src='admin/assets/vendors/switcher/switcher.js'></script>
-        <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-
     </body>
 </html>
+

@@ -56,6 +56,7 @@ public class ProfileController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         Account account = (Account) request.getSession().getAttribute("account");
         AccountDAO accDao = new AccountDAO();
         if (account == null) {
@@ -99,34 +100,41 @@ public class ProfileController extends HttpServlet {
                 RequestDispatcher dispatcher = request.getRequestDispatcher("jsp/studentProfile.jsp");
                 dispatcher.forward(request, response);
             }
+            
             request.setAttribute("account", account);
 
         }
     }
-        /**
-         * Handles the HTTP <code>POST</code> method.
-         *
-         * @param request servlet request
-         * @param response servlet response
-         * @throws ServletException if a servlet-specific error occurs
-         * @throws IOException if an I/O error occurs
-         */
-        @Override
-        protected void doPost
-        (HttpServletRequest request, HttpServletResponse response)
+
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        }
-
-        /**
-         * Returns a short description of the servlet.
-         *
-         * @return a String containing servlet description
-         */
-        @Override
-        public String getServletInfo
-        
-            () {
-        return "Short description";
-        }// </editor-fold>
-
+        String fullname = request.getParameter("fullname");
+        String email = request.getParameter("email");
+        Account account = (Account) request.getSession().getAttribute("account");
+        int id = account.getUserId();
+        String uid = request.getParameter("userId");
+        AccountDAO dao = new AccountDAO();
+        dao.updatefAccount(fullname, email, id);
+        response.sendRedirect("profile?userid="+uid);
     }
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
+
+}

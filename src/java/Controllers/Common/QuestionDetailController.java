@@ -4,8 +4,10 @@
  */
 package Controllers.Common;
 
+import DAOs.AnswerDAO;
 import DAOs.QuestionDAO;
 import DAOs.SubjectDAO;
+import Models.Answer;
 import Models.Question;
 import Models.Subject;
 import jakarta.servlet.ServletException;
@@ -13,51 +15,49 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.Part;
-import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author User
  */
-@WebServlet(name = "AddQuestionController", urlPatterns = {"/addques"})
+@WebServlet(name = "QuestionDetailController", urlPatterns = {"/questiondetail"})
 
-public class AddQuestionController extends HttpServlet {
+public class QuestionDetailController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        AnswerDAO an = new AnswerDAO();
         SubjectDAO subD = new SubjectDAO();
         List<Subject> lst = subD.list();
-        request.setAttribute("sublist", lst);
-        request.getRequestDispatcher("jsp/addques.jsp").forward(request, response);
+        request.setAttribute("sublistt", lst);
+        String id = request.getParameter("questionid");
+        QuestionDAO qued = new QuestionDAO();
+        Question que = qued.getbyId(id);
+        request.setAttribute("questiondetail", que);
+        List<Answer> list = an.getAnswerByQuestion(Integer.parseInt(id));
+                request.setAttribute("listan", list);
+        request.getRequestDispatcher("jsp/questiondetail.jsp").forward(request, response);
     }
 
     @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
-
-        // Retrieve form data
-        String content = request.getParameter("quescontent");
-        String explain = request.getParameter("quesexplain");
-        String subject = request.getParameter("subject");
-        String[] options = request.getParameterValues("option[]");
-        String[] correctAnswers = request.getParameterValues("correct[]");
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String id = request.getParameter("questionid");
+        
+        String content = request.getParameter("quescontentdetail");
+        String explain = request.getParameter("quesexplaindetail");
+        String subject = request.getParameter("subjectdetail");
+        String[] options = request.getParameterValues("options[]");
+        String[] correctAnswers = request.getParameterValues("corrects[]");
 
         String url = "jdbc:sqlserver://LAPTEO\\SQLEXPRESS:1433;databaseName=Group2_SWP319_SE1749";
         String user = "hung";
@@ -71,8 +71,13 @@ public class AddQuestionController extends HttpServlet {
             connection = DriverManager.getConnection(url, user, pass);
 
             // SQL query to insert question
-            String sqlQuery = "insert into Question (Question_Content,Created_Day,ImageURL,Explain,SubjectId) \n"
-                    + "values (?,?,?,?,?)";
+            String sqlQuery = "UPDATE [dbo].[Question] "
+                    + "SET [Question_Content] = ?,"
+                    + "[Created_Day] = ?,"
+                    + "[ImageURL] = ?,"
+                    + "[Explain] = ? ,"
+                    + "SubjectId=?"
+                    + "WHERE [QuestionID] = ?";
 
             // Create a PreparedStatement object
             statement = connection.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS);
@@ -83,6 +88,7 @@ public class AddQuestionController extends HttpServlet {
             SubjectDAO sub = new SubjectDAO();
             int subid = sub.getIDbyName(subject);
             statement.setInt(5, subid);
+            statement.setString(6, id);
 
             // Execute the query
             int affectedRows = statement.executeUpdate();
@@ -101,7 +107,11 @@ public class AddQuestionController extends HttpServlet {
                         String optionText = options[i];
                         boolean isCorrect = (correctAnswers != null && correctAnswers.length > 0 && correctAnswers[i].equals(String.valueOf(i + 1)));
                         // SQL query to insert option
-                        String insertOptionQuery = "INSERT INTO Answer (Answer_Content, IsCorrect,QuestionID) VALUES (?, ?,?)";
+                        String insertOptionQuery = "UPDATE [dbo].[Question] "
+                                + "SET [Answer_Content] = ?,"
+                                + "[IsCorrect] = ?,"
+                                + "WHERE [QuestionID] = ?";
+
                         statement = connection.prepareStatement(insertOptionQuery);
                         statement.setString(1, optionText);
                         statement.setBoolean(2, isCorrect);
@@ -128,17 +138,5 @@ public class AddQuestionController extends HttpServlet {
             }
         }
         response.sendRedirect("questionbank");
-    }
-
-    private String getSubmittedFileName(Part part) {
-        if (part != null) {
-            for (String cd : part.getHeader("content-disposition").split(";")) {
-                if (cd.trim().startsWith("filename")) {
-                    String fileName = cd.substring(cd.indexOf('=') + 1).trim().replace("\"", "");
-                    return fileName.substring(fileName.lastIndexOf('/') + 1).substring(fileName.lastIndexOf('\\') + 1);
-                }
-            }
-        }
-        return null; // Return null if part is null or file name is not found
     }
 }
