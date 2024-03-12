@@ -100,6 +100,10 @@ public class ProfileController extends HttpServlet {
                 RequestDispatcher dispatcher = request.getRequestDispatcher("jsp/studentProfile.jsp");
                 dispatcher.forward(request, response);
             }
+            if(account.getRole().getRoleId() == 2 || account.getRole().getRoleId() == 1){
+                RequestDispatcher dispatcher = request.getRequestDispatcher("jsp/user-detail.jsp");
+                dispatcher.forward(request, response);
+            }
             
             request.setAttribute("account", account);
 
