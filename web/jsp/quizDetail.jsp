@@ -288,8 +288,11 @@
 
                                 <div class="col-lg-9 col-md-8 col-sm-12">
                                     <div class="m-b30" id="quizzes">
-                                        <h4>Question & Answers (${questions.size()})</h4>
-                                        <ul class="curriculum-list">
+                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px">
+                                            <h4 id="questionLengthCount">Question & Answers (${questions.size()})</h4>
+                                            <a class="btn radius-xl text-uppercase" onclick="addQuestionBtnClick(${quiz.subject.subjectId}, ${quiz.quiz.quizId})" data-bs-toggle="modal" data-bs-target="#addQuestionModal">Add question</a>
+                                        </div>
+                                        <ul class="curriculum-list" id="listQuestions">
                                             <c:forEach var="q" items="${questions}" varStatus="loop">
                                                 <li class="questionCard ${q.questionId}">
                                                     <c:set var="correctAnswer" value=""/>
@@ -324,8 +327,8 @@
 
                                                     <c:if test="${sessionScope.account.role.roleId != 4}">
                                                         <div class="questionCardAction">
-                                                            <i onclick="updateQuestionBtnClick(${q.questionId}, ${quiz.quiz.quizId})" data-bs-toggle="modal" data-bs-target="#updateCardModal" title="Update" class="bi bi-pencil-fill" style="color: orange; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid #cccccc"></i>
-                                                            <i onclick="deleteQuestionBtnClick(${q.questionId}, ${quiz.quiz.quizId})" data-bs-toggle="modal" data-bs-target="#deleteCardModal" title="Delete" class="bi bi-trash3-fill" style="color: red; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center"></i>
+                                                            <i onclick="updateQuestionBtnClick(${q.questionId}, ${quiz.quiz.quizId}, ${quiz.subject.subjectId})" data-bs-toggle="modal" data-bs-target="#updateCardModal" title="Update" class="bi bi-pencil-fill" style="color: orange; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid #cccccc"></i>
+                                                            <i onclick="deleteQuestionBtnClick(${q.questionId}, ${quiz.quiz.quizId}, ${quiz.subject.subjectId})" data-bs-toggle="modal" data-bs-target="#deleteCardModal" title="Delete" class="bi bi-trash3-fill" style="color: red; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center"></i>
                                                         </div>
                                                     </c:if>
                                                 </li>
@@ -554,12 +557,14 @@
             <!-- Footer END ==== -->
             <button class="back-to-top fa fa-chevron-up" ></button>
 
+
+
             <div class="modal fade" id="updateCardModal" tabindex="-1" aria-labelledby="updateCardModal" aria-hidden="true">
                 <div class="modal-dialog modal-lg" style="margin: 8.75rem auto;">
                     <div class="modal-content" style="border-radius: 20px">
                         <div class="modal-header">
-                            <h4 class="modal-title fs-5" id="exampleModalLabel">Update Question</h1>
-                                <i class="bi bi-x-lg" data-bs-dismiss="modal" aria-label="Close" style="cursor: pointer"></i>
+                            <h4 class="modal-title fs-5" id="exampleModalLabel">Update Question</h4>
+                            <i class="bi bi-x-lg" data-bs-dismiss="modal" aria-label="Close" style="cursor: pointer"></i>
                         </div>
                         <div class="modal-body" style="height: 320px;">
                             <form id="updateQuestionForm" class="needs-validation" novalidate method="post">
@@ -625,12 +630,65 @@
                 </div>
             </div>
 
+            <div class="modal fade" id="addQuestionModal" tabindex="-1" aria-labelledby="addQuestionModal" aria-hidden="true">
+                <div class="modal-dialog" style="margin: 8.75rem auto; display: flex; max-width: 1000px;">
+                    <form id="addQuestionForm" class="needs-validation" novalidate method="post">
+                        <div class="modal-content" style="border-top-left-radius: 20px; min-width: 600px">
+                            <div class="modal-header">
+                                <h4 class="modal-title fs-5" id="exampleModalLabel">Create Question</h4>
+                            </div>
+                            <div class="modal-body" style="height: 320px;">
+                                <div class="row placeani">
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <div class="">Question:</div>
+                                            <div class="input-group">
+                                                <input name="question" id="questionInput" placeholder="Enter question" value="" minlength="6" type="text" required class="form-control">
+                                                <div class="invalid-feedback">
+                                                    Question must least 6 char
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row placeani">
+                                    <div class="col-lg-12" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px">
+                                        <div>Answers:</div>
+                                        <button class="btn radius-xl text-uppercase" style="font-size: 10px; padding: 7px 15px;" id="addAnswer">Add answer</button>
+                                    </div>
+                                    <div class="col-lg-12" id="answersWrapper">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button id="addQuestionSubmit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="modal-content" style="border-top-right-radius: 20px; min-width: 400px;">
+                        <div class="modal-header">
+                            <h4 class="modal-title fs-5" id="exampleModalLabel">${quiz.subject.subjectName}</h4>
+                            <i class="bi bi-x-lg" data-bs-dismiss="modal" aria-label="Close" style="cursor: pointer"></i>
+                        </div>
+                        <div class="modal-body placeani" id="questionsBySubject" style="padding: 15px; height: 320px; overflow-y: auto">
+                            <div class="question-group" style="display: flex; gap: 15px; margin-bottom: 15px; padding: 10px 14px; box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; height: fit-content; border-radius: 20px">
+                                <div class="question">Which is the most appropriate way when you want to resolve the disagreement requirement between Corporate customers?</div>
+                                <i class="bi bi-plus-circle-fill" style="color: green; margin-top: 2px; font-size: 25px; cursor: pointer"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
             <div class="modal fade" id="updateQuizModal" tabindex="-1" aria-labelledby="updateQuizModal" aria-hidden="true">
                 <div class="modal-dialog modal-lg" style="margin: 8.75rem auto;">
                     <div class="modal-content" style="border-radius: 20px">
                         <div class="modal-header">
-                            <h4 class="modal-title fs-5" id="exampleModalLabel">Update Quiz</h1>
-                                <i class="bi bi-x-lg" data-bs-dismiss="modal" aria-label="Close" style="cursor: pointer"></i>
+                            <h4 class="modal-title fs-5" id="exampleModalLabel">Update Quiz</h4>
+                            <i class="bi bi-x-lg" data-bs-dismiss="modal" aria-label="Close" style="cursor: pointer"></i>
                         </div>
                         <div class="modal-body">
                             <form id="verifyFormfg" class="needs-validation" novalidate method="post">
@@ -675,8 +733,8 @@
                 <div class="modal-dialog" style="margin: 8.75rem auto;">
                     <div class="modal-content" style="border-radius: 20px">
                         <div class="modal-header">
-                            <h4 class="modal-title fs-5" id="exampleModalLabel">Delete Question</h1>
-                                <i class="bi bi-x-lg" data-bs-dismiss="modal" aria-label="Close" style="cursor: pointer"></i>
+                            <h4 class="modal-title fs-5" id="exampleModalLabel">Delete Question</h4>
+                            <i class="bi bi-x-lg" data-bs-dismiss="modal" aria-label="Close" style="cursor: pointer"></i>
                         </div>
                         <div class="modal-body">
                             Are you sure delete question?
@@ -693,8 +751,8 @@
                 <div class="modal-dialog" style="margin: 8.75rem auto;">
                     <div class="modal-content" style="border-radius: 20px">
                         <div class="modal-header">
-                            <h4 class="modal-title fs-5" id="exampleModalLabel">Delete Answer</h1>
-                                <i class="bi bi-x-lg" data-bs-dismiss="modal" aria-label="Close" style="cursor: pointer"></i>
+                            <h4 class="modal-title fs-5" id="exampleModalLabel">Delete Answer</h4>
+                            <i class="bi bi-x-lg" data-bs-dismiss="modal" aria-label="Close" style="cursor: pointer"></i>
                         </div>
                         <div class="modal-body">
                             Are you sure delete answer?
@@ -727,6 +785,7 @@
         <script>
                                                                 let questionID = "";
                                                                 let quizID = "";
+                                                                let subjectId = "";
                                                                 let indexAnswerDelete = 0;
                                                                 let answersDelete = [];
                                                                 let answerDeleteID = 0;
@@ -734,13 +793,15 @@
                                                                 function getQuizID(quizID1) {
                                                                     quizID = quizID1;
                                                                 }
-                                                                function deleteQuestionBtnClick(questionID1, quizID1) {
+                                                                function deleteQuestionBtnClick(questionID1, quizID1, subjectId1) {
                                                                     questionID = questionID1;
                                                                     quizID = quizID1;
+                                                                    subjectId = subjectId1;
                                                                 }
-                                                                function updateQuestionBtnClick(questionID1, quizID1) {
+                                                                function updateQuestionBtnClick(questionID1, quizID1, subjectId1) {
                                                                     questionID = questionID1;
                                                                     quizID = quizID1;
+                                                                    subjectId = subjectId1;
 
                                                                     $.ajax({
                                                                         url: "/SWP391_SE1749_NET_GROUP2/quizzes",
@@ -765,6 +826,95 @@
                                                                         }
                                                                     });
                                                                 }
+                                                                function addQuestionBtnClick(subjectId1, quizID1) {
+                                                                    quizID = quizID1;
+                                                                    subjectId = subjectId1;
+
+                                                                    $.ajax({
+                                                                        url: "/SWP391_SE1749_NET_GROUP2/quizzes",
+                                                                        type: "post",
+                                                                        data: {
+                                                                            subjectId: subjectId1,
+                                                                            quizID: quizID,
+                                                                            action: "getQuestionsBySubject"
+                                                                        },
+                                                                        success: function (data) {
+                                                                            let mess = "Get Question successfuly!";
+                                                                            let color = "green";
+
+                                                                            switch (data) {
+                                                                                case "failed":
+                                                                                    mess = "Get Question failed!";
+                                                                                    color = "red";
+                                                                                    toastMessageAction(mess, color);
+                                                                                    break;
+                                                                                case "empty":
+                                                                                    $("#questionsBySubject").html("<div>Dont have any questions</div>");
+                                                                                    break;
+
+                                                                                default:
+                                                                                    document.getElementById("addQuestionForm").reset();
+
+                                                                                    $("#questionsBySubject").empty();
+                                                                                    $("#questionsBySubject").html(data);
+
+                                                                                    break;
+                                                                            }
+
+                                                                            toastMessageAction(mess, color);
+                                                                        },
+                                                                        error: function () {
+                                                                            toastMessageAction("Something went wrong", "red");
+                                                                        }
+                                                                    });
+                                                                }
+                                                                function addToQuestionList(questionID) {
+                                                                    $(".addQuestionToListBtn").addClass("disable");
+                                                                    const questionsLength = $(".questionCard").length;
+
+                                                                    $.ajax({
+                                                                        url: "/SWP391_SE1749_NET_GROUP2/quizzes",
+                                                                        type: "post",
+                                                                        data: {
+                                                                            questionID: questionID,
+                                                                            quizID: quizID,
+                                                                            subjectId: subjectId,
+                                                                            questionsLength: questionsLength + 1,
+                                                                            action: "addToQuestionList"
+                                                                        },
+                                                                        success: function (data) {
+                                                                            let mess = "Add Question to List successfuly!";
+                                                                            let color = "green";
+
+                                                                            switch (data) {
+                                                                                case "failed":
+                                                                                    mess = "Add Question to List failed!";
+                                                                                    color = "red";
+
+                                                                                    toastMessageAction(mess, color);
+
+                                                                                    $(".addQuestionToListBtn").removeClass("disable");
+                                                                                    break;
+
+                                                                                default:
+                                                                                    $(".addQuestionToListBtn").removeClass("disable");
+
+                                                                                    let questionAddToListClass = ".question-group." + questionID;
+                                                                                    $(questionAddToListClass).remove();
+
+                                                                                    $("#listQuestions").append(data);
+
+                                                                                    $("#questionLengthCount").text("Question & Answers (" + $(".questionCard").length + ")");
+                                                                                    break;
+                                                                            }
+
+                                                                            toastMessageAction(mess, color);
+                                                                        },
+                                                                        error: function () {
+                                                                            toastMessageAction("Something went wrong", "red");
+                                                                        }
+                                                                    });
+                                                                }
 
                                                                 function toastMessageAction(text, color, link) {
                                                                     if (text && text !== "") {
@@ -778,7 +928,6 @@
                                                                             }, 2000);
                                                                         }
                                                                         setTimeout(function () {
-                                                                            $("#loginButton").removeAttr('disabled');
                                                                             $('#toast').text("");
                                                                             $('#toast').toggleClass('show');
                                                                         }, 3000);
@@ -891,6 +1040,7 @@
                                                                         data: {
                                                                             answerID: answerDeleteID,
                                                                             questionID: questionID,
+                                                                            subjectId: subjectId,
                                                                             countQuestionUpdate: indexOfQuestionUpdate,
                                                                             action: "deleteAnswer"
                                                                         },
@@ -925,6 +1075,7 @@
                                                                         data: {
                                                                             questionID: questionID,
                                                                             quizID: quizID,
+                                                                            subjectId: subjectId,
                                                                             action: "deleteQuestion"
                                                                         },
                                                                         success: function (data) {
@@ -941,7 +1092,7 @@
                                                                                     let parent = document.getElementById("quizzes");
 
                                                                                     $("#quizzes").empty();
-                                                                                    parent.insertAdjacentHTML('beforeend', data);
+                                                                                    $("#quizzes").html(data);
 
                                                                                     $('#deleteCardModal').modal('hide');
                                                                                     break;
@@ -987,6 +1138,7 @@
                                                                                 action: "updateQuestion",
                                                                                 quizID: quizID,
                                                                                 questionID: questionID,
+                                                                                subjectId: subjectId,
                                                                                 questionValue: questionValue,
                                                                                 answers: JSON.stringify(arr),
                                                                                 countQuestionUpdate: indexOfQuestionUpdate
@@ -1023,7 +1175,6 @@
                                                                         });
                                                                     }
                                                                 });
-
 
         </script>
     </body>
