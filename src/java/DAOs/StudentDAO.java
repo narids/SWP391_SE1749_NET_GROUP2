@@ -5,7 +5,7 @@
 package DAOs;
 
 import Models.BaseEntity;
-import Models.Student;
+import Models.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -37,7 +37,6 @@ public class StudentDAO extends DBContext<BaseEntity> {
 //        }
 //        return StudentList;
 //    }
-
     public String getStudentIdByEmail(String email) {
         String sql = "SELECT s.StudentID from Student s, Account a \n"
                 + "where a.UserID = s.UserID and a.Email = ? ";
@@ -119,6 +118,44 @@ public class StudentDAO extends DBContext<BaseEntity> {
 
     }
 
+    public Account getAccountByStudentID(int studentID) {
+        String sql = "SELECT Account.UserID, Account.Username, Account.Email, Account.Avatar, Account.Status,Role.RoleID,Role.RoleName\n"
+                + "FROM account\n"
+                + "INNER JOIN Role ON Account.RoleID = Role.RoleID\n"
+                + "JOIN student ON account.UserID = student.UserID\n"
+                + "WHERE student.StudentID =?;";
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, studentID); // set the parameter for the query
+            ResultSet rs = statement.executeQuery();
+
+            while (rs.next()) {
+//                Role role = new Role();
+//                acc = new Account(resultSet.getInt("UserID"),resultSet.getString("Username"), resultSet.getString("Email"),resultSet.getString("Password"),
+//                        resultSet.getString("Avatar"),role,resultSet.getBoolean("status"),resultSet.getInt("RoleID"),resultSet.getString("Fullname"));
+                Account account = new Account();
+                account.setUserId(rs.getInt("UserID"));
+                account.setUsername(rs.getString("Username"));
+                account.setEmail(rs.getString("Email"));
+                account.setAvatar(rs.getString("Avatar") != null ? rs.getString("Avatar") : "");
+                account.setStatus(rs.getBoolean("Status"));
+
+                Role role = new Role();
+                role.setRoleId(rs.getInt("RoleID"));
+                role.setRoleName(rs.getString("RoleName"));
+                account.setRole(role);
+                return account;
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
 //    public void addStudentToClass( String StudentID,int ClassID) {
 //        String sql = "INSERT into ClassStudent(StudentID,ClassID) VALUES(?,?)";
 //        try {
@@ -138,7 +175,7 @@ public class StudentDAO extends DBContext<BaseEntity> {
 //    }
     public void addStudentToClass(String studentID, int classID) {
         String sql = "INSERT INTO ClassStudent(StudentID, ClassID) VALUES (?, ?)";
-        try ( PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             // Set parameters
             statement.setString(1, studentID);
             statement.setInt(2, classID);

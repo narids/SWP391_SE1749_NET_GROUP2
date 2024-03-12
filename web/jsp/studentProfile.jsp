@@ -89,11 +89,11 @@
                                     <div class="col-lg-3 col-md-4 col-sm-12 m-b30">
                                         <div class="profile-bx text-center">
                                             <div class="user-profile-thumb">
-                                                <img src=${sessionScope.account.getAvatar()} alt=""/>
+                                                <img src=${account.getAvatar()} alt=""/>
                                         </div>
                                         <div class="profile-info">
-                                            <h4>${sessionScope.account.getUsername()}</h4>
-                                            <span>${sessionScope.account.getEmail()}</span>
+                                            <h4>${account.getUsername()}</h4>
+                                            <span>${account.getEmail()}</span>
                                         </div>
                                         <div class="profile-social">
                                             <ul class="list-inline m-a0">
@@ -222,7 +222,7 @@
                                                         <div class="form-group row">
                                                             <label class="col-12 col-sm-3 col-md-3 col-lg-2 col-form-label">Full Name</label>
                                                             <div class="col-12 col-sm-9 col-md-9 col-lg-7">
-                                                                <input class="form-control" type="text" value="${sessionScope.account.getUsername()}">
+                                                                <input class="form-control" type="text" value="${account.getUsername()}">
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
