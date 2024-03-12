@@ -5,6 +5,7 @@
 package DAOs;
 
 import Models.Account;
+import Models.BaseEntity;
 import Models.Role;
 import Models.Student;
 import Models.Teacher;
@@ -66,7 +67,7 @@ public class AccountDAO extends DBContext<BaseEntity> {
             if (rs.next()) {
                 Teacher t = new Teacher();
                 t.setuserId(rs.getInt(1));
-                t.setTeacherId(rs.getString(2));
+                t.setTeacherId(rs.getInt(2));
 
                 return t;
             }
@@ -87,8 +88,46 @@ public class AccountDAO extends DBContext<BaseEntity> {
             if (rs.next()) {
                 Student t = new Student();
                 t.setUserId(rs.getInt(1));
-                t.setStudentId(rs.getString(2));
+                t.setStudentId(rs.getInt(2));
 
+                return t;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public int getTeacherByUserID(int id) {
+        try {
+            String sql = "SELECT [TeacherID]\n"
+                    + "  FROM [Teacher]\n"
+                    + "  where UserID = ?";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, id);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+
+                int t = rs.getInt("TeacherID");
+                return t;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+
+    public Student getStudentByUserID(int id) {
+        try {
+            String sql = "SELECT [StudentID]\n"
+                    + "  FROM [Student]\n"
+                    + "  where UserID = ?";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, id);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                Student t = new Student();
+                t.setStudentId(rs.getInt("StudentID"));
                 return t;
             }
         } catch (SQLException ex) {
@@ -261,6 +300,185 @@ public class AccountDAO extends DBContext<BaseEntity> {
         return false;
     }
 
+    public Boolean addToTeacherAccounts(int userID) {
+        try {
+            String sql = "INSERT INTO [dbo].[Teacher]\n"
+                    + "           ([UserID])\n"
+                    + "     VALUES\n"
+                    + "           (?)";
+            connection.setAutoCommit(false);
+            PreparedStatement stm = connection.prepareCall(sql);
+
+            stm.setInt(1, userID);
+
+            if (stm.executeUpdate() > 0) {
+                connection.commit();
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return false;
+    }
+
+    public List<Account> getAccountList() {
+        List<Account> accounts = new ArrayList<>();
+        try {
+            String sql = "SELECT a.*, r.RoleName FROM Account a LEFT JOIN Role r ON a.RoleID = r.RoleID";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Account a = new Account();
+                a.setUserId(rs.getInt("UserID"));
+                a.setUsername(rs.getString("Username"));
+                a.setPassword(rs.getString("Password"));
+                a.setRoleId(rs.getInt("RoleID"));
+                a.setEmail(rs.getString("Email"));
+                a.setAvatar(rs.getString("Avatar"));
+                a.setFullName(rs.getString("FullName"));
+                a.setStatus(rs.getBoolean("Status"));
+                a.setRole(new Role(rs.getInt("RoleID"), rs.getString("RoleName")));
+                accounts.add(a);
+            }
+            return accounts;
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public List<Role> getRoleList() {
+        List<Role> roles = new ArrayList<>();
+        try {
+            String sql = "SELECT * FROM Role";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Role r = new Role();
+                r.setRoleId(rs.getInt("RoleID"));
+                r.setRoleName(rs.getString("RoleName"));
+                roles.add(r);
+            }
+            return roles;
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public Account getAccountById(int id) {
+        try {
+            String sql = "SELECT a.*, r.RoleName FROM Account a LEFT JOIN Role r ON a.RoleID = r.RoleID WHERE a.UserID = ?";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, id);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                Account a = new Account();
+                a.setUserId(rs.getInt("UserID"));
+                a.setUsername(rs.getString("Username"));
+                a.setPassword(rs.getString("Password"));
+                a.setRoleId(rs.getInt("RoleID"));
+                a.setEmail(rs.getString("Email"));
+                a.setAvatar(rs.getString("Avatar"));
+                a.setFullName(rs.getString("FullName"));
+                a.setStatus(rs.getBoolean("Status"));
+                a.setRole(new Role(rs.getInt("RoleID"), rs.getString("RoleName")));
+                return a;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public void updateAccount(int userId, String username, String fullname, String email, int roleId, boolean Status) {
+        try {
+            String sql = "UPDATE [dbo].[Account]  "
+                    + "SET [Username] = ? ,"
+                    + "[RoleID] = ? ,"
+                    + "[Email] = ? ,"
+                    + "[FullName] = ? ,"
+                    + "[Status] = ? "
+                    + "WHERE [UserID] = ?";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setString(1, username);
+            stm.setInt(2, roleId);
+            stm.setString(3, email);
+            stm.setString(4, fullname);
+            stm.setBoolean(5, Status);
+            stm.setInt(6, userId);
+            stm.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public int insertAccount(String username, String fullname, String email, int roleId, boolean Status, String password) {
+        try {
+            String sql = "INSERT INTO [dbo].[Account]"
+                    + "([Username],"
+                    + "[Password],"
+                    + "[RoleID],"
+                    + "[Email],"
+                    + "[FullName],"
+                    + "[Status]) "
+                    + "VALUES (?,?,?,?,?,?)";
+            PreparedStatement stm = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+            stm.setString(1, username);
+            stm.setString(2, password);
+            stm.setInt(3, roleId);
+            stm.setString(4, email);
+            stm.setString(5, fullname);
+            stm.setBoolean(6, Status);
+            stm.executeUpdate();
+            ResultSet rs = stm.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return -1;
+    }
+
+    public String generateRandomPassword(int len) {
+        // ASCII range – alphanumeric (0-9, a-z, A-Z)
+        final String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        SecureRandom random = new SecureRandom();
+        StringBuilder sb = new StringBuilder();
+
+        // each iteration of the loop randomly chooses a character from the given
+        // ASCII range and appends it to the `StringBuilder` instance
+        for (int i = 0; i < len; i++) {
+            int randomIndex = random.nextInt(chars.length());
+            sb.append(chars.charAt(randomIndex));
+        }
+
+        return sb.toString();
+    }
+
+    public void updatefAccount(String name, String email, int id) {
+        try {
+            String sql = "UPDATE [Account]  "
+                    + "SET [FullName] = ? ,"
+                    + "[Email] = ? "
+                    + "WHERE [UserID] = ?";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setString(1, name);
+            stm.setString(2, email);
+            stm.setInt(3, id);
+            stm.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new AccountDAO().checkExistedEmailOrUser("asdasdsdas", "dasdaaa"));
+    }
+
 //    @Override
 //    public ArrayList<Account> list() {
 //
@@ -339,7 +557,6 @@ public class AccountDAO extends DBContext<BaseEntity> {
 //    public void delete(Account model) {
 //        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
 //    }
-
     @Override
     public ArrayList<BaseEntity> list() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody

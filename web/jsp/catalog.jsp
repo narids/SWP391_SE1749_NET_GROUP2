@@ -3,6 +3,7 @@
     Created on : Jan 28, 2024, 7:38:29 PM
     Author     : admin
 --%>
+<%@page import="Ultils.ConvertTime" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -312,35 +313,39 @@
                                                 </div>
                                             </div>
                                             <div class="tab-pane" id="quiz-results">
-                                                <div class="profile-head">
-                                                    <h3>Quiz Results</h3>
-                                                </div>
-                                                <div class="courses-filter">
-                                                    <div class="row">
-                                                        <div class="col-md-6 col-lg-6">
-                                                            <ul class="course-features">
-                                                                <li><i class="ti-book"></i> <span class="label">Lectures</span> <span class="value">8</span></li>
-                                                                <li><i class="ti-help-alt"></i> <span class="label">Quizzes</span> <span class="value">1</span></li>
-                                                                <li><i class="ti-time"></i> <span class="label">Duration</span> <span class="value">60 hours</span></li>
-                                                                <li><i class="ti-stats-up"></i> <span class="label">Skill level</span> <span class="value">Beginner</span></li>
-                                                                <li><i class="ti-smallcap"></i> <span class="label">Language</span> <span class="value">English</span></li>
-                                                                <li><i class="ti-user"></i> <span class="label">Students</span> <span class="value">32</span></li>
-                                                                <li><i class="ti-check-box"></i> <span class="label">Assessments</span> <span class="value">Yes</span></li>
-                                                            </ul>
-                                                        </div>
-                                                        <div class="col-md-6 col-lg-6">
-                                                            <ul class="course-features">
-                                                                <li><i class="ti-book"></i> <span class="label">Lectures</span> <span class="value">8</span></li>
-                                                                <li><i class="ti-help-alt"></i> <span class="label">Quizzes</span> <span class="value">1</span></li>
-                                                                <li><i class="ti-time"></i> <span class="label">Duration</span> <span class="value">60 hours</span></li>
-                                                                <li><i class="ti-stats-up"></i> <span class="label">Skill level</span> <span class="value">Beginner</span></li>
-                                                                <li><i class="ti-smallcap"></i> <span class="label">Language</span> <span class="value">English</span></li>
-                                                                <li><i class="ti-user"></i> <span class="label">Students</span> <span class="value">32</span></li>
-                                                                <li><i class="ti-check-box"></i> <span class="label">Assessments</span> <span class="value">Yes</span></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                <table
+                                                    id="myTable"
+                                                    class="table table-bordered display"
+                                                    style="width: 100%"
+                                                    >
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col" style="width: 35%">Title</th>
+                                                            <th scope="col" style="width: 10%">Score</th>
+                                                            <th scope="col" style="width: 15%">Time</th>
+                                                            <th scope="col" style="width: 15%">Date</th>
+                                                            <th scope="col" style="width: 25%">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <c:forEach items="${ltScore}" var="s">
+                                                            <tr>
+                                                                <td>${s.quiz.quizName}</td>
+                                                                <td>${s.score}</td>
+                                                                <td>${ConvertTime.secondsToTime(s.time)}</td>
+                                                                <td>${s.createDate}</td>
+                                                                <td>
+                                                                    <a href="quiz-review?scoreId=${s.testId}" class="btn btn-sm yellow outline radius-xl ">
+                                                                        Review
+                                                                    </a>
+                                                                    <a href="quiz-handle?quizId=${s.quiz.quizId}" class="btn btn-sm red outline radius-xl">
+                                                                        Retake
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+                                                        </c:forEach>
+                                                    </tbody>
+                                                </table>
                                             </div>
                                             <div class="tab-pane" id="edit-profile">
                                                 <div class="profile-head">

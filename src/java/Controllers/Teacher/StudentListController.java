@@ -62,8 +62,8 @@ public class StudentListController extends HttpServlet {
 //        int ClassID = Integer.parseInt(request.getParameter("Classid"));
         HttpSession session = request.getSession();
         int ClassID = (int) session.getAttribute("Classid");
-        List<Student> StudentList = s.getStudentIdByClassID(ClassID);
-        request.setAttribute("StudentList", StudentList);
+//        List<Student> StudentList = s.getStudentIdByClassID(ClassID);
+//        request.setAttribute("StudentList", StudentList);
         request.getRequestDispatcher("jsp/Student-list.jsp").forward(request, response);
     }
 

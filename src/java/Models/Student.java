@@ -4,7 +4,6 @@
  */
 package Models;
 
-import DAOs.BaseEntity;
 
 /**
  *
@@ -14,24 +13,20 @@ public class Student extends BaseEntity
 {
 
     private int userId;
-    private String studentId;
+    private int studentId;
 
     private Account user;
 
     public Student() {
     }
 
-    public Student(int userId, String studentId, Account user) {
+    public Student(int userId, int studentId, Account user) {
         this.userId = userId;
         this.studentId = studentId;
         this.user = user;
     }
-       public Student(int userId, String studentId,String name) {
-        this.userId = userId;
-        this.studentId = studentId;
-        this.name = name;
     
-    }
+ 
 
     public int getUserId() {
         return userId;
@@ -41,11 +36,11 @@ public class Student extends BaseEntity
         this.userId = userId;
     }
 
-    public String getStudentId() {
+    public int getStudentId() {
         return studentId;
     }
 
-    public void setStudentId(String studentId) {
+    public void setStudentId(int studentId) {
         this.studentId = studentId;
     }
 

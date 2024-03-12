@@ -4,7 +4,6 @@
  */
 package Models;
 
-import DAOs.BaseEntity;
 
 /**
  *

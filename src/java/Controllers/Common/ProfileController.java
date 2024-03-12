@@ -4,16 +4,23 @@
  */
 package Controllers.Common;
 
+import DAOs.AccountDAO;
+import DAOs.QuizDAO;
 import Models.Account;
+import Models.ClassSubject;
+import Models.Student;
+import Models.Teacher;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  *
@@ -33,19 +40,7 @@ public class ProfileController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        // Assuming you have a method to get the currently logged-in user from the session
-        Account user = getCurrentUser(request);
-        // Pass the user object to the JSP
-        request.setAttribute("user", user);
-        // Forward to the JSP based on user's role
-        if (user.getRole().getRoleId()== 4) {
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/studentProfile.jsp");
-            dispatcher.forward(request, response);
-        } else if (user.getRole().getRoleId()==3) {
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/jsp/teacherProfile.jsp");
-            dispatcher.forward(request, response);
-        }
+
         // Add more conditions for other roles if needed
     }
 
@@ -61,7 +56,54 @@ public class ProfileController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        
+        Account account = (Account) request.getSession().getAttribute("account");
+        AccountDAO accDao = new AccountDAO();
+        if (account == null) {
+            response.sendRedirect("login");
+        } else {
+            if (account.getRole().getRoleId() == 3) {
+                QuizDAO quizDAO = new QuizDAO();
+
+                String quizzesByTeacherIDSQL = "SELECT Quiz.QuizID, Quiz.QuizName, Quiz.QuizContent, Quiz.CreatedDate, Quiz.QuizStatus, Class.ClassName, Subject.SubjectName, Teacher.TeacherID, Class.ClassID, Subject.SubjectID\n"
+                        + "FROM         Class INNER JOIN\n"
+                        + "                      ClassSubject ON Class.ClassID = ClassSubject.ClassID INNER JOIN\n"
+                        + "                      Subject ON ClassSubject.SubjectID = Subject.SubjectID INNER JOIN\n"
+                        + "                      Teacher ON ClassSubject.TeacherID = Teacher.TeacherID INNER JOIN\n"
+                        + "                      Quiz ON ClassSubject.QuizID = Quiz.QuizID\n"
+                        + "			where Teacher.TeacherID = " + String.valueOf(accDao.getTeacherByUserID(account.getUserId()));
+
+                List<ClassSubject> quizzesByTeacherID = quizDAO.getQuizzesByTeacherID(quizzesByTeacherIDSQL);
+
+                request.setAttribute("quizlist", quizzesByTeacherID);
+                RequestDispatcher dispatcher = request.getRequestDispatcher("jsp/teacherProfile.jsp");
+                dispatcher.forward(request, response);
+
+            }
+
+            if (account.getRole().getRoleId() == 4) {
+                QuizDAO quizDAO = new QuizDAO();
+
+                String quizzesByStudentIDSQL = "SELECT    Quiz.QuizID, Quiz.QuizName, Quiz.QuizContent, Quiz.CreatedDate, Quiz.QuizStatus, Class.ClassName, Subject.SubjectName, Teacher.TeacherID, Student.StudentID, Class.ClassID, Subject.SubjectID\n"
+                        + "FROM         ClassStudent INNER JOIN\n"
+                        + "Class ON ClassStudent.ClassID = Class.ClassID INNER JOIN\n"
+                        + "ClassSubject ON Class.ClassID = ClassSubject.ClassID INNER JOIN\n"
+                        + "Quiz ON ClassSubject.QuizID = Quiz.QuizID INNER JOIN\n"
+                        + "Student ON ClassStudent.StudentID = Student.StudentID INNER JOIN\n"
+                        + "Subject ON ClassSubject.SubjectID = Subject.SubjectID INNER JOIN\n"
+                        + "Teacher ON ClassSubject.TeacherID = Teacher.TeacherID\n"
+                        + "where Quiz.QuizStatus = 1 and Student.StudentID = " + String.valueOf(accDao.getStudentByUserID(account.getUserId()));
+
+                List<ClassSubject> quizzesByStudentID = quizDAO.getQuizzesByStudentID(quizzesByStudentIDSQL);
+
+                request.setAttribute("quizlist", quizzesByStudentID);
+                RequestDispatcher dispatcher = request.getRequestDispatcher("jsp/studentProfile.jsp");
+                dispatcher.forward(request, response);
+            }
+            
+            request.setAttribute("account", account);
+
+        }
     }
 
     /**
@@ -75,12 +117,14 @@ public class ProfileController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    private Account getCurrentUser(HttpServletRequest request) {
-        // Assume you have a session attribute named "user"
-        return (Account) request.getSession().getAttribute("account");
+        String fullname = request.getParameter("fullname");
+        String email = request.getParameter("email");
+        Account account = (Account) request.getSession().getAttribute("account");
+        int id = account.getUserId();
+        String uid = request.getParameter("userId");
+        AccountDAO dao = new AccountDAO();
+        dao.updatefAccount(fullname, email, id);
+        response.sendRedirect("profile?userid="+uid);
     }
 
     /**

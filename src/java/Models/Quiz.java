@@ -1,29 +1,31 @@
 package Models;
 
-import DAOs.BaseEntity;
+import java.sql.Time;
 import java.util.Date;
 
 /**
  *
  * @author khanhlinh date 18/01/2024
  */
-public class Quiz{
+public class Quiz {
 
     private int quizId;
     private String quizName;
     private String quizContent;
     private String createdDate;
     private int quizStatus;
+    private int time;
 
     public Quiz() {
     }
 
-    public Quiz(int quizId, String quizName, String quizContent, String createdDate, int quizStatus) {
+    public Quiz(int quizId, String quizName, String quizContent, String createdDate, int quizStatus, int time) {
         this.quizId = quizId;
         this.quizName = quizName;
         this.quizContent = quizContent;
         this.createdDate = createdDate;
         this.quizStatus = quizStatus;
+        this.time = time;
     }
 
     public int getQuizId() {
@@ -66,11 +68,17 @@ public class Quiz{
         this.quizStatus = quizStatus;
     }
 
-    
+    public int getTime() {
+        return time;
+    }
 
-    
+    public void setTime(int time) {
+        this.time = time;
+    }
 
-    
-    
+    @Override
+    public String toString() {
+        return "Quiz{" + "quizId=" + quizId + ", quizName=" + quizName + ", quizContent=" + quizContent + ", createdDate=" + createdDate + ", quizStatus=" + quizStatus + ", time=" + time + '}';
+    }
 
 }

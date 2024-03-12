@@ -5,17 +5,22 @@
 package DAOs;
 
 import Models.Answer;
+import Models.BaseEntity;
 import Models.ClassSubject;
 import Models.MyClass;
 import Models.Question;
 import Models.Quiz;
 import Models.Subject;
-import Models.SubjectDemension;
+import Models.SubjectDimension;
 import Models.Teacher;
+import Ultils.ConvertTime;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -84,7 +89,7 @@ public class QuizDAO extends DBContext<BaseEntity> {
         return ltSubject;
     }
 
-    public SubjectDemension getSubDeById(int id) {
+    public SubjectDimension getSubDeById(int id) {
         String sql = "SELECT * "
                 + "FROM SubjectDemension "
                 + "WHERE SubDeID = ?";
@@ -93,7 +98,7 @@ public class QuizDAO extends DBContext<BaseEntity> {
             stm.setInt(1, id);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
-                SubjectDemension subDe = new SubjectDemension(
+                SubjectDimension subDe = new SubjectDimension(
                         rs.getInt("SubDeID"),
                         rs.getString("SubDeName"),
                         rs.getString("SubDeDetail"));
@@ -152,7 +157,7 @@ public class QuizDAO extends DBContext<BaseEntity> {
 
                 myClass.setClassName(rs.getString(6));
                 subject.setSubjectName(rs.getString(7));
-                teacher.setTeacherId((String.valueOf(rs.getInt(8))));
+                teacher.setTeacherId(rs.getInt(8));
 
                 myClass.setClassID(rs.getInt("ClassID"));
                 subject.setSubjectId(rs.getInt("SubjectID"));
@@ -193,7 +198,7 @@ public class QuizDAO extends DBContext<BaseEntity> {
 
                 myClass.setClassName(rs.getString(6));
                 subject.setSubjectName(rs.getString(7));
-                teacher.setTeacherId((String.valueOf(rs.getInt(8))));
+                teacher.setTeacherId(rs.getInt("SubjectID"));
 
                 myClass.setClassID(rs.getInt("ClassID"));
                 subject.setSubjectId(rs.getInt("SubjectID"));
@@ -217,6 +222,25 @@ public class QuizDAO extends DBContext<BaseEntity> {
         try {
             connection.setAutoCommit(false);
             PreparedStatement stm = connection.prepareCall(sql);
+
+            if (stm.executeUpdate() > 0) {
+                connection.commit();
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return false;
+    }
+
+    public Boolean addQuizQuestion(String quizID, String questionID) {
+        String sql = "INSERT INTO [dbo].[QuizQuestion] ([QuizID] ,[QuestionID]) VALUES  (?,?)";
+        try {
+            connection.setAutoCommit(false);
+            PreparedStatement stm = connection.prepareCall(sql);
+            stm.setString(1, quizID);
+            stm.setString(2, questionID);
 
             if (stm.executeUpdate() > 0) {
                 connection.commit();
@@ -378,6 +402,30 @@ public class QuizDAO extends DBContext<BaseEntity> {
         return ltQuestion;
     }
 
+    public int setScore(int quizId, int userId, double score, int time) {
+        int generatedId = -1;
+        try {
+            LocalDateTime currentDateTime = LocalDateTime.now();
+            LocalDateTime createDateTime = currentDateTime.minusNanos(ConvertTime.secondsToTime(time).getTime() * 1000000L);
+            Timestamp createTimestamp = Timestamp.valueOf(createDateTime);
+            String strSelect = "INSERT INTO Test (QuizId, Score, UserId, Time, CreateDate) VALUES (?, ?, ?, ?, ?)";
+            PreparedStatement stm = connection.prepareStatement(strSelect, PreparedStatement.RETURN_GENERATED_KEYS);
+            stm.setInt(1, quizId);
+            stm.setDouble(2, score);
+            stm.setInt(3, userId);
+            stm.setInt(4, time);
+            stm.setTimestamp(5, createTimestamp);
+            stm.executeUpdate();
+            ResultSet rs = stm.getGeneratedKeys();
+            if (rs.next()) {
+                generatedId = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return generatedId;
+    }
+
     public Quiz getQuizById(String id) {
         String sql = "SELECT * FROM Quiz where QuizID = '" + id + "'";
 
@@ -395,7 +443,29 @@ public class QuizDAO extends DBContext<BaseEntity> {
                 q.setQuizContent(rs.getString(3));
                 q.setCreatedDate(rs.getString(4));
                 q.setQuizStatus(rs.getInt(5));
+                q.setTime(rs.getInt(6));
+                return q;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 
+    public Quiz getQuizById(int id) {
+        String sql = "SELECT * FROM Quiz where QuizID = ?";
+        try {
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, id);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                Quiz q = new Quiz();
+                q.setQuizId(rs.getInt(1));
+                q.setQuizName(rs.getString(2));
+                q.setQuizContent(rs.getString(3));
+                q.setCreatedDate(rs.getString(4));
+                q.setQuizStatus(rs.getInt(5));
+                q.setTime(rs.getInt(6));
                 return q;
             }
         } catch (SQLException ex) {
@@ -524,10 +594,7 @@ public class QuizDAO extends DBContext<BaseEntity> {
 
     public static void main(String[] args) {
         QuizDAO q = new QuizDAO();
-        List<Quiz> ltQuiz = q.getQuizForGuest();
-        for (Quiz quiz : ltQuiz) {
-            System.out.println(quiz);
-        }
+        System.out.println(q.getQuizById("1"));
 //        List<Quiz> quizList = q.getQuizList(0, 0, createdDay);
 //        for (Quiz quiz : quizList) {
 //            System.out.println(quiz);

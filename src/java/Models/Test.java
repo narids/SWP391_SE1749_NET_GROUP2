@@ -4,6 +4,8 @@
  */
 package Models;
 
+import java.util.Date;
+
 /**
  *
  * @author owner
@@ -13,10 +15,9 @@ public class Test {
     private int testId;
     private int quizId;
     private int userId;
-    private int correctAnswer;
-    private String startTime;
-    private String completionDate;
-    private String endTime;
+    private float score;
+    private int time;
+    private Date createDate;
 
     private Account user;
     private Quiz quiz;
@@ -24,14 +25,13 @@ public class Test {
     public Test() {
     }
 
-    public Test(int testId, int quizId, int userId, int correctAnswer, String startTime, String completionDate, String endTime, Account user, Quiz quiz) {
+    public Test(int testId, int quizId, int userId, float score, int time, Date createDate, Account user, Quiz quiz) {
         this.testId = testId;
         this.quizId = quizId;
         this.userId = userId;
-        this.correctAnswer = correctAnswer;
-        this.startTime = startTime;
-        this.completionDate = completionDate;
-        this.endTime = endTime;
+        this.score = score;
+        this.time = time;
+        this.createDate = createDate;
         this.user = user;
         this.quiz = quiz;
     }
@@ -60,36 +60,28 @@ public class Test {
         this.userId = userId;
     }
 
-    public int getCorrectAnswer() {
-        return correctAnswer;
+    public float getScore() {
+        return score;
     }
 
-    public void setCorrectAnswer(int correctAnswer) {
-        this.correctAnswer = correctAnswer;
+    public void setScore(float score) {
+        this.score = score;
     }
 
-    public String getStartTime() {
-        return startTime;
+    public int getTime() {
+        return time;
     }
 
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
+    public void setTime(int time) {
+        this.time = time;
     }
 
-    public String getCompletionDate() {
-        return completionDate;
+    public Date getCreateDate() {
+        return createDate;
     }
 
-    public void setCompletionDate(String completionDate) {
-        this.completionDate = completionDate;
-    }
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 
     public Account getUser() {
@@ -110,7 +102,7 @@ public class Test {
 
     @Override
     public String toString() {
-        return "Test{" + "testId=" + testId + ", quizId=" + quizId + ", userId=" + userId + ", correctAnswer=" + correctAnswer + ", startTime=" + startTime + ", completionDate=" + completionDate + ", endTime=" + endTime + ", user=" + user + ", quiz=" + quiz + '}';
+        return "Test{" + "testId=" + testId + ", quizId=" + quizId + ", userId=" + userId + ", score=" + score + ", time=" + time + ", createDate=" + createDate + ", user=" + user + ", quiz=" + quiz + '}';
     }
 
 }
