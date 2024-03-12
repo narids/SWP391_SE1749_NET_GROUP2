@@ -232,7 +232,7 @@
                         <div class="container">
                             <ul class="nav nav-tabs" id="myTab" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Subject</a>
+                                    <a class="nav-link  show active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Subject</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Student</a>
@@ -240,8 +240,26 @@
 
                             </ul>
                             <div class="tab-content" id="myTabContent">
-                                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-
+                                <div class="tab-pane fade  show active " id="home" role="tabpanel" aria-labelledby="home-tab">
+                                    <table>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">SubjectID</th>
+                                            <th scope="col">Subject Name</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach items="${sjList}" var="st" varStatus="loop">
+                                            <tr>
+                                                <th scope="row">${loop.index + 1}</th>
+                                                <td>${st.getSubjectId()}</td>
+                                                <td><a href="quizlist?subjectid=${st.getSubjectId()}">${st.getSubjectName()}
+                                                    </a></td>   
+                                            </tr>
+                                        </c:forEach>
+                                    </tbody>
+                                    </table>
                                 </div>
 
                                 <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">  <table class="table">

@@ -64,9 +64,15 @@ public class ViewClassController extends HttpServlet {
 //        Account account = (Account) request.getSession().getAttribute("account");
 
         int classID = Integer.parseInt(request.getParameter("classId"));
-        StudentDAO st = new StudentDAO(); 
-        List<Student> stList =  st.getStudentIdByClassID(classID);
+        StudentDAO st = new StudentDAO();
+        List<Student> stList = st.getStudentIdByClassID(classID);
         request.setAttribute("stList", stList);
+
+        ClassDAO c = new ClassDAO();
+        List<Subject> sjList = c.getSubjectByClassID(classID);
+        request.setAttribute("sjList", sjList);
+        
+
         request.getRequestDispatcher("jsp/ClassViewDetail.jsp").forward(request, response);
     }
 

@@ -97,27 +97,27 @@ public class StudentDAO extends DBContext<BaseEntity> {
         return StudentName; // Moved the return statement outside the try-catch block
     }
 
-//    public List<Student> getStudentIdByClassID(int ClassID) {
-//        String sql = "SELECT distinct a.UserID,s.StudentID,a.Fullname from ClassStudent cs,Student s,ClassSubject csj,Account a\n"
-//                + "where cs.ClassID = csj.ClassID and cs.StudentID = s.StudentID and a.UserID =s.UserID\n"
-//                + "and cs.ClassID =?";
-//        List<Student> StudentList = new ArrayList<>();
-//        try {
-//            PreparedStatement statement = connection.prepareStatement(sql);
-//            statement.setInt(1, ClassID); // set the parameter for the query
-//            ResultSet resultSet = statement.executeQuery();
-//
-//            while (resultSet.next()) {
-//                StudentList.add(new Student(resultSet.getInt("UserID"), resultSet.getString("StudentID"),
-//                        resultSet.getString("Fullname")));
-//            }
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return StudentList;
-//
-//    }
+    public List<Student> getStudentIdByClassID(int ClassID) {
+        String sql = "SELECT distinct a.UserID,s.StudentID,a.Fullname from ClassStudent cs,Student s,ClassSubject csj,Account a\n"
+                + "where cs.ClassID = csj.ClassID and cs.StudentID = s.StudentID and a.UserID =s.UserID\n"
+                + "and cs.ClassID =?";
+        List<Student> StudentList = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, ClassID); // set the parameter for the query
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                StudentList.add(new Student(resultSet.getInt("UserID"), resultSet.getInt("StudentID"),
+                        resultSet.getString("Fullname")));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return StudentList;
+
+    }
 
 //    public void addStudentToClass( String StudentID,int ClassID) {
 //        String sql = "INSERT into ClassStudent(StudentID,ClassID) VALUES(?,?)";

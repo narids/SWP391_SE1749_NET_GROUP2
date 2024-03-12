@@ -27,6 +27,14 @@ public class Subject extends BaseEntity{
         this.subDetail = subDetail;
         this.subDe = subDe;
     }
+    
+    public Subject(int subjectId, String subjectName, int subDeId, String subDetail) {
+        this.subjectId = subjectId;
+        this.subjectName = subjectName;
+        this.subDeId = subDeId;
+        this.subDetail = subDetail;
+     
+    }
 
     public int getSubjectId() {
         return subjectId;

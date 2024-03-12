@@ -6,7 +6,7 @@ package DAOs;
 
 import Models.BaseEntity;
 import Models.MyClass;
-import Models.Student;
+import Models.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -59,9 +59,9 @@ public class ClassDAO extends DBContext<BaseEntity> {
 
                 while (resultSet.next()) {
                     classes.
-                    add(new MyClass(resultSet.getInt("ClassID"), 
-                            resultSet.getString("ClassName"), 
-                            resultSet.getString("Username")));
+                            add(new MyClass(resultSet.getInt("ClassID"),
+                                    resultSet.getString("ClassName"),
+                                    resultSet.getString("Username")));
 
                 }
                 // Close resultSet, statement, and connection (if necessary)
@@ -131,6 +131,41 @@ public class ClassDAO extends DBContext<BaseEntity> {
             ;
         }
         return classes;
+    }
+
+    public List<Subject> getSubjectByClassID(int id) {
+        String sql = "SELECT s.*\n"
+                + "FROM Subject s\n"
+                + "INNER JOIN ClassSubject cs ON s.SubjectID = cs.SubjectID\n"
+                + "WHERE cs.ClassID = ?;";
+        List<Subject> subjects = new ArrayList<>();
+        try {
+            // Check if connection is null or not
+            if (connection != null) {
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setInt(1, id); // set the parameter for the query
+                ResultSet resultSet = statement.executeQuery();
+
+                while (resultSet.next()) {
+                    subjects.
+                            add(new Subject(resultSet.getInt("SubjectID"),
+                                    resultSet.getString("SubjectName"), resultSet.getInt("SubDeID")
+                                    , resultSet.getString("SubDetail")));
+
+                }
+                // Close resultSet, statement, and connection (if necessary)
+                resultSet.close();
+                statement.close();
+                // No need to return myClass here, return it after try-catch block
+            } else {
+                System.err.println("Connection is null. Cannot execute query.");
+            }
+        } catch (SQLException ex) {
+            // Log the exception or handle it appropriately
+            ex.printStackTrace();
+        }
+        return subjects; // Moved the return statement outside the try-catch block
+
     }
 
     public List<MyClass> getClasses() {
