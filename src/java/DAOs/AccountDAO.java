@@ -67,7 +67,7 @@ public class AccountDAO extends DBContext<BaseEntity> {
             if (rs.next()) {
                 Teacher t = new Teacher();
                 t.setuserId(rs.getInt(1));
-                t.setTeacherId(rs.getString(2));
+                t.setTeacherId(rs.getInt(2));
 
                 return t;
             }
@@ -98,7 +98,7 @@ public class AccountDAO extends DBContext<BaseEntity> {
         return null;
     }
 
-    public int getTeacherByUserID(int id){
+    public int getTeacherByUserID(int id) {
         try {
             String sql = "SELECT [TeacherID]\n"
                     + "  FROM [Teacher]\n"
@@ -107,8 +107,8 @@ public class AccountDAO extends DBContext<BaseEntity> {
             stm.setInt(1, id);
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
-                
-               int t = rs.getInt("TeacherID");
+
+                int t = rs.getInt("TeacherID");
                 return t;
             }
         } catch (SQLException ex) {
@@ -116,7 +116,8 @@ public class AccountDAO extends DBContext<BaseEntity> {
         }
         return 0;
     }
-    public Student getStudentByUserID(int id){
+
+    public Student getStudentByUserID(int id) {
         try {
             String sql = "SELECT [StudentID]\n"
                     + "  FROM [Student]\n"
@@ -134,6 +135,7 @@ public class AccountDAO extends DBContext<BaseEntity> {
         }
         return null;
     }
+
     public String getTeacherFullname(int id) {
         try {
             String sql = "SELECT Teacher.UserID, Teacher.TeacherID, Account.Username, Account.Firstname, Account.Lastname\n"
@@ -455,6 +457,22 @@ public class AccountDAO extends DBContext<BaseEntity> {
         }
 
         return sb.toString();
+    }
+
+    public void updatefAccount(String name, String email, int id) {
+        try {
+            String sql = "UPDATE [Account]  "
+                    + "SET [FullName] = ? ,"
+                    + "[Email] = ? "
+                    + "WHERE [UserID] = ?";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setString(1, name);
+            stm.setString(2, email);
+            stm.setInt(3, id);
+            stm.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public static void main(String[] args) {

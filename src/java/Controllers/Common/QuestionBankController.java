@@ -24,15 +24,17 @@ import java.util.logging.Logger;
  */
 @WebServlet(name = "QuestionBankController", urlPatterns = {"/questionbank"})
 
-public class QuestionBankController extends HttpServlet{
+public class QuestionBankController extends HttpServlet {
+
+    QuestionDAO queD = new QuestionDAO();
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException, SQLException, ParseException {
-        QuestionDAO queD = new QuestionDAO();
+            throws ServletException, IOException, SQLException, ParseException {
         List<Question> lst = queD.list();
         request.setAttribute("queslist", lst);
         request.getRequestDispatcher("jsp/questionbank.jsp").forward(request, response);
     }
-    
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
@@ -46,13 +48,16 @@ public class QuestionBankController extends HttpServlet{
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(QuestionBankController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
-            Logger.getLogger(QuestionBankController.class.getName()).log(Level.SEVERE, null, ex);
+         String action = request.getParameter("quesaction");
+        switch (action) {
+            case "delete":
+                int id = Integer.parseInt(request.getParameter("questionid"));
+                queD.deleteByID(id);
+                response.sendRedirect("questionbank");
+                break;
+            default:
+                throw new AssertionError();
         }
     }
-    
+
 }

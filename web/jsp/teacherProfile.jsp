@@ -177,44 +177,14 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            
 
-                                            <div class="tab-pane" id="quiz-results">
-                                                <div class="profile-head">
-                                                    <h3>Quiz Results</h3>
-                                                </div>
-                                                <div class="courses-filter">
-                                                    <div class="row">
-                                                        <div class="col-md-6 col-lg-6">
-                                                            <ul class="course-features">
-                                                                <li><i class="ti-book"></i> <span class="label">Lectures</span> <span class="value">8</span></li>
-                                                                <li><i class="ti-help-alt"></i> <span class="label">Quizzes</span> <span class="value">1</span></li>
-                                                                <li><i class="ti-time"></i> <span class="label">Duration</span> <span class="value">60 hours</span></li>
-                                                                <li><i class="ti-stats-up"></i> <span class="label">Skill level</span> <span class="value">Beginner</span></li>
-                                                                <li><i class="ti-smallcap"></i> <span class="label">Language</span> <span class="value">English</span></li>
-                                                                <li><i class="ti-user"></i> <span class="label">Students</span> <span class="value">32</span></li>
-                                                                <li><i class="ti-check-box"></i> <span class="label">Assessments</span> <span class="value">Yes</span></li>
-                                                            </ul>
-                                                        </div>
-                                                        <div class="col-md-6 col-lg-6">
-                                                            <ul class="course-features">
-                                                                <li><i class="ti-book"></i> <span class="label">Lectures</span> <span class="value">8</span></li>
-                                                                <li><i class="ti-help-alt"></i> <span class="label">Quizzes</span> <span class="value">1</span></li>
-                                                                <li><i class="ti-time"></i> <span class="label">Duration</span> <span class="value">60 hours</span></li>
-                                                                <li><i class="ti-stats-up"></i> <span class="label">Skill level</span> <span class="value">Beginner</span></li>
-                                                                <li><i class="ti-smallcap"></i> <span class="label">Language</span> <span class="value">English</span></li>
-                                                                <li><i class="ti-user"></i> <span class="label">Students</span> <span class="value">32</span></li>
-                                                                <li><i class="ti-check-box"></i> <span class="label">Assessments</span> <span class="value">Yes</span></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+
+                                            
                                             <div class="tab-pane" id="edit-profile">
                                                 <div class="profile-head">
                                                     <h3>Edit Profile</h3>
                                                 </div>
-                                                <form class="edit-profile">
+                                                <form class="edit-profile" action="profile" method="POST">
                                                     <div class="">
                                                         <div class="form-group row">
                                                             <div class="col-12 col-sm-9 col-md-9 col-lg-10 ml-auto">
@@ -224,91 +194,16 @@
                                                         <div class="form-group row">
                                                             <label class="col-12 col-sm-3 col-md-3 col-lg-2 col-form-label">Full Name</label>
                                                             <div class="col-12 col-sm-9 col-md-9 col-lg-7">
-                                                                <input class="form-control" type="text" value="${sessionScope.account.getUsername()}">
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <label class="col-12 col-sm-3 col-md-3 col-lg-2 col-form-label">Occupation</label>
-                                                            <div class="col-12 col-sm-9 col-md-9 col-lg-7">
-                                                                <input class="form-control" type="text" value="">
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <label class="col-12 col-sm-3 col-md-3 col-lg-2 col-form-label">Company Name</label>
-                                                            <div class="col-12 col-sm-9 col-md-9 col-lg-7">
-                                                                <input class="form-control" type="text" value="">
-                                                                <span class="help">If you want your invoices addressed to a company. Leave blank to use your full name.</span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <label class="col-12 col-sm-3 col-md-3 col-lg-2 col-form-label">Phone No.</label>
-                                                            <div class="col-12 col-sm-9 col-md-9 col-lg-7">
-                                                                <input class="form-control" type="text" value="">
+                                                                <input class="form-control" name="fullname" type="text" value="${account.fullName}">
                                                             </div>
                                                         </div>
 
-                                                        <div class="seperator"></div>
+                                                        <input type="hidden" id="userid" name="userid" value="${account.userId}">
 
-                                                        <div class="form-group row">
-                                                            <div class="col-12 col-sm-9 col-md-9 col-lg-10 ml-auto">
-                                                                <h3>2. Address</h3>
-                                                            </div>
-                                                        </div>
                                                         <div class="form-group row">
                                                             <label class="col-12 col-sm-3 col-md-3 col-lg-2 col-form-label">Address</label>
                                                             <div class="col-12 col-sm-9 col-md-9 col-lg-7">
-                                                                <input class="form-control" type="text" value="">
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <label class="col-12 col-sm-3 col-md-3 col-lg-2 col-form-label">City</label>
-                                                            <div class="col-12 col-sm-9 col-md-9 col-lg-7">
-                                                                <input class="form-control" type="text" value="">
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <label class="col-12 col-sm-3 col-md-3 col-lg-2 col-form-label">State</label>
-                                                            <div class="col-12 col-sm-9 col-md-9 col-lg-7">
-                                                                <input class="form-control" type="text" value="">
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <label class="col-12 col-sm-3 col-md-3 col-lg-2 col-form-label">Postcode</label>
-                                                            <div class="col-12 col-sm-9 col-md-9 col-lg-7">
-                                                                <input class="form-control" type="text" value="">
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="m-form__seperator m-form__seperator--dashed m-form__seperator--space-2x"></div>
-
-                                                        <div class="form-group row">
-                                                            <div class="col-12 col-sm-9 col-md-9 col-lg-10 ml-auto">
-                                                                <h3 class="m-form__section">3. Social Links</h3>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="form-group row">
-                                                            <label class="col-12 col-sm-3 col-md-3 col-lg-2 col-form-label">Linkedin</label>
-                                                            <div class="col-12 col-sm-9 col-md-9 col-lg-7">
-                                                                <input class="form-control" type="text" value="www.linkedin.com">
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <label class="col-12 col-sm-3 col-md-3 col-lg-2 col-form-label">Facebook</label>
-                                                            <div class="col-12 col-sm-9 col-md-9 col-lg-7">
-                                                                <input class="form-control" type="text" value="www.facebook.com">
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <label class="col-12 col-sm-3 col-md-3 col-lg-2 col-form-label">Twitter</label>
-                                                            <div class="col-12 col-sm-9 col-md-9 col-lg-7">
-                                                                <input class="form-control" type="text" value="www.twitter.com">
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <label class="col-12 col-sm-3 col-md-3 col-lg-2 col-form-label">Instagram</label>
-                                                            <div class="col-12 col-sm-9 col-md-9 col-lg-7">
-                                                                <input class="form-control" type="text" value="www.instagram.com">
+                                                                <input class="form-control" name="email" type="text" value="${account.email}">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -318,7 +213,7 @@
                                                                 <div class="col-12 col-sm-3 col-md-3 col-lg-2">
                                                                 </div>
                                                                 <div class="col-12 col-sm-9 col-md-9 col-lg-7">
-                                                                    <button type="reset" class="btn">Save changes</button>
+                                                                    <button type="submit" class="btn">Save changes</button>
                                                                     <button type="reset" class="btn-secondry">Cancel</button>
                                                                 </div>
                                                             </div>
@@ -429,48 +324,48 @@
                                             <li><a href="assets/images/gallery/pic8.jpg" class="magnific-anchor"><img src="assets/images/gallery/pic8.jpg" alt=""></a></li>
                                         </ul>
 
-                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="footer-bottom">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-lg-12 col-md-12 col-sm-12 text-center"> <a target="_blank" href="https://www.templateshub.net">Templates Hub</a></div>
-                            </div>
-                        </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 text-center"> <a target="_blank" href="https://www.templateshub.net">Templates Hub</a></div>
                     </div>
-                </footer>
-                <!-- Footer END ==== -->
-                <button class="back-to-top fa fa-chevron-up" ></button>
-            </div>
-        </div>
-                                                            
-                    <!-- contact area END -->
                 </div>
-                <!-- Content END-->
-                <!-- Footer ==== -->
-                <jsp:include page="components/footer.jsp"></jsp:include>
-                <!-- Footer END ==== -->
-                <button class="back-to-top fa fa-chevron-up" ></button>
             </div>
-            <!-- External JavaScripts -->
-            <script src="assets/js/jquery.min.js"></script>
-            <script src="assets/vendors/bootstrap/js/popper.min.js"></script>
-            <script src="assets/vendors/bootstrap/js/bootstrap.min.js"></script>
-            <script src="assets/vendors/bootstrap-select/bootstrap-select.min.js"></script>
-            <script src="assets/vendors/bootstrap-touchspin/jquery.bootstrap-touchspin.js"></script>
-            <script src="assets/vendors/magnific-popup/magnific-popup.js"></script>
-            <script src="assets/vendors/counter/waypoints-min.js"></script>
-            <script src="assets/vendors/counter/counterup.min.js"></script>
-            <script src="assets/vendors/imagesloaded/imagesloaded.js"></script>
-            <script src="assets/vendors/masonry/masonry.js"></script>
-            <script src="assets/vendors/masonry/filter.js"></script>
-            <script src="assets/vendors/owl-carousel/owl.carousel.js"></script>
-            <script src="assets/js/functions.js"></script>
-            <script src="assets/js/contact.js"></script>
-            <script src='assets/vendors/switcher/switcher.js'></script>
-    </body>
+        </footer>
+        <!-- Footer END ==== -->
+        <button class="back-to-top fa fa-chevron-up" ></button>
+    </div>
+</div>
+
+<!-- contact area END -->
+</div>
+<!-- Content END-->
+<!-- Footer ==== -->
+<jsp:include page="components/footer.jsp"></jsp:include>
+<!-- Footer END ==== -->
+<button class="back-to-top fa fa-chevron-up" ></button>
+</div>
+<!-- External JavaScripts -->
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/vendors/bootstrap/js/popper.min.js"></script>
+<script src="assets/vendors/bootstrap/js/bootstrap.min.js"></script>
+<script src="assets/vendors/bootstrap-select/bootstrap-select.min.js"></script>
+<script src="assets/vendors/bootstrap-touchspin/jquery.bootstrap-touchspin.js"></script>
+<script src="assets/vendors/magnific-popup/magnific-popup.js"></script>
+<script src="assets/vendors/counter/waypoints-min.js"></script>
+<script src="assets/vendors/counter/counterup.min.js"></script>
+<script src="assets/vendors/imagesloaded/imagesloaded.js"></script>
+<script src="assets/vendors/masonry/masonry.js"></script>
+<script src="assets/vendors/masonry/filter.js"></script>
+<script src="assets/vendors/owl-carousel/owl.carousel.js"></script>
+<script src="assets/js/functions.js"></script>
+<script src="assets/js/contact.js"></script>
+<script src='assets/vendors/switcher/switcher.js'></script>
+</body>
 </html>

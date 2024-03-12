@@ -131,7 +131,7 @@ public class QuizController extends HttpServlet {
                     ClassSubject quiz = quizzes.get(0);
                     List<Question> questions = questionDAO.getQuestionAndAnswersByQuizId(id);
 
-                    request.setAttribute("teacherFullname", adb.getTeacherFullname(Integer.parseInt(quizzes.get(0).getTeacher().getTeacherId())));
+                    request.setAttribute("teacherFullname", adb.getTeacherFullname((quizzes.get(0).getTeacher().getTeacherId())));
                     request.setAttribute("quiz", quiz);
                     request.setAttribute("questions", questions);
                     request.getRequestDispatcher("jsp/quizDetail.jsp").forward(request, response);

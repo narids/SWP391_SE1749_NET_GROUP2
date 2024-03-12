@@ -71,7 +71,7 @@ public class SubjectDeDAO extends DBContext<SubjectDimension> {
         }
     }
     public SubjectDimension getbyID(int id){
-                            SubjectDimension subname = new SubjectDimension();
+         SubjectDimension subname = new SubjectDimension();
          try {
             String sql = "Select s.SubDeName,s.SubDeDetail\n"
                     + "from SubjectDemension s where s.SubDeID=?";
@@ -82,6 +82,28 @@ public class SubjectDeDAO extends DBContext<SubjectDimension> {
                 while (rs.next()) {
                     subname.setSubDeName(rs.getString("SubDeName"));
                     subname.setSubDeDetail(rs.getString("SubDeDetail"));
+                }
+                // Other database operations
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(QuestionDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return subname;
+    }
+    public SubjectDimension getbyIDfull(int id){
+         SubjectDimension subname = new SubjectDimension();
+         try {
+            String sql = "Select s.SubDeName,s.SubDeDetail,s.SubDeID\n"
+                    + "from SubjectDemension s where s.SubDeID=?";
+            if (connection != null && !connection.isClosed()) {
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setInt(1, id);
+                ResultSet rs = statement.executeQuery();
+                while (rs.next()) {
+                    subname.setSubDeName(rs.getString("SubDeName"));
+                    subname.setSubDeDetail(rs.getString("SubDeDetail"));
+                    subname.setSubDeId(rs.getInt("SubDeID"));
                 }
                 // Other database operations
             }
