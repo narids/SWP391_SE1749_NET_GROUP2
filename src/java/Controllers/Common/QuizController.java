@@ -116,7 +116,7 @@ public class QuizController extends HttpServlet {
                         break;
                 }
 
-                sql = sql + " and Quiz.QuizID = '" + id + "'";
+                sql = sql + " and Quiz.QuizID = " + id + "";
 
                 List<ClassSubject> quizzes;
                 if (account.getRole().getRoleId() != 4) {
