@@ -85,7 +85,7 @@ public class StudentListController extends HttpServlet {
                 case "delete":
                     HttpSession session = request.getSession();
                     int ClassID = (int) session.getAttribute("Classid");
-                    String id = request.getParameter("StudentID");
+                    int id = Integer.parseInt(request.getParameter("StudentID"));
                     s.removeStudentFromClassByStudentID(id, ClassID);
                     response.sendRedirect("StudentList");
                     break;

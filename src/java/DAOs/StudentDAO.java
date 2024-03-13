@@ -37,11 +37,11 @@ public class StudentDAO extends DBContext<BaseEntity> {
 //        }
 //        return StudentList;
 //    }
-    public String getStudentIdByEmail(String email) {
+    public int getStudentIdByEmail(String email) {
         String sql = "SELECT s.StudentID from Student s, Account a \n"
                 + "where a.UserID = s.UserID and a.Email = ? ";
-        String StudentID = null;
 
+        int StudentID = 0;
         try {
             // Check if connection is null or not
             if (connection != null) {
@@ -50,7 +50,8 @@ public class StudentDAO extends DBContext<BaseEntity> {
                 ResultSet resultSet = statement.executeQuery();
 
                 if (resultSet.next()) {
-                    StudentID = resultSet.getString("StudentID");
+
+                    StudentID = resultSet.getInt("StudentID");
                 }
 
                 resultSet.close();
@@ -173,11 +174,11 @@ public class StudentDAO extends DBContext<BaseEntity> {
 //        }
 //
 //    }
-    public void addStudentToClass(String studentID, int classID) {
+    public void addStudentToClass(int studentID, int classID) {
         String sql = "INSERT INTO ClassStudent(StudentID, ClassID) VALUES (?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             // Set parameters
-            statement.setString(1, studentID);
+            statement.setInt(1, studentID);
             statement.setInt(2, classID);
 
             // Execute the statement
@@ -195,12 +196,12 @@ public class StudentDAO extends DBContext<BaseEntity> {
         }
     }
 
-    public void removeStudentFromClassByStudentID(String id, int classId) {
+    public void removeStudentFromClassByStudentID(int id, int classId) {
         try {
             // Delete from ClassStudent table
             String strSQL = "DELETE FROM ClassStudent WHERE StudentID = ? and ClassID = ?";
             PreparedStatement statement = connection.prepareStatement(strSQL);
-            statement.setString(1, id);
+            statement.setInt(1, id);
             statement.setInt(2, classId);
             statement.executeUpdate();
 
