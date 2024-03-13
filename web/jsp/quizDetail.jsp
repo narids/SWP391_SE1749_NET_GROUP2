@@ -167,7 +167,7 @@
                                                 </c:when>
 
                                                 <c:otherwise>
-                                                    <a class="btn radius-xl text-uppercase" id="addFavorite">Add to favorites</a>
+                                                    <a class="btn radius-xl text-uppercase" id="addFavorite" href="quiz-handle?quizId=${quiz.quiz.quizId}">TAKE QUIZ</a>
                                                 </c:otherwise>
                                             </c:choose>
                                         </div>
