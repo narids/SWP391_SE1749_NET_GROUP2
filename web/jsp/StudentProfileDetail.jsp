@@ -3,7 +3,8 @@
     Created on : Jan 30, 2024, 3:25:21 PM
     Author     : User
 --%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -89,11 +90,11 @@
                                     <div class="col-lg-3 col-md-4 col-sm-12 m-b30">
                                         <div class="profile-bx text-center">
                                             <div class="user-profile-thumb">
-                                                <img src=${sessionScope.account.getAvatar()} alt=""/>
+                                                <img src=${account.getAvatar()} alt=""/>
                                         </div>
                                         <div class="profile-info">
-                                            <h4>${sessionScope.account.getUsername()}</h4>
-                                            <span>${sessionScope.account.getEmail()}</span>
+                                            <h4>${account.getUsername()}</h4>
+                                            <span>${account.getEmail()}</span>
                                         </div>
                                         <div class="profile-social">
                                             <ul class="list-inline m-a0">
@@ -147,32 +148,34 @@
                                                 <div class="courses-filter">
                                                     <div class="clearfix">
                                                         <ul id="masonry" class="ttr-gallery-listing magnific-image row">
-                                                            <li class="action-card col-xl-4 col-lg-6 col-md-12 col-sm-6 publish">
-                                                                <div class="cours-bx">
-                                                                    <div class="action-box">
-                                                                        <img src="assets/images/courses/pic1.jpg" alt="">
-                                                                        <a href="#" class="btn">Read More</a>
-                                                                    </div>
-                                                                    <div class="info-bx text-center">
-                                                                        <h5><a href="#">Quizzz</a></h5>
-                                                                        <span>Programming</span>
-                                                                    </div>
-                                                                    <div class="cours-more-info">
-                                                                        <div class="review">
-                                                                            <span>3 Review</span>
-                                                                            <ul class="cours-star">
-                                                                                <li class="active"><i class="fa fa-star"></i></li>
-                                                                                <li class="active"><i class="fa fa-star"></i></li>
-                                                                                <li class="active"><i class="fa fa-star"></i></li>
-                                                                                <li><i class="fa fa-star"></i></li>
-                                                                                <li><i class="fa fa-star"></i></li>
-                                                                            </ul>
+                                                            <c:forEach items="${requestScope.quizlist}" var="ab">
+                                                                <li class="action-card col-xl-4 col-lg-6 col-md-12 col-sm-6 pending">
+                                                                    <div class="cours-bx">
+                                                                        <div class="action-box">
+                                                                            <img src="assets/images/courses/pic1.jpg" alt="">
+                                                                            <a href="quizzes?quizID=${ab.quiz.quizId}" class="btn">Read More</a>
+                                                                        </div>
+                                                                        <div class="info-bx text-center">
+                                                                            <h5><a href='quizzes?quizID=${ab.quiz.quizId}'>${fn:toUpperCase(ab.quiz.quizName)}</a></h5>
+                                                                            <span>${ab.subject.subjectName}</span>
+                                                                        </div>
+                                                                        <div class="cours-more-info">
+                                                                            <div class="review">
+                                                                                <span>3 Review</span>
+                                                                                <ul class="cours-star">
+                                                                                    <li class="active"><i class="fa fa-star"></i></li>
+                                                                                    <li class="active"><i class="fa fa-star"></i></li>
+                                                                                    <li class="active"><i class="fa fa-star"></i></li>
+                                                                                    <li><i class="fa fa-star"></i></li>
+                                                                                    <li><i class="fa fa-star"></i></li>
+                                                                                </ul>
+                                                                            </div>
+
                                                                         </div>
 
                                                                     </div>
-                                                                </div>
-                                                            </li>
-
+                                                                </li>
+                                                            </c:forEach>
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -222,7 +225,7 @@
                                                         <div class="form-group row">
                                                             <label class="col-12 col-sm-3 col-md-3 col-lg-2 col-form-label">Full Name</label>
                                                             <div class="col-12 col-sm-9 col-md-9 col-lg-7">
-                                                                <input class="form-control" type="text" value="${sessionScope.account.getUsername()}">
+                                                                <input class="form-control" type="text" value="${account.getUsername()}">
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
