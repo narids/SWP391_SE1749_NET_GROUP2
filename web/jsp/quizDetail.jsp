@@ -137,80 +137,7 @@
 
             <div id="loading-icon-bx"></div>
             <!-- Header Top ==== -->
-            <header class="header rs-nav">
-                <div class="top-bar">
-                    <div class="container">
-                        <div class="row d-flex justify-content-between">
-                            <div class="topbar-left">
-                                <ul>
-                                    <li><a href="faq-1.html"><i class="fa fa-question-circle"></i>Ask a Question</a></li>
-                                    <li><a href="javascript:;"><i class="fa fa-envelope-o"></i>Support@website.com</a></li>
-                                </ul>
-                            </div>
-                            <div class="topbar-right">
-                                <ul>
-                                    <li>
-                                        <select class="header-lang-bx">
-                                            <option data-icon="flag flag-uk">English UK</option>
-                                            <option data-icon="flag flag-us">English US</option>
-                                        </select>
-                                    </li>
-                                    <li><a href="login">Login</a></li>
-                                    <li><a href="register">Register</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="sticky-header navbar-expand-lg" style="z-index: 100">
-                    <div class="menu-bar clearfix">
-                        <div class="container clearfix">
-                            <!-- Header Logo ==== -->
-                            <div class="menu-logo">
-                                <a href="home"><img src="assets/images/logo.png" alt=""></a>
-                            </div>
-                            <!-- Mobile Nav Button ==== -->
-                            <button class="navbar-toggler collapsed menuicon justify-content-end" type="button" data-toggle="collapse" data-target="#menuDropdown" aria-controls="menuDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                            </button>
-                            <!-- Author Nav ==== -->
-                            <div class="secondary-menu">
-                                <div class="secondary-inner">
-                                    <ul>
-                                        <!-- Search Button ==== -->
-                                        <li class="search-btn"><button id="quik-search-btn" type="button" class="btn-link"><i class="fa fa-search"></i></button></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <!-- Search Box ==== -->
-                            <div class="nav-search-bar">
-                                <form action="quiz-search">
-                                    <input name="keyword" value="" type="text" class="form-control" placeholder="Type to search">
-                                    <span><i class="ti-search"></i></span>
-                                </form>
-                                <span id="search-remove"><i class="ti-close"></i></span>
-                            </div>
-                            <!-- Navigation Menu ==== -->
-                            <div class="menu-links navbar-collapse collapse justify-content-start" id="menuDropdown">
-                                <div class="menu-logo">
-                                    <a href="home"><img src="assets/images/logo.png" alt=""></a>
-                                </div>
-                                <ul class="nav navbar-nav">	
-                                    <li class=""><a href="home">Home</a>
-                                    </li>
-                                    <li class=""><a href="quizzes">Quizzes</a>
-                                    </li>
-                                    <li class="active"><a href="catalog">Your library</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <!-- Navigation Menu END ==== -->
-                        </div>
-                    </div>
-                </div>
-            </header>
+            <jsp:include page="components/header.jsp"></jsp:include>
             <!-- header END ==== -->
             <!-- Content -->
             <div class="page-content bg-white">
@@ -236,7 +163,7 @@
                                         <div class="course-buy-now text-center">
                                             <c:choose>
                                                 <c:when test = "${sessionScope.account.role.roleId != 4}">
-                                                    <a class="btn radius-xl text-uppercase" onclick="getQuizID(${quiz.quiz.quizId})" data-bs-toggle="modal" data-bs-target="#updateQuizModal">Update quiz</a>
+                                                    <a class="btn radius-xl text-uppercase" onclick="updateQuizBtnAction(${quiz.quiz.quizId}, '${quiz.quiz.quizName}', '${quiz.quiz.quizContent}', ${quiz.subject.subjectId})" data-bs-toggle="modal" data-bs-target="#updateQuizModal">Update quiz</a>
                                                 </c:when>
 
                                                 <c:otherwise>
@@ -245,8 +172,8 @@
                                             </c:choose>
                                         </div>
                                         <div class="teacher-bx">
-                                            <h5 title="Quiz name" class="text-center">${quiz.quiz.quizName}</h5>
-                                            <div title="Quiz descriptions" class="text-center">${quiz.quiz.quizContent}</div>
+                                            <h5 title="Quiz name" id="quizNameTitle" class="text-center">${quiz.quiz.quizName}</h5>
+                                            <div title="Quiz descriptions" id="quizContentTitle" class="text-center">${quiz.quiz.quizContent}</div>
                                         </div>
                                         <div class="cours-more-info">
                                             <div class="review">
@@ -686,45 +613,45 @@
             <div class="modal fade" id="updateQuizModal" tabindex="-1" aria-labelledby="updateQuizModal" aria-hidden="true">
                 <div class="modal-dialog modal-lg" style="margin: 8.75rem auto;">
                     <div class="modal-content" style="border-radius: 20px">
-                        <div class="modal-header">
-                            <h4 class="modal-title fs-5" id="exampleModalLabel">Update Quiz</h4>
-                            <i class="bi bi-x-lg" data-bs-dismiss="modal" aria-label="Close" style="cursor: pointer"></i>
-                        </div>
-                        <div class="modal-body">
-                            <form id="verifyFormfg" class="needs-validation" novalidate method="post">
+                        <form id="updateQuizForm" class="needs-validation" novalidate method="post">
+                            <div class="modal-header">
+                                <h4 class="modal-title fs-5" id="exampleModalLabel">Update Quiz</h4>
+                                <i class="bi bi-x-lg" data-bs-dismiss="modal" aria-label="Close" style="cursor: pointer"></i>
+                            </div>
+                            <div class="modal-body">
 
                                 <div class="row placeani">
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-4">
                                         <div class="form-group">
-                                            <div class="">Quiz name:</div>
-                                            <div class="input-group">
-                                                <input name="username" pattern="^[A-Za-z0-9]{6,20}$" placeholder="Enter username" value="${requestScope.username}" type="text" required class="form-control">
-                                                <div class="invalid-feedback">
-                                                    Username must least 6 char, only include string and digit.
+                                            <div class="form-group">
+                                                <div class="">Question name</div>
+                                                <div class="input-group">
+                                                    <input name="quizName" id="quizNameInput" placeholder="Enter quiz name" value="" minlength="3" type="text" required class="form-control">
+                                                    <div class="invalid-feedback">
+                                                        Quiz name must least 3 char
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-8">
                                         <div class="form-group">
-                                            <div class="">Quiz descriptions:</div>
-                                            <div class="input-group"> 
-                                                <input style="outline: none" name="password" id="password" pattern="^[A-Za-z0-9]{6,20}$" placeholder="Enter password" value="${requestScope.password}" type="password" class="form-control" required="">
-                                                <span class="toggle-password" id="togglePassword">&#x1F441;</span>
-                                                <div class="invalid-feedback">
-                                                    Password must least 6 char, only include string and digit.
+                                            <div class="form-group">
+                                                <div class="">Quiz content</div>
+                                                <div class="input-group">
+                                                    <input name="quizDesc" id="quizContentInput" placeholder="Enter quiz descriptions" value="" type="text" class="form-control">
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <button type="button" id="updateSubmit" class="btn btn-primary">Update</button>
-                        </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" id="updateQuizSubmit" class="btn btn-primary">Update</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -789,9 +716,17 @@
                                                                 let indexAnswerDelete = 0;
                                                                 let answersDelete = [];
                                                                 let answerDeleteID = 0;
+                                                                let quizContent = "";
+                                                                let quizName = "";
 
-                                                                function getQuizID(quizID1) {
+                                                                function updateQuizBtnAction(quizID1, quizName1, quizContent1, subjectID1) {
                                                                     quizID = quizID1;
+                                                                    quizContent = quizContent1;
+                                                                    quizName = quizName1;
+                                                                    subjectId = subjectID1;
+
+                                                                    $("#quizNameInput").val(quizName);
+                                                                    $("#quizContentInput").val(quizContent);
                                                                 }
                                                                 function deleteQuestionBtnClick(questionID1, quizID1, subjectId1) {
                                                                     questionID = questionID1;
@@ -1030,6 +965,37 @@
 
                                                                 }
 
+                                                                $("#updateQuizSubmit").click(function () {
+                                                                    $.ajax({
+                                                                        url: "/SWP391_SE1749_NET_GROUP2/quizzes",
+                                                                        type: "post",
+                                                                        data: {
+                                                                            quizID: quizID,
+                                                                            quizName: $("#quizNameInput").val(),
+                                                                            quizContent: $("#quizContentInput").val(),
+                                                                            action: "updateQuiz"
+                                                                        },
+                                                                        success: function (data) {
+                                                                            let text = "Update quiz successfully!";
+                                                                            let color = "green";
+
+                                                                            if (data === "failed") {
+                                                                                text = "Update quiz failed!";
+                                                                                color = "red";
+                                                                            } else {
+                                                                                $('#updateQuizModal').modal('hide');
+                                                                                
+                                                                                $('#quizNameTitle').text($("#quizNameInput").val());
+                                                                                $('#quizContentTitle').text($("#quizContentInput").val());
+                                                                            }
+
+                                                                            toastMessageAction(text, color);
+                                                                        },
+                                                                        error: function () {
+                                                                            toastMessageAction("Something went wrong", "red");
+                                                                        }
+                                                                    });
+                                                                })
                                                                 $('#deleteAnswerSubmit').click(function () {
                                                                     let questionClass = ".questionCard." + questionID;
                                                                     const indexOfQuestionUpdate = $(questionClass).index() + 1;
