@@ -36,19 +36,10 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="ttr-material-button">
+                        <a href="news-list" class="ttr-material-button">
                             <span class="ttr-icon"><i class="ti-bookmark-alt"></i></span>
                             <span class="ttr-label">Manage Subject</span>
-                            <span class="ttr-arrow-icon"><i class="fa fa-angle-down"></i></span>
                         </a>
-                        <ul>
-                            <li>
-                                <a href="subdelist" class="ttr-material-button"><span class="ttr-label">Subject Demension</span></a>
-                            </li>
-                            <li>
-                                <a href="mailbox-compose.html" class="ttr-material-button"><span class="ttr-label">Subject</span></a>
-                            </li>
-                        </ul>
                     </li>
                 </c:if>
                 <c:if test="${sessionScope.account.getRole().getRoleId() eq 2}">
