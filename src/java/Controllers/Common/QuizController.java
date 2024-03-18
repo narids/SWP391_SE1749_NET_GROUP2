@@ -116,7 +116,7 @@ public class QuizController extends HttpServlet {
                         break;
                 }
 
-                sql = sql + " and Quiz.QuizID = '" + id + "'";
+                sql = sql + " and Quiz.QuizID = " + id + "";
 
                 List<ClassSubject> quizzes;
                 if (account.getRole().getRoleId() != 4) {
@@ -230,6 +230,16 @@ public class QuizController extends HttpServlet {
 
                         break;
                     case "updateQuiz":
+                        String quizName = request.getParameter("quizName");
+                        String quizContent = request.getParameter("quizContent");
+                        String sql = "UPDATE [dbo].[Quiz] SET [QuizName] = '" + quizName + "' ,[QuizContent] = '" + quizContent + "' WHERE QuizID = " + quizID;
+
+                        if (quizDAO.updateQuizWithSql(sql)) {
+                            out.print("success");
+                        } else {
+                            out.print("failed");
+
+                        }
 
                         break;
                     case "updateQuestion":

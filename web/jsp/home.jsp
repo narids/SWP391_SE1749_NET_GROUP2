@@ -140,8 +140,7 @@
                                                             <button 
                                                                 type="button" 
                                                                 class="btn btn-primary" 
-                                                                data-toggle="modal" 
-                                                                data-target="#takeQuizModal-${q.quizId}">                                                          
+                                                                onclick="window.location.href='quizzes?quizID=${q.quizId}'">                                                          
                                                                 Take Quiz
                                                             </button>
                                                         </h5>
@@ -152,8 +151,7 @@
                                                         <button 
                                                             type="button" 
                                                             class="btn btn-primary" 
-                                                            data-toggle="modal" 
-                                                            data-target="#takeQuizModal-${q.quizId}">                                                          
+                                                            onclick="window.location.href='quizzes?quizID=${q.quizId}'">                                                          
                                                             ${q.quizContent}
                                                         </button>
                                                     </h5>

@@ -6,6 +6,7 @@ package Controllers.Common;
 
 import DAOs.SubjectDAO;
 import DAOs.SubjectDeDAO;
+import Models.Account;
 import Models.Subject;
 import Models.SubjectDimension;
 import jakarta.servlet.ServletException;
@@ -13,6 +14,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
@@ -29,10 +31,19 @@ public class AddSubjectController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+
+        Account account = (Account) session.getAttribute("account");
+
+        if (account == null) {
+            response.sendRedirect("login");
+
+        } else {
         int id = Integer.parseInt(request.getParameter("subjectdeid"));
         SubjectDimension subdi = subD.getbyIDfull(id);
         request.setAttribute("subjectdimension", subdi);
         request.getRequestDispatcher("jsp/addsubject.jsp").forward(request, response);
+        }
     }
 
     @Override

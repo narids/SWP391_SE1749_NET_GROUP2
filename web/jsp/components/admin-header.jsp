@@ -9,7 +9,7 @@
         <!--logo start -->
         <div class="ttr-logo-box">
             <div>
-                <a href="index.html" class="ttr-logo">
+                <a href="home" class="ttr-logo">
                     <img alt="" class="ttr-logo-mobile" src="admin/assets/images/logo-mobile.png" width="30" height="30">
                     <img alt="" class="ttr-logo-desktop" src="admin/assets/images/logo-white.png" width="160" height="27">
                 </a>
@@ -20,17 +20,7 @@
             <!-- header left menu start -->
             <ul class="ttr-header-navigation">
                 <li>
-                    <a href="../index.html" class="ttr-material-button ttr-submenu-toggle">HOME</a>
-                </li>
-                <li>
-                    <a href="#" class="ttr-material-button ttr-submenu-toggle">QUICK MENU <i class="fa fa-angle-down"></i></a>
-                    <div class="ttr-header-submenu">
-                        <ul>
-                            <li><a href="../courses.html">Our Courses</a></li>
-                            <li><a href="../event.html">New Event</a></li>
-                            <li><a href="../membership.html">Membership</a></li>
-                        </ul>
-                    </div>
+                    <a href="home" class="ttr-material-button ttr-submenu-toggle">HOME</a>
                 </li>
             </ul>
             <!-- header left menu end -->
@@ -121,7 +111,7 @@
                             <li><a href="user-profile.html">My profile</a></li>
                             <li><a href="list-view-calendar.html">Activity</a></li>
                             <li><a href="mailbox.html">Messages</a></li>
-                            <li><a href="../login.html">Logout</a></li>
+                            <li><a href="logout">Logout</a></li>
                         </ul>
                     </div>
                 </li>
