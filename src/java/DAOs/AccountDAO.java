@@ -42,7 +42,6 @@ public class AccountDAO extends DBContext<BaseEntity> {
                 account.setEmail(rs.getString("Email"));
                 account.setAvatar(rs.getString("Avatar") != null ? rs.getString("Avatar") : "");
                 account.setStatus(rs.getBoolean("Status"));
-
                 Role role = new Role();
                 role.setRoleId(rs.getInt("RoleID"));
                 role.setRoleName(rs.getString("RoleName"));
