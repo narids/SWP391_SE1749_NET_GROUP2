@@ -57,6 +57,12 @@ public class NewsDeleteController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 //        processRequest(request, response);
+        NewsDAO n = new NewsDAO();
+        int commentId = Integer.parseInt(request.getParameter("commentId"));
+        int newsID = Integer.parseInt(request.getParameter("newsId"));
+        n.deleteCommentByCommentID(commentId);
+        n.deleteCommentByParentID(commentId);
+        response.sendRedirect("news-display-detail?newsId=" + newsID);
     }
 
     /**
@@ -71,12 +77,6 @@ public class NewsDeleteController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 //        processRequest(request, response);
-        NewsDAO n = new NewsDAO();
-        int commentId = Integer.parseInt(request.getParameter("commentId"));
-        int newsID = Integer.parseInt(request.getParameter("newsId"));
-        n.deleteCommentByCommentID(commentId);
-        n.deleteCommentByParentID(commentId);
-        response.sendRedirect("news-display-detail?newsId=" + newsID);
 
     }
 

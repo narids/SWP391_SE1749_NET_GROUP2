@@ -2,14 +2,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controllers.Common;
+package Controllers.Student;
 
-import DAOs.NewsDAO;
-import Models.Account;
-import Models.NewsComment;
+import DAOs.ClassDAO;
+import DAOs.StudentDAO;
+import Models.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,7 +20,8 @@ import java.util.List;
  *
  * @author nghia
  */
-public class NewsCommentController extends HttpServlet {
+@WebServlet(name = "ViewClassController", urlPatterns = {"/ViewClass"})
+public class ViewClassController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,10 +40,10 @@ public class NewsCommentController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet NewsCommentController</title>");
+            out.println("<title>Servlet ViewClassController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet NewsCommentController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ViewClassController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -59,8 +61,19 @@ public class NewsCommentController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        processRequest(request, response);
-        Account account = (Account) request.getSession().getAttribute("account");
+//        Account account = (Account) request.getSession().getAttribute("account");
+
+        int classID = Integer.parseInt(request.getParameter("classId"));
+        StudentDAO st = new StudentDAO();
+        List<Student> stList = st.getStudentIdByClassID(classID);
+        request.setAttribute("stList", stList);
+
+        ClassDAO c = new ClassDAO();
+        List<Subject> sjList = c.getSubjectByClassID(classID);
+        request.setAttribute("sjList", sjList);
+        
+
+        request.getRequestDispatcher("jsp/ClassViewDetail.jsp").forward(request, response);
     }
 
     /**
@@ -74,30 +87,7 @@ public class NewsCommentController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Account account = (Account) request.getSession().getAttribute("account");
-        NewsDAO n = new NewsDAO();
-        int UserID;
-        if (account != null) {
-            UserID = account.getUserId();
-            String content = request.getParameter("content");
-            int ParentID;
-            if (request.getParameter("parentId") != null) {
-                ParentID = Integer.parseInt(request.getParameter("parentId"));
-
-            } else {
-                ParentID = 0;
-            }
-            int newsID = Integer.parseInt(request.getParameter("newsId"));
-
-            n.addComment(content, UserID, newsID, ParentID);
-            response.sendRedirect("news-display-detail?newsId=" + newsID);
-        } else {
-            // If account is null, set UserID to 0
-
-            request.getRequestDispatcher("jsp/login.jsp").forward(request, response);
-
-        }
-
+        processRequest(request, response);
     }
 
     /**

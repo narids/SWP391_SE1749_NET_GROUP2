@@ -85,7 +85,7 @@ public class AddStudentController extends HttpServlet {
         String email = request.getParameter("StudentEmail");
         int ClassID = Integer.parseInt(request.getParameter("HiddenClassID"));
         StudentDAO s = new StudentDAO();
-        String StudentID = s.getStudentIdByEmail(email);
+        int StudentID = s.getStudentIdByEmail(email);
         s.addStudentToClass(StudentID, ClassID);
         response.sendRedirect("StudentList");
     }
