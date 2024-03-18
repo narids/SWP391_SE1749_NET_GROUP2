@@ -32,7 +32,7 @@
         <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.png" />
 
         <!-- PAGE TITLE HERE ============================================= -->
-        <title>Profile </title>
+        <title>Subject Detail </title>
 
         <!-- MOBILE SPECIFIC ============================================= -->
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -226,7 +226,7 @@
             <div class="page-banner ovbl-dark" style="background-image:url(assets/images/banner/banner1.jpg);">
                 <div class="container">
                     <div class="page-banner-entry">
-                        <h1 class="text-white">Subject Dimension Detail</h1>
+                        <h1 class="text-white">Subject Detail</h1>
                     </div>
                 </div>
             </div>

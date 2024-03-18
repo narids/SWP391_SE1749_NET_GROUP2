@@ -6,6 +6,7 @@ package Controllers.Common;
 
 import DAOs.QuestionDAO;
 import DAOs.SubjectDAO;
+import Models.Account;
 import Models.Question;
 import Models.Subject;
 import jakarta.servlet.ServletException;
@@ -13,6 +14,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;
@@ -41,10 +43,19 @@ public class AddQuestionController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+
+        Account account = (Account) session.getAttribute("account");
+
+        if (account == null) {
+            response.sendRedirect("login");
+
+        } else {
         SubjectDAO subD = new SubjectDAO();
         List<Subject> lst = subD.list();
         request.setAttribute("sublist", lst);
         request.getRequestDispatcher("jsp/addques.jsp").forward(request, response);
+        }
     }
 
     @Override

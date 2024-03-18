@@ -5,12 +5,14 @@
 package Controllers.Common;
 
 import DAOs.QuestionDAO;
+import Models.Account;
 import Models.Question;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -37,12 +39,21 @@ public class QuestionBankController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+
+        Account account = (Account) session.getAttribute("account");
+
+        if (account == null) {
+            response.sendRedirect("login");
+
+        } else {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
             Logger.getLogger(QuestionBankController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParseException ex) {
             Logger.getLogger(QuestionBankController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         }
     }
 

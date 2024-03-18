@@ -57,192 +57,30 @@
         <link class="skin" rel="stylesheet" type="text/css" href="./assets/css/color/color-1.css">
     </head>
     <body>
-        <header class="header rs-nav">
-            <div class="top-bar">
-                <div class="container">
-                    <div class="row d-flex justify-content-between">
-                        <div class="topbar-left">
-                            <ul>
-                                <li><a href="faq-1.html"><i class="fa fa-question-circle"></i>Ask a Question</a></li>
-                                <li><a href="javascript:;"><i class="fa fa-envelope-o"></i>Support@website.com</a></li>
-                            </ul>
-                        </div>
-                        <div class="topbar-right">
-                            <ul>
-                                <li>
-                                    <select class="header-lang-bx">
-                                        <option data-icon="flag flag-uk">English UK</option>
-                                        <option data-icon="flag flag-us">English US</option>
-                                    </select>
-                                </li>
-                                <li>${sessionScope.account.getUsername()}</li>
-                                <li><a href="resetpass.jsp">Forget Password</a></li>
-                            </ul>
-                        </div>
+        <jsp:include page="components/header.jsp"></jsp:include>
+            <div class="tab-pane active" id="courses">
+                <div class="profile-head">
+                    <h3>Quiz</h3>
+                    <div class="feature-filters style1 ml-auto">
+                        <ul class="filters" data-toggle="buttons">
+                            <li data-filter="" class="btn active">
+                                <input type="radio">
+                                <a href="#"><span>All</span></a> 
+                            </li>
+                            <li data-filter="publish" class="btn">
+                                <input type="radio">
+                                <a href="#"><span>Publish</span></a> 
+                            </li>
+                            <li data-filter="pending" class="btn">
+                                <input type="radio">
+                                <a href="#"><span>Pending</span></a> 
+                            </li>
+                        </ul>
                     </div>
                 </div>
-            </div>
-            <div class="sticky-header navbar-expand-lg">
-                <div class="menu-bar clearfix">
-                    <div class="container clearfix">
-                        <!-- Header Logo ==== -->
-                        <div class="menu-logo">
-                            <a href=""></a>
-                        </div>
-                        <!-- Mobile Nav Button ==== -->
-                        <button class="navbar-toggler collapsed menuicon justify-content-end" type="button" data-toggle="collapse" data-target="#menuDropdown" aria-controls="menuDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </button>
-                        <!-- Author Nav ==== -->
-                        <div class="secondary-menu">
-                            <div class="secondary-inner">
-                                <ul>
-                                    <li><a href="javascript:;" class="btn-link"><i class="fa fa-facebook"></i></a></li>
-                                    <li><a href="javascript:;" class="btn-link"><i class="fa fa-google-plus"></i></a></li>
-                                    <li><a href="javascript:;" class="btn-link"><i class="fa fa-linkedin"></i></a></li>
-                                    <!-- Search Button ==== -->
-                                    <li class="search-btn"><button id="quik-search-btn" type="button" class="btn-link"><i class="fa fa-search"></i></button></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <!-- Search Box ==== -->
-                        <div class="nav-search-bar">
-                            <form action="#">
-                                <input name="search" value="" type="text" class="form-control" placeholder="Type to search">
-                                <span><i class="ti-search"></i></span>
-                            </form>
-                            <span id="search-remove"><i class="ti-close"></i></span>
-                        </div>
-                        <!-- Navigation Menu ==== -->
-                        <div class="menu-links navbar-collapse collapse justify-content-start" id="menuDropdown">
-                            <div class="menu-logo">
-                                <a href=""></a>
-                            </div>
-                            <ul class="nav navbar-nav">	
-                                <li class="active"><a href="home">Home </a>
-
-                                </li>
-                                <li><a href="javascript:;">Pages <i class="fa fa-chevron-down"></i></a>
-                                    <ul class="sub-menu">
-                                        <li><a href="javascript:;">About<i class="fa fa-angle-right"></i></a>
-                                            <ul class="sub-menu">
-                                                <li><a href="about-1.html">About 1</a></li>
-                                                <li><a href="about-2.html">About 2</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="javascript:;">Event<i class="fa fa-angle-right"></i></a>
-                                            <ul class="sub-menu">
-                                                <li><a href="event.html">Event</a></li>
-                                                <li><a href="events-details.html">Events Details</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="javascript:;">FAQ's<i class="fa fa-angle-right"></i></a>
-                                            <ul class="sub-menu">
-                                                <li><a href="faq-1.html">FAQ's 1</a></li>
-                                                <li><a href="faq-2.html">FAQ's 2</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="javascript:;">Contact Us<i class="fa fa-angle-right"></i></a>
-                                            <ul class="sub-menu">
-                                                <li><a href="contact-1.html">Contact Us 1</a></li>
-                                                <li><a href="contact-2.html">Contact Us 2</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="portfolio.html">Portfolio</a></li>
-                                        <li><a href="profile.html">Profile</a></li>
-                                        <li><a href="membership.html">Membership</a></li>
-                                        <li><a href="error-404.html">404 Page</a></li>
-                                    </ul>
-                                </li>
-                                <li class="add-mega-menu"><a href="javascript:;">Our Courses <i class="fa fa-chevron-down"></i></a>
-                                    <ul class="sub-menu add-menu">
-                                        <li class="add-menu-left">
-                                            <h5 class="menu-adv-title">Our Courses</h5>
-                                            <ul>
-                                                <li><a href="courses.html">Courses </a></li>
-                                                <li><a href="courses-details.html">Courses Details</a></li>
-                                                <li><a href="teacherProfile.jsp">Teacher Profile</a></li>
-                                                <li><a href="event.html">Upcoming Event</a></li>
-                                                    <c:if test="${sessionScope.account.getRole().getRoleId()==1}" > 
-                                                    <li><a href="class">Class </a></li>
-                                                    </c:if> 
-                                            </ul>
-                                        </li>
-                                        <li class="add-menu-right">
-                                            <img src="assets/images/adv/adv.jpg" alt=""/>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li><a href="javascript:;">Blog <i class="fa fa-chevron-down"></i></a>
-                                    <ul class="sub-menu">
-                                        <li><a href="blog-classic-grid.html">Blog Classic</a></li>
-                                        <li><a href="blog-classic-sidebar.html">Blog Classic Sidebar</a></li>
-                                        <li><a href="blog-list-sidebar.html">Blog List Sidebar</a></li>
-                                        <li><a href="blog-standard-sidebar.html">Blog Standard Sidebar</a></li>
-                                        <li><a href="blog-details.html">Blog Details</a></li>
-                                    </ul>
-                                </li>
-                                <li class="nav-dashboard"><a href="javascript:;">Dashboard <i class="fa fa-chevron-down"></i></a>
-                                    <ul class="sub-menu">
-                                        <li><a href="admin/index.html">Dashboard</a></li>
-                                        <li><a href="admin/add-listing.html">Add Listing</a></li>
-                                        <li><a href="admin/bookmark.html">Bookmark</a></li>
-                                        <li><a href="admin/courses.html">Courses</a></li>
-                                        <li><a href="admin/review.html">Review</a></li>
-                                        <li><a href="admin/teacher-profile.html">Teacher Profile</a></li>
-                                        <li><a href="admin/user-profile.html">User Profile</a></li>
-                                        <li><a href="javascript:;">Calendar<i class="fa fa-angle-right"></i></a>
-                                            <ul class="sub-menu">
-                                                <li><a href="admin/basic-calendar.html">Basic Calendar</a></li>
-                                                <li><a href="admin/list-view-calendar.html">List View Calendar</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="javascript:;">Mailbox<i class="fa fa-angle-right"></i></a>
-                                            <ul class="sub-menu">
-                                                <li><a href="admin/mailbox.html">Mailbox</a></li>
-                                                <li><a href="admin/mailbox-compose.html">Compose</a></li>
-                                                <li><a href="admin/mailbox-read.html">Mail Read</a></li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
-                            <div class="nav-social-link">
-                                <a href="javascript:;"><i class="fa fa-facebook"></i></a>
-                                <a href="javascript:;"><i class="fa fa-google-plus"></i></a>
-                                <a href="javascript:;"><i class="fa fa-linkedin"></i></a>
-                            </div>
-                        </div>
-                        <!-- Navigation Menu END ==== -->
-                    </div>
-                </div>
-            </div>
-        </header>
-        <div class="tab-pane active" id="courses">
-            <div class="profile-head">
-                <h3>Quiz</h3>
-                <div class="feature-filters style1 ml-auto">
-                    <ul class="filters" data-toggle="buttons">
-                        <li data-filter="" class="btn active">
-                            <input type="radio">
-                            <a href="#"><span>All</span></a> 
-                        </li>
-                        <li data-filter="publish" class="btn">
-                            <input type="radio">
-                            <a href="#"><span>Publish</span></a> 
-                        </li>
-                        <li data-filter="pending" class="btn">
-                            <input type="radio">
-                            <a href="#"><span>Pending</span></a> 
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="courses-filter">
-                <div class="clearfix">
-                    <ul id="masonry" class="ttr-gallery-listing magnific-image row">
+                <div class="courses-filter">
+                    <div class="clearfix">
+                        <ul id="masonry" class="ttr-gallery-listing magnific-image row">
                         <c:forEach items="${requestScope.quizlistbyid}" var="ab">
                             <li class="action-card col-xl-4 col-lg-6 col-md-12 col-sm-6 pending">
                                 <div class="cours-bx">
@@ -384,21 +222,21 @@
     <!-- Footer END ==== -->
     <button class="back-to-top fa fa-chevron-up" ></button>
 
-<!-- External JavaScripts -->
-<script src="assets/js/jquery.min.js"></script>
-<script src="assets/vendors/bootstrap/js/popper.min.js"></script>
-<script src="assets/vendors/bootstrap/js/bootstrap.min.js"></script>
-<script src="assets/vendors/bootstrap-select/bootstrap-select.min.js"></script>
-<script src="assets/vendors/bootstrap-touchspin/jquery.bootstrap-touchspin.js"></script>
-<script src="assets/vendors/magnific-popup/magnific-popup.js"></script>
-<script src="assets/vendors/counter/waypoints-min.js"></script>
-<script src="assets/vendors/counter/counterup.min.js"></script>
-<script src="assets/vendors/imagesloaded/imagesloaded.js"></script>
-<script src="assets/vendors/masonry/masonry.js"></script>
-<script src="assets/vendors/masonry/filter.js"></script>
-<script src="assets/vendors/owl-carousel/owl.carousel.js"></script>
-<script src="assets/js/functions.js"></script>
-<script src="assets/js/contact.js"></script>
-<script src='assets/vendors/switcher/switcher.js'></script>
+    <!-- External JavaScripts -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/vendors/bootstrap/js/popper.min.js"></script>
+    <script src="assets/vendors/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/vendors/bootstrap-select/bootstrap-select.min.js"></script>
+    <script src="assets/vendors/bootstrap-touchspin/jquery.bootstrap-touchspin.js"></script>
+    <script src="assets/vendors/magnific-popup/magnific-popup.js"></script>
+    <script src="assets/vendors/counter/waypoints-min.js"></script>
+    <script src="assets/vendors/counter/counterup.min.js"></script>
+    <script src="assets/vendors/imagesloaded/imagesloaded.js"></script>
+    <script src="assets/vendors/masonry/masonry.js"></script>
+    <script src="assets/vendors/masonry/filter.js"></script>
+    <script src="assets/vendors/owl-carousel/owl.carousel.js"></script>
+    <script src="assets/js/functions.js"></script>
+    <script src="assets/js/contact.js"></script>
+    <script src='assets/vendors/switcher/switcher.js'></script>
 </body>
 </html>
