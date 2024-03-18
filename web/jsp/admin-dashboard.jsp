@@ -1,9 +1,5 @@
-<%-- 
-    Document   : questiondetail
-    Created on : Mar 9, 2024, 8:13:48 PM
-    Author     : User
---%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -45,8 +41,6 @@
         <!-- All PLUGINS CSS ============================================= -->
         <link rel="stylesheet" type="text/css" href="admin/assets/css/assets.css">
         <link rel="stylesheet" type="text/css" href="admin/assets/vendors/calendar/fullcalendar.css">
-        <link rel="stylesheet" type="text/css" href="admin/assets/vendors/summernote/summernote.css">
-        <link rel="stylesheet" type="text/css" href="admin/assets/vendors/file-upload/imageuploadify.min.css">
 
         <!-- TYPOGRAPHY ============================================= -->
         <link rel="stylesheet" type="text/css" href="admin/assets/css/typography.css">
@@ -58,85 +52,23 @@
         <link rel="stylesheet" type="text/css" href="admin/assets/css/style.css">
         <link rel="stylesheet" type="text/css" href="admin/assets/css/dashboard.css">
         <link class="skin" rel="stylesheet" type="text/css" href="admin/assets/css/color/color-1.css">
-
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
     </head>
     <body class="ttr-opened-sidebar ttr-pinned-sidebar">
 
         <!-- header start -->
         <jsp:include page="components/admin-header.jsp"></jsp:include>
-        <!-- header end -->
-        <!-- Left sidebar menu start -->
+            <!-- header end -->
+            <!-- Left sidebar menu start -->
         <jsp:include page="components/admin-sidebar.jsp"></jsp:include>
+        <!-- Left sidebar menu end -->
+
+        <!--Main container start -->
         <main class="ttr-wrapper">
-            <div class="form-container">
-                <h2>Update a Question</h2>
-                <form action="questiondetail" method="POST">
-                    <div class="form-group">
-                        <label for="content">Content: </label>
-                        <input type="text" id="quescontentdetail" name="quescontent" value="${questiondetail.questionContent}" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="explain">Explain: </label>
-                        <input type="text" id="quesexplaindetail" name="quesexplain" value="${questiondetail.explain}" required>
-                    </div>
-
-                    <label for="subjectsdetail">Subject: ${questiondetail.subject.subjectName}</label>
-                    <input list="subjectsdetail" name="subjectdetail" id="subjectdetail">
-                    <datalist id="subjectsdetail">
-                        <c:forEach items="${requestScope.sublistt}" var="ba">
-                            <option value="${ba.subjectName}" >
-                            </c:forEach>
-                    </datalist>
-                    <div id="options">
-                        <div class="option">
-                            <label for="option1">Option 1:</label>
-                            <input type="text" class="option-text" name="options[]" required >
-                            <input type="checkbox" class="correct-checkbox" name="corrects[]" value="1">
-                            <label for="correct1">Correct</label><br>
-                        </div>
-                    </div>
-
-                    <button type="button" onclick="addOption()">Add Option</button><br><br>
-
-                    <input type="submit" value="Submit">
-                </form>
-
-                <script>
-                    function addOption() {
-                        var optionsDiv = document.getElementById('options');
-                        var optionCount = optionsDiv.getElementsByClassName('option').length + 1;
-
-                        var newOptionDiv = document.createElement('div');
-                        newOptionDiv.className = 'option';
-
-                        var optionLabel = document.createElement('label');
-                        optionLabel.htmlFor = 'option' + optionCount;
-                        optionLabel.textContent = 'Option ' + optionCount + ':';
-                        newOptionDiv.appendChild(optionLabel);
-
-                        var optionInput = document.createElement('input');
-                        optionInput.type = 'text';
-                        optionInput.className = 'option-text';
-                        optionInput.name = 'option[]';
-                        optionInput.required = true;
-                        newOptionDiv.appendChild(optionInput);
-
-                        var correctCheckbox = document.createElement('input');
-                        correctCheckbox.type = 'checkbox';
-                        correctCheckbox.className = 'correct-checkbox';
-                        correctCheckbox.name = 'correct[]';
-                        correctCheckbox.value = optionCount;
-                        newOptionDiv.appendChild(correctCheckbox);
-
-                        var correctLabel = document.createElement('label');
-                        correctLabel.htmlFor = 'correct' + optionCount;
-                        correctLabel.textContent = 'Correct';
-                        newOptionDiv.appendChild(correctLabel);
-
-                        optionsDiv.appendChild(newOptionDiv);
-                    }
-                </script>
         </main>
+        <div class="ttr-overlay"></div>
+
+        <!-- External JavaScripts -->
         <script src="admin/assets/js/jquery.min.js"></script>
         <script src="admin/assets/vendors/bootstrap/js/popper.min.js"></script>
         <script src="admin/assets/vendors/bootstrap/js/bootstrap.min.js"></script>
@@ -153,8 +85,27 @@
         <script src="admin/assets/js/functions.js"></script>
         <script src="admin/assets/vendors/chart/chart.min.js"></script>
         <script src="admin/assets/js/admin.js"></script>
-        <script src="admin/assets/vendors/summernote/summernote.js"></script>
-        <script src="admin/assets/vendors/file-upload/imageuploadify.min.js"></script>
         <script src='admin/assets/vendors/switcher/switcher.js'></script>
+        <script>
+            // Pricing add
+            function newMenuItem() {
+                var newElem = $('tr.list-item').first().clone();
+                newElem.find('input').val('');
+                newElem.appendTo('table#item-add');
+            }
+            if ($("table#item-add").is('*')) {
+                $('.add-item').on('click', function (e) {
+                    e.preventDefault();
+                    newMenuItem();
+                });
+                $(document).on("click", "#item-add .delete", function (e) {
+                    e.preventDefault();
+                    $(this).parent().parent().parent().parent().remove();
+                });
+            }
+        </script>
+
     </body>
+
+    <!-- Mirrored from educhamp.themetrades.com/demo/admin/add-listing.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 22 Feb 2019 13:09:05 GMT -->
 </html>
