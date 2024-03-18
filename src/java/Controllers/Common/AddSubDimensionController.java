@@ -5,11 +5,13 @@
 package Controllers.Common;
 
 import DAOs.SubjectDeDAO;
+import Models.Account;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
@@ -22,7 +24,16 @@ public class AddSubDimensionController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+
+        Account account = (Account) session.getAttribute("account");
+
+        if (account == null) {
+            response.sendRedirect("login");
+
+        } else {
         request.getRequestDispatcher("jsp/addsubde.jsp").forward(request, response);
+        }
     }
 
     @Override

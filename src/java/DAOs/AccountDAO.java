@@ -42,7 +42,6 @@ public class AccountDAO extends DBContext<BaseEntity> {
                 account.setEmail(rs.getString("Email"));
                 account.setAvatar(rs.getString("Avatar") != null ? rs.getString("Avatar") : "");
                 account.setStatus(rs.getBoolean("Status"));
-
                 Role role = new Role();
                 role.setRoleId(rs.getInt("RoleID"));
                 role.setRoleName(rs.getString("RoleName"));
@@ -62,7 +61,7 @@ public class AccountDAO extends DBContext<BaseEntity> {
                     + "  FROM [Group2_SWP319_SE1749].[dbo].[Teacher]\n"
                     + "  where UserID = ?";
             PreparedStatement stm = connection.prepareStatement(sql);
-            stm.setString(1, id);
+            stm.setInt(1, Integer.parseInt(id));
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
                 Teacher t = new Teacher();
@@ -83,7 +82,7 @@ public class AccountDAO extends DBContext<BaseEntity> {
                     + "  FROM [Group2_SWP319_SE1749].[dbo].[Student]\n"
                     + "  where UserID = ?";
             PreparedStatement stm = connection.prepareStatement(sql);
-            stm.setString(1, id);
+            stm.setInt(1, Integer.parseInt(id));
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
                 Student t = new Student();

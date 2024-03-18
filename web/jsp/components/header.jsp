@@ -16,6 +16,12 @@
                                 <c:if test="${sessionScope.account.getRole().getRoleId() eq 1}">
                                 <li><a href="news-list"></i>Dashboard</a></li>
                                 </c:if>
+                                <c:if test="${sessionScope.account.getRole().getRoleId() eq 2}">
+                                <li><a href="news-list"></i>Dashboard</a></li>
+                                </c:if>
+                                <c:if test="${sessionScope.account.getRole().getRoleId() eq 3}">
+                                <li><a href="news-list"></i>Dashboard</a></li>
+                                </c:if>
                             <li><a href="logout"></i>Log out</a></li>
                             </c:if>
                         <c:if test="${sessionScope.account eq null}">
@@ -65,13 +71,13 @@
                         <a href="home"><img src="assets/images/logo.png" alt=""></a>
                     </div>
                     <ul class="nav navbar-nav">	
-                        <li class="active"><a href="javascript:;">Home</a>
+                        <li class="active"><a href="home">Home</a>
                         </li>
                         <li class=""><a href="quizzes">Quizzes</a>
                         </li>
                         <li class=""><a href="catalog">Your library</a>
                         </li>
-                        <li class=""><a href="#">News</a>
+                        <li class=""><a href="News">News</a>
                         </li>
                     </ul>
                 </div>

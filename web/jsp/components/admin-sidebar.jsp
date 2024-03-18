@@ -1,3 +1,4 @@
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div class="ttr-sidebar">
     <div class="ttr-sidebar-wrapper content-scroll">
         <!-- side menu logo start -->
@@ -18,81 +19,57 @@
                 <li>
                     <a href="index.html" class="ttr-material-button">
                         <span class="ttr-icon"><i class="ti-home"></i></span>
-                        <span class="ttr-label">Dashborad</span>
+                        <span class="ttr-label">Dashboard</span>
                     </a>
                 </li>
-                <li>
-                    <a href="user-list?action=view" class="ttr-material-button">
-                        <span class="ttr-icon"><i class="ti-user"></i></span>
-                        <span class="ttr-label">User List</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="news-list" class="ttr-material-button">
-                        <span class="ttr-icon"><i class="ti-email"></i></span>
-                        <span class="ttr-label">News List</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="ttr-material-button">
-                        <span class="ttr-icon"><i class="ti-email"></i></span>
-                        <span class="ttr-label">Mailbox</span>
-                        <span class="ttr-arrow-icon"><i class="fa fa-angle-down"></i></span>
-                    </a>
-                    <ul>
-                        <li>
-                            <a href="mailbox.html" class="ttr-material-button"><span class="ttr-label">Mail Box</span></a>
-                        </li>
-                        <li>
-                            <a href="mailbox-compose.html" class="ttr-material-button"><span class="ttr-label">Compose</span></a>
-                        </li>
-                        <li>
-                            <a href="mailbox-read.html" class="ttr-material-button"><span class="ttr-label">Mail Read</span></a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#" class="ttr-material-button">
-                        <span class="ttr-icon"><i class="ti-calendar"></i></span>
-                        <span class="ttr-label">Calendar</span>
-                        <span class="ttr-arrow-icon"><i class="fa fa-angle-down"></i></span>
-                    </a>
-                    <ul>
-                        <li>
-                            <a href="basic-calendar.html" class="ttr-material-button"><span class="ttr-label">Basic Calendar</span></a>
-                        </li>
-                        <li>
-                            <a href="list-view-calendar.html" class="ttr-material-button"><span class="ttr-label">List View</span></a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="bookmark.html" class="ttr-material-button">
-                        <span class="ttr-icon"><i class="ti-bookmark-alt"></i></span>
-                        <span class="ttr-label">Bookmarks</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="review.html" class="ttr-material-button">
-                        <span class="ttr-icon"><i class="ti-comments"></i></span>
-                        <span class="ttr-label">Review</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="ttr-material-button">
-                        <span class="ttr-icon"><i class="ti-user"></i></span>
-                        <span class="ttr-label">My Profile</span>
-                        <span class="ttr-arrow-icon"><i class="fa fa-angle-down"></i></span>
-                    </a>
-                    <ul>
-                        <li>
-                            <a href="user-profile.html" class="ttr-material-button"><span class="ttr-label">User Profile</span></a>
-                        </li>
-                        <li>
-                            <a href="teacher-profile.html" class="ttr-material-button"><span class="ttr-label">Teacher Profile</span></a>
-                        </li>
-                    </ul>
-                </li>
+                <c:if test="${sessionScope.account.getRole().getRoleId() eq 1}">
+                    <li>
+                        <a href="user-list?action=view" class="ttr-material-button">
+                            <span class="ttr-icon"><i class="ti-user"></i></span>
+                            <span class="ttr-label">Manage User</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="news-list" class="ttr-material-button">
+                            <span class="ttr-icon"><i class="ti-email"></i></span>
+                            <span class="ttr-label">Manage News</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="news-list" class="ttr-material-button">
+                            <span class="ttr-icon"><i class="ti-bookmark-alt"></i></span>
+                            <span class="ttr-label">Manage Subject</span>
+                        </a>
+                    </li>
+                </c:if>
+                <c:if test="${sessionScope.account.getRole().getRoleId() eq 2}">
+                    <li>
+                        <a href="class" class="ttr-material-button">
+                            <span class="ttr-icon"><i class="ti-user"></i></span>
+                            <span class="ttr-label">Manage Class</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="questionbank" class="ttr-material-button">
+                            <span class="ttr-icon"><i class="ti-calendar"></i></span>
+                            <span class="ttr-label">Manage Question</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="news-list" class="ttr-material-button">
+                            <span class="ttr-icon"><i class="ti-email"></i></span>
+                            <span class="ttr-label">Manage News</span>
+                        </a>
+                    </li>
+                </c:if>
+                <c:if test="${sessionScope.account.getRole().getRoleId() eq 3}">
+                    <li>
+                        <a href="StudentList" class="ttr-material-button">
+                            <span class="ttr-icon"><i class="ti-user"></i></span>
+                            <span class="ttr-label">Manage Student</span>
+                        </a>
+                    </li>
+                </c:if>
                 <li class="ttr-seperate"></li>
             </ul>
             <!-- sidebar menu end -->
