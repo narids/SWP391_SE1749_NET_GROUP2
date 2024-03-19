@@ -161,6 +161,17 @@ public class AnswerDAO extends DBContext<BaseEntity> {
         }
     }
 
+    public void deleteByID(int id){
+        try {
+            String strSQL = "DELETE FROM [Answer] WHERE QuestionID = ? ";
+            PreparedStatement statement = connection.prepareStatement(strSQL);
+            statement.setInt(1, id);
+            statement.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("getListUsers:" + e.getMessage());
+        }
+    }
+    
     @Override
     public ArrayList<BaseEntity> list() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody

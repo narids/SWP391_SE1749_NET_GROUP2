@@ -236,7 +236,7 @@ public class QuestionDAO extends DBContext<Question> {
 
     public void deleteByID(int id) {
         try {
-            String strSQL = "DELETE FROM [dbo].[Question] WHERE QuestionID = ?";
+            String strSQL = "DELETE FROM [Question] WHERE QuestionID = ?";
             PreparedStatement statement = connection.prepareStatement(strSQL);
             statement.setInt(1, id);
             statement.executeUpdate();

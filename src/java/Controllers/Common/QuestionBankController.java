@@ -4,6 +4,7 @@
  */
 package Controllers.Common;
 
+import DAOs.AnswerDAO;
 import DAOs.QuestionDAO;
 import Models.Account;
 import Models.Question;
@@ -29,7 +30,8 @@ import java.util.logging.Logger;
 public class QuestionBankController extends HttpServlet {
 
     QuestionDAO queD = new QuestionDAO();
-
+   AnswerDAO anD = new AnswerDAO();
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
@@ -38,7 +40,6 @@ public class QuestionBankController extends HttpServlet {
 
         if (account == null) {
             response.sendRedirect("login");
-
         } else {
             if (account.getRole().getRoleId() == 3 || account.getRole().getRoleId() == 2) {
                 List<Question> lst = queD.list();
@@ -56,6 +57,7 @@ public class QuestionBankController extends HttpServlet {
         switch (action) {
             case "delete":
                 int id = Integer.parseInt(request.getParameter("questionid"));
+                anD.deleteByID(id);
                 queD.deleteByID(id);
                 response.sendRedirect("questionbank");
                 break;
