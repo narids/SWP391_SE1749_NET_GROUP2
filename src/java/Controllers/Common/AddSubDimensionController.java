@@ -32,17 +32,22 @@ public class AddSubDimensionController extends HttpServlet {
             response.sendRedirect("login");
 
         } else {
-        request.getRequestDispatcher("jsp/addsubde.jsp").forward(request, response);
+            if (account.getRole().getRoleId() == 3 || account.getRole().getRoleId() == 2) {
+                request.getRequestDispatcher("jsp/addsubde.jsp").forward(request, response);
+            } else {
+                response.sendRedirect("home");
+            }
         }
     }
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String content = request.getParameter("subdiname");
-        String explain = request.getParameter("subdidetail");
-        SubjectDeDAO sub = new SubjectDeDAO();
-        sub.addnew(content, explain);
-        response.sendRedirect("subdelist");
-    }
+        @Override
+        protected void doPost
+        (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+            String content = request.getParameter("subdiname");
+            String explain = request.getParameter("subdidetail");
+            SubjectDeDAO sub = new SubjectDeDAO();
+            sub.addnew(content, explain);
+            response.sendRedirect("subdelist");
+        }
 
-}
+    }

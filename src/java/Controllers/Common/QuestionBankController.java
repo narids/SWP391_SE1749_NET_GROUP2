@@ -30,13 +30,6 @@ public class QuestionBankController extends HttpServlet {
 
     QuestionDAO queD = new QuestionDAO();
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, SQLException, ParseException {
-        List<Question> lst = queD.list();
-        request.setAttribute("queslist", lst);
-        request.getRequestDispatcher("jsp/questionbank.jsp").forward(request, response);
-    }
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
@@ -47,19 +40,19 @@ public class QuestionBankController extends HttpServlet {
             response.sendRedirect("login");
 
         } else {
-        try {
-            processRequest(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(QuestionBankController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
-            Logger.getLogger(QuestionBankController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            if (account.getRole().getRoleId() == 3 || account.getRole().getRoleId() == 2) {
+                List<Question> lst = queD.list();
+                request.setAttribute("queslist", lst);
+                request.getRequestDispatcher("jsp/questionbank.jsp").forward(request, response);
+            } else {
+                response.sendRedirect("home");
+            }
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-         String action = request.getParameter("quesaction");
+        String action = request.getParameter("quesaction");
         switch (action) {
             case "delete":
                 int id = Integer.parseInt(request.getParameter("questionid"));

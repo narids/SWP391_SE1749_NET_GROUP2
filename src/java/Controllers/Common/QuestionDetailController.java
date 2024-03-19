@@ -46,24 +46,28 @@ public class QuestionDetailController extends HttpServlet {
             response.sendRedirect("login");
 
         } else {
-        AnswerDAO an = new AnswerDAO();
-        SubjectDAO subD = new SubjectDAO();
-        List<Subject> lst = subD.list();
-        request.setAttribute("sublistt", lst);
-        String id = request.getParameter("questionid");
-        QuestionDAO qued = new QuestionDAO();
-        Question que = qued.getbyId(id);
-        request.setAttribute("questiondetail", que);
-        List<Answer> list = an.getAnswerByQuestion(Integer.parseInt(id));
+            if (account.getRole().getRoleId() == 3 || account.getRole().getRoleId() == 2) {
+                AnswerDAO an = new AnswerDAO();
+                SubjectDAO subD = new SubjectDAO();
+                List<Subject> lst = subD.list();
+                request.setAttribute("sublistt", lst);
+                String id = request.getParameter("questionid");
+                QuestionDAO qued = new QuestionDAO();
+                Question que = qued.getbyId(id);
+                request.setAttribute("questiondetail", que);
+                List<Answer> list = an.getAnswerByQuestion(Integer.parseInt(id));
                 request.setAttribute("listan", list);
-        request.getRequestDispatcher("jsp/questiondetail.jsp").forward(request, response);
+                request.getRequestDispatcher("jsp/questiondetail.jsp").forward(request, response);
+            } else {
+                response.sendRedirect("home");
+            }
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String id = request.getParameter("questionid");
-        
+
         String content = request.getParameter("quescontentdetail");
         String explain = request.getParameter("quesexplaindetail");
         String subject = request.getParameter("subjectdetail");

@@ -23,8 +23,9 @@ import java.util.List;
  */
 @WebServlet(name = "QuizListController", urlPatterns = {"/quizlist"})
 
-public class QuizListController extends HttpServlet{
-     @Override
+public class QuizListController extends HttpServlet {
+
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
 
@@ -34,16 +35,20 @@ public class QuizListController extends HttpServlet{
             response.sendRedirect("login");
 
         } else {
-        SubjectDAO subD = new SubjectDAO();
-        String id = request.getParameter("subjectid");
-        List<ClassSubject> lst = subD.getlistQuiz(id);
-        request.setAttribute("quizlistbyid", lst);
-        request.getRequestDispatcher("jsp/quizlist.jsp").forward(request, response);
+            if (account.getRole().getRoleId() == 3 || account.getRole().getRoleId() == 2) {
+                SubjectDAO subD = new SubjectDAO();
+                String id = request.getParameter("subjectid");
+                List<ClassSubject> lst = subD.getlistQuiz(id);
+                request.setAttribute("quizlistbyid", lst);
+                request.getRequestDispatcher("jsp/quizlist.jsp").forward(request, response);
+            } else {
+                response.sendRedirect("home");
+            }
         }
     }
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
+
     }
 }
