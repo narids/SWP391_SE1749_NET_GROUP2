@@ -64,5 +64,4 @@ public class SubjectController extends HttpServlet{
                 throw new AssertionError();
         }
     }
-    
 }
