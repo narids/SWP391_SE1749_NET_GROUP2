@@ -56,9 +56,10 @@ public class QuizSearchController extends HttpServlet {
         int noOfPages = 1;
         switch (type) {
             case 1:
-                List<Quiz> quizzes = qdao.getQuizzes(keyword);
+                List<Quiz> quizzes = qdao.searchQuizzes(keyword);
                 noOfPages = (int) Math.ceil(quizzes.size() * 1.0 / 12);
                 quizzes = new Pagination().paginateRecords(quizzes, page, 12);
+                System.out.println(quizzes);
                 request.setAttribute("quizzes", quizzes);
                 break;
             case 3:
