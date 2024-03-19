@@ -307,7 +307,7 @@
                                                             <a href="#" class="btn">Take Quiz</a>
                                                         </div>
                                                         <div class="info-bx text-center">
-                                                            <h5><a href="#">${q.quizContent}</a></h5>
+                                                            <h5><a href="#">${q.quizName}</a></h5>
                                                         </div>
                                                         <div class="cours-more-info">
                                                             <div class="review">
