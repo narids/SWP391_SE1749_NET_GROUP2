@@ -39,10 +39,14 @@ public class AddSubjectController extends HttpServlet {
             response.sendRedirect("login");
 
         } else {
-        int id = Integer.parseInt(request.getParameter("subjectdeid"));
-        SubjectDimension subdi = subD.getbyIDfull(id);
-        request.setAttribute("subjectdimension", subdi);
-        request.getRequestDispatcher("jsp/addsubject.jsp").forward(request, response);
+            if (account.getRole().getRoleId() == 3 || account.getRole().getRoleId() == 2) {
+                int id = Integer.parseInt(request.getParameter("subjectdeid"));
+                SubjectDimension subdi = subD.getbyIDfull(id);
+                request.setAttribute("subjectdimension", subdi);
+                request.getRequestDispatcher("jsp/addsubject.jsp").forward(request, response);
+            } else {
+                response.sendRedirect("home");
+            }
         }
     }
 

@@ -34,12 +34,15 @@ public class SubDimensionDetailController extends HttpServlet {
 
         if (account == null) {
             response.sendRedirect("login");
-
         } else {
-        int id = Integer.parseInt(request.getParameter("subjectdeid"));
-        SubjectDimension subd = subde.getbyID(id);
-        request.setAttribute("subdedetail", subd);
-        request.getRequestDispatcher("jsp/subdedetail.jsp").forward(request, response);
+            if (account.getRole().getRoleId() == 3 || account.getRole().getRoleId() == 2) {
+                int id = Integer.parseInt(request.getParameter("subjectdeid"));
+                SubjectDimension subd = subde.getbyID(id);
+                request.setAttribute("subdedetail", subd);
+                request.getRequestDispatcher("jsp/subdedetail.jsp").forward(request, response);
+            } else{
+                response.sendRedirect("home");
+            }
         }
     }
 
@@ -48,8 +51,7 @@ public class SubDimensionDetailController extends HttpServlet {
         String content = request.getParameter("subdiname");
         String explain = request.getParameter("subdidetail");
         int id = Integer.parseInt(request.getParameter("subjectdeid"));
-        SubjectDeDAO sub = new SubjectDeDAO();
-        sub.updateDi(content, explain, id);
+        subde.updateDi(content, explain, id);
         response.sendRedirect("subdelist");
     }
 

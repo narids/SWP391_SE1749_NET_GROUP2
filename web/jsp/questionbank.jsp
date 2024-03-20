@@ -85,7 +85,7 @@
                                     Add a question
                                 </a>
                             </div>
-                            <table border="1px"> 
+                            <table id="Mytable" border="1px"> 
                                 <tr>
                                     <td>#</td>
                                     <td>Subject</td>
@@ -269,7 +269,10 @@
         <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 
         <script>
-            let table = new DataTable('#myTable');
+            let table = new DataTable('#' , {
+                lengthChange: false,
+                length: 5
+            });
         </script>
         <script>
             // Pricing add

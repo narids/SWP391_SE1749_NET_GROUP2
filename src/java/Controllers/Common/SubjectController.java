@@ -37,11 +37,15 @@ public class SubjectController extends HttpServlet{
             response.sendRedirect("login");
 
         } else {
+            if (account.getRole().getRoleId() == 3 || account.getRole().getRoleId() == 2) {
         String id = request.getParameter("subjectdeid");
         List<Subject> lst = queD.getlist(id);
         request.setAttribute("subdiid", id);
         request.setAttribute("sublistbyid", lst);
         request.getRequestDispatcher("jsp/subjectList.jsp").forward(request, response);
+         } else{
+                response.sendRedirect("home");
+            }
         }
     }
 
