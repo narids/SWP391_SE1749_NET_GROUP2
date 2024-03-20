@@ -90,18 +90,18 @@
                                 </a>
                             </div>
                             <div class="widget-inner">
-                                <table id="myTable" class="table table-hover">
+                                <table id="Mytable" class="table table-hover" border="0px">
                                     <thead>
                                         <tr>
                                             <th scope="col">#</th>
                                             <th scope="col">Class Name</th>
                                             <th scope="col">Teacher</th>
                                             <th scope="col">Action</th>
-                                            <th scope="col"></th>
-                                            <th scope="col"></th>
+                                     
+                                         
                                         </tr>
                                     </thead>
-                                    <tbody>                                  
+                                                                      
                                         <c:forEach  var="n" items="${ClassList}">
                                             <tr>
 
@@ -122,7 +122,7 @@
                                                 </td>
                                             </tr>
                                         </c:forEach>
-                                    </tbody>
+                                    
                                 </table>
                             </div>
                         </div>
@@ -195,6 +195,32 @@
         <script src="assets/vendors/chart/chart.min.js"></script>
         <script src="assets/js/admin.js"></script>
         <script src='assets/vendors/switcher/switcher.js'></script>
+        <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+
+         <script>
+            let table = new DataTable('#Mytable' , {
+                lengthChange: false,
+                length: 5
+            });
+        </script>
+        <script>
+            // Pricing add
+            function newMenuItem() {
+                var newElem = $('tr.list-item').first().clone();
+                newElem.find('input').val('');
+                newElem.appendTo('table#item-add');
+            }
+            if ($("table#item-add").is('*')) {
+                $('.add-item').on('click', function (e) {
+                    e.preventDefault();
+                    newMenuItem();
+                });
+                $(document).on("click", "#item-add .delete", function (e) {
+                    e.preventDefault();
+                    $(this).parent().parent().parent().parent().remove();
+                });
+            }
+        </script>
     </body>
 
 </html>

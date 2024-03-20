@@ -137,59 +137,59 @@
 
             <div id="loading-icon-bx"></div>
             <!-- Header Top ==== -->
-    <jsp:include page="components/header.jsp"></jsp:include>
-            <!-- header END ==== -->
-            <!-- Content -->
-            <div class="page-content bg-white">
-                <!-- Breadcrumb row -->
-                <div class="breadcrumb-row">
-                    <div class="container">
-                        <ul class="list-inline">
-                            <li><a href="home">Home</a></li>
-                            <li><a href="catalog">Catalog</a></li>
-                            <li>Class Detail</li>
-                        </ul>
-                    </div>
-                </div>
-                <!-- Breadcrumb row END -->
-                <!-- inner page banner END -->
-                <div class="content-block">
-                    <!-- About Us -->
-                    <div class="section-area section-sp1" style="padding-top: 30px">
+            <jsp:include page="components/header.jsp"></jsp:include>
+                <!-- header END ==== -->
+                <!-- Content -->
+                <div class="page-content bg-white">
+                    <!-- Breadcrumb row -->
+                    <div class="breadcrumb-row">
                         <div class="container">
-                            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                <li class="nav-item">
-                                    <a class="nav-link  show active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Subject</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Student</a>
-                                </li>
-
+                            <ul class="list-inline">
+                                <li><a href="home">Home</a></li>
+                                <li><a href="catalog">Catalog</a></li>
+                                <li>Class Detail</li>
                             </ul>
-                            <div class="tab-content" id="myTabContent">
-                                <div class="tab-pane fade  show active " id="home" role="tabpanel" aria-labelledby="home-tab">
-                                    <table>
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">#</th>
-                                            <th scope="col">SubjectID</th>
-                                            <th scope="col">Subject Name</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <c:forEach items="${sjList}" var="st" varStatus="loop">
-                                            <tr>
-                                                <th scope="row">${loop.index + 1}</th>
-                                                <td>${st.getSubjectId()}</td>
-                                                <td><a href="quizlist?subjectid=${st.getSubjectId()}">${st.getSubjectName()}
-                                                    </a></td>   
-                                            </tr>
-                                        </c:forEach>
-                                    </tbody>
+                        </div>
+                    </div>
+                    <!-- Breadcrumb row END -->
+                    <!-- inner page banner END -->
+                    <div class="content-block">
+                        <!-- About Us -->
+                        <div class="section-area section-sp1" style="padding-top: 30px">
+                            <div class="container">
+                                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link  show active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Subject</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Student</a>
+                                    </li>
+
+                                </ul>
+                                <div class="tab-content" id="myTabContent">
+                                    <div class="tab-pane fade  show active " id="home" role="tabpanel" aria-labelledby="home-tab">
+                                        <table id="myTable">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">#</th>
+                                                    <th scope="col">SubjectID</th>
+                                                    <th scope="col">Subject Name</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            <c:forEach items="${sjList}" var="st" varStatus="loop">
+                                                <tr>
+                                                    <th scope="row">${loop.index + 1}</th>
+                                                    <td>${st.getSubjectId()}</td>
+                                                    <td><a href="quizlist?subjectid=${st.getSubjectId()}">${st.getSubjectName()}
+                                                        </a></td>   
+                                                </tr>
+                                            </c:forEach>
+                                        </tbody>
                                     </table>
                                 </div>
 
-                                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">  <table class="table">
+                                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">  <table class="myTable">
                                         <thead>
                                             <tr>
                                                 <th scope="col">#</th>
@@ -202,7 +202,7 @@
                                                 <tr>
                                                     <th scope="row">${loop.index + 1}</th>
                                                     <td><a href="StudentProfile?studentId=${st.getStudentId()}">${st.getStudentId()}
-                                                    </a></td>
+                                                        </a></td>
                                                     <td>${st.getName()}</td>
                                                 </tr>
                                             </c:forEach>
@@ -495,6 +495,14 @@
         <script src="assets/js/functions.js"></script>
         <script src="assets/js/contact.js"></script>
         <script src="assets/vendors/switcher/switcher.js"></script>
+        <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+
+        <script>
+            let table = new DataTable('#myTable', {
+                lengthChange: false,
+                length: 5
+            });
+        </script>
 
     </body>
 
