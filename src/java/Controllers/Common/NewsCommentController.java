@@ -79,23 +79,25 @@ public class NewsCommentController extends HttpServlet {
         int UserID;
         if (account != null) {
             UserID = account.getUserId();
+            String content = request.getParameter("content");
+            int ParentID;
+            if (request.getParameter("parentId") != null) {
+                ParentID = Integer.parseInt(request.getParameter("parentId"));
+
+            } else {
+                ParentID = 0;
+            }
+            int newsID = Integer.parseInt(request.getParameter("newsId"));
+
+            n.addComment(content, UserID, newsID, ParentID);
+            response.sendRedirect("news-display-detail?newsId=" + newsID);
         } else {
             // If account is null, set UserID to 0
-            UserID = 4;
+
+            request.getRequestDispatcher("jsp/login.jsp").forward(request, response);
+
         }
 
-        String content = request.getParameter("content");
-        int ParentID;
-        if (request.getParameter("parentId") != null) {
-            ParentID = Integer.parseInt(request.getParameter("parentId"));
-
-        }else{ 
-            ParentID = 0;
-        }
-        int newsID = Integer.parseInt(request.getParameter("newsId"));
-
-        n.addComment(content, UserID, newsID, ParentID);
-        response.sendRedirect("news-display-detail?newsId=" + newsID);
     }
 
     /**

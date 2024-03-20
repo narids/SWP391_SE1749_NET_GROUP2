@@ -71,7 +71,7 @@
                         <a href="home"><img src="assets/images/logo.png" alt=""></a>
                     </div>
                     <ul class="nav navbar-nav">	
-                        <li class="active"><a href="javascript:;">Home</a>
+                        <li class="active"><a href="home">Home</a>
                         </li>
                         <li class=""><c:if test="${sessionScope.account.getRole().getRoleId() eq 2 or sessionScope.account.getRole().getRoleId() eq 3}"> <a href="subdelist">Subject Dimension</a></c:if>
                         </li>

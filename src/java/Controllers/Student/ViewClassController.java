@@ -2,25 +2,26 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controllers.Teacher;
+package Controllers.Student;
 
 import DAOs.ClassDAO;
 import DAOs.StudentDAO;
-import Models.Student;
+import Models.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import java.util.List;
 
 /**
  *
  * @author nghia
  */
-public class StudentListController extends HttpServlet {
+@WebServlet(name = "ViewClassController", urlPatterns = {"/ViewClass"})
+public class ViewClassController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,14 +35,17 @@ public class StudentListController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
+        try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-
-//            StudentDAO s = new StudentDAO();
-//            int ClassID = Integer.parseInt(request.getParameter("Classid"));
-//            List<Student> StudentList = s.getStudentIdByClassID(ClassID);
-//            request.setAttribute("StudentList", StudentList);
-//            request.getRequestDispatcher("jsp/Student-list.jsp").forward(request, response);
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet ViewClassController</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet ViewClassController at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
         }
     }
 
@@ -57,14 +61,19 @@ public class StudentListController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        processRequest(request, response);
-        StudentDAO s = new StudentDAO();
-//        int ClassID = Integer.parseInt(request.getParameter("Classid"));
-        HttpSession session = request.getSession();
-        int ClassID = (int) session.getAttribute("Classid");
-        List<Student> StudentList = s.getStudentIdByClassID(ClassID);
-        request.setAttribute("StudentList", StudentList);
-        request.getRequestDispatcher("jsp/Student-list.jsp").forward(request, response);
+//        Account account = (Account) request.getSession().getAttribute("account");
+
+        int classID = Integer.parseInt(request.getParameter("classId"));
+        StudentDAO st = new StudentDAO();
+        List<Student> stList = st.getStudentIdByClassID(classID);
+        request.setAttribute("stList", stList);
+
+        ClassDAO c = new ClassDAO();
+        List<Subject> sjList = c.getSubjectByClassID(classID);
+        request.setAttribute("sjList", sjList);
+        
+
+        request.getRequestDispatcher("jsp/ClassViewDetail.jsp").forward(request, response);
     }
 
     /**
@@ -78,21 +87,7 @@ public class StudentListController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String action = request.getParameter("action");
-        if (action != null) {
-            StudentDAO s = new StudentDAO();
-            switch (action) {
-                case "delete":
-                    HttpSession session = request.getSession();
-                    int ClassID = (int) session.getAttribute("Classid");
-                    int id = Integer.parseInt(request.getParameter("StudentID"));
-                    s.removeStudentFromClassByStudentID(id, ClassID);
-                    response.sendRedirect("StudentList");
-                    break;
-                default:
-                    throw new AssertionError();
-            }
-        }
+        processRequest(request, response);
     }
 
     /**

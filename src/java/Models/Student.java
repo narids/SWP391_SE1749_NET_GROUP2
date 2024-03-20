@@ -4,13 +4,11 @@
  */
 package Models;
 
-
 /**
  *
  * @author admin
  */
-public class Student extends BaseEntity
-{
+public class Student extends BaseEntity {
 
     private int userId;
     private int studentId;
@@ -25,8 +23,13 @@ public class Student extends BaseEntity
         this.studentId = studentId;
         this.user = user;
     }
-    
- 
+
+    public Student(int userId, int studentId, String name) {
+        this.userId = userId;
+        this.studentId = studentId;
+        this.name = name;
+
+    }
 
     public int getUserId() {
         return userId;

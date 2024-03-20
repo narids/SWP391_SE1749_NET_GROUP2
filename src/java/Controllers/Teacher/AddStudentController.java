@@ -14,6 +14,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
@@ -34,7 +35,7 @@ public class AddStudentController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
+        try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
@@ -62,7 +63,8 @@ public class AddStudentController extends HttpServlet {
             throws ServletException, IOException {
 //        processRequest(request, response);
         ClassDAO t = new ClassDAO();
-        int ClassID = Integer.parseInt(request.getParameter("Classid"));
+        HttpSession session = request.getSession();
+        int ClassID = (int) session.getAttribute("Classid");
         MyClass ClassSelected = t.getClassesByID(ClassID);
         String ClassName = ClassSelected.getClassName();
         request.setAttribute("ClassName", ClassName);
@@ -83,9 +85,10 @@ public class AddStudentController extends HttpServlet {
             throws ServletException, IOException {
 //        processRequest(request, response);
         String email = request.getParameter("StudentEmail");
-        int ClassID = Integer.parseInt(request.getParameter("HiddenClassID"));
+        HttpSession session = request.getSession();
+        int ClassID = (int) session.getAttribute("Classid");
         StudentDAO s = new StudentDAO();
-        String StudentID = s.getStudentIdByEmail(email);
+        int StudentID = s.getStudentIdByEmail(email);
         s.addStudentToClass(StudentID, ClassID);
         response.sendRedirect("StudentList");
     }

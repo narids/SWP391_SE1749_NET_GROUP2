@@ -92,7 +92,7 @@ public class UserListController extends HttpServlet {
                             request.getParameter("status").contains("1") ? true : false,
                             password);
                     try {
-                        SendEmail.sendEmailPassword(request.getParameter("email"), request.getParameter("username"), password);
+                        SendEmail.sendEmailPassword(request.getParameter("email"), request.getParameter("email"), password);
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }

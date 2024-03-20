@@ -136,6 +136,27 @@ public class QuizDAO extends DBContext<BaseEntity> {
         return ltQuiz;
     }
 
+    public List<Quiz> searchQuizzes(String keyword) {
+        List<Quiz> ltQuiz = new ArrayList<>();
+        String sql = "SELECT * FROM Quiz WHERE QuizName LIKE ? AND QuizStatus = 1";
+        try {
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setString(1, "%" + keyword + "%");
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Quiz quiz = new Quiz();
+                quiz.setQuizId(rs.getInt("QuizID"));
+                quiz.setQuizName(rs.getString("QuizName"));
+                quiz.setQuizContent(rs.getString("QuizContent"));
+                quiz.setCreatedDate(rs.getString("CreatedDate"));
+                ltQuiz.add(quiz);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(QuizDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ltQuiz;
+    }
+
     public List<ClassSubject> getQuizzesByTeacherID(String sql) {
         List<ClassSubject> ltQuiz = new ArrayList<>();
 
@@ -594,11 +615,11 @@ public class QuizDAO extends DBContext<BaseEntity> {
 
     public static void main(String[] args) {
         QuizDAO q = new QuizDAO();
-        System.out.println(q.getQuizById("1"));
-//        List<Quiz> quizList = q.getQuizList(0, 0, createdDay);
-//        for (Quiz quiz : quizList) {
-//            System.out.println(quiz);
-//        }
+//        System.out.println(q.getQuizById("1"));
+        List<Quiz> quizList = q.searchQuizzes("");
+        for (Quiz quiz : quizList) {
+            System.out.println(quiz);
+        }
     }
 
     @Override
