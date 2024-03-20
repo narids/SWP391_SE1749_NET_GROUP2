@@ -24,7 +24,8 @@ import java.io.IOException;
  */
 @WebServlet(name = "SubjectDetailController", urlPatterns = {"/subjectdetail"})
 
-public class SubjectDetailController extends HttpServlet{
+public class SubjectDetailController extends HttpServlet {
+
     SubjectDAO subde = new SubjectDAO();
 
     @Override
@@ -35,12 +36,15 @@ public class SubjectDetailController extends HttpServlet{
 
         if (account == null) {
             response.sendRedirect("login");
-
         } else {
-        int id = Integer.parseInt(request.getParameter("subjectid"));
-        Subject subd = subde.getbyID(id);
-        request.setAttribute("subjectdetail", subd);
-        request.getRequestDispatcher("jsp/subjectdetail.jsp").forward(request, response);
+            if (account.getRole().getRoleId() == 3 || account.getRole().getRoleId() == 2) {
+                int id = Integer.parseInt(request.getParameter("subjectid"));
+                Subject subd = subde.getbyID(id);
+                request.setAttribute("subjectdetail", subd);
+                request.getRequestDispatcher("jsp/subjectdetail.jsp").forward(request, response);
+            } else {
+                response.sendRedirect("home");
+            }
         }
     }
 
@@ -49,8 +53,8 @@ public class SubjectDetailController extends HttpServlet{
         String content = request.getParameter("subname");
         String explain = request.getParameter("subdetail");
         int id = Integer.parseInt(request.getParameter("subjectid"));
-                        String deid = String.valueOf(subde.getIDbyID(id));
+        String deid = String.valueOf(subde.getIDbyID(id));
         subde.updateSubject(content, explain, id);
-        response.sendRedirect("subjectlist?subjectdeid="+deid);
+        response.sendRedirect("subjectlist?subjectdeid=" + deid);
     }
 }

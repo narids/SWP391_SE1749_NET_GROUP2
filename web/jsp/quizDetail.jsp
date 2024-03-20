@@ -138,29 +138,29 @@
             <div id="loading-icon-bx"></div>
             <!-- Header Top ==== -->
             <jsp:include page="components/header.jsp"></jsp:include>
-            <!-- header END ==== -->
-            <!-- Content -->
-            <div class="page-content bg-white">
-                <!-- Breadcrumb row -->
-                <div class="breadcrumb-row">
-                    <div class="container">
-                        <ul class="list-inline">
-                            <li><a href="home">Home</a></li>
-                            <li><a href="quizzes">Quizzes</a></li>
-                            <li>Quizzes Detail</li>
-                        </ul>
-                    </div>
-                </div>
-                <!-- Breadcrumb row END -->
-                <!-- inner page banner END -->
-                <div class="content-block">
-                    <!-- About Us -->
-                    <div class="section-area section-sp1" style="padding-top: 30px">
+                <!-- header END ==== -->
+                <!-- Content -->
+                <div class="page-content bg-white">
+                    <!-- Breadcrumb row -->
+                    <div class="breadcrumb-row">
                         <div class="container">
-                            <div class="row d-flex flex-row-reverse">
-                                <div class="col-lg-3 col-md-4 col-sm-12 m-b30">
-                                    <div class="course-detail-bx">
-                                        <div class="course-buy-now text-center">
+                            <ul class="list-inline">
+                                <li><a href="home">Home</a></li>
+                                <li><a href="quizzes">Quizzes</a></li>
+                                <li>Quizzes Detail</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- Breadcrumb row END -->
+                    <!-- inner page banner END -->
+                    <div class="content-block">
+                        <!-- About Us -->
+                        <div class="section-area section-sp1" style="padding-top: 30px">
+                            <div class="container">
+                                <div class="row d-flex flex-row-reverse">
+                                    <div class="col-lg-3 col-md-4 col-sm-12 m-b30">
+                                        <div class="course-detail-bx">
+                                            <div class="course-buy-now text-center">
                                             <c:choose>
                                                 <c:when test = "${sessionScope.account.role.roleId != 4}">
                                                     <a class="btn radius-xl text-uppercase" onclick="updateQuizBtnAction(${quiz.quiz.quizId}, '${quiz.quiz.quizName}', '${quiz.quiz.quizContent}', ${quiz.subject.subjectId})" data-bs-toggle="modal" data-bs-target="#updateQuizModal">Update quiz</a>
@@ -217,7 +217,9 @@
                                     <div class="m-b30" id="quizzes">
                                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px">
                                             <h4 id="questionLengthCount">Question & Answers (${questions.size()})</h4>
-                                            <a class="btn radius-xl text-uppercase" onclick="addQuestionBtnClick(${quiz.subject.subjectId}, ${quiz.quiz.quizId})" data-bs-toggle="modal" data-bs-target="#addQuestionModal">Add question</a>
+                                            <c:if test = "${sessionScope.account.role.roleId != 4}">
+                                                <a class="btn radius-xl text-uppercase" onclick="addQuestionBtnClick(${quiz.subject.subjectId}, ${quiz.quiz.quizId})" data-bs-toggle="modal" data-bs-target="#addQuestionModal">Add question</a>
+                                            </c:if>
                                         </div>
                                         <ul class="curriculum-list" id="listQuestions">
                                             <c:forEach var="q" items="${questions}" varStatus="loop">
@@ -558,52 +560,47 @@
             </div>
 
             <div class="modal fade" id="addQuestionModal" tabindex="-1" aria-labelledby="addQuestionModal" aria-hidden="true">
-                <div class="modal-dialog" style="margin: 8.75rem auto; display: flex; max-width: 1000px;">
-                    <form id="addQuestionForm" class="needs-validation" novalidate method="post">
-                        <div class="modal-content" style="border-top-left-radius: 20px; min-width: 600px">
-                            <div class="modal-header">
-                                <h4 class="modal-title fs-5" id="exampleModalLabel">Create Question</h4>
-                            </div>
-                            <div class="modal-body" style="height: 320px;">
-                                <div class="row placeani">
-                                    <div class="col-lg-12">
-                                        <div class="form-group">
-                                            <div class="">Question:</div>
-                                            <div class="input-group">
-                                                <input name="question" id="questionInput" placeholder="Enter question" value="" minlength="6" type="text" required class="form-control">
-                                                <div class="invalid-feedback">
-                                                    Question must least 6 char
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row placeani">
-                                    <div class="col-lg-12" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px">
-                                        <div>Answers:</div>
-                                        <button class="btn radius-xl text-uppercase" style="font-size: 10px; padding: 7px 15px;" id="addAnswer">Add answer</button>
-                                    </div>
-                                    <div class="col-lg-12" id="answersWrapper">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button id="addQuestionSubmit" class="btn btn-primary">Submit</button>
-                            </div>
-                        </div>
-                    </form>
-
-                    <div class="modal-content" style="border-top-right-radius: 20px; min-width: 400px;">
+                <div class="modal-dialog" style="margin: 8.75rem auto; max-width: 1000px;">
+                    <div class="modal-content">
                         <div class="modal-header">
                             <h4 class="modal-title fs-5" id="exampleModalLabel">${quiz.subject.subjectName}</h4>
+                            <input type="text" id="searchQuestionInModalAdd" placeholder="Search question" style='height: 40px; border: 1px; margin-left: auto; margin-right: 40px; border-color: #e7ecf1; border-style: solid; padding-left: 10px; padding-right: 10px'/>
                             <i class="bi bi-x-lg" data-bs-dismiss="modal" aria-label="Close" style="cursor: pointer"></i>
                         </div>
+
                         <div class="modal-body placeani" id="questionsBySubject" style="padding: 15px; height: 320px; overflow-y: auto">
-                            <div class="question-group" style="display: flex; gap: 15px; margin-bottom: 15px; padding: 10px 14px; box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; height: fit-content; border-radius: 20px">
-                                <div class="question">Which is the most appropriate way when you want to resolve the disagreement requirement between Corporate customers?</div>
-                                <i class="bi bi-plus-circle-fill" style="color: green; margin-top: 2px; font-size: 25px; cursor: pointer"></i>
-                            </div>
+                        </div>
+
+                        <div id="addQuestionFooter" style="display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 7px 23px; border-top: 0.5px lightgray solid">
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination" style="margin: 0;">
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+
+                            <button style="padding: 5px 30px;
+                                    border: none;
+                                    background: green;
+                                    color: white;
+                                    border-radius: 18px;
+                                    text-transform: capitalize;"
+                                    id="addAllQuestionsBtn"
+                                    onclick="addAllQuestionsClick()"
+                                    >
+                                Add all
+                            </button>
                         </div>
                     </div>
 
@@ -710,437 +707,479 @@
         <script src="assets/js/contact.js"></script>
         <script src="assets/vendors/switcher/switcher.js"></script>
         <script>
-                                                                let questionID = "";
-                                                                let quizID = "";
-                                                                let subjectId = "";
-                                                                let indexAnswerDelete = 0;
-                                                                let answersDelete = [];
-                                                                let answerDeleteID = 0;
-                                                                let quizContent = "";
-                                                                let quizName = "";
+                                        let questionID = "";
+                                        let quizID = "";
+                                        let subjectId = "";
+                                        let indexAnswerDelete = 0;
+                                        let answersDelete = [];
+                                        let answerDeleteID = 0;
+                                        let quizContent = "";
+                                        let quizName = "";
 
-                                                                function updateQuizBtnAction(quizID1, quizName1, quizContent1, subjectID1) {
-                                                                    quizID = quizID1;
-                                                                    quizContent = quizContent1;
-                                                                    quizName = quizName1;
-                                                                    subjectId = subjectID1;
+                                        function updateQuizBtnAction(quizID1, quizName1, quizContent1, subjectID1) {
+                                            quizID = quizID1;
+                                            quizContent = quizContent1;
+                                            quizName = quizName1;
+                                            subjectId = subjectID1;
 
-                                                                    $("#quizNameInput").val(quizName);
-                                                                    $("#quizContentInput").val(quizContent);
-                                                                }
-                                                                function deleteQuestionBtnClick(questionID1, quizID1, subjectId1) {
-                                                                    questionID = questionID1;
-                                                                    quizID = quizID1;
-                                                                    subjectId = subjectId1;
-                                                                }
-                                                                function updateQuestionBtnClick(questionID1, quizID1, subjectId1) {
-                                                                    questionID = questionID1;
-                                                                    quizID = quizID1;
-                                                                    subjectId = subjectId1;
+                                            $("#quizNameInput").val(quizName);
+                                            $("#quizContentInput").val(quizContent);
+                                        }
+                                        function deleteQuestionBtnClick(questionID1, quizID1, subjectId1) {
+                                            questionID = questionID1;
+                                            quizID = quizID1;
+                                            subjectId = subjectId1;
+                                        }
+                                        function updateQuestionBtnClick(questionID1, quizID1, subjectId1) {
+                                            questionID = questionID1;
+                                            quizID = quizID1;
+                                            subjectId = subjectId1;
 
-                                                                    $.ajax({
-                                                                        url: "/SWP391_SE1749_NET_GROUP2/quizzes",
-                                                                        type: "post",
-                                                                        data: {
-                                                                            questionID: questionID,
-                                                                            action: "getQuestion"
-                                                                        },
-                                                                        success: function (data) {
-                                                                            if (data !== "") {
-                                                                                $("#updateQuestionForm").empty();
-                                                                                let parent = document.getElementById("updateQuestionForm");
-                                                                                parent.insertAdjacentHTML('beforeend', data);
+                                            $.ajax({
+                                                url: "/SWP391_SE1749_NET_GROUP2/quizzes",
+                                                type: "post",
+                                                data: {
+                                                    questionID: questionID,
+                                                    action: "getQuestion"
+                                                },
+                                                success: function (data) {
+                                                    if (data !== "") {
+                                                        $("#updateQuestionForm").empty();
+                                                        let parent = document.getElementById("updateQuestionForm");
+                                                        parent.insertAdjacentHTML('beforeend', data);
 
-                                                                            } else {
-                                                                                toastMessageAction("Get Question failed!", "red");
-                                                                            }
+                                                    } else {
+                                                        toastMessageAction("Get Question failed!", "red");
+                                                    }
 
-                                                                        },
-                                                                        error: function () {
-                                                                            toastMessageAction("Something went wrong", "red");
-                                                                        }
-                                                                    });
-                                                                }
-                                                                function addQuestionBtnClick(subjectId1, quizID1) {
-                                                                    quizID = quizID1;
-                                                                    subjectId = subjectId1;
+                                                },
+                                                error: function () {
+                                                    toastMessageAction("Something went wrong", "red");
+                                                }
+                                            });
+                                        }
+                                        function addQuestionBtnClick(subjectId1, quizID1) {
+                                            quizID = quizID1;
+                                            subjectId = subjectId1;
 
-                                                                    $.ajax({
-                                                                        url: "/SWP391_SE1749_NET_GROUP2/quizzes",
-                                                                        type: "post",
-                                                                        data: {
-                                                                            subjectId: subjectId1,
-                                                                            quizID: quizID,
-                                                                            action: "getQuestionsBySubject"
-                                                                        },
-                                                                        success: function (data) {
-                                                                            let mess = "Get Question successfuly!";
-                                                                            let color = "green";
+                                            $.ajax({
+                                                url: "/SWP391_SE1749_NET_GROUP2/quizzes",
+                                                type: "post",
+                                                data: {
+                                                    subjectId: subjectId1,
+                                                    quizID: quizID,
+                                                    action: "getQuestionsBySubject"
+                                                },
+                                                success: function (data) {
+                                                    switch (data) {
+                                                        case "failed":
+                                                            toastMessageAction("Get Question failed!", "red");
+                                                            $("#addQuestionFooter").hide();
+                                                            $("#searchQuestionInModalAdd").hide();
+                                                            break;
+                                                        case "empty":
+                                                            $("#questionsBySubject").html("<div style=\"display: flex; justify-content:center; align-items: center;\">Dont have any questions</div>");
+                                                            $("#addQuestionFooter").hide();
+                                                            $("#searchQuestionInModalAdd").hide();
+                                                            break;
 
-                                                                            switch (data) {
-                                                                                case "failed":
-                                                                                    mess = "Get Question failed!";
-                                                                                    color = "red";
-                                                                                    toastMessageAction(mess, color);
-                                                                                    break;
-                                                                                case "empty":
-                                                                                    $("#questionsBySubject").html("<div>Dont have any questions</div>");
-                                                                                    break;
+                                                        default:
+                                                            $("#questionsBySubject").empty();
+                                                            $("#questionsBySubject").html(data);
+                                                            $("#addQuestionFooter").show();
+                                                            $("#searchQuestionInModalAdd").show();
 
-                                                                                default:
-                                                                                    document.getElementById("addQuestionForm").reset();
+                                                            break;
+                                                    }
+                                                },
+                                                error: function () {
+                                                    toastMessageAction("Something went wrong", "red");
+                                                }
+                                            });
+                                        }
+                                        function addToQuestionList(questionID) {
+                                            const questionsLength = $(".questionCard").length;
 
-                                                                                    $("#questionsBySubject").empty();
-                                                                                    $("#questionsBySubject").html(data);
+                                            $.ajax({
+                                                url: "/SWP391_SE1749_NET_GROUP2/quizzes",
+                                                type: "post",
+                                                data: {
+                                                    questionID: questionID,
+                                                    quizID: quizID,
+                                                    subjectId: subjectId,
+                                                    questionsLength: questionsLength + 1,
+                                                    action: "addToQuestionList"
+                                                },
+                                                success: function (data) {
+                                                    switch (data) {
+                                                        case "failed":
+                                                            toastMessageAction("Add Question to List failed!", "red");
 
-                                                                                    break;
-                                                                            }
+                                                            $("#addQuestionFooter").hide();
+                                                            $("#searchQuestionInModalAdd").hide();
+                                                            break;
 
-                                                                            toastMessageAction(mess, color);
-                                                                        },
-                                                                        error: function () {
-                                                                            toastMessageAction("Something went wrong", "red");
-                                                                        }
-                                                                    });
-                                                                }
-                                                                function addToQuestionList(questionID) {
-                                                                    $(".addQuestionToListBtn").addClass("disable");
-                                                                    const questionsLength = $(".questionCard").length;
+                                                        default:
+                                                            let questionAddToListClass = ".question-group." + questionID;
+                                                            $(questionAddToListClass).remove();
 
-                                                                    $.ajax({
-                                                                        url: "/SWP391_SE1749_NET_GROUP2/quizzes",
-                                                                        type: "post",
-                                                                        data: {
-                                                                            questionID: questionID,
-                                                                            quizID: quizID,
-                                                                            subjectId: subjectId,
-                                                                            questionsLength: questionsLength + 1,
-                                                                            action: "addToQuestionList"
-                                                                        },
-                                                                        success: function (data) {
-                                                                            let mess = "Add Question to List successfuly!";
-                                                                            let color = "green";
+                                                            $("#listQuestions").append(data);
 
-                                                                            switch (data) {
-                                                                                case "failed":
-                                                                                    mess = "Add Question to List failed!";
-                                                                                    color = "red";
+                                                            if ($(".question-group").length === 0) {
+                                                                $("#addQuestionFooter").hide();
+                                                                $("#searchQuestionInModalAdd").hide();
+                                                                $("#questionsBySubject").html("<div style=\"display: flex; justify-content:center; align-items: center;\">Dont have any questions</div>");
+                                                            } else {
+                                                                $("#addQuestionFooter").show();
+                                                                $("#searchQuestionInModalAdd").show();
+                                                            }
 
-                                                                                    toastMessageAction(mess, color);
+                                                            $("#questionLengthCount").text("Question & Answers (" + $(".questionCard").length + ")");
+                                                            break;
+                                                    }
+                                                },
+                                                error: function () {
+                                                    toastMessageAction("Something went wrong", "red");
+                                                }
+                                            });
+                                        }
 
-                                                                                    $(".addQuestionToListBtn").removeClass("disable");
-                                                                                    break;
+                                        function addAllQuestionsClick() {
+                                            let numbersQuetionID = [];
 
-                                                                                default:
-                                                                                    $(".addQuestionToListBtn").removeClass("disable");
+                                            $('[class^="question-group"]').each(function () {
+                                                var className = $(this).attr('class');
+                                                var number = parseInt(className.replace('question-group ', ''));
+                                                numbersQuetionID.push(number);
+                                            });
 
-                                                                                    let questionAddToListClass = ".question-group." + questionID;
-                                                                                    $(questionAddToListClass).remove();
+                                            if (numbersQuetionID.length !== 0) {
+                                                const questionsLength = $(".questionCard").length;
 
-                                                                                    $("#listQuestions").append(data);
+                                                alert(numbersQuetionID)
+                                                $.ajax({
+                                                    url: "/SWP391_SE1749_NET_GROUP2/quizzes",
+                                                    type: "post",
+                                                    data: {
+                                                        questionsID: JSON.stringify(numbersQuetionID),
+                                                        quizID: quizID,
+                                                        subjectId: subjectId,
+                                                        questionsLength: questionsLength + 1,
+                                                        action: "addAllQuesionsToQuizz"
+                                                    },
+                                                    success: function (data) {
+                                                        let text = "Update quiz successfully!";
+                                                        let color = "green";
 
-                                                                                    $("#questionLengthCount").text("Question & Answers (" + $(".questionCard").length + ")");
-                                                                                    break;
-                                                                            }
+                                                        if (data === "failed") {
+                                                            text = "Update quiz failed!";
+                                                            color = "red";
+                                                        } else {
+                                                            $('#updateQuizModal').modal('hide');
 
-                                                                            toastMessageAction(mess, color);
-                                                                        },
-                                                                        error: function () {
-                                                                            toastMessageAction("Something went wrong", "red");
-                                                                        }
-                                                                    });
-                                                                }
+                                                            $('#quizNameTitle').text($("#quizNameInput").val());
+                                                            $('#quizContentTitle').text($("#quizContentInput").val());
+                                                        }
 
-                                                                function toastMessageAction(text, color, link) {
-                                                                    if (text && text !== "") {
-                                                                        $('#toast').text(text);
-                                                                        $('#toast').css('background-color', color);
-                                                                        $('#toast').toggleClass('show');
-                                                                        // After 3 seconds, remove the show class from DIV and redirect
-                                                                        if (link && link !== "") {
-                                                                            setTimeout(function () {
-                                                                                window.location.href = link;
-                                                                            }, 2000);
-                                                                        }
-                                                                        setTimeout(function () {
-                                                                            $('#toast').text("");
-                                                                            $('#toast').toggleClass('show');
-                                                                        }, 3000);
-                                                                    }
-                                                                }
-                                                                function reloadListAnswers(resultArray, index) {
-                                                                    resultArray.splice(index - 1, 1);
+                                                        toastMessageAction(text, color);
+                                                    },
+                                                    error: function () {
+                                                        toastMessageAction("Something went wrong", "red");
+                                                    }
+                                                });
+                                            }
+                                        }
 
-                                                                    let parent = document.getElementById("answersWrapper");
+                                        function toastMessageAction(text, color, link) {
+                                            if (text && text !== "") {
+                                                $('#toast').text(text);
+                                                $('#toast').css('background-color', color);
+                                                $('#toast').toggleClass('show');
+                                                // After 3 seconds, remove the show class from DIV and redirect
+                                                if (link && link !== "") {
+                                                    setTimeout(function () {
+                                                        window.location.href = link;
+                                                    }, 2000);
+                                                }
+                                                setTimeout(function () {
+                                                    $('#toast').text("");
+                                                    $('#toast').toggleClass('show');
+                                                }, 3000);
+                                            }
+                                        }
+                                        function reloadListAnswers(resultArray, index) {
+                                            resultArray.splice(index - 1, 1);
 
-                                                                    if (resultArray.length < 6) {
-                                                                        $("#addAnswer").show();
-                                                                    } else {
-                                                                        $("#addAnswer").hide();
-                                                                    }
+                                            let parent = document.getElementById("answersWrapper");
 
-                                                                    let data = "";
-                                                                    for (let i = 0; i < resultArray.length; i++) {
-                                                                        const type = String.fromCharCode(i + 1 + 64);
-                                                                        const checked = resultArray[i].checked ? "checked" : "";
-                                                                        const count = i + 1;
+                                            if (resultArray.length < 6) {
+                                                $("#addAnswer").show();
+                                            } else {
+                                                $("#addAnswer").hide();
+                                            }
 
-                                                                        data += "<div class=\"form-group\" style=\"display: flex; align-items: center; gap: 17px;\">\n"
-                                                                                + "                                            <input type=\"text\" hidden value='" + resultArray[i].id + "' name='answerID' class=\"answerID\">\n"
-                                                                                + "                                            <input " + checked + " type=\"checkbox\" id=\"option1\" name=\"options[]\" class=\"checkbox\">\n"
-                                                                                + "                                            <span>" + type + ",</span>\n"
-                                                                                + "                                            <span class=\"input-group\">\n"
-                                                                                + "                                                <input name=\"answer\" placeholder=\"Enter answer\" value='" + resultArray[i].value + "' minlength=\"6\" type=\"text\" required class=\"form-control\">\n"
-                                                                                + "                                                <div class=\"invalid-feedback\">\n"
-                                                                                + "                                                    Answer must least 6 char\n"
-                                                                                + "                                                </div>\n"
-                                                                                + "                                            </span>\n"
-                                                                                + "                                        <i onclick='removeAnswer(" + count + ")' style='cursor:pointer; color: red;' class=\"bi bi-dash-circle-fill deleteAnswer\"></i>\n"
-                                                                                + "                                        </div>";
-                                                                    }
+                                            let data = "";
+                                            for (let i = 0; i < resultArray.length; i++) {
+                                                const type = String.fromCharCode(i + 1 + 64);
+                                                const checked = resultArray[i].checked ? "checked" : "";
+                                                const count = i + 1;
 
-                                                                    $("#answersWrapper").empty();
-                                                                    parent.insertAdjacentHTML('beforeend', data);
+                                                data += "<div class=\"form-group\" style=\"display: flex; align-items: center; gap: 17px;\">\n"
+                                                        + "                                            <input type=\"text\" hidden value='" + resultArray[i].id + "' name='answerID' class=\"answerID\">\n"
+                                                        + "                                            <input " + checked + " type=\"checkbox\" id=\"option1\" name=\"options[]\" class=\"checkbox\">\n"
+                                                        + "                                            <span>" + type + ",</span>\n"
+                                                        + "                                            <span class=\"input-group\">\n"
+                                                        + "                                                <input name=\"answer\" placeholder=\"Enter answer\" value='" + resultArray[i].value + "' minlength=\"6\" type=\"text\" required class=\"form-control\">\n"
+                                                        + "                                                <div class=\"invalid-feedback\">\n"
+                                                        + "                                                    Answer must least 6 char\n"
+                                                        + "                                                </div>\n"
+                                                        + "                                            </span>\n"
+                                                        + "                                        <i onclick='removeAnswer(" + count + ")' style='cursor:pointer; color: red;' class=\"bi bi-dash-circle-fill deleteAnswer\"></i>\n"
+                                                        + "                                        </div>";
+                                            }
 
-                                                                    indexAnswerDelete = 0;
-                                                                    answersDelete = [];
-                                                                }
+                                            $("#answersWrapper").empty();
+                                            parent.insertAdjacentHTML('beforeend', data);
 
-                                                                function addAnswerInUpdateModal() {
-                                                                    let parent = document.getElementById("answersWrapper");
-                                                                    var numberAnswers = document.querySelectorAll('#answersWrapper .form-group').length;
-                                                                    const type = String.fromCharCode(numberAnswers + 1 + 64);
+                                            indexAnswerDelete = 0;
+                                            answersDelete = [];
+                                        }
 
-                                                                    if (numberAnswers < 5) {
-                                                                        $("#addAnswer").show();
-                                                                    } else {
-                                                                        $("#addAnswer").hide();
+                                        function addAnswerInUpdateModal() {
+                                            let parent = document.getElementById("answersWrapper");
+                                            var numberAnswers = document.querySelectorAll('#answersWrapper .form-group').length;
+                                            const type = String.fromCharCode(numberAnswers + 1 + 64);
 
-                                                                    }
+                                            if (numberAnswers < 5) {
+                                                $("#addAnswer").show();
+                                            } else {
+                                                $("#addAnswer").hide();
 
-                                                                    let data = "<div class=\"form-group\" style=\"display: flex; align-items: center; gap: 17px;\">\n"
-                                                                            + "                                            <input type=\"text\" hidden value='-1' name='answerID' class=\"answerID\">\n"
-                                                                            + "                                            <input type=\"checkbox\" id=\"option1\" name=\"options[]\" class=\"checkbox\">\n"
-                                                                            + "                                            <span>" + type + ",</span>\n"
-                                                                            + "                                            <span class=\"input-group\">\n"
-                                                                            + "                                                <input name=\"answer\" placeholder=\"Enter answer\" value=\"\" minlength=\"6\" type=\"text\" required class=\"form-control\">\n"
-                                                                            + "                                                <div class=\"invalid-feedback\">\n"
-                                                                            + "                                                    Answer must least 6 char\n"
-                                                                            + "                                                </div>\n"
-                                                                            + "                                            </span>\n"
-                                                                            + "                                        <i onclick='removeAnswer(" + (numberAnswers + 1) + ")' style='cursor:pointer; color: red;' class=\"bi bi-dash-circle-fill deleteAnswer\"></i>"
-                                                                            + "                                        </div>";
-                                                                    parent.insertAdjacentHTML('beforeend', data);
-                                                                }
-                                                                function removeAnswer(index) {
-                                                                    let resultArray = [];
+                                            }
 
-                                                                    // Lặp qua mỗi form-group
-                                                                    $('#answersWrapper .form-group').each(function () {
-                                                                        // Lấy giá trị của checkbox (true hoặc false)
-                                                                        const checkboxValue = $(this).find('.checkbox').prop('checked');
+                                            let data = "<div class=\"form-group\" style=\"display: flex; align-items: center; gap: 17px;\">\n"
+                                                    + "                                            <input type=\"text\" hidden value='-1' name='answerID' class=\"answerID\">\n"
+                                                    + "                                            <input type=\"checkbox\" id=\"option1\" name=\"options[]\" class=\"checkbox\">\n"
+                                                    + "                                            <span>" + type + ",</span>\n"
+                                                    + "                                            <span class=\"input-group\">\n"
+                                                    + "                                                <input name=\"answer\" placeholder=\"Enter answer\" value=\"\" minlength=\"6\" type=\"text\" required class=\"form-control\">\n"
+                                                    + "                                                <div class=\"invalid-feedback\">\n"
+                                                    + "                                                    Answer must least 6 char\n"
+                                                    + "                                                </div>\n"
+                                                    + "                                            </span>\n"
+                                                    + "                                        <i onclick='removeAnswer(" + (numberAnswers + 1) + ")' style='cursor:pointer; color: red;' class=\"bi bi-dash-circle-fill deleteAnswer\"></i>"
+                                                    + "                                        </div>";
+                                            parent.insertAdjacentHTML('beforeend', data);
+                                        }
+                                        function removeAnswer(index) {
+                                            let resultArray = [];
 
-                                                                        // Lấy giá trị của input có name="answer"
-                                                                        const answerID = $(this).find('input[name="answerID"]').val();
-                                                                        const answerValue = $(this).find('input[name="answer"]').val();
+                                            // Lặp qua mỗi form-group
+                                            $('#answersWrapper .form-group').each(function () {
+                                                // Lấy giá trị của checkbox (true hoặc false)
+                                                const checkboxValue = $(this).find('.checkbox').prop('checked');
 
-                                                                        // Thêm cặp giá trị vào mảng
-                                                                        if (checkboxValue !== undefined) {
-                                                                            resultArray.push({checked: checkboxValue, id: answerID, value: answerValue});
-                                                                        }
-                                                                    });
+                                                // Lấy giá trị của input có name="answer"
+                                                const answerID = $(this).find('input[name="answerID"]').val();
+                                                const answerValue = $(this).find('input[name="answer"]').val();
 
-
-
-                                                                    if (resultArray.at(index - 1).id == -1) {
-                                                                        reloadListAnswers(resultArray, index);
-                                                                    } else {
-                                                                        indexAnswerDelete = index;
-                                                                        answersDelete = [...resultArray];
-                                                                        answerDeleteID = resultArray.at(index - 1).id;
-
-                                                                        $('#deleteAnswerModal').modal('show');
-                                                                    }
+                                                // Thêm cặp giá trị vào mảng
+                                                if (checkboxValue !== undefined) {
+                                                    resultArray.push({checked: checkboxValue, id: answerID, value: answerValue});
+                                                }
+                                            });
 
 
-                                                                }
 
-                                                                $("#updateQuizSubmit").click(function () {
-                                                                    $.ajax({
-                                                                        url: "/SWP391_SE1749_NET_GROUP2/quizzes",
-                                                                        type: "post",
-                                                                        data: {
-                                                                            quizID: quizID,
-                                                                            quizName: $("#quizNameInput").val(),
-                                                                            quizContent: $("#quizContentInput").val(),
-                                                                            action: "updateQuiz"
-                                                                        },
-                                                                        success: function (data) {
-                                                                            let text = "Update quiz successfully!";
-                                                                            let color = "green";
+                                            if (resultArray.at(index - 1).id == -1) {
+                                                reloadListAnswers(resultArray, index);
+                                            } else {
+                                                indexAnswerDelete = index;
+                                                answersDelete = [...resultArray];
+                                                answerDeleteID = resultArray.at(index - 1).id;
 
-                                                                            if (data === "failed") {
-                                                                                text = "Update quiz failed!";
-                                                                                color = "red";
-                                                                            } else {
-                                                                                $('#updateQuizModal').modal('hide');
-                                                                                
-                                                                                $('#quizNameTitle').text($("#quizNameInput").val());
-                                                                                $('#quizContentTitle').text($("#quizContentInput").val());
-                                                                            }
+                                                $('#deleteAnswerModal').modal('show');
+                                            }
 
-                                                                            toastMessageAction(text, color);
-                                                                        },
-                                                                        error: function () {
-                                                                            toastMessageAction("Something went wrong", "red");
-                                                                        }
-                                                                    });
-                                                                })
-                                                                $('#deleteAnswerSubmit').click(function () {
-                                                                    let questionClass = ".questionCard." + questionID;
-                                                                    const indexOfQuestionUpdate = $(questionClass).index() + 1;
 
-                                                                    $.ajax({
-                                                                        url: "/SWP391_SE1749_NET_GROUP2/quizzes",
-                                                                        type: "post",
-                                                                        data: {
-                                                                            answerID: answerDeleteID,
-                                                                            questionID: questionID,
-                                                                            subjectId: subjectId,
-                                                                            countQuestionUpdate: indexOfQuestionUpdate,
-                                                                            action: "deleteAnswer"
-                                                                        },
-                                                                        success: function (data) {
-                                                                            let text = "Delete answer successfully!";
-                                                                            let color = "green";
+                                        }
 
-                                                                            if (data === "failed") {
-                                                                                text = "Delete failed!";
-                                                                                color = "red";
-                                                                            } else {
-                                                                                reloadListAnswers(answersDelete, indexAnswerDelete);
-                                                                                $('#deleteAnswerModal').modal('hide');
+                                        $("#updateQuizSubmit").click(function () {
+                                            $.ajax({
+                                                url: "/SWP391_SE1749_NET_GROUP2/quizzes",
+                                                type: "post",
+                                                data: {
+                                                    quizID: quizID,
+                                                    quizName: $("#quizNameInput").val(),
+                                                    quizContent: $("#quizContentInput").val(),
+                                                    action: "updateQuiz"
+                                                },
+                                                success: function (data) {
+                                                    let text = "Update quiz successfully!";
+                                                    let color = "green";
 
-                                                                                let parent = document.getElementsByClassName("questionCard")[indexOfQuestionUpdate - 1];
+                                                    if (data === "failed") {
+                                                        text = "Update quiz failed!";
+                                                        color = "red";
+                                                    } else {
+                                                        $('#updateQuizModal').modal('hide');
 
-                                                                                $(questionClass).empty();
-                                                                                parent.insertAdjacentHTML('beforeend', data);
-                                                                            }
+                                                        $('#quizNameTitle').text($("#quizNameInput").val());
+                                                        $('#quizContentTitle').text($("#quizContentInput").val());
+                                                    }
 
-                                                                            toastMessageAction(text, color);
-                                                                        },
-                                                                        error: function () {
-                                                                            toastMessageAction("Something went wrong", "red");
-                                                                        }
-                                                                    });
-                                                                });
-                                                                $('#deleteQuestionSubmit').click(function () {
-                                                                    $.ajax({
-                                                                        url: "/SWP391_SE1749_NET_GROUP2/quizzes",
-                                                                        type: "post",
-                                                                        data: {
-                                                                            questionID: questionID,
-                                                                            quizID: quizID,
-                                                                            subjectId: subjectId,
-                                                                            action: "deleteQuestion"
-                                                                        },
-                                                                        success: function (data) {
-                                                                            let text = "Delete question successfully!";
-                                                                            let color = "green";
+                                                    toastMessageAction(text, color);
+                                                },
+                                                error: function () {
+                                                    toastMessageAction("Something went wrong", "red");
+                                                }
+                                            });
+                                        })
+                                        $('#deleteAnswerSubmit').click(function () {
+                                            let questionClass = ".questionCard." + questionID;
+                                            const indexOfQuestionUpdate = $(questionClass).index() + 1;
 
-                                                                            switch (data) {
-                                                                                case "failed":
-                                                                                    text = "Delete failed!";
-                                                                                    color = "red";
-                                                                                    break;
+                                            $.ajax({
+                                                url: "/SWP391_SE1749_NET_GROUP2/quizzes",
+                                                type: "post",
+                                                data: {
+                                                    answerID: answerDeleteID,
+                                                    questionID: questionID,
+                                                    subjectId: subjectId,
+                                                    countQuestionUpdate: indexOfQuestionUpdate,
+                                                    action: "deleteAnswer"
+                                                },
+                                                success: function (data) {
+                                                    let text = "Delete answer successfully!";
+                                                    let color = "green";
 
-                                                                                default :
-                                                                                    let parent = document.getElementById("quizzes");
+                                                    if (data === "failed") {
+                                                        text = "Delete failed!";
+                                                        color = "red";
+                                                    } else {
+                                                        reloadListAnswers(answersDelete, indexAnswerDelete);
+                                                        $('#deleteAnswerModal').modal('hide');
 
-                                                                                    $("#quizzes").empty();
-                                                                                    $("#quizzes").html(data);
+                                                        let parent = document.getElementsByClassName("questionCard")[indexOfQuestionUpdate - 1];
 
-                                                                                    $('#deleteCardModal').modal('hide');
-                                                                                    break;
-                                                                            }
+                                                        $(questionClass).empty();
+                                                        parent.insertAdjacentHTML('beforeend', data);
+                                                    }
 
-                                                                            toastMessageAction(text, color);
-                                                                        },
-                                                                        error: function () {
-                                                                            toastMessageAction("Something went wrong", "red");
-                                                                        }
-                                                                    });
-                                                                });
-                                                                $("#updateQuestionSubmit").click(function () {
-                                                                    const answerCount = $('#answersWrapper .form-group').length;
+                                                    toastMessageAction(text, color);
+                                                },
+                                                error: function () {
+                                                    toastMessageAction("Something went wrong", "red");
+                                                }
+                                            });
+                                        });
+                                        $('#deleteQuestionSubmit').click(function () {
+                                            $.ajax({
+                                                url: "/SWP391_SE1749_NET_GROUP2/quizzes",
+                                                type: "post",
+                                                data: {
+                                                    questionID: questionID,
+                                                    quizID: quizID,
+                                                    subjectId: subjectId,
+                                                    action: "deleteQuestion"
+                                                },
+                                                success: function (data) {
+                                                    let text = "Delete question successfully!";
+                                                    let color = "green";
 
-                                                                    if (answerCount === 0) {
-                                                                        toastMessageAction("Must be at least 1 answer", "red");
-                                                                    } else {
-                                                                        const questionValue = $('#updateQuestionForm #questionInput').val();
-                                                                        let questionClass = ".questionCard." + questionID;
-                                                                        const indexOfQuestionUpdate = $(questionClass).index() + 1;
-                                                                        let arr = [];
+                                                    switch (data) {
+                                                        case "failed":
+                                                            text = "Delete failed!";
+                                                            color = "red";
+                                                            break;
 
-                                                                        // Lặp qua mỗi form-group
-                                                                        $('#answersWrapper .form-group').each(function () {
-                                                                            // Lấy giá trị của checkbox (true hoặc false)
-                                                                            const checkboxValue = $(this).find('.checkbox').prop('checked');
+                                                        default :
+                                                            let parent = document.getElementById("quizzes");
 
-                                                                            // Lấy giá trị của input có name="answer"
-                                                                            const answerID = $(this).find('input[name="answerID"]').val();
-                                                                            const answerValue = $(this).find('input[name="answer"]').val();
+                                                            $("#quizzes").empty();
+                                                            $("#quizzes").html(data);
 
-                                                                            // Thêm cặp giá trị vào mảng
-                                                                            if (checkboxValue !== undefined) {
-                                                                                arr.push({isCorrect: checkboxValue, answerId: answerID, answerContent: answerValue, questionId: questionID});
-                                                                            }
-                                                                        });
+                                                            $('#deleteCardModal').modal('hide');
+                                                            break;
+                                                    }
 
-                                                                        $.ajax({
-                                                                            url: "/SWP391_SE1749_NET_GROUP2/quizzes",
-                                                                            type: "post",
-                                                                            data: {
-                                                                                action: "updateQuestion",
-                                                                                quizID: quizID,
-                                                                                questionID: questionID,
-                                                                                subjectId: subjectId,
-                                                                                questionValue: questionValue,
-                                                                                answers: JSON.stringify(arr),
-                                                                                countQuestionUpdate: indexOfQuestionUpdate
-                                                                            },
-                                                                            success: function (data) {
-                                                                                let text = "Update question and answers successfully!";
-                                                                                let color = "green";
+                                                    toastMessageAction(text, color);
+                                                },
+                                                error: function () {
+                                                    toastMessageAction("Something went wrong", "red");
+                                                }
+                                            });
+                                        });
+                                        $("#updateQuestionSubmit").click(function () {
+                                            const answerCount = $('#answersWrapper .form-group').length;
 
-                                                                                switch (data) {
-                                                                                    case "answers_failed":
-                                                                                        text = "Update answers failed!";
-                                                                                        color = "red";
-                                                                                        break;
-                                                                                    case "question_failed":
-                                                                                        text = "Update question failed!";
-                                                                                        color = "red";
-                                                                                        break;
+                                            if (answerCount === 0) {
+                                                toastMessageAction("Must be at least 1 answer", "red");
+                                            } else {
+                                                const questionValue = $('#updateQuestionForm #questionInput').val();
+                                                let questionClass = ".questionCard." + questionID;
+                                                const indexOfQuestionUpdate = $(questionClass).index() + 1;
+                                                let arr = [];
 
-                                                                                    default:
-                                                                                        let parent = document.getElementsByClassName("questionCard")[indexOfQuestionUpdate - 1];
+                                                // Lặp qua mỗi form-group
+                                                $('#answersWrapper .form-group').each(function () {
+                                                    // Lấy giá trị của checkbox (true hoặc false)
+                                                    const checkboxValue = $(this).find('.checkbox').prop('checked');
 
-                                                                                        $(questionClass).empty();
-                                                                                        parent.insertAdjacentHTML('beforeend', data);
+                                                    // Lấy giá trị của input có name="answer"
+                                                    const answerID = $(this).find('input[name="answerID"]').val();
+                                                    const answerValue = $(this).find('input[name="answer"]').val();
 
-                                                                                        $('#updateCardModal').modal('hide');
-                                                                                        break;
-                                                                                }
+                                                    // Thêm cặp giá trị vào mảng
+                                                    if (checkboxValue !== undefined) {
+                                                        arr.push({isCorrect: checkboxValue, answerId: answerID, answerContent: answerValue, questionId: questionID});
+                                                    }
+                                                });
 
-                                                                                toastMessageAction(text, color);
-                                                                            },
-                                                                            error: function () {
-                                                                                toastMessageAction("Something went wrong", "red");
-                                                                            }
-                                                                        });
-                                                                    }
-                                                                });
+                                                $.ajax({
+                                                    url: "/SWP391_SE1749_NET_GROUP2/quizzes",
+                                                    type: "post",
+                                                    data: {
+                                                        action: "updateQuestion",
+                                                        quizID: quizID,
+                                                        questionID: questionID,
+                                                        subjectId: subjectId,
+                                                        questionValue: questionValue,
+                                                        answers: JSON.stringify(arr),
+                                                        countQuestionUpdate: indexOfQuestionUpdate
+                                                    },
+                                                    success: function (data) {
+                                                        let text = "Update question and answers successfully!";
+                                                        let color = "green";
+
+                                                        switch (data) {
+                                                            case "answers_failed":
+                                                                text = "Update answers failed!";
+                                                                color = "red";
+                                                                break;
+                                                            case "question_failed":
+                                                                text = "Update question failed!";
+                                                                color = "red";
+                                                                break;
+
+                                                            default:
+                                                                let parent = document.getElementsByClassName("questionCard")[indexOfQuestionUpdate - 1];
+
+                                                                $(questionClass).empty();
+                                                                parent.insertAdjacentHTML('beforeend', data);
+
+                                                                $('#updateCardModal').modal('hide');
+                                                                break;
+                                                        }
+
+                                                        toastMessageAction(text, color);
+                                                    },
+                                                    error: function () {
+                                                        toastMessageAction("Something went wrong", "red");
+                                                    }
+                                                });
+                                            }
+                                        });
 
         </script>
     </body>

@@ -252,7 +252,6 @@
                                     <div class="action-box">
                                         <img src="assets/images/courses/pic1.jpg" alt="">
                                         <a href="subdidetail?subjectdeid=${ab.subDeId}" class="btn">Read More</a>
-
                                     </div>
                                     <div class="info-bx text-center">
                                         <h5><a href='subjectlist?subjectdeid=${ab.subDeId}'>${fn:toUpperCase(ab.subDeName)}</a></h5>
@@ -261,8 +260,6 @@
                                                 <i class="fa fa-trash"></i>
                                             </a></span>
                                     </div>
-
-
                                 </div>
                             </li>
                         </c:forEach>

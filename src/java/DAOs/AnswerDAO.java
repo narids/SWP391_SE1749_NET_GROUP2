@@ -133,14 +133,14 @@ public class AnswerDAO extends DBContext<BaseEntity> {
         return ltAnswer;
     }
 
-    public void addAnswer(String content, String iscr, String id) {
+    public void addAnswer(String content, boolean iscr, int id) {
         try {
 
             String strSelect = "INSERT INTO Answer (Answer_Content, IsCorrect) VALUES (?, ?) where QuestionID=?";
             PreparedStatement stm = connection.prepareStatement(strSelect);
             stm.setString(1, content);
-            stm.setString(2, iscr);
-            stm.setString(3, id);
+            stm.setBoolean(2, iscr);
+            stm.setInt(3, id);
             stm.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e);
@@ -161,6 +161,17 @@ public class AnswerDAO extends DBContext<BaseEntity> {
         }
     }
 
+    public void deleteByID(int id){
+        try {
+            String strSQL = "DELETE FROM [Answer] WHERE QuestionID = ? ";
+            PreparedStatement statement = connection.prepareStatement(strSQL);
+            statement.setInt(1, id);
+            statement.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("getListUsers:" + e.getMessage());
+        }
+    }
+    
     @Override
     public ArrayList<BaseEntity> list() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody

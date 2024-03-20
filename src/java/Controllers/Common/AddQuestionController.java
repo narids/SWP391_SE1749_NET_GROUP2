@@ -4,10 +4,8 @@
  */
 package Controllers.Common;
 
-import DAOs.QuestionDAO;
 import DAOs.SubjectDAO;
 import Models.Account;
-import Models.Question;
 import Models.Subject;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -16,7 +14,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -25,13 +22,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -51,10 +44,14 @@ public class AddQuestionController extends HttpServlet {
             response.sendRedirect("login");
 
         } else {
-        SubjectDAO subD = new SubjectDAO();
-        List<Subject> lst = subD.list();
-        request.setAttribute("sublist", lst);
-        request.getRequestDispatcher("jsp/addques.jsp").forward(request, response);
+            if (account.getRole().getRoleId() == 3 || account.getRole().getRoleId() == 2) {
+                SubjectDAO subD = new SubjectDAO();
+                List<Subject> lst = subD.list();
+                request.setAttribute("sublist", lst);
+                request.getRequestDispatcher("jsp/addques.jsp").forward(request, response);
+            } else {
+                response.sendRedirect("home");
+            }
         }
     }
 

@@ -360,17 +360,20 @@
                                     Add a Subject
                                 </a>
                             </div>
-                            <table border="1px"> 
-                                <tr>
-                                    <td>#</td>
-                                    <td>Name</td>
-                                    <td>Detail</td>
-                                </tr>
+                            <table id="Mytable" border="1px"> 
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Name</th>
+                                        <th>Detail</th>
+                                        <th>Update/Delete</th>
+                                    </tr>
+                                </thead>
                                 <c:forEach items="${requestScope.sublistbyid}" var="a">
                                     <tr>
 
-                                        <td>${a.subjectId}
-                                        </td>
+                                        <th>${a.subjectId}
+                                        </th>
                                         <td><a href="quizlist?subjectid=${a.subjectId}" >
                                                 ${a.subjectName}</a>
                                         </td>
@@ -379,8 +382,8 @@
                                         </td>
                                         <td>
                                             <a href="subjectdetail?subjectid=${a.subjectId}" class="btn btn-sm yellow outline radius-xl" style="padding: 5px 10px">
-                                                        <i class="fa fa-pencil"></i>
-                                                    </a>
+                                                <i class="fa fa-pencil"></i>
+                                            </a>
                                             <a href="#" class="btn btn-sm red outline radius-xl delete-" data-toggle="modal" data-target="#deleteM-${a.subjectId}" style="padding: 5px 10px">
                                                 <i class="fa fa-trash"></i>
                                             </a>
@@ -543,6 +546,11 @@
         <script src="admin/assets/js/admin.js"></script>
         <script src='admin/assets/vendors/switcher/switcher.js'></script>
         <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-
+        <script>
+            let table = new DataTable('#Mytable', {
+                lengthChange: false,
+                length: 10
+            });
+        </script>
     </body>
 </html>

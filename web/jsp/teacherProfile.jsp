@@ -112,9 +112,6 @@
                                                 <li class="nav-item">
                                                     <a class="nav-link" data-toggle="tab" href="#edit-profile"><i class="ti-pencil-alt"></i>Edit Profile</a>
                                                 </li>
-                                                <li class="nav-item">
-                                                    <a class="nav-link" data-toggle="tab" href="jsp/resetpass.jsp"><i class="ti-pencil-alt"></i>Forgot Password</a>
-                                                </li>
                                             </ul>
                                         </div>
                                     </div>
@@ -137,7 +134,7 @@
                                                             </li>
                                                             <li data-filter="pending" class="btn">
                                                                 <input type="radio">
-                                                                <a href="#"><span>Pending</span></a> 
+                                                                <a href="#"><span>Private</span></a> 
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -201,7 +198,7 @@
                                                         <input type="hidden" id="userid" name="userid" value="${account.userId}">
 
                                                         <div class="form-group row">
-                                                            <label class="col-12 col-sm-3 col-md-3 col-lg-2 col-form-label">Address</label>
+                                                            <label class="col-12 col-sm-3 col-md-3 col-lg-2 col-form-label">Email</label>
                                                             <div class="col-12 col-sm-9 col-md-9 col-lg-7">
                                                                 <input class="form-control" name="email" type="text" value="${account.email}">
                                                             </div>

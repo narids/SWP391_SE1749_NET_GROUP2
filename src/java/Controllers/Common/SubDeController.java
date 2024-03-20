@@ -35,9 +35,13 @@ public class SubDeController extends HttpServlet{
             response.sendRedirect("login");
 
         } else {
+            if (account.getRole().getRoleId() == 3 || account.getRole().getRoleId() == 2) {
         List<SubjectDimension> lst = queD.list();
         request.setAttribute("subdelist", lst);
         request.getRequestDispatcher("jsp/subDeList.jsp").forward(request, response);
+        } else{
+                response.sendRedirect("home");
+            }
         }
     }
 

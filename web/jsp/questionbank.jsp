@@ -60,41 +60,44 @@
 
         <!-- header start -->
         <jsp:include page="components/admin-header.jsp"></jsp:include>
-        <!-- header end -->
-        <!-- Left sidebar menu start -->
+            <!-- header end -->
+            <!-- Left sidebar menu start -->
         <jsp:include page="components/admin-sidebar.jsp"></jsp:include>
-        <!-- Left sidebar menu end -->
+            <!-- Left sidebar menu end -->
 
-        <!--Main container start -->
-        <main class="ttr-wrapper">
-            <div class="container-fluid">
-                <div class="db-breadcrumb">
-                    <h4 class="breadcrumb-title">Question list</h4>
-                    <ul class="db-breadcrumb-list">
-                        <li><a href="#"><i class="fa fa-home"></i>Home</a></li>
-                        <li>Question list</li>
-                    </ul>
-                </div>	
-                <div class="row">
-                    <!-- Your Profile Views Chart -->
-                    <div class="col-lg-12 m-b30">
-                        <div class="widget-box">
-                            <div class="wc-title d-flex justify-content-between align-items-center">
-                                <h4>Question Bank</h4>
-                                <a href="addques" class="btn btn-sm info ">
-                                    Add a question
-                                </a>
-                            </div>
-                            <table border="1px"> 
-                                <tr>
-                                    <td>#</td>
-                                    <td>Subject</td>
-                                    <td>Content</td>
-                                </tr>
+            <!--Main container start -->
+            <main class="ttr-wrapper">
+                <div class="container-fluid">
+                    <div class="db-breadcrumb">
+                        <h4 class="breadcrumb-title">Question list</h4>
+                        <ul class="db-breadcrumb-list">
+                            <li><a href="#"><i class="fa fa-home"></i>Home</a></li>
+                            <li>Question list</li>
+                        </ul>
+                    </div>	
+                    <div class="row">
+                        <!-- Your Profile Views Chart -->
+                        <div class="col-lg-12 m-b30">
+                            <div class="widget-box">
+                                <div class="wc-title d-flex justify-content-between align-items-center">
+                                    <h4>Question Bank</h4>
+                                    <a href="addques" class="btn btn-sm info ">
+                                        Add a question
+                                    </a>
+                                </div>
+                                <table id="Mytable" border="1px"> 
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Subject</th>
+                                            <th>Content</th>
+                                            <th>Update/Delete</th>
+                                        </tr>
+                                    </thead>
                                 <c:forEach items="${requestScope.queslist}" var="a">
                                     <tr>
-                                        <td>${a.questionId}
-                                        </td>
+                                        <th>${a.questionId}
+                                        </th>
                                         <td>
                                             ${a.subject.subjectName}
                                         </td>
@@ -102,13 +105,13 @@
                                             ${a.questionContent}
                                         </td>
                                         <td>
-                                                    <a href="questiondetail?questionid=${a.questionId}" class="btn btn-sm yellow outline radius-xl" style="padding: 5px 10px">
-                                                        <i class="fa fa-pencil"></i>
-                                                    </a>
-                                                    <a href="#" class="btn btn-sm red outline radius-xl delete-news" data-toggle="modal" data-target="#deleteModal-${a.questionId}" style="padding: 5px 10px">
-                                                        <i class="fa fa-trash"></i>
-                                                    </a>
-                                                </td>
+                                            <a href="questiondetail?questionid=${a.questionId}" class="btn btn-sm yellow outline radius-xl" style="padding: 5px 10px">
+                                                <i class="fa fa-pencil"></i>
+                                            </a>
+                                            <a href="#" class="btn btn-sm red outline radius-xl delete-news" data-toggle="modal" data-target="#deleteModal-${a.questionId}" style="padding: 5px 10px">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
+                                        </td>
                                     </tr>   
                                 </c:forEach>
                             </table>
@@ -269,7 +272,10 @@
         <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 
         <script>
-            let table = new DataTable('#myTable');
+            let table = new DataTable('#Mytable', {
+                lengthChange: false,
+                length: 10
+            });
         </script>
         <script>
             // Pricing add
