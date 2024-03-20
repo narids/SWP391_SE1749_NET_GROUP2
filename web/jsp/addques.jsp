@@ -107,6 +107,7 @@
                     </div>
 
                     <label for="subjects">Choose a subject:</label>
+                    <br>
                     <input list="subjects" name="subject" id="subject">
                     <datalist id="subjects">
                         <c:forEach items="${requestScope.sublist}" var="ba">
