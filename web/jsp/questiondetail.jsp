@@ -71,16 +71,20 @@
             <div class="form-container">
                 <h2>Update a Question</h2>
                 <form action="questiondetail" method="POST">
+                   ID: ${questiondetail.questionId}
+                    <input name="questioniddetail"  type="hidden" value="${questiondetail.questionId}" required>
                     <div class="form-group">
-                        <label for="content">Content: </label>
-                        <input type="text" id="quescontentdetail" name="quescontent" value="${questiondetail.questionContent}" required>
+                        <label for="content">Content: ${questiondetail.questionContent}</label>
+                        <br>
+                        <input type="text"  name="quescontentdetail"  required>
                     </div>
                     <div class="form-group">
-                        <label for="explain">Explain: </label>
-                        <input type="text" id="quesexplaindetail" name="quesexplain" value="${questiondetail.explain}" required>
+                        <label for="explain">Explain: ${questiondetail.explain}</label>
+                                                <br>
+                        <input type="text"  name="quesexplaindetail"  required>
                     </div>
-
                     <label for="subjectsdetail">Subject: ${questiondetail.subject.subjectName}</label>
+                                            <br>
                     <input list="subjectsdetail" name="subjectdetail" id="subjectdetail">
                     <datalist id="subjectsdetail">
                         <c:forEach items="${requestScope.sublistt}" var="ba">
@@ -90,6 +94,7 @@
                     <div id="options">
                         <div class="option">
                             <label for="option1">Option 1:</label>
+                                                    <br>
                             <input type="text" class="option-text" name="options[]" required >
                             <input type="checkbox" class="correct-checkbox" name="corrects[]" value="1">
                             <label for="correct1">Correct</label><br>
@@ -113,18 +118,20 @@
                         optionLabel.htmlFor = 'option' + optionCount;
                         optionLabel.textContent = 'Option ' + optionCount + ':';
                         newOptionDiv.appendChild(optionLabel);
-
+                         
+                        var newBr = document.createElement('br');
+                        newOptionDiv.appendChild(newBr);
                         var optionInput = document.createElement('input');
                         optionInput.type = 'text';
                         optionInput.className = 'option-text';
-                        optionInput.name = 'option[]';
+                        optionInput.name = 'options[]';
                         optionInput.required = true;
                         newOptionDiv.appendChild(optionInput);
 
                         var correctCheckbox = document.createElement('input');
                         correctCheckbox.type = 'checkbox';
                         correctCheckbox.className = 'correct-checkbox';
-                        correctCheckbox.name = 'correct[]';
+                        correctCheckbox.name = 'corrects[]';
                         correctCheckbox.value = optionCount;
                         newOptionDiv.appendChild(correctCheckbox);
 

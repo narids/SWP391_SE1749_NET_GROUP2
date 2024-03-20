@@ -73,7 +73,7 @@
                     <ul class="nav navbar-nav">	
                         <li class="active"><a href="home">Home</a>
                         </li>
-                        <li class=""><a href="quizzes">Quizzes</a>
+                        <li class=""><c:if test="${sessionScope.account.getRole().getRoleId() eq 2 or sessionScope.account.getRole().getRoleId() eq 3}"> <a href="subdelist">Subject Dimension</a></c:if>
                         </li>
                         <li class=""><a href="catalog">Your library</a>
                         </li>
