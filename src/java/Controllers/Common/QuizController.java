@@ -47,7 +47,7 @@ public class QuizController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
+        try ( PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
@@ -172,7 +172,7 @@ public class QuizController extends HttpServlet {
             String subjectId = request.getParameter("subjectId");
             String countQuestionUpdate = request.getParameter("countQuestionUpdate");
 
-            try (PrintWriter out = response.getWriter()) {
+            try ( PrintWriter out = response.getWriter()) {
                 switch (action) {
                     case "getQuestion":
                         Question q = quizDAO.getQuestionById(questionID);
@@ -357,9 +357,13 @@ public class QuizController extends HttpServlet {
                             List<Question> questions = questionDAO.getQuestionAndAnswersByQuizId(quizID);
 
                             out.print(" <div style=\"display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px\">\n"
-                                    + "                                            <h4 id=\"questionLengthCount\">Question & Answers (" + questions.size() + ")</h4>\n"
-                                    + "                                            <a class=\"btn radius-xl text-uppercase\" onclick=\"addQuestionBtnClick(" + subjectId + ", " + quizID + ")\" data-bs-toggle=\"modal\" data-bs-target=\"#addQuestionModal\">Add question</a>\n"
-                                    + "                                        </div>"
+                                    + "                                            <h4 id=\"questionLengthCount\">Question & Answers (" + questions.size() + ")</h4>\n");
+
+                            if (account.getRole().getRoleId() != 4) {
+                                out.print("                                            <a class=\"btn radius-xl text-uppercase\" onclick=\"addQuestionBtnClick(" + subjectId + ", " + quizID + ")\" data-bs-toggle=\"modal\" data-bs-target=\"#addQuestionModal\">Add question</a>\n");
+
+                            }
+                            out.print("                                        </div>"
                                     + " <ul class=\"curriculum-list\" id=\"listQuestions\">\n");
 
                             for (int i = 0; i < questions.size(); i++) {
@@ -420,15 +424,16 @@ public class QuizController extends HttpServlet {
                         List<Question> questions = questionDAO.getQuestionAndAnswersBySubjectId(quizID, subjectId);
 
                         if (questions != null) {
-                            for (Question q5 : questions) {
-                                out.print("<div class='question-group " + q5.getQuestionId() + "' style=\"display: flex; gap: 15px; margin-bottom: 15px; padding: 10px 14px; box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; height: fit-content; border-radius: 20px\">\n"
-                                        + "                                <div class=\"question\">" + q5.getQuestionContent() + "</div>\n"
-                                        + "                                <i class=\"bi bi-plus-circle-fill addQuestionToListBtn\" onclick='addToQuestionList(" + q5.getQuestionId() + ")' style=\"color: green; margin-top: 2px; font-size: 25px; cursor: pointer\"></i>\n"
-                                        + "                            </div>");
+                            if (questions.isEmpty()) {
+                                out.print("empty");
+                            } else {
+                                for (Question q5 : questions) {
+                                    out.print("<div class='question-group " + q5.getQuestionId() + "' style=\"display: flex; justify-content: space-between; gap: 15px; margin-bottom: 15px; padding: 10px 14px; box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; height: fit-content; border-radius: 20px\">\n"
+                                            + "                                <div class=\"question\">" + q5.getQuestionContent() + "</div>\n"
+                                            + "                                <i class=\"bi bi-plus-circle-fill addQuestionToListBtn\" onclick='addToQuestionList(" + q5.getQuestionId() + ")' style=\"color: green; margin-top: 2px; font-size: 25px; cursor: pointer\"></i>\n"
+                                            + "                            </div>");
+                                }
                             }
-
-                        } else if (questions.size() == 0) {
-                            out.print("empty");
                         } else {
                             out.print("failed");
                         }
@@ -484,6 +489,68 @@ public class QuizController extends HttpServlet {
                         } else {
                             out.print("failed");
                         }
+                        break;
+                    case "addAllQuesionsToQuizz":
+                        String questionsIDJson = request.getParameter("questionsID");
+
+                        Gson gson2 = new Gson();
+                        Type type2 = new TypeToken<List<Integer>>() {
+                        }.getType();
+                        List<Integer> questionsID = gson2.fromJson(questionsIDJson, type2);
+
+                        if (quizDAO.addQuestionsToQuiz(quizID, questionsID)) {
+                            int questionsLength = Integer.parseInt(request.getParameter("questionsLength"));
+
+                            for (Integer id : questionsID) {
+                                questionsLength += 1;
+                                Question q6 = quizDAO.getQuestionById(id.toString());
+                                List<Answer> answers6 = q6.getAnswers();
+                                String correctAnswer6 = "";
+
+                                out.print("<li class=\"questionCard " + id + "\">"
+                                        + "<div style=\"width: 100%; min-width: 135px\">\n"
+                                        + "                                                        <h5><span>" + questionsLength + ", </span>" + q6.getQuestionContent() + "</h5>\n"
+                                        + "                                                        <ul>\n"
+                                        + "                                                            <li style=\"padding: 15px 0 0 0; border: none\">\n"
+                                        + "                                                                <div class=\"curriculum-list-box\">\n");
+
+                                for (int i = 0; i < answers6.size(); i++) {
+                                    Answer a6 = answers6.get(i);
+                                    char type6 = (char) ('A' + i);
+
+                                    out.print("                                                                        <div style=\"display: flex; gap: 10px\">\n"
+                                            + "                                                                            <h5>" + type6 + ".</h5> " + a6.getAnswerContent() + "\n"
+                                            + "                                                                        </div>");
+
+                                    if (a6.isIsCorrect()) {
+                                        if (correctAnswer6 == "") {
+                                            correctAnswer6 += type6;
+                                        } else {
+                                            correctAnswer6 = correctAnswer6 + ", " + type6;
+                                        }
+                                    }
+                                }
+
+                                out.print("                                                                </div>\n"
+                                        + "                                                            </li>\n"
+                                        + "                                                        </ul>\n"
+                                        + "                                                    </div>\n"
+                                        + "                                                    <h5 style=\"color: green; border-left: 1px solid lightgray; padding: 0 35px; min-width: 120px; width: 120px\">" + correctAnswer6 + "</h5>\n"
+                                );
+
+                                if (account.getRole().getRoleId() != 4) {
+                                    out.print("                                                        <div class=\"questionCardAction\">\n"
+                                            + "                                                            <i onclick=\"updateQuestionBtnClick(" + id + ", " + quizID + "," + subjectId + ")\" data-bs-toggle=\"modal\" data-bs-target=\"#updateCardModal\" title=\"Update\" class=\"bi bi-pencil-fill\" style=\"color: orange; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid #cccccc\"></i>\n"
+                                            + "                                                            <i onclick=\"deleteQuestionBtnClick(" + id + ", " + quizID + "," + subjectId + ")\" data-bs-toggle=\"modal\" data-bs-target=\"#deleteCardModal\" title=\"Delete\" class=\"bi bi-trash3-fill\" style=\"color: red; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center\"></i>\n"
+                                            + "                                                        </div>\n");
+                                }
+
+                                out.print("</li>");
+                            }
+                        } else {
+                            out.print("failed");
+                        }
+
                         break;
 
                     default:
