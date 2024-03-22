@@ -20,6 +20,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -198,6 +199,28 @@ public class QuizDAO extends DBContext<BaseEntity> {
         return null;
     }
 
+    public Boolean addQuestionsToQuiz(String quizID, List<Integer> quesList) {
+        String sql = "";
+
+        for (Integer q : quesList) {
+            sql = sql + "INSERT INTO [dbo].[QuizQuestion] ([QuizID] ,[QuestionID]) VALUES  (" + quizID + "," + q + ") \n";
+        }
+
+        try {
+            connection.setAutoCommit(false);
+            PreparedStatement stm = connection.prepareCall(sql);
+
+            if (stm.executeUpdate() > 0) {
+                connection.commit();
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return false;
+    }
+
     public List<ClassSubject> getQuizzesByStudentID(String sql) {
         List<ClassSubject> ltQuiz = new ArrayList<>();
 
@@ -272,6 +295,30 @@ public class QuizDAO extends DBContext<BaseEntity> {
         }
 
         return false;
+    }
+
+    public Boolean addQuiz(String quizName, String QuizContent, int status) {
+        String sql = " INSERT INTO Quiz (QuizName, QuizContent, CreatedDate, QuizStatus)\n"
+                + "VALUES (?, ?, ?, ?);";
+        try {
+            connection.setAutoCommit(false);
+            PreparedStatement stm = connection.prepareCall(sql);
+            stm.setString(1, quizName);
+            stm.setString(2, QuizContent);
+            stm.setString(3, new SimpleDateFormat("dd/mm/yyyy").format(new Date()));
+            stm.setInt(4, status);
+            
+
+            if (stm.executeUpdate() > 0) {
+                connection.commit();
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return false;
+
     }
 
     public Boolean removeQuestionInQuiz(String quizID, String questionID) {
