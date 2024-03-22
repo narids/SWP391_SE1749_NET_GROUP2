@@ -68,6 +68,7 @@ public class QuestionDetailController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String ID = request.getParameter("questioniddetail");
         int id = Integer.parseInt(request.getParameter("questioniddetail"));
         String content = request.getParameter("quescontentdetail");
         String explain = request.getParameter("quesexplaindetail");
@@ -76,7 +77,7 @@ public class QuestionDetailController extends HttpServlet {
         String[] correctAnswers = request.getParameterValues("corrects[]");
         an.deleteByID(id);
                     try {
-                        qued.updateByID(content, explain, subject, id);
+                        qued.updateByID(content, explain, subject, ID);
                     } catch (SQLException ex) {
                         Logger.getLogger(QuestionDetailController.class.getName()).log(Level.SEVERE, null, ex);
                     }

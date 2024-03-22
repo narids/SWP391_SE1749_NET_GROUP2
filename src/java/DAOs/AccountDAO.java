@@ -204,7 +204,7 @@ public class AccountDAO extends DBContext<BaseEntity> {
                 return true;
             }
         } catch (SQLException ex) {
-            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error");
         }
         return false;
     }

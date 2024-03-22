@@ -56,9 +56,10 @@ public class QuestionBankController extends HttpServlet {
         String action = request.getParameter("quesaction");
         switch (action) {
             case "delete":
+                String ID = request.getParameter("questionid");
                 int id = Integer.parseInt(request.getParameter("questionid"));
                 anD.deleteByID(id);
-                queD.deleteByID(id);
+                queD.deleteByID(ID);
                 response.sendRedirect("questionbank");
                 break;
             default:

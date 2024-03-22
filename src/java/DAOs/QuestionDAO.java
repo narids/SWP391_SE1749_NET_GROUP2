@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -85,6 +86,32 @@ public class QuestionDAO extends DBContext<Question> {
 
     public Question getbyId(String id) {
         Question question = new Question();
+        if (getbyID(id)) {
+            try {
+                String strSelect = "Select q.QuestionID,q.Question_Content,s.SubjectName,a.Answer_Content,a.IsCorrect,q.Explain  from Question q left join Answer a on q.QuestionID =a.QuestionID\n"
+                        + "inner join Subject s on q.SubjectId =s.SubjectID where q.QuestionID=?";
+                PreparedStatement stm = connection.prepareStatement(strSelect);
+                stm.setString(1, id);
+                ResultSet rs = stm.executeQuery();
+                while (rs.next()) {
+                    question.setQuestionId(rs.getInt("QuestionID"));
+                    question.setQuestionContent(rs.getString("Question_Content"));
+                    question.setAnswers(getAnswersByQuestionIDString(id));
+                    question.setExplain(rs.getString("Explain"));
+                    Subject sub = new Subject();
+                    sub.setSubjectName(rs.getString("SubjectName"));
+                    question.setSubject(sub);
+
+                }
+            } catch (SQLException e) {
+                System.out.println("Error");
+            }
+        }
+        return question;
+    }
+
+    public boolean getbyID(String id) {
+        Question question = new Question();
         try {
             String strSelect = "Select q.QuestionID,q.Question_Content,s.SubjectName,a.Answer_Content,a.IsCorrect,q.Explain  from Question q left join Answer a on q.QuestionID =a.QuestionID\n"
                     + "inner join Subject s on q.SubjectId =s.SubjectID where q.QuestionID=?";
@@ -99,12 +126,12 @@ public class QuestionDAO extends DBContext<Question> {
                 Subject sub = new Subject();
                 sub.setSubjectName(rs.getString("SubjectName"));
                 question.setSubject(sub);
-
+                return true;
             }
         } catch (SQLException e) {
-            System.out.println(e);
+            System.out.println("Error");
         }
-        return question;
+        return false;
     }
 
     public List<Answer> getAnswersByQuestionIDString(String id) {
@@ -131,6 +158,7 @@ public class QuestionDAO extends DBContext<Question> {
         } catch (SQLException ex) {
             Logger.getLogger(QuizDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+
         return null;
     }
 
@@ -214,9 +242,24 @@ public class QuestionDAO extends DBContext<Question> {
     }
 
     public static void main(String[] args) {
-        List<Question> lt = new QuestionDAO().getQuestionByQuiz(2);
-        for (Question question : lt) {
-            System.out.println(question);
+//        List<Question> lt = new QuestionDAO().getQuestionByQuiz(2);
+//        for (Question question : lt) {
+//            System.out.println(question);
+//        }
+
+        Scanner input = new Scanner(System.in);
+        System.out.print("ID: ");
+        String id = input.nextLine();
+        QuestionDAO qued = new QuestionDAO();
+        try {
+            if (qued.getbyID(id)) {
+                System.out.println("True");
+            } else {
+                System.out.println("False");
+
+            }
+        } catch (Exception ex) {
+            System.out.println("Error");
         }
     }
 
@@ -238,8 +281,9 @@ public class QuestionDAO extends DBContext<Question> {
         }
     }
 
-    public void updateByID(String content,String explain,String subject,int id) throws SQLException{
-        String sql = "UPDATE [Question] "
+    public void updateByID(String content, String explain, String subject, String id) throws SQLException {
+        if (getbyID(id)) {
+            String sql = "UPDATE [Question] "
                     + "SET [Question_Content] = ?,"
                     + "[Created_Day] = ?,"
                     + "[ImageURL] = ?,"
@@ -255,17 +299,21 @@ public class QuestionDAO extends DBContext<Question> {
             SubjectDAO sub = new SubjectDAO();
             int subid = sub.getIDbyName(subject);
             statement.setInt(5, subid);
-            statement.setInt(6, id);
-             statement.executeUpdate();
-    }
-    public void deleteByID(int id) {
-        try {
-            String strSQL = "DELETE FROM [Question] WHERE QuestionID = ?";
-            PreparedStatement statement = connection.prepareStatement(strSQL);
-            statement.setInt(1, id);
+            statement.setString(6, id);
             statement.executeUpdate();
-        } catch (Exception e) {
-            System.out.println("getListUsers:" + e.getMessage());
+        }
+    }
+
+    public void deleteByID(String id) {
+        if (getbyID(id)) {
+            try {
+                String strSQL = "DELETE FROM [Question] WHERE QuestionID = ?";
+                PreparedStatement statement = connection.prepareStatement(strSQL);
+                statement.setString(1, id);
+                statement.executeUpdate();
+            } catch (Exception e) {
+                System.out.println("getListUsers:" + e.getMessage());
+            }
         }
     }
 
