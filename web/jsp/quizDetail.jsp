@@ -128,6 +128,16 @@
             .questionCard:hover .questionCardAction{
                 transform: translateX(0);
             }
+
+            .noClick {
+                pointer-events: none;
+                color: lightgray;
+                background-color: lightgray;
+            }
+
+            #questionLengthCount{
+                margin: 0;
+            }
         </style>
     </head>
     <body id="bg">
@@ -496,7 +506,7 @@
                             <i class="bi bi-x-lg" data-bs-dismiss="modal" aria-label="Close" style="cursor: pointer"></i>
                         </div>
                         <div class="modal-body" style="height: 320px;">
-                            <form id="updateQuestionForm" class="needs-validation" novalidate method="post">
+                            <form id="updateQuestionForm" class="needs-validation" method="post">
                                 <div class="row placeani">
                                     <div class="col-lg-12">
                                         <div class="form-group">
@@ -515,38 +525,7 @@
                                         <div>Answers:</div>
                                         <button class="btn radius-xl text-uppercase" style="font-size: 10px; padding: 7px 15px;" id="addAnswer">Add answer</button>
                                     </div>
-                                    <div class="col-lg-12" id="answersWrapper">
-                                        <div class="form-group" style="display: flex; align-items: center; gap: 17px;">
-                                            <input type="checkbox" id="option1" name="options[]" class="checkbox">
-                                            <span>A,</span>
-                                            <span class="input-group">
-                                                <input name="answer" placeholder="Enter answer" value="" minlength="6" type="text" required class="form-control">
-                                                <div class="invalid-feedback">
-                                                    Answer must least 6 char
-                                                </div>
-                                            </span>
-                                        </div>
-                                        <div class="form-group" style="display: flex; align-items: center; gap: 17px;">
-                                            <input type="checkbox" id="option1" name="options[]" class="checkbox">
-                                            <span>A,</span>
-                                            <span class="input-group">
-                                                <input name="answer" placeholder="Enter answer" value="" minlength="6" type="text" required class="form-control">
-                                                <div class="invalid-feedback">
-                                                    Answer must least 6 char
-                                                </div>
-                                            </span>
-                                        </div>
-                                        <div class="form-group" style="display: flex; align-items: center; gap: 17px;">
-                                            <input type="checkbox" id="option1" name="options[]" class="checkbox">
-                                            <span>A,</span>
-                                            <span class="input-group">
-                                                <input name="answer" placeholder="Enter answer" value="" minlength="6" type="text" required class="form-control">
-                                                <div class="invalid-feedback">
-                                                    Answer must least 6 char
-                                                </div>
-                                            </span>
-                                        </div>
-                                    </div>
+                                    <div class="col-lg-12" id="answersWrapper"></div>
                                 </div>
                             </form>
 
@@ -571,25 +550,7 @@
                         <div class="modal-body placeani" id="questionsBySubject" style="padding: 15px; height: 320px; overflow-y: auto">
                         </div>
 
-                        <div id="addQuestionFooter" style="display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 7px 23px; border-top: 0.5px lightgray solid">
-                            <nav aria-label="Page navigation example">
-                                <ul class="pagination" style="margin: 0;">
-                                    <li class="page-item">
-                                        <a class="page-link" href="#" aria-label="Previous">
-                                            <span aria-hidden="true">&laquo;</span>
-                                        </a>
-                                    </li>
-                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#" aria-label="Next">
-                                            <span aria-hidden="true">&raquo;</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </nav>
-
+                        <div id="addQuestionFooter" style="display: flex; justify-content: flex-end; align-items: center; gap: 10px; padding: 10px 23px; border-top: 0.5px lightgray solid">
                             <button style="padding: 5px 30px;
                                     border: none;
                                     background: green;
@@ -621,7 +582,7 @@
                                     <div class="col-lg-4">
                                         <div class="form-group">
                                             <div class="form-group">
-                                                <div class="">Question name</div>
+                                                <div class="">Quiz name</div>
                                                 <div class="input-group">
                                                     <input name="quizName" id="quizNameInput" placeholder="Enter quiz name" value="" minlength="3" type="text" required class="form-control">
                                                     <div class="invalid-feedback">
@@ -768,6 +729,7 @@
                                                 data: {
                                                     subjectId: subjectId1,
                                                     quizID: quizID,
+                                                    searchQuestionVal: "",
                                                     action: "getQuestionsBySubject"
                                                 },
                                                 success: function (data) {
@@ -816,7 +778,6 @@
                                                             toastMessageAction("Add Question to List failed!", "red");
 
                                                             $("#addQuestionFooter").hide();
-                                                            $("#searchQuestionInModalAdd").hide();
                                                             break;
 
                                                         default:
@@ -827,11 +788,9 @@
 
                                                             if ($(".question-group").length === 0) {
                                                                 $("#addQuestionFooter").hide();
-                                                                $("#searchQuestionInModalAdd").hide();
                                                                 $("#questionsBySubject").html("<div style=\"display: flex; justify-content:center; align-items: center;\">Dont have any questions</div>");
                                                             } else {
                                                                 $("#addQuestionFooter").show();
-                                                                $("#searchQuestionInModalAdd").show();
                                                             }
 
                                                             $("#questionLengthCount").text("Question & Answers (" + $(".questionCard").length + ")");
@@ -856,7 +815,6 @@
                                             if (numbersQuetionID.length !== 0) {
                                                 const questionsLength = $(".questionCard").length;
 
-                                                alert(numbersQuetionID)
                                                 $.ajax({
                                                     url: "/SWP391_SE1749_NET_GROUP2/quizzes",
                                                     type: "post",
@@ -864,24 +822,42 @@
                                                         questionsID: JSON.stringify(numbersQuetionID),
                                                         quizID: quizID,
                                                         subjectId: subjectId,
-                                                        questionsLength: questionsLength + 1,
+                                                        questionsLength: questionsLength,
                                                         action: "addAllQuesionsToQuizz"
                                                     },
                                                     success: function (data) {
-                                                        let text = "Update quiz successfully!";
-                                                        let color = "green";
+                                                        let classDisable = ".questionCardAction";
+                                                        switch (data) {
+                                                            case "failed":
+                                                                toastMessageAction("Add Question to List failed!", "red", classDisable);
 
-                                                        if (data === "failed") {
-                                                            text = "Update quiz failed!";
-                                                            color = "red";
-                                                        } else {
-                                                            $('#updateQuizModal').modal('hide');
+                                                                $("#addQuestionFooter").hide();
+                                                                $("#searchQuestionInModalAdd").hide();
+                                                                break;
 
-                                                            $('#quizNameTitle').text($("#quizNameInput").val());
-                                                            $('#quizContentTitle').text($("#quizContentInput").val());
+                                                            default:
+
+                                                                for (let i = 0; i < numbersQuetionID.length; i++) {
+                                                                    const c = ".question-group." + numbersQuetionID[i];
+                                                                    $(c).remove();
+                                                                }
+
+                                                                $("#listQuestions").append(data);
+
+                                                                if ($(".question-group").length === 0) {
+                                                                    $("#addQuestionFooter").hide();
+                                                                    $("#searchQuestionInModalAdd").hide();
+                                                                    $("#questionsBySubject").html("<div style=\"display: flex; justify-content:center; align-items: center;\">Dont have any questions in banks</div>");
+                                                                } else {
+                                                                    $("#addQuestionFooter").show();
+                                                                    $("#searchQuestionInModalAdd").show();
+                                                                }
+
+                                                                $("#questionLengthCount").text("Question & Answers (" + $(".questionCard").length + ")");
+
+                                                                toastMessageAction("Add All Question to list successfully!", "green", classDisable);
+                                                                break;
                                                         }
-
-                                                        toastMessageAction(text, color);
                                                     },
                                                     error: function () {
                                                         toastMessageAction("Something went wrong", "red");
@@ -890,18 +866,15 @@
                                             }
                                         }
 
-                                        function toastMessageAction(text, color, link) {
+                                        function toastMessageAction(text, color, classDisable) {
                                             if (text && text !== "") {
                                                 $('#toast').text(text);
                                                 $('#toast').css('background-color', color);
                                                 $('#toast').toggleClass('show');
-                                                // After 3 seconds, remove the show class from DIV and redirect
-                                                if (link && link !== "") {
-                                                    setTimeout(function () {
-                                                        window.location.href = link;
-                                                    }, 2000);
-                                                }
+                                                classDisable && $(classDisable).addClass("noClick");
+
                                                 setTimeout(function () {
+                                                    classDisable && $(classDisable).removeClass("noClick");
                                                     $('#toast').text("");
                                                     $('#toast').toggleClass('show');
                                                 }, 3000);
@@ -929,10 +902,7 @@
                                                         + "                                            <input " + checked + " type=\"checkbox\" id=\"option1\" name=\"options[]\" class=\"checkbox\">\n"
                                                         + "                                            <span>" + type + ",</span>\n"
                                                         + "                                            <span class=\"input-group\">\n"
-                                                        + "                                                <input name=\"answer\" placeholder=\"Enter answer\" value='" + resultArray[i].value + "' minlength=\"6\" type=\"text\" required class=\"form-control\">\n"
-                                                        + "                                                <div class=\"invalid-feedback\">\n"
-                                                        + "                                                    Answer must least 6 char\n"
-                                                        + "                                                </div>\n"
+                                                        + "                                                <input name=\"answer\" placeholder=\"Enter answer\" value='" + resultArray[i].value + "' type=\"text\" required class=\"form-control\">\n"
                                                         + "                                            </span>\n"
                                                         + "                                        <i onclick='removeAnswer(" + count + ")' style='cursor:pointer; color: red;' class=\"bi bi-dash-circle-fill deleteAnswer\"></i>\n"
                                                         + "                                        </div>";
@@ -962,10 +932,7 @@
                                                     + "                                            <input type=\"checkbox\" id=\"option1\" name=\"options[]\" class=\"checkbox\">\n"
                                                     + "                                            <span>" + type + ",</span>\n"
                                                     + "                                            <span class=\"input-group\">\n"
-                                                    + "                                                <input name=\"answer\" placeholder=\"Enter answer\" value=\"\" minlength=\"6\" type=\"text\" required class=\"form-control\">\n"
-                                                    + "                                                <div class=\"invalid-feedback\">\n"
-                                                    + "                                                    Answer must least 6 char\n"
-                                                    + "                                                </div>\n"
+                                                    + "                                                <input name=\"answer\" placeholder=\"Enter answer\" value=\"\" type=\"text\" required class=\"form-control\">\n"
                                                     + "                                            </span>\n"
                                                     + "                                        <i onclick='removeAnswer(" + (numberAnswers + 1) + ")' style='cursor:pointer; color: red;' class=\"bi bi-dash-circle-fill deleteAnswer\"></i>"
                                                     + "                                        </div>";
@@ -1052,6 +1019,7 @@
                                                 success: function (data) {
                                                     let text = "Delete answer successfully!";
                                                     let color = "green";
+                                                    let classDisable = ".deleteAnswer";
 
                                                     if (data === "failed") {
                                                         text = "Delete failed!";
@@ -1066,7 +1034,7 @@
                                                         parent.insertAdjacentHTML('beforeend', data);
                                                     }
 
-                                                    toastMessageAction(text, color);
+                                                    toastMessageAction(text, color, classDisable);
                                                 },
                                                 error: function () {
                                                     toastMessageAction("Something went wrong", "red");
@@ -1086,6 +1054,7 @@
                                                 success: function (data) {
                                                     let text = "Delete question successfully!";
                                                     let color = "green";
+                                                    let classDisable = ".questionCardAction";
 
                                                     switch (data) {
                                                         case "failed":
@@ -1103,7 +1072,7 @@
                                                             break;
                                                     }
 
-                                                    toastMessageAction(text, color);
+                                                    toastMessageAction(text, color, classDisable);
                                                 },
                                                 error: function () {
                                                     toastMessageAction("Something went wrong", "red");
@@ -1120,15 +1089,21 @@
                                                 let questionClass = ".questionCard." + questionID;
                                                 const indexOfQuestionUpdate = $(questionClass).index() + 1;
                                                 let arr = [];
+                                                let answerEmpty = false;
 
                                                 // Lặp qua mỗi form-group
                                                 $('#answersWrapper .form-group').each(function () {
+                                                    const answerValue = $(this).find('input[name="answer"]').val();
+
+                                                    if (answerValue == "") {
+                                                        answerEmpty = true;
+                                                        return false;
+                                                    }
                                                     // Lấy giá trị của checkbox (true hoặc false)
                                                     const checkboxValue = $(this).find('.checkbox').prop('checked');
 
                                                     // Lấy giá trị của input có name="answer"
                                                     const answerID = $(this).find('input[name="answerID"]').val();
-                                                    const answerValue = $(this).find('input[name="answer"]').val();
 
                                                     // Thêm cặp giá trị vào mảng
                                                     if (checkboxValue !== undefined) {
@@ -1136,51 +1111,93 @@
                                                     }
                                                 });
 
-                                                $.ajax({
-                                                    url: "/SWP391_SE1749_NET_GROUP2/quizzes",
-                                                    type: "post",
-                                                    data: {
-                                                        action: "updateQuestion",
-                                                        quizID: quizID,
-                                                        questionID: questionID,
-                                                        subjectId: subjectId,
-                                                        questionValue: questionValue,
-                                                        answers: JSON.stringify(arr),
-                                                        countQuestionUpdate: indexOfQuestionUpdate
-                                                    },
-                                                    success: function (data) {
-                                                        let text = "Update question and answers successfully!";
-                                                        let color = "green";
+                                                if (answerEmpty) {
+                                                    toastMessageAction("Answer cant be empty.", "red", "#updateQuestionSubmit")
+                                                } else {
+                                                    $.ajax({
+                                                        url: "/SWP391_SE1749_NET_GROUP2/quizzes",
+                                                        type: "post",
+                                                        data: {
+                                                            action: "updateQuestion",
+                                                            quizID: quizID,
+                                                            questionID: questionID,
+                                                            subjectId: subjectId,
+                                                            questionValue: questionValue,
+                                                            answers: JSON.stringify(arr),
+                                                            countQuestionUpdate: indexOfQuestionUpdate
+                                                        },
+                                                        success: function (data) {
+                                                            let text = "Update question and answers successfully!";
+                                                            let color = "green";
+                                                            let classDisable = ".questionCardAction";
 
-                                                        switch (data) {
-                                                            case "answers_failed":
-                                                                text = "Update answers failed!";
-                                                                color = "red";
-                                                                break;
-                                                            case "question_failed":
-                                                                text = "Update question failed!";
-                                                                color = "red";
-                                                                break;
+                                                            switch (data) {
+                                                                case "answers_failed":
+                                                                    text = "Update answers failed!";
+                                                                    color = "red";
+                                                                    break;
+                                                                case "question_failed":
+                                                                    text = "Update question failed!";
+                                                                    color = "red";
+                                                                    break;
 
-                                                            default:
-                                                                let parent = document.getElementsByClassName("questionCard")[indexOfQuestionUpdate - 1];
+                                                                default:
+                                                                    let parent = document.getElementsByClassName("questionCard")[indexOfQuestionUpdate - 1];
 
-                                                                $(questionClass).empty();
-                                                                parent.insertAdjacentHTML('beforeend', data);
+                                                                    $(questionClass).empty();
+                                                                    parent.insertAdjacentHTML('beforeend', data);
 
-                                                                $('#updateCardModal').modal('hide');
-                                                                break;
+                                                                    $('#updateCardModal').modal('hide');
+                                                                    break;
+                                                            }
+
+                                                            toastMessageAction(text, color, classDisable);
+                                                        },
+                                                        error: function () {
+                                                            toastMessageAction("Something went wrong", "red");
                                                         }
+                                                    });
 
-                                                        toastMessageAction(text, color);
-                                                    },
-                                                    error: function () {
-                                                        toastMessageAction("Something went wrong", "red");
-                                                    }
-                                                });
+                                                }
                                             }
                                         });
 
+                                        $("#searchQuestionInModalAdd").on("input", function () {
+                                            const value = $(this).val();
+
+                                            $.ajax({
+                                                url: "/SWP391_SE1749_NET_GROUP2/quizzes",
+                                                type: "post",
+                                                data: {
+                                                    subjectId: subjectId,
+                                                    quizID: quizID,
+                                                    searchQuestionVal: value,
+                                                    action: "getQuestionsBySubject"
+                                                },
+                                                success: function (data) {
+                                                    switch (data) {
+                                                        case "failed":
+                                                            toastMessageAction("Get Question failed!", "red");
+                                                            $("#addQuestionFooter").hide();
+                                                            break;
+                                                        case "empty":
+                                                            $("#questionsBySubject").html("<div style=\"display: flex; justify-content:center; align-items: center;\">Dont have any questions with search value</div>");
+                                                            $("#addQuestionFooter").hide();
+                                                            break;
+
+                                                        default:
+                                                            $("#questionsBySubject").empty();
+                                                            $("#questionsBySubject").html(data);
+                                                            $("#addQuestionFooter").show();
+
+                                                            break;
+                                                    }
+                                                },
+                                                error: function () {
+                                                    toastMessageAction("Something went wrong", "red");
+                                                }
+                                            });
+                                        });
         </script>
     </body>
 
