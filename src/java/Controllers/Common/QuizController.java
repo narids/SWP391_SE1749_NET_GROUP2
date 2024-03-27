@@ -211,10 +211,7 @@ public class QuizController extends HttpServlet {
                                         + "                                            <input " + checked + " type=\"checkbox\" id=\"option1\" name=\"options[]\" class=\"checkbox\">\n"
                                         + "                                            <span>" + type + ",</span>\n"
                                         + "                                            <span class=\"input-group\">\n"
-                                        + "                                                <input name=\"answer\" placeholder=\"Enter answer\" value='" + a.getAnswerContent() + "' minlength=\"6\" type=\"text\" required class=\"form-control\">\n"
-                                        + "                                                <div class=\"invalid-feedback\">\n"
-                                        + "                                                    Answer must least 6 char\n"
-                                        + "                                                </div>\n"
+                                        + "                                                <input name=\"answer\" placeholder=\"Enter answer\" value='" + a.getAnswerContent() + "' type=\"text\" required class=\"form-control\">\n"
                                         + "                                            </span>\n"
                                         + "                                            <i onclick='removeAnswer(" + index + ")' style='cursor:pointer; color: red;' class=\"bi bi-dash-circle-fill deleteAnswer\"></i>\n"
                                         + "                                        </div>");
@@ -420,8 +417,9 @@ public class QuizController extends HttpServlet {
 
                     case "getQuestionsBySubject":
                         QuestionDAO questionDAO = new QuestionDAO();
+                        String searchQuestionVal = request.getParameter("searchQuestionVal");
 
-                        List<Question> questions = questionDAO.getQuestionAndAnswersBySubjectId(quizID, subjectId);
+                        List<Question> questions = questionDAO.getQuestionAndAnswersBySubjectId(quizID, subjectId, searchQuestionVal);
 
                         if (questions != null) {
                             if (questions.isEmpty()) {
