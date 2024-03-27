@@ -58,6 +58,7 @@
         <link rel="stylesheet" type="text/css" href="admin/assets/css/style.css">
         <link class="skin" rel="stylesheet" type="text/css" href="admin/assets/css/color/color-1.css">
         <link rel="stylesheet" type="text/css" href="admin/assets/css/dashboard.css">
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
 
     </head>
     <body class="ttr-opened-sidebar ttr-pinned-sidebar">

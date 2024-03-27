@@ -77,17 +77,13 @@ public class addQuizController extends HttpServlet {
             throws ServletException, IOException {
 //        processRequest(request, response);
         Account account = (Account) request.getSession().getAttribute("account");
-        String quizName = request.getParameter("quizName"); 
+        String quizName = request.getParameter("quizName");
         String quizContent = request.getParameter("content");
         int status = Integer.parseInt(request.getParameter("Status"));
-        QuizDAO q = new QuizDAO(); 
-        q.addQuiz(quizName, quizContent, status); 
-         response.sendRedirect("catalog");
-        
-        
-        
-               
-    
+        QuizDAO q = new QuizDAO();
+        q.addQuiz(quizName, quizContent, status);
+        response.sendRedirect("quizzes");
+
     }
 
     /**

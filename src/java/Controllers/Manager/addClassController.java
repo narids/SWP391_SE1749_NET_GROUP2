@@ -6,6 +6,7 @@ package Controllers.Manager;
 
 import DAOs.ClassDAO;
 import Models.MyClass;
+import Models.Teacher;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -60,8 +61,9 @@ public class addClassController extends HttpServlet {
             throws ServletException, IOException {
 //        processRequest(request, response);
         ClassDAO t = new ClassDAO();
-       List<Integer> TeacherIDs = t.getTeacherIDs();
-        request.setAttribute("TeacherIDs", TeacherIDs);
+//       List<Integer> TeacherIDs = t.getTeacherIDs();
+        List<Teacher> teachers = t.getTeachers();
+        request.setAttribute("Teachers", teachers);
         request.getRequestDispatcher("jsp/add-class.jsp").forward(request, response);
     }
 
