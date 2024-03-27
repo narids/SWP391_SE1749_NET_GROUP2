@@ -14,13 +14,10 @@
                         <c:if test="${sessionScope.account ne null}">
                             <li><a href="profile">${sessionScope.account.getUsername()}</a></li>
                                 <c:if test="${sessionScope.account.getRole().getRoleId() eq 1}">
-                                <li><a href="news-list"></i>Dashboard</a></li>
+                                <li><a href="dashboard"></i>Dashboard</a></li>
                                 </c:if>
                                 <c:if test="${sessionScope.account.getRole().getRoleId() eq 2}">
-                                <li><a href="news-list"></i>Dashboard</a></li>
-                                </c:if>
-                                <c:if test="${sessionScope.account.getRole().getRoleId() eq 3}">
-                                <li><a href="news-list"></i>Dashboard</a></li>
+                                <li><a href="dashboard"></i>Dashboard</a></li>
                                 </c:if>
                             <li><a href="logout"></i>Log out</a></li>
                             </c:if>
