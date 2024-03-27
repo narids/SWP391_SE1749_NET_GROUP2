@@ -39,16 +39,20 @@ public class QuizDAO extends DBContext<BaseEntity> {
      *
      * @return
      */
-    public List<Quiz> getQuizForGuest() {
+    public List<Quiz> getQuizForGuest(int userId) {
         List<Quiz> ltQuiz = new ArrayList<>();
-        String sql = "SELECT * "
-                + "FROM Quiz q "
-                + "WHERE q.QuizID "
-                + "NOT IN "
-                + "(SELECT c.QuizID "
-                + "FROM ClassSubject c)";
+        String sql = "SELECT cs.QuizID "
+                + "FROM ClassSubject cs "
+                + "left join ClassStudent cst "
+                + "on cs.ClassID = cst.ClassID "
+                + "left join Student s "
+                + "on cst.StudentID = s.StudentID "
+                + "left join Account a "
+                + "on s.UserID = a.UserID  "
+                + "where a.UserID = ?";
         try {
             PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, userId);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 Quiz quiz = new Quiz();

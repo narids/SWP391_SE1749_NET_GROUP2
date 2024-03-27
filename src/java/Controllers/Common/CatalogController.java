@@ -7,11 +7,13 @@ package Controllers.Common;
 import DAOs.AccountDAO;
 import DAOs.ClassDAO;
 import DAOs.QuizDAO;
+import DAOs.TestDAO;
 import Models.Account;
 import Models.ClassSubject;
 import Models.MyClass;
 import Models.Student;
 import Models.Teacher;
+import Models.Test;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -86,7 +88,8 @@ public class CatalogController extends HttpServlet {
             int userID = account.getUserId();
             ClassDAO c = new ClassDAO();
             List<MyClass> classes = c.getClassByUserID(userID);
-            
+            List<Test> ltScore = new TestDAO().getListScore(userID);
+            request.setAttribute("ltScore", ltScore);
             request.setAttribute("classes", classes);
 //            int classID = c.getClassIdByUserId(userID);
 //            int numberOfStudent = c.getNumberOfStudentInClass(classID);
@@ -125,12 +128,12 @@ public class CatalogController extends HttpServlet {
                 String confirmPassword = request.getParameter("confirmPassword");
 
                 if (currentPassword.equals(newPassword)) {
-                    try (PrintWriter out = response.getWriter()) {
+                    try ( PrintWriter out = response.getWriter()) {
                         out.print("duplicate");
                     }
 
                 } else if (!newPassword.equals(confirmPassword)) {
-                    try (PrintWriter out = response.getWriter()) {
+                    try ( PrintWriter out = response.getWriter()) {
                         out.print("notMatch");
                     }
 
@@ -138,13 +141,13 @@ public class CatalogController extends HttpServlet {
                     Account accCheck = adb.getAccount(account.getUsername(), currentPassword);
 
                     if (accCheck == null) {
-                        try (PrintWriter out = response.getWriter()) {
+                        try ( PrintWriter out = response.getWriter()) {
                             out.print("passNotCorrect");
                         }
                     } else {
                         adb.resetPass(newPassword, account.getEmail());
 
-                        try (PrintWriter out = response.getWriter()) {
+                        try ( PrintWriter out = response.getWriter()) {
                             out.print("success");
                         }
                     }
@@ -254,7 +257,7 @@ public class CatalogController extends HttpServlet {
                         quizzes = quizDAO.getQuizzesByStudentID(sql);
                     }
 
-                    try (PrintWriter out = response.getWriter()) {
+                    try ( PrintWriter out = response.getWriter()) {
                         String dataPrint = "";
 
                         for (ClassSubject q : quizzes) {
@@ -312,7 +315,7 @@ public class CatalogController extends HttpServlet {
                     }
 
                 } catch (Exception e) {
-                    try (PrintWriter out = response.getWriter()) {
+                    try ( PrintWriter out = response.getWriter()) {
                         out.print("");
                     }
                 }
@@ -333,7 +336,7 @@ public class CatalogController extends HttpServlet {
 
                 sql += id;
 
-                try (PrintWriter out = response.getWriter()) {
+                try ( PrintWriter out = response.getWriter()) {
                     if (quizDAO.updateQuizWithSql(sql)) {
                         if (type.equals("toPublish")) {
                             out.print("<span style=\"color: green;\">Publish</span> <i onclick=\"updateStatus(" + id + ", 'toPrivate')\" class=\"bi bi-arrow-repeat quizStatusBtn noClick\" style=\"font-size: 19px; cursor: pointer\"></i>");

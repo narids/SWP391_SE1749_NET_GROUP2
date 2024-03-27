@@ -152,7 +152,7 @@
                                                                             <a href="quizzes?quizID=${ab.quiz.quizId}" class="btn">Read More</a>
                                                                         </div>
                                                                         <div class="info-bx text-center">
-                                                                            <h5><a href='quizzes?quizID=${ab.quiz.quizId}'>${fn:toUpperCase(ab.quiz.quizName)}</a></h5>
+                                                                            <h5 class="text-uppercase" ><a href='quizzes?quizID=${ab.quiz.quizId}'>${ab.quiz.quizName}</a></h5>
                                                                             <span>${ab.subject.subjectName}</span>
                                                                         </div>
                                                                         <div class="cours-more-info">
