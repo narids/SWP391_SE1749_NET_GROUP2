@@ -276,8 +276,8 @@
                                                                             <span class="text-red">${error}</span>
                                                                             <label class="col-form-label">Teacher <span class="text-red">*</span></label>
                                                                             <select name="TeacherID" id="TeacherID" class="form-control" required>
-                                                                                <c:forEach var="teacher" items="${TeacherIDs}">
-                                                                                    <option value="${teacher}"}>${teacher}</option>
+                                                                                <c:forEach var="teacher" items="${Teachers}">
+                                                                                    <option value="${teacher.getTeacherId()}"}>${teacher.getName()} </option>
                                                                                 </c:forEach>
                                                                                 <input type="hidden" name="HiddenTeacherID" id="hiddenTeacherID">
                                                                                 </div>
