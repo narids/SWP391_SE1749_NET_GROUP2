@@ -102,6 +102,29 @@
                                             <input type="radio" id="css" name="Status" value="0" >
                                             <label for="css">Personal</label><br>
                                         </div>
+
+                                        <div class="container">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="option" id="showInput" value="show">
+                                                <label class="form-check-label" for="showInput">
+                                                    Show input
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="option" id="setDefault" value="default">
+                                                <div class="dropdown-menu">
+                                                    <a class="dropdown-item" href="#">Action</a>
+                                                    <a class="dropdown-item" href="#">Another action</a>
+                                                    <a class="dropdown-item" href="#">Something else here</a>
+                                                    <div class="dropdown-divider"></div>
+                                                    <a class="dropdown-item" href="#">Separated link</a>
+                                                </div>
+                                                <label class="form-check-label" for="setDefault">
+                                                    Set default
+                                                </label>
+                                            </div>
+                                            <input type="text" id="textInput" class="form-control" style="display: none;">
+                                        </div>
                                         <div class="col-12">
                                             <button type="submit" class="btn-secondry add-item m-r5"><i class="fa fa-fw fa-plus-circle"></i> Add</button>
                                         </div>
@@ -155,6 +178,15 @@
             }
         </script>
         <script>
+
+            $(document).ready(function () {
+                $('#showInput').click(function () {
+                    $('#textInput').show();
+                });
+                $('#setDefault').click(function () {
+                    $('#textInput').val('Default value').show();
+                });
+            });
             document.getElementById('fileInput').addEventListener('change', function () {
                 var fileInput = document.getElementById('fileInput');
                 var fileNameInput = document.getElementById('fileNameInput');
@@ -165,6 +197,7 @@
                     fileNameInput.value = ''; // Clear the filename if no file is selected
                 }
             });
+
 
         </script>
     </body>

@@ -237,7 +237,7 @@
                 <div class="breadcrumb-row">
                     <div class="container">
                         <ul class="list-inline">
-                            <li><a href="#">Home</a></li>
+                            <li><a href="class">Class</a></li>
                             <li>Class Details</li>
                         </ul>
                     </div>
@@ -274,6 +274,7 @@
                                                                         <div>
                                                                             <input name="ClassName" class="form-control" type="text" required>
                                                                             <span class="text-red">${error}</span>
+                                                                            <br/>
                                                                             <label class="col-form-label">Teacher <span class="text-red">*</span></label>
                                                                             <select name="TeacherID" id="TeacherID" class="form-control" required>
                                                                                 <c:forEach var="teacher" items="${Teachers}">

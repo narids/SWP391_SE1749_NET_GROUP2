@@ -274,6 +274,7 @@
                                                                         <div>
                                                                             <input name="ClassName" class="form-control" type="text" value="${ClassName}" readonly required>
                                                                             <span class="text-red">${error}</span>
+                                                                            <br/>
                                                                             <label class="col-form-label">Student Email<span class="text-red">*</span></label>
                                                                             <input name="StudentEmail" class="form-control" type="text" required>
                                                                         </div>

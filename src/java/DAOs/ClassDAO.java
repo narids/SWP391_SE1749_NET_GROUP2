@@ -248,6 +248,7 @@ public class ClassDAO extends DBContext<BaseEntity> {
         return true;
     }
 
+  
 //    public void addClassName(String className) {
 //        String sql = "INSERT INTO Class (className) VALUES (?)";
 //        try {
@@ -320,10 +321,9 @@ public class ClassDAO extends DBContext<BaseEntity> {
     }
 
     public List<Teacher> getTeachers() {
-        String sql = "select distinct cs.TeacherID, ac.UserID, ac.Fullname from ClassSubject cs, Class c, Teacher t, Account ac \n"
-                + "                where cs.ClassID = c.ClassID and\n"
-                + "                cs.TeacherID = t.TeacherID and \n"
-                + "				t.UserID = ac.UserID \n";
+        String sql = "select distinct t.TeacherID, ac.UserID, ac.Fullname from Class c, Teacher t, Account ac \n"
+                + "                where \n"
+                + "		t.UserID = ac.UserID \n";
         List<Teacher> teacher = new ArrayList<>();
         try {
             // Check if connection is null or not
@@ -469,6 +469,25 @@ public class ClassDAO extends DBContext<BaseEntity> {
             }
         }
     }
+    
+    public void updateClassName(String ClassName, int classID) {
+        try {
+            String strSQL = "UPDATE [Class] "
+                    + "SET [ClassName] = ? "
+                    + "WHERE [ClassID] = ?";
+            PreparedStatement statement = connection.prepareStatement(strSQL);
+            statement.setString(1, ClassName);
+            statement.setInt(2, classID);
+            statement.executeUpdate();
+
+            // Commit the changes to the database
+            connection.commit();
+        } catch (Exception e) {
+            // Handle exceptions
+            e.printStackTrace();
+        }
+    }
+    
 
     public void AddClassTeacher(int ClassID, String TeacherID) {
         String sql = "INSERT Into ClassSubject(ClassID, TeacherID) VALUES(?,?)";
