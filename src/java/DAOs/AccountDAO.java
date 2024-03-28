@@ -27,7 +27,7 @@ public class AccountDAO extends DBContext<BaseEntity> {
 
     public Account getAccount(String UserName, String Password) {
         try {
-            String sql = "SELECT Account.UserID, Account.Username, Account.Email, Account.Avatar, Account.Status, Role.RoleID, Role.RoleName\n"
+            String sql = "SELECT Account.FullName,Account.UserID, Account.Username, Account.Email, Account.Avatar, Account.Status, Role.RoleID, Role.RoleName\n"
                     + "FROM Account INNER JOIN\n"
                     + "Role ON Account.RoleID = Role.RoleID\n"
                     + "where Account.Username = ? and Account.Password = ?";
@@ -37,6 +37,7 @@ public class AccountDAO extends DBContext<BaseEntity> {
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
                 Account account = new Account();
+                account.setFullName(rs.getString("FullName"));
                 account.setUserId(rs.getInt("UserID"));
                 account.setUsername(rs.getString("Username"));
                 account.setEmail(rs.getString("Email"));
@@ -204,7 +205,7 @@ public class AccountDAO extends DBContext<BaseEntity> {
                 return true;
             }
         } catch (SQLException ex) {
-            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error");
         }
         return false;
     }
@@ -407,6 +408,22 @@ public class AccountDAO extends DBContext<BaseEntity> {
             stm.setString(4, fullname);
             stm.setBoolean(5, Status);
             stm.setInt(6, userId);
+            stm.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void updateAcc(String fullname, String email,int id) {
+        try {
+            String sql = "Update Account\n"
+                    + "Set FullName = ?,\n"
+                    + "Email =? \n"
+                    + "where UserID = ?";
+            PreparedStatement stm = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+            stm.setString(1, fullname);
+            stm.setString(2, email);
+            stm.setInt(3, id);
             stm.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);

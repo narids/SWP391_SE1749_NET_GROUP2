@@ -105,6 +105,7 @@
                                             ${a.questionContent}
                                         </td>
                                         <td>
+                                            
                                             <a href="questiondetail?questionid=${a.questionId}" class="btn btn-sm yellow outline radius-xl" style="padding: 5px 10px">
                                                 <i class="fa fa-pencil"></i>
                                             </a>
@@ -294,6 +295,7 @@
                     $(this).parent().parent().parent().parent().remove();
                 });
             }
+            
         </script>
 
     </body>

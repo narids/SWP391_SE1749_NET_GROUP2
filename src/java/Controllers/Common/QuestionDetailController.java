@@ -57,8 +57,7 @@ public class QuestionDetailController extends HttpServlet {
                                 request.setAttribute("questionid", id);
                 Question que = qued.getbyId(id);
                 request.setAttribute("questiondetail", que);
-                List<Answer> list = an.getAnswerByQuestion(Integer.parseInt(id));
-                request.setAttribute("listan", list);
+                
                 request.getRequestDispatcher("jsp/questiondetail.jsp").forward(request, response);
             } else {
                 response.sendRedirect("home");
@@ -68,6 +67,7 @@ public class QuestionDetailController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String ID = request.getParameter("questioniddetail");
         int id = Integer.parseInt(request.getParameter("questioniddetail"));
         String content = request.getParameter("quescontentdetail");
         String explain = request.getParameter("quesexplaindetail");
@@ -76,7 +76,7 @@ public class QuestionDetailController extends HttpServlet {
         String[] correctAnswers = request.getParameterValues("corrects[]");
         an.deleteByID(id);
                     try {
-                        qued.updateByID(content, explain, subject, id);
+                        qued.updateByID(content, explain, subject, ID);
                     } catch (SQLException ex) {
                         Logger.getLogger(QuestionDetailController.class.getName()).log(Level.SEVERE, null, ex);
                     }

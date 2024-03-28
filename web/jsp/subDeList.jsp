@@ -77,7 +77,7 @@
                                             <option data-icon="flag flag-us">English US</option>
                                         </select>
                                     </li>
-                                    <li>${sessionScope.account.getUsername()}</li>
+                                    <li><a href="profile">${sessionScope.account.getUsername()}</a></li>
                                     <li><a href="resetpass.jsp">Forget Password</a></li>
                                 </ul>
                             </div>
@@ -256,7 +256,7 @@
                                     <div class="info-bx text-center">
                                         <h5><a href='subjectlist?subjectdeid=${ab.subDeId}'>${fn:toUpperCase(ab.subDeName)}</a></h5>
                                         <span>${ab.subDeDetail}</span>
-                                        <span><a href="#" class="btn btn-sm red outline radius-xl delete" data-toggle="modal" data-target="#delete-${ab.subDeId}">
+                                        <span><a href="#" class="btn btn-sm red outline radius-xl delete" data-toggle="modal" data-target="#delet-${ab.subDeId}">
                                                 <i class="fa fa-trash"></i>
                                             </a></span>
                                     </div>
@@ -267,7 +267,7 @@
                 </div>
             </div>
             <c:forEach items="${subdelist}" var="n">
-                <div class="modal fade" id="delete-${n.subDeId}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <div class="modal fade" id="delet-${n.subDeId}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <form action="subdelist" method="post">
                             <div class="modal-content">
@@ -278,9 +278,9 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <input type="hidden" id="newsIdToDelete" name="todo" value="delete">
-                                    <input type="hidden" id="newsIdToDelete" name="subDeId" value="${n.subDeId}">
-                                    Are you sure you want to delete this Subject Dimension: ?
+                                    <input type="hidden" id="idd" name="todo" value="delete">
+                                    <input type="hidden" id="idd" name="subDeId" value="${n.subDeId}">
+                                    Are you sure you want to delete this Subject Dimension: 
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>

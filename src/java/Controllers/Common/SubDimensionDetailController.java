@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 /**
@@ -29,7 +30,7 @@ public class SubDimensionDetailController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-
+ 
         Account account = (Account) session.getAttribute("account");
 
         if (account == null) {
@@ -48,10 +49,11 @@ public class SubDimensionDetailController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String content = request.getParameter("subdiname");
-        String explain = request.getParameter("subdidetail");
-        int id = Integer.parseInt(request.getParameter("subjectdeid"));
-        subde.updateDi(content, explain, id);
+        String content = request.getParameter("subdinamee");
+        String explain = request.getParameter("subdidetaile");
+        int id = Integer.parseInt(request.getParameter("subjectdimensionid"));
+        
+        subde.updateDi(content, explain, id);     
         response.sendRedirect("subdelist");
     }
 

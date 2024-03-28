@@ -47,7 +47,7 @@ public class SubjectDeDAO extends DBContext<SubjectDimension> {
         return list;
     }
 
-    public void addnew(String name,String detail) {
+    public void addnew(String name, String detail) {
         try {
             String sql = "insert into SubjectDemension (SubDeName,SubDeDetail) \n"
                     + "values (?,?)";
@@ -60,9 +60,41 @@ public class SubjectDeDAO extends DBContext<SubjectDimension> {
         }
     }
 
-    public void deleteByID(int id){
+    public void deleteByID(int id) {
         try {
-            String strSQL = "DELETE FROM [dbo].[SubjectDemension] WHERE SubDeID = ?";
+            String strSQL = "delete SubjectDemension\n"
+                    + " from SubjectDemension\n"
+                    + " where SubjectDemension.SubDeID =  ?";
+            PreparedStatement statement = connection.prepareStatement(strSQL);
+            statement.setInt(1, id);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("getListUsers:" + e.getMessage());
+        }
+    }
+
+    public void deleteByIDdd(int id) {
+        try {
+            String strSQL = "DELETE ClassSubject\n"
+                    + " FROM ClassSubject  \n"
+                    + "   join subject on  ClassSubject.SubjectID = Subject.SubjectID\n"
+                    + "join SubjectDemension on Subject.SubDeID = SubjectDemension.SubDeID\n"
+                    + "WHERE SubjectDemension.SubDeID = ?";
+            PreparedStatement statement = connection.prepareStatement(strSQL);
+            statement.setInt(1, id);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("getListUsers:" + e.getMessage());
+        }
+    }
+
+    public void deleteByIDd(int id) {
+        try {
+            String strSQL = "delete Question\n"
+                    + "from Question\n"
+                    + "join Subject on Subject.SubjectID = Question.SubjectId\n"
+                    + "join SubjectDemension on Subject.SubDeID = SubjectDemension.SubDeID\n"
+                    + "where SubjectDemension.SubDeID = ?";
             PreparedStatement statement = connection.prepareStatement(strSQL);
             statement.setInt(1, id);
             statement.executeUpdate();
@@ -70,16 +102,32 @@ public class SubjectDeDAO extends DBContext<SubjectDimension> {
             System.out.println("getListUsers:" + e.getMessage());
         }
     }
-    public SubjectDimension getbyID(int id){
-         SubjectDimension subname = new SubjectDimension();
-         try {
-            String sql = "Select s.SubDeName,s.SubDeDetail\n"
-                    + "from SubjectDemension s where s.SubDeID=?";
+
+    public void deleteByIDddd(int id) {
+        try {
+            String strSQL = "delete Subject\n"
+                    + "from Subject\n"
+                    + "join SubjectDemension on Subject.SubDeID = SubjectDemension.SubDeID\n"
+                    + "where SubjectDemension.SubDeID =?";
+            PreparedStatement statement = connection.prepareStatement(strSQL);
+            statement.setInt(1, id);
+            statement.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("getListUsers:" + e.getMessage());
+        }
+    }
+
+    public SubjectDimension getbyID(int id) {
+        SubjectDimension subname = new SubjectDimension();
+        try {
+            String sql = "Select *\n"
+                    + "from SubjectDemension  where SubDeID=?";
             if (connection != null && !connection.isClosed()) {
                 PreparedStatement statement = connection.prepareStatement(sql);
                 statement.setInt(1, id);
                 ResultSet rs = statement.executeQuery();
                 while (rs.next()) {
+                    subname.setSubDeId(rs.getInt("SubDeID"));
                     subname.setSubDeName(rs.getString("SubDeName"));
                     subname.setSubDeDetail(rs.getString("SubDeDetail"));
                 }
@@ -91,9 +139,10 @@ public class SubjectDeDAO extends DBContext<SubjectDimension> {
         }
         return subname;
     }
-    public SubjectDimension getbyIDfull(int id){
-         SubjectDimension subname = new SubjectDimension();
-         try {
+
+    public SubjectDimension getbyIDfull(int id) {
+        SubjectDimension subname = new SubjectDimension();
+        try {
             String sql = "Select s.SubDeName,s.SubDeDetail,s.SubDeID\n"
                     + "from SubjectDemension s where s.SubDeID=?";
             if (connection != null && !connection.isClosed()) {
@@ -113,21 +162,23 @@ public class SubjectDeDAO extends DBContext<SubjectDimension> {
         }
         return subname;
     }
-    public void updateDi(String name,String detail,int id) {
+
+    public void updateDi(String name, String detail, int id) {
         try {
-            String sql = "UPDATE [SubjectDemension] "
-                    + "SET [SubDeName] = ?,"
-                    + "[SubDeDetail] = ?"
-                    + "WHERE [SubDeID] =?";
+            String sql = "UPDATE [SubjectDemension] \n" +
+"                    SET [SubDeName] = ?,\n" +
+"                    [SubDeDetail] = ?\n" +
+"                    WHERE [SubDeID] =?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, name);
             statement.setString(2, detail);
             statement.setInt(3, id);
             statement.executeUpdate();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println("getListUsers:" + e.getMessage());
         }
     }
+
     @Override
     public void insert(SubjectDimension entity) {
     }

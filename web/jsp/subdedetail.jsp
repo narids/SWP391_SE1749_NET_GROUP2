@@ -245,24 +245,25 @@
                     <ul id="masonry" class="ttr-gallery-listing magnific-image row">
                         <div class="widget-inner">
                             <form action="subdidetail" method="POST" >
+                                <input name="subjectdimensionid" class="form-control" type="hidden" value="${subdedetail.subDeId}" required>
                                 <div class="row">
                                     <div class="form-group col-8">
-                                        <input name="subjectdeid" class="form-control" type="hidden" value="${subdedetail.subDeId}" required>
+                                        <input type="hidden" id="iddd" name="subjectdimensionid" value="${subdedetail.subDeId}">
                                         <label class="col-form-label">Name <span class="text-red">*</span></label>
                                         <div>
-                                            <input name="subdiname" class="form-control" type="text" required value="${subdedetail.subDeName}">
+                                            <input type="text" id="subdinamee" name="subdinamee" value="${subdedetail.subDeName}"><br>
                                         </div>
                                     </div>
-
                                     <div class="form-group col-12">
                                         <label class="col-form-label">Detail <span class="text-red">*</span></label>
                                         <div>
-                                            <textarea name="subdidetail" class="form-control" style="width: 100%; min-height: 100px" required >${subdedetail.subDeDetail}</textarea>
+                                            
+                                            <textarea id="subdidetaile" name="subdidetaile">${subdedetail.subDeDetail}</textarea><br><br>
                                         </div>
                                     </div>
 
                                     <div class="col-12">
-                                        <button type="submit" > Update</button>
+                                        <button type="submit" >Update</button>
                                     </div>
                                 </div>
                             </form>

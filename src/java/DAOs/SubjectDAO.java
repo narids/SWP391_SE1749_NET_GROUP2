@@ -14,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -51,12 +52,12 @@ public class SubjectDAO extends DBContext<Subject> {
         ArrayList<ClassSubject> list = new ArrayList<>();
         try {
             String sql = "SELECT Quiz.QuizID, Quiz.QuizName, Quiz.QuizContent, Quiz.CreatedDate, Quiz.QuizStatus, Class.ClassName, Subject.SubjectName, Teacher.TeacherID, Class.ClassID \n"
-                        + "FROM         Class INNER JOIN\n"
-                        + "                      ClassSubject ON Class.ClassID = ClassSubject.ClassID INNER JOIN\n"
-                        + "                      Subject ON ClassSubject.SubjectID = Subject.SubjectID INNER JOIN\n"
-                        + "                      Teacher ON ClassSubject.TeacherID = Teacher.TeacherID INNER JOIN\n"
-                        + "                      Quiz ON ClassSubject.QuizID = Quiz.QuizID\n"
-                        + "                      where Subject.SubjectID = ?";
+                    + "FROM         Class INNER JOIN\n"
+                    + "                      ClassSubject ON Class.ClassID = ClassSubject.ClassID INNER JOIN\n"
+                    + "                      Subject ON ClassSubject.SubjectID = Subject.SubjectID INNER JOIN\n"
+                    + "                      Teacher ON ClassSubject.TeacherID = Teacher.TeacherID INNER JOIN\n"
+                    + "                      Quiz ON ClassSubject.QuizID = Quiz.QuizID\n"
+                    + "                      where Subject.SubjectID = ?";
             PreparedStatement stm = connection.prepareStatement(sql);
             stm.setString(1, id);
             ResultSet rs = stm.executeQuery();
@@ -92,6 +93,7 @@ public class SubjectDAO extends DBContext<Subject> {
         }
         return list;
     }
+
     public ArrayList<Subject> getlist(String id) {
         ArrayList<Subject> list = new ArrayList<>();
         try {
@@ -117,6 +119,28 @@ public class SubjectDAO extends DBContext<Subject> {
         return list;
     }
 
+    public static void main(String[] args) {
+//        
+
+        Scanner input = new Scanner(System.in);
+//        System.out.print("Name: ");
+//        String name = input.nextLine();
+        SubjectDAO sub = new SubjectDAO();
+//        int id = sub.getIDbyName(name);
+//        System.out.println(id);
+        System.out.print("ID: ");
+        String idsub = input.nextLine();
+        try {
+            if (sub.getbyIDSubject(Integer.parseInt(idsub))) {
+                System.out.println("True");
+            } else {
+                System.out.println("False");
+            }
+        } catch (Exception ex) {
+            System.out.println("Error");
+        }
+    }
+
     public int getIDbyName(String subname) {
         try {
             String sql = "Select s.SubjectID from Subject s\n"
@@ -128,11 +152,33 @@ public class SubjectDAO extends DBContext<Subject> {
                 return rs.getInt("SubjectID");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(QuestionDAO.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error");
         }
         return 0;
     }
-    public Subject getbyID(int id){
+
+    public Subject getbyID(int id) {
+        Subject sub = new Subject();
+        if (getbyIDSubject(id)) {
+            try {
+                String sql = "Select s.SubjectID,s.SubjectName,s.SubDetail from Subject s\n"
+                        + "where s.SubjectID = ?";
+                PreparedStatement stm = connection.prepareStatement(sql);
+                stm.setInt(1, id);
+                ResultSet rs = stm.executeQuery();
+                while (rs.next()) {
+                    sub.setSubjectId(rs.getInt("SubjectID"));
+                    sub.setSubjectName(rs.getString("SubjectName"));
+                    sub.setSubDetail(rs.getString("SubDetail"));
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(QuestionDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return sub;
+    }
+
+    public boolean getbyIDSubject(int id) {
         Subject sub = new Subject();
         try {
             String sql = "Select s.SubjectName,s.SubDetail from Subject s\n"
@@ -143,49 +189,59 @@ public class SubjectDAO extends DBContext<Subject> {
             while (rs.next()) {
                 sub.setSubjectName(rs.getString("SubjectName"));
                 sub.setSubDetail(rs.getString("SubDetail"));
+                return true;
             }
         } catch (SQLException ex) {
-            Logger.getLogger(QuestionDAO.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error");
         }
-        return sub;
+        return false;
     }
+
     public int getIDbyID(int id) {
-        try {
-            String sql = "Select s.SubDeID from Subject s\n"
-                    + "where s.SubjectID = ?";
-            PreparedStatement stm = connection.prepareStatement(sql);
-            stm.setInt(1, id);
-            ResultSet rs = stm.executeQuery();
-            while (rs.next()) {
-                return rs.getInt("SubDeID");
+        
+            try {
+                String sql = "Select s.SubDeID from Subject s\n"
+                        + "where s.SubjectID = ?";
+                PreparedStatement stm = connection.prepareStatement(sql);
+                stm.setInt(1, id);
+                ResultSet rs = stm.executeQuery();
+                while (rs.next()) {
+                    return rs.getInt("SubDeID");
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(QuestionDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(QuestionDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
         return 0;
     }
-    public void deleteClassSubject(int id){
-        try {
-            String strSQL = "DELETE FROM [ClassSubject] WHERE SubjectID = ?";
-            PreparedStatement statement = connection.prepareStatement(strSQL);
-            statement.setInt(1, id);
-            statement.executeUpdate();
-        } catch (Exception e) {
-            System.out.println("getListUsers:" + e.getMessage());
-        }
-    }
-    public void deleteByID(int id){
-         try {
-            String strSQL = "DELETE FROM [Subject] WHERE SubjectID = ?";
-            PreparedStatement statement = connection.prepareStatement(strSQL);
-            statement.setInt(1, id);
-            statement.executeUpdate();
-        } catch (Exception e) {
-            System.out.println("getListUsers:" + e.getMessage());
+
+    public void deleteClassSubject(int id) {
+        if (getbyIDSubject(id)) {
+            try {
+                String strSQL = "DELETE FROM [ClassSubject] WHERE SubjectID = ?";
+                PreparedStatement statement = connection.prepareStatement(strSQL);
+                statement.setInt(1, id);
+                statement.executeUpdate();
+            } catch (Exception e) {
+                System.out.println("getListUsers:" + e.getMessage());
+            }
         }
     }
 
-    public void addSubject(String name,String detail,String id){
+    public void deleteByID(int id) {
+        if (getbyIDSubject(id)) {
+            try {
+                String strSQL = "DELETE FROM [Subject] WHERE SubjectID = ?";
+                PreparedStatement statement = connection.prepareStatement(strSQL);
+                statement.setInt(1, id);
+                statement.executeUpdate();
+            } catch (Exception e) {
+                System.out.println("getListUsers:" + e.getMessage());
+            }
+        }
+    }
+
+    public void addSubject(String name, String detail, String id) {
         try {
             String sql = "insert into Subject (SubjectName,SubDetail,SubDeID) \n"
                     + "values (?,?,?)";
@@ -198,21 +254,25 @@ public class SubjectDAO extends DBContext<Subject> {
             System.out.println("getListUsers:" + e.getMessage());
         }
     }
-   public void updateSubject(String name,String detail,int id) {
-        try {
-            String sql = "UPDATE [Subject] "
-                    + "SET [SubjectName] = ?,"
-                    + "[SubDetail] = ?"
-                    + "WHERE [SubjectID] =?";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, name);
-            statement.setString(2, detail);
-            statement.setInt(3, id);
-            statement.executeUpdate();
-        } catch (Exception e) {
-            System.out.println("getListUsers:" + e.getMessage());
-        }
-    } 
+
+    public void updateSubject(String name, String detail, int id) {
+         
+            try {
+                String sql = "UPDATE [Subject] \n" +
+"                        SET [SubjectName] = ?,\n" +
+"                       [SubDetail] = ?\n" +
+"                        WHERE [SubjectID] = ?";
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setString(1, name);
+                statement.setString(2, detail);
+                statement.setInt(3, id);
+                statement.executeUpdate();
+            } catch (SQLException e) {
+                System.out.println("getListUsers:" + e.getMessage());
+            }
+       
+    }
+
     @Override
     public void insert(Subject entity) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
