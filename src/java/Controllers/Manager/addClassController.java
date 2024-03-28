@@ -82,17 +82,26 @@ public class addClassController extends HttpServlet {
         ClassDAO t = new ClassDAO();
         String className = request.getParameter("ClassName");
         String TeacherID = request.getParameter("HiddenTeacherID");
-        String error = "Name had been used, pls try another ones";
+        String error1 = "Name had been used, pls try another ones";
+        String error2 = "Classname only has 10 character only, pls try another ones";
 
-        if (t.checkClassName(className)) {
+        if (t.checkClassName(className) ) {
 
-            request.setAttribute("error", error);
+            request.setAttribute("error", error1);   
             List<Teacher> teachers = t.getTeachers();
             request.setAttribute("Teachers", teachers);
             List<MyClass> ClassList = t.getAllClasses();
             request.setAttribute("ClassList", ClassList);
             request.getRequestDispatcher("jsp/Class-list.jsp").include(request, response);
-        } else {
+        }else if(className.length() > 10){
+            request.setAttribute("error", error2);   
+            List<Teacher> teachers = t.getTeachers();
+            request.setAttribute("Teachers", teachers);
+            List<MyClass> ClassList = t.getAllClasses();
+            request.setAttribute("ClassList", ClassList);
+            request.getRequestDispatcher("jsp/Class-list.jsp").include(request, response);   
+        }
+        else {
 
             int classID = t.addClassName(className);
 
