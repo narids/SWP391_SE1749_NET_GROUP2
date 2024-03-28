@@ -247,6 +247,7 @@
                             <form action="subjectdetail" method="POST" >
                                 <div class="row">
                                     <div class="form-group col-8">
+                                        <input type="hidden" id="idddd" name="subjectid" value="${subjectdetail.subjectId}">
                                         <label class="col-form-label">Name <span class="text-red">*</span></label>
                                         <div>
                                             <input name="subname" class="form-control" type="text" required value="${subjectdetail.subjectName}">

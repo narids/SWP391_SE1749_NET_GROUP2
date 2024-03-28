@@ -59,6 +59,9 @@ public class ProfileController extends HttpServlet {
         
         Account account = (Account) request.getSession().getAttribute("account");
         AccountDAO accDao = new AccountDAO();
+                int id = account.getUserId();
+        Account acc = accDao.getAccountById(id);
+        
         if (account == null) {
             response.sendRedirect("login");
         } else {
@@ -103,10 +106,9 @@ public class ProfileController extends HttpServlet {
             if(account.getRole().getRoleId() == 2 || account.getRole().getRoleId() == 1){
                 RequestDispatcher dispatcher = request.getRequestDispatcher("jsp/user-detail.jsp");
                 dispatcher.forward(request, response);
-            }
-            
+            }            
             request.setAttribute("account", account);
-
+            request.setAttribute("acc", acc);
         }
     }
 

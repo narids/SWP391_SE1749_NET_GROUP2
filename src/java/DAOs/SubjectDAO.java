@@ -161,12 +161,13 @@ public class SubjectDAO extends DBContext<Subject> {
         Subject sub = new Subject();
         if (getbyIDSubject(id)) {
             try {
-                String sql = "Select s.SubjectName,s.SubDetail from Subject s\n"
+                String sql = "Select s.SubjectID,s.SubjectName,s.SubDetail from Subject s\n"
                         + "where s.SubjectID = ?";
                 PreparedStatement stm = connection.prepareStatement(sql);
                 stm.setInt(1, id);
                 ResultSet rs = stm.executeQuery();
                 while (rs.next()) {
+                    sub.setSubjectId(rs.getInt("SubjectID"));
                     sub.setSubjectName(rs.getString("SubjectName"));
                     sub.setSubDetail(rs.getString("SubDetail"));
                 }
@@ -197,7 +198,7 @@ public class SubjectDAO extends DBContext<Subject> {
     }
 
     public int getIDbyID(int id) {
-        if (getbyIDSubject(id)) {
+        
             try {
                 String sql = "Select s.SubDeID from Subject s\n"
                         + "where s.SubjectID = ?";
@@ -210,7 +211,7 @@ public class SubjectDAO extends DBContext<Subject> {
             } catch (SQLException ex) {
                 Logger.getLogger(QuestionDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
+        
         return 0;
     }
 
@@ -255,21 +256,21 @@ public class SubjectDAO extends DBContext<Subject> {
     }
 
     public void updateSubject(String name, String detail, int id) {
-        if (getbyIDSubject(id)) {
+         
             try {
-                String sql = "UPDATE [Subject] "
-                        + "SET [SubjectName] = ?,"
-                        + "[SubDetail] = ?"
-                        + "WHERE [SubjectID] =?";
+                String sql = "UPDATE [Subject] \n" +
+"                        SET [SubjectName] = ?,\n" +
+"                       [SubDetail] = ?\n" +
+"                        WHERE [SubjectID] = ?";
                 PreparedStatement statement = connection.prepareStatement(sql);
                 statement.setString(1, name);
                 statement.setString(2, detail);
                 statement.setInt(3, id);
                 statement.executeUpdate();
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 System.out.println("getListUsers:" + e.getMessage());
             }
-        }
+       
     }
 
     @Override
