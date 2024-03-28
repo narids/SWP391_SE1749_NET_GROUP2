@@ -67,7 +67,6 @@ public class UserListController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
-        String msg = "failed";
         switch (action) {
             case "detail":
                 adao.updateAccount(
@@ -78,7 +77,9 @@ public class UserListController extends HttpServlet {
                         Integer.parseInt(request.getParameter("role")),
                         request.getParameter("status").contains("1") ? true : false);
 //                    response.sendRedirect("user-list?action=view");
-                msg = "success";
+                try ( PrintWriter out = response.getWriter()) {
+                    out.print("success");
+                }
                 request.getSession().setAttribute("isUpdateSuccess", true);
                 break;
             case "insert":
@@ -101,15 +102,14 @@ public class UserListController extends HttpServlet {
                     } else if (Integer.parseInt(request.getParameter("role")) == 3) {
                         adao.addToTeacherAccounts(aid);
                     }
-                    msg = "success";
+                    try ( PrintWriter out = response.getWriter()) {
+                        out.print("success");
+                    }
                     request.getSession().setAttribute("isAddSuccess", true);
                 }
                 break;
             default:
                 throw new AssertionError();
-        }
-        try ( PrintWriter out = response.getWriter()) {
-            out.print(msg);
         }
     }
 

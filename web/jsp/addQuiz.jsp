@@ -1,7 +1,7 @@
 <%-- 
-    Document   : addsubde
-    Created on : Mar 9, 2024, 8:13:58 PM
-    Author     : User
+    Document   : add-news
+    Created on : Jan 29, 2024, 10:28:22 PM
+    Author     : admin
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -32,7 +32,7 @@
         <link rel="shortcut icon" type="image/x-icon" href="admin/assets/images/favicon.png" />
 
         <!-- PAGE TITLE HERE ============================================= -->
-        <title>Add new Subject Dimension </title>
+        <title>EduChamp : Education HTML Template </title>
 
         <!-- MOBILE SPECIFIC ============================================= -->
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -78,27 +78,32 @@
                     <div class="col-lg-12 m-b30">
                         <div class="widget-box">
                             <div class="wc-title">
-                                <h4>Add Subject Dimension</h4>
+                                <h4>Add news</h4>
                             </div>
                             <div class="widget-inner">
-                                <form action="addsubdi" method="POST" >
+                                <form action="addQuiz" method="POST" class="edit-profile m-b30" >
                                     <div class="row">
                                         <div class="form-group col-8">
-                                            <label class="col-form-label">Name <span class="text-red">*</span></label>
+                                            <label class="col-form-label">Quiz Name <span class="text-red">*</span></label>
                                             <div>
-                                                <input name="subdiname" class="form-control" type="text" required>
+                                                <input name="quizName" class="form-control" type="text" required>
                                             </div>
                                         </div>
-
                                         <div class="form-group col-12">
-                                            <label class="col-form-label">Detail <span class="text-red">*</span></label>
+                                            <label class="col-form-label">Quiz<span class="text-red">*</span></label>
                                             <div>
-                                                <textarea name="subdidetail" class="form-control" style="width: 100%; min-height: 100px" required></textarea>
+                                                <textarea name="content" class="form-control" style="width: 100%; min-height: 100px" required></textarea>
                                             </div>
                                         </div>
-
+                                        <div class="form-group col-12">
+                                            <label class="col-form-label">Status <span class="text-red">*</span></label>
+                                            <input type="radio" id="html" name="Status" value="1" checked>
+                                            <label for="html">Public</label><br>
+                                            <input type="radio" id="css" name="Status" value="0" >
+                                            <label for="css">Personal</label><br>
+                                        </div>
                                         <div class="col-12">
-                                            <button type="submit" > Add</button>
+                                            <button type="submit" class="btn-secondry add-item m-r5"><i class="fa fa-fw fa-plus-circle"></i> Add</button>
                                         </div>
                                     </div>
                                 </form>
@@ -131,5 +136,38 @@
         <script src="admin/assets/vendors/summernote/summernote.js"></script>
         <script src="admin/assets/vendors/file-upload/imageuploadify.min.js"></script>
         <script src='admin/assets/vendors/switcher/switcher.js'></script>
+        <script>
+        </script>
+        <script>
+            $(document).ready(function () {
+                $('.summernote').summernote({
+                    height: 300,
+                    tabsize: 2
+                });
+
+                $('input[type="file"]').imageuploadify();
+            });
+        </script>
+        <script>
+            function getContent() {
+                var content = $('#summernote').summernote('code');
+                $('#summernoteContent').val(content);
+            }
+        </script>
+        <script>
+            document.getElementById('fileInput').addEventListener('change', function () {
+                var fileInput = document.getElementById('fileInput');
+                var fileNameInput = document.getElementById('fileNameInput');
+                if (fileInput.files.length > 0) {
+                    var fileName = fileInput.files[0].name;
+                    fileNameInput.value = fileName;
+                } else {
+                    fileNameInput.value = ''; // Clear the filename if no file is selected
+                }
+            });
+
+        </script>
     </body>
+
+    <!-- Mirrored from educhamp.themetrades.com/demo/admin/add-listing.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 22 Feb 2019 13:09:05 GMT -->
 </html>

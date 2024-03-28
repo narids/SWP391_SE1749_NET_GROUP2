@@ -69,7 +69,7 @@
                             </li>
                             <li data-filter="publish" class="btn">
                                 <input type="radio">
-                                <a href="#"><span>Publish</span></a> 
+                                <a href="#"><span>Public</span></a> 
                             </li>
                             <li data-filter="pending" class="btn">
                                 <input type="radio">

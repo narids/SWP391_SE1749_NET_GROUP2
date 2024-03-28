@@ -4,22 +4,22 @@
  */
 package Controllers.Manager;
 
-import DAOs.ClassDAO;
-import Models.MyClass;
-import Models.Teacher;
+import DAOs.QuizDAO;
+import Models.Account;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
 
 /**
  *
  * @author nghia
  */
-public class addClassController extends HttpServlet {
+@WebServlet(name = "addQuizController", urlPatterns = {"/addQuiz"})
+public class addQuizController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,15 +33,15 @@ public class addClassController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
+        try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet addClassController</title>");
+            out.println("<title>Servlet addQuizController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet addClassController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet addQuizController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,11 +60,8 @@ public class addClassController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 //        processRequest(request, response);
-        ClassDAO t = new ClassDAO();
-//       List<Integer> TeacherIDs = t.getTeacherIDs();
-        List<Teacher> teachers = t.getTeachers();
-        request.setAttribute("Teachers", teachers);
-        request.getRequestDispatcher("jsp/add-class.jsp").forward(request, response);
+        request.getRequestDispatcher("jsp/addQuiz.jsp").forward(request, response);
+
     }
 
     /**
@@ -79,24 +76,13 @@ public class addClassController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 //        processRequest(request, response);
-        ClassDAO t = new ClassDAO();
-        String className = request.getParameter("ClassName");
-        String TeacherID = request.getParameter("HiddenTeacherID");
-        String error = "Name had been used, pls try another ones";
-
-        if (t.checkClassName(className)) {
-
-            request.setAttribute("error", error);
-            response.sendRedirect("class");
-        } else {
-           
-            int classID =  t.addClassName(className);
-            
-            t.AddClassTeacher(classID,TeacherID);
-            
-            response.sendRedirect("class");
-
-        }
+        Account account = (Account) request.getSession().getAttribute("account");
+        String quizName = request.getParameter("quizName");
+        String quizContent = request.getParameter("content");
+        int status = Integer.parseInt(request.getParameter("Status"));
+        QuizDAO q = new QuizDAO();
+        q.addQuiz(quizName, quizContent, status);
+        response.sendRedirect("quizzes");
 
     }
 

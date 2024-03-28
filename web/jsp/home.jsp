@@ -124,43 +124,10 @@
                             <div class="container">
                                 <div class="row">
                                     <div class="col-md-12 heading-bx left">
-                                        <h2 class="title-head">Popular <span>Quizzes</span></h2>
+                                        <h2 class="title-head">Online <span>Quizzes</span></h2>
                                         <p>As you answer more questions correctly, you're advanced from easier multiple choice questions to harder, written ones. Be ready for test day with Learn.</p>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="courses-carousel owl-carousel owl-btn-1 col-12 p-lr0">
-                                    <c:forEach items="${qdao.quizForGuest}" var="q" >
-                                        <div class="item">
-                                            <div class="cours-bx">
-                                                <div class="action-box">
-                                                    <img src="https://media.istockphoto.com/id/1322647265/video/quiz-time-for-web-design-quiz-symbol-poster-banner-animated.jpg?s=640x640&k=20&c=S4_3WlgD8Nw3crK3KSAlzXDP1lwW9EzXrg7fmobEjoo=" alt="">
-                                                    <div class="info-bx text-center">
-                                                        <h5>
-                                                            <button 
-                                                                type="button" 
-                                                                class="btn btn-primary" 
-                                                                onclick="window.location.href='quizzes?quizID=${q.quizId}'">                                                          
-                                                                Take Quiz
-                                                            </button>
-                                                        </h5>
-                                                    </div>
-                                                </div>
-                                                <div class="info-bx text-center">
-                                                    <h5>
-                                                        <button 
-                                                            type="button" 
-                                                            class="btn btn-primary" 
-                                                            onclick="window.location.href='quizzes?quizID=${q.quizId}'">                                                          
-                                                            ${q.quizContent}
-                                                        </button>
-                                                    </h5>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </c:forEach>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <!-- Popular Courses END -->
@@ -349,12 +316,6 @@
                 <!-- Footer END ==== -->
                 <button class="back-to-top fa fa-chevron-up" ></button>
             </div>
-            <!-- TakeQuiz Modal -->
-        <c:forEach items="${qdao.quizForGuest}" var="q">
-            <jsp:include page="../assets/components/take-quiz-modal.jsp">
-                <jsp:param name="quizId" value="${q.quizId}"></jsp:param>
-            </jsp:include>
-        </c:forEach>
         <!-- External JavaScripts -->
         <script src="assets/js/jquery.min.js"></script>
         <script src="assets/vendors/bootstrap/js/popper.min.js"></script>
