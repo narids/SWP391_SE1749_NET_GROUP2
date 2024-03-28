@@ -76,7 +76,6 @@ public class QuestionDAO extends DBContext<Question> {
 
                 question.setAnswers(getAnswersByQuestionID(rs.getInt("QuestionID")));
 
-               
             }
 
             return ltQuestion;
@@ -85,6 +84,7 @@ public class QuestionDAO extends DBContext<Question> {
         }
         return null;
     }
+
     public List<Question> getQuestionByQuiz(int quizId) {
         List<Question> ltQuestion = new ArrayList<>();
         try {
@@ -312,14 +312,14 @@ public class QuestionDAO extends DBContext<Question> {
     }
 
     public void updateByID(String content, String explain, String subject, String id) throws SQLException {
-        if (getbyID(id)) {
-            String sql = "UPDATE [Question] "
-                    + "SET [Question_Content] = ?,"
-                    + "[Created_Day] = ?,"
-                    + "[ImageURL] = ?,"
-                    + "[Explain] = ? ,"
-                    + "SubjectId=?"
-                    + "WHERE [QuestionID] = ?";
+        try {
+            String sql = "UPDATE [Question] \n"
+                    + "               Set      [Question_Content] = ?,\n"
+                    + "                  [Created_Day] = ?,\n"
+                    + "                 [ImageURL] = ?,\n"
+                    + "                   [Explain] = ? ,\n"
+                    + "                SubjectId=?\n"
+                    + "                    WHERE [QuestionID] = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             // Create a PreparedStatement object
             statement.setString(1, content);
@@ -331,7 +331,10 @@ public class QuestionDAO extends DBContext<Question> {
             statement.setInt(5, subid);
             statement.setString(6, id);
 
-    
+        } catch (SQLException e) {
+            System.out.println("getListUsers:" + e.getMessage());
+        }
+    }
 
     public void deleteByID(int id) {
         try {
@@ -340,7 +343,11 @@ public class QuestionDAO extends DBContext<Question> {
             statement.setInt(1, id);
 
             statement.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println("getListUsers:" + e.getMessage());
         }
+
     }
 
     public void deleteByID(String id) {

@@ -35,7 +35,7 @@ public class ClassDetailController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
+        try ( PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
@@ -92,34 +92,68 @@ public class ClassDetailController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
+//    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+//            throws ServletException, IOException {
+//        ClassDAO t = new ClassDAO();
+//        String TeacherID = request.getParameter("HiddenTeacherID");
+////        int ClassID = Integer.parseInt(request.getParameter("ClassId"));
+//        HttpSession session = request.getSession();
+//        int ClassID = (int) session.getAttribute("Classid");
+//
+//        String ClassName = request.getParameter("ClassName");
+//        if (ClassName != null && ClassName.length() > 10) {
+//            request.setAttribute("ClassId", ClassID);
+//            String error = "Class name must less than 10 characters";
+//            request.setAttribute("error", error);
+//            // Check if the class name already exists and is not the current class
+//            MyClass existingClass = t.getClassesByName(ClassName);
+//            if (existingClass != null && existingClass.getClassID() != ClassID) {
+//                String error1 = "Class name already exists";
+//                request.setAttribute("error", error1);
+//            }
+////            doGet(request, response);
+//            List<MyClass> ClassList = t.getAllClasses();
+//            request.setAttribute("ClassList", ClassList);
+//            request.getRequestDispatcher("jsp/Class-list.jsp").include(request, response);
+//        } else {
+//            t.updateClassName(ClassName, ClassID);
+//            t.updateClass(TeacherID, ClassID);
+//
+//            response.sendRedirect("class");
+////        String test = TeacherID; 
+////        request.setAttribute("test", test);
+////    request.getRequestDispatcher("jsp/test.jsp").forward(request, response);
+//        }
+//    }
+    
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        ClassDAO t = new ClassDAO();
-        String TeacherID = request.getParameter("HiddenTeacherID");
-//        int ClassID = Integer.parseInt(request.getParameter("ClassId"));
-        HttpSession session = request.getSession();
-        int ClassID = (int) session.getAttribute("Classid");
+        throws ServletException, IOException {
+    ClassDAO t = new ClassDAO();
+    String TeacherID = request.getParameter("HiddenTeacherID");
+    HttpSession session = request.getSession();
+    int ClassID = (int) session.getAttribute("Classid");
 
-        String ClassName = request.getParameter("ClassName");
-        if (ClassName != null && ClassName.length() > 10) {
-              request.setAttribute("ClassId", ClassID);
-            String error = "Class name must less than 10 characters";
-            request.setAttribute("error", error);
-
-//            doGet(request, response);
-             List<MyClass> ClassList = t.getAllClasses();
-        request.setAttribute("ClassList", ClassList);
-            request.getRequestDispatcher("jsp/Class-list.jsp").include(request, response);
+    String ClassName = request.getParameter("ClassName");
+    if (ClassName != null && ClassName.length() > 10) {
+        String error = "Class name must be less than 10 characters";
+        request.setAttribute("error", error);
+    } else {
+        MyClass existingClass = t.getClassesByName(ClassName);
+        if (existingClass != null && existingClass.getClassID() != ClassID) {
+            String error1 = "Class name already exists";
+            request.setAttribute("error", error1);
         } else {
             t.updateClassName(ClassName, ClassID);
             t.updateClass(TeacherID, ClassID);
-
             response.sendRedirect("class");
-//        String test = TeacherID; 
-//        request.setAttribute("test", test);
-//    request.getRequestDispatcher("jsp/test.jsp").forward(request, response);
+            return;
         }
     }
+    List<MyClass> ClassList = t.getAllClasses();
+    request.setAttribute("ClassList", ClassList);
+    request.getRequestDispatcher("jsp/Class-list.jsp").include(request, response);
+}
+
 
     /**
      * Returns a short description of the servlet.

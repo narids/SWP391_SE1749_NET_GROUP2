@@ -222,28 +222,7 @@ public class QuizDAO extends DBContext<BaseEntity> {
         }
         return null;
     }
-
-    public Boolean addQuestionsToQuiz(String quizID, List<Integer> quesList) {
-        String sql = "";
-
-        for (Integer q : quesList) {
-            sql = sql + "INSERT INTO [dbo].[QuizQuestion] ([QuizID] ,[QuestionID]) VALUES  (" + quizID + "," + q + ") \n";
-        }
-
-        try {
-            connection.setAutoCommit(false);
-            PreparedStatement stm = connection.prepareCall(sql);
-
-            if (stm.executeUpdate() > 0) {
-                connection.commit();
-                return true;
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(AccountDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return false;
-    }
+ 
 
     public List<ClassSubject> getQuizzesByStudentID(String sql) {
         List<ClassSubject> ltQuiz = new ArrayList<>();

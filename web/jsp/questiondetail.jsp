@@ -64,27 +64,27 @@
 
         <!-- header start -->
         <jsp:include page="components/admin-header.jsp"></jsp:include>
-        <!-- header end -->
-        <!-- Left sidebar menu start -->
+            <!-- header end -->
+            <!-- Left sidebar menu start -->
         <jsp:include page="components/admin-sidebar.jsp"></jsp:include>
-        <main class="ttr-wrapper">
-            <div class="form-container">
-                <h2>Update a Question</h2>
-                <form action="questiondetail" method="POST">
-                   ID: ${questiondetail.questionId}
+            <main class="ttr-wrapper">
+                <div class="form-container">
+                    <h2>Update a Question</h2>
+                    <form action="questiondetail" method="POST">
+                        ID: ${questiondetail.questionId}
                     <input name="questioniddetail"  type="hidden" value="${questiondetail.questionId}" required>
                     <div class="form-group">
-                        <label for="content">Content: ${questiondetail.questionContent}</label>
+                        <label for="content">Content: </label>
                         <br>
-                        <input type="text"  name="quescontentdetail"  required>
+                        <input type="text"  name="quescontentdetail" value="${questiondetail.questionContent}" required>
                     </div>
                     <div class="form-group">
-                        <label for="explain">Explain: ${questiondetail.explain}</label>
-                                                <br>
-                        <input type="text"  name="quesexplaindetail"  required>
+                        <label for="explain">Explain: </label>
+                        <br>
+                        <input type="text"  name="quesexplaindetail"  value="${questiondetail.explain}"required>
                     </div>
                     <label for="subjectsdetail">Subject: ${questiondetail.subject.subjectName}</label>
-                                            <br>
+                    <br>
                     <input list="subjectsdetail" name="subjectdetail" id="subjectdetail">
                     <datalist id="subjectsdetail">
                         <c:forEach items="${requestScope.sublistt}" var="ba">
@@ -94,7 +94,7 @@
                     <div id="options">
                         <div class="option">
                             <label for="option1">Option 1:</label>
-                                                    <br>
+                            <br>
                             <input type="text" class="option-text" name="options[]" required >
                             <input type="checkbox" class="correct-checkbox" name="corrects[]" value="1">
                             <label for="correct1">Correct</label><br>
@@ -118,7 +118,7 @@
                         optionLabel.htmlFor = 'option' + optionCount;
                         optionLabel.textContent = 'Option ' + optionCount + ':';
                         newOptionDiv.appendChild(optionLabel);
-                         
+
                         var newBr = document.createElement('br');
                         newOptionDiv.appendChild(newBr);
                         var optionInput = document.createElement('input');
