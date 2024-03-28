@@ -107,7 +107,7 @@
                                                 <td style="width:50%; white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;">${n.title}</td>
                                                 <td style="width:10%">${n.viewsCount}</td>
                                                 <td style="width:10%">${ndao.getFullnameById(n.createdBy)}</td>
-                                                <td style="width:10%">${n.status eq 1 ? 'Publish' : 'Draft'}</td>
+                                                <td style="width:10%">${n.status eq 1 ? 'Public' : 'Draft'}</td>
                                                 <td>
                                                     <a href="news-detail?newsId=${n.newsId}" class="btn btn-sm yellow outline radius-xl" style="padding: 5px 10px">
                                                         <i class="fa fa-pencil"></i>

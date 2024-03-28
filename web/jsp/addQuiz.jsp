@@ -98,7 +98,7 @@
                                         <div class="form-group col-12">
                                             <label class="col-form-label">Status <span class="text-red">*</span></label>
                                             <input type="radio" id="html" name="Status" value="1" checked>
-                                            <label for="html">Publish</label><br>
+                                            <label for="html">Public</label><br>
                                             <input type="radio" id="css" name="Status" value="0" >
                                             <label for="css">Personal</label><br>
                                         </div>

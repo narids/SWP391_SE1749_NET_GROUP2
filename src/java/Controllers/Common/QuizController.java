@@ -5,11 +5,13 @@
 package Controllers.Common;
 
 import DAOs.AccountDAO;
+import DAOs.ClassDAO;
 import DAOs.QuestionDAO;
 import DAOs.QuizDAO;
 import Models.Account;
 import Models.Answer;
 import Models.ClassSubject;
+import Models.MyClass;
 import Models.Question;
 import Models.Quiz;
 import Models.Student;
@@ -75,6 +77,7 @@ public class QuizController extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         AccountDAO adb = new AccountDAO();
+        Boolean goToQuizzes = false;
 
         Account account = (Account) session.getAttribute("account");
 
@@ -136,11 +139,56 @@ public class QuizController extends HttpServlet {
                     request.setAttribute("questions", questions);
                     request.getRequestDispatcher("jsp/quizDetail.jsp").forward(request, response);
                 } else {
-                    request.getRequestDispatcher("jsp/quiz.jsp").forward(request, response);
+                    goToQuizzes = true;
                 }
 
             } else {
-                request.getRequestDispatcher("jsp/quiz.jsp").forward(request, response);
+                goToQuizzes = true;
+
+            }
+
+            if (goToQuizzes) {
+                Teacher teacher = (Teacher) request.getSession().getAttribute("teacher");
+                Student student = (Student) request.getSession().getAttribute("student");
+
+                if (teacher != null) {
+                    String quizzesByTeacherIDSQL = "SELECT Quiz.QuizID, Quiz.QuizName, Quiz.QuizContent, Quiz.CreatedDate, Quiz.QuizStatus, Class.ClassName, Subject.SubjectName, Teacher.TeacherID, Class.ClassID, Subject.SubjectID\n"
+                            + "FROM         Class INNER JOIN\n"
+                            + "                      ClassSubject ON Class.ClassID = ClassSubject.ClassID INNER JOIN\n"
+                            + "                      Subject ON ClassSubject.SubjectID = Subject.SubjectID INNER JOIN\n"
+                            + "                      Teacher ON ClassSubject.TeacherID = Teacher.TeacherID INNER JOIN\n"
+                            + "                      Quiz ON ClassSubject.QuizID = Quiz.QuizID\n"
+                            + "					  where Teacher.TeacherID = " + String.valueOf(teacher.getTeacherId());
+
+                    List<ClassSubject> quizzesByTeacherID = quizDAO.getQuizzesByTeacherID(quizzesByTeacherIDSQL);
+
+                    request.setAttribute("quizzes", quizzesByTeacherID);
+
+                }
+
+                if (student != null) {
+                    String quizzesByStudentIDSQL = "SELECT    Quiz.QuizID, Quiz.QuizName, Quiz.QuizContent, Quiz.CreatedDate, Quiz.QuizStatus, Class.ClassName, Subject.SubjectName, Teacher.TeacherID, Student.StudentID, Class.ClassID, Subject.SubjectID\n"
+                            + "FROM         ClassStudent INNER JOIN\n"
+                            + "Class ON ClassStudent.ClassID = Class.ClassID INNER JOIN\n"
+                            + "ClassSubject ON Class.ClassID = ClassSubject.ClassID INNER JOIN\n"
+                            + "Quiz ON ClassSubject.QuizID = Quiz.QuizID INNER JOIN\n"
+                            + "Student ON ClassStudent.StudentID = Student.StudentID INNER JOIN\n"
+                            + "Subject ON ClassSubject.SubjectID = Subject.SubjectID INNER JOIN\n"
+                            + "Teacher ON ClassSubject.TeacherID = Teacher.TeacherID\n"
+                            + "where Quiz.QuizStatus = 1 and Student.StudentID = " + String.valueOf(student.getStudentId());
+
+                    List<ClassSubject> quizzesByStudentID = quizDAO.getQuizzesByStudentID(quizzesByStudentIDSQL);
+
+                    request.setAttribute("quizzes", quizzesByStudentID);
+                }
+
+                int userID = account.getUserId();
+                ClassDAO c = new ClassDAO();
+                List<MyClass> classes = c.getClassByUserID(userID);
+
+                request.setAttribute("classes", classes);
+                request.setAttribute("account", account);
+                request.getRequestDispatcher("jsp/quizzes.jsp").forward(request, response);
 
             }
         }
@@ -551,6 +599,31 @@ public class QuizController extends HttpServlet {
 
                         break;
 
+                    case "changeQuizStatus":
+                        String id = request.getParameter("id");
+                        String typeStatus = request.getParameter("type");
+
+                        String sqlStatus = "UPDATE [dbo].[Quiz]\n";
+
+                        if (typeStatus.equals("toPublish")) {
+                            sqlStatus += " SET [QuizStatus] = 1 WHERE QuizID =\n";
+                        } else {
+                            sqlStatus += " SET [QuizStatus] = 0 WHERE QuizID =\n";
+                        }
+
+                        sqlStatus += id;
+
+                        if (quizDAO.updateQuizWithSql(sqlStatus)) {
+                            if (typeStatus.equals("toPublish")) {
+                                out.print("<span style=\"color: green;\">Public</span> <i onclick=\"updateStatus(" + id + ", 'toPrivate')\" class=\"bi bi-arrow-repeat quizStatusBtn\" style=\"font-size: 19px; cursor: pointer\"></i>");
+                            } else {
+                                out.print("<span style=\"color: red;\">Private</span><i onclick=\"updateStatus(" + id + ", 'toPublish')\" class=\"bi bi-arrow-repeat quizStatusBtn\" style=\"font-size: 19px; cursor: pointer\"></i>");
+                            }
+
+                        } else {
+                            out.print("failed");
+
+                        }
                     default:
                         throw new AssertionError();
                 }

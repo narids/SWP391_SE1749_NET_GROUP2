@@ -386,7 +386,7 @@
                                         <div class="form-group col-12">
                                             <label class="col-form-label">Status <span class="text-red">*</span></label>
                                             <input type="radio" id="html" name="rbStatus" value="1" ${news.status eq 1 ? 'checked' : ''}>
-                                            <label for="html">Publish</label><br>
+                                            <label for="html">Public</label><br>
                                             <input type="radio" id="css" name="rbStatus" value="0" ${news.status eq 0 ? 'checked' : ''}>
                                             <label for="css">Draft</label><br>
                                         </div>

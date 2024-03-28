@@ -262,7 +262,7 @@ public class CatalogController extends HttpServlet {
 
                         for (ClassSubject q : quizzes) {
                             String colorStatus = "green";
-                            String valueStatus = "Publish";
+                            String valueStatus = "Public";
                             String typeStatus = "toPrivate";
                             String dataPrintTemp = "";
 
@@ -339,7 +339,7 @@ public class CatalogController extends HttpServlet {
                 try ( PrintWriter out = response.getWriter()) {
                     if (quizDAO.updateQuizWithSql(sql)) {
                         if (type.equals("toPublish")) {
-                            out.print("<span style=\"color: green;\">Publish</span> <i onclick=\"updateStatus(" + id + ", 'toPrivate')\" class=\"bi bi-arrow-repeat quizStatusBtn noClick\" style=\"font-size: 19px; cursor: pointer\"></i>");
+                            out.print("<span style=\"color: green;\">Public</span> <i onclick=\"updateStatus(" + id + ", 'toPrivate')\" class=\"bi bi-arrow-repeat quizStatusBtn noClick\" style=\"font-size: 19px; cursor: pointer\"></i>");
                         } else {
                             out.print("<span style=\"color: red;\">Private</span><i onclick=\"updateStatus(" + id + ", 'toPublish')\" class=\"bi bi-arrow-repeat quizStatusBtn noClick\" style=\"font-size: 19px; cursor: pointer\"></i>");
                         }
