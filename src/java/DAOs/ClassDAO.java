@@ -149,8 +149,8 @@ public class ClassDAO extends DBContext<BaseEntity> {
                 while (resultSet.next()) {
                     subjects.
                             add(new Subject(resultSet.getInt("SubjectID"),
-                                    resultSet.getString("SubjectName"), resultSet.getInt("SubDeID")
-                                    , resultSet.getString("SubDetail")));
+                                    resultSet.getString("SubjectName"), resultSet.getInt("SubDeID"),
+                                    resultSet.getString("SubDetail")));
 
                 }
                 // Close resultSet, statement, and connection (if necessary)
@@ -287,11 +287,13 @@ public class ClassDAO extends DBContext<BaseEntity> {
         return ClassID;
     }
 
-    public String getTeacherByClassID(int id) {
-        String sql = "select distinct cs.TeacherID from ClassSubject cs, Class c, Teacher t, Account ac "
-                + "where cs.ClassID = c.ClassID and"
-                + " cs.TeacherID = t.TeacherID and t.UserID = ac.UserID and c.ClassID = ? ";
-        String TeacherID = null;
+    public Teacher getTeacherByClassID(int id) {
+        String sql = "select distinct cs.TeacherID, ac.UserID, ac.Fullname from ClassSubject cs, Class c, Teacher t, Account ac \n"
+                + "                where cs.ClassID = c.ClassID and\n"
+                + "                cs.TeacherID = t.TeacherID and \n"
+                + "				t.UserID = ac.UserID and \n"
+                + "				c.ClassID = ? ";
+        Teacher teacher = null;
         try {
             // Check if connection is null or not
             if (connection != null) {
@@ -300,9 +302,10 @@ public class ClassDAO extends DBContext<BaseEntity> {
                 ResultSet resultSet = statement.executeQuery();
 
                 if (resultSet.next()) {
-                    TeacherID = resultSet.getString("TeacherID");
+                    teacher = new Teacher(resultSet.getInt("UserID"), resultSet.getInt("TeacherID"),
+                            resultSet.getString("Fullname"));
                 }
-
+                
                 resultSet.close();
                 statement.close();
                 // No need to return myClass here, return it after try-catch block
@@ -313,7 +316,34 @@ public class ClassDAO extends DBContext<BaseEntity> {
             // Log the exception or handle it appropriately
             ex.printStackTrace();
         }
-        return TeacherID; // Moved the return statement outside the try-catch block
+        return teacher; // Moved the return statement outside the try-catch block
+    }
+
+    public List<Teacher> getTeachers() {
+        String sql = "select distinct cs.TeacherID, ac.UserID, ac.Fullname from ClassSubject cs, Class c, Teacher t, Account ac \n"
+                + "                where cs.ClassID = c.ClassID and\n"
+                + "                cs.TeacherID = t.TeacherID and \n"
+                + "				t.UserID = ac.UserID \n";
+        List<Teacher> teacher = new ArrayList<>();
+        try {
+            // Check if connection is null or not
+            if (connection != null) {
+                PreparedStatement statement = connection.prepareStatement(sql);
+                ResultSet resultSet = statement.executeQuery();
+
+                while (resultSet.next()) {
+                    teacher.add(new Teacher(resultSet.getInt("UserID"), resultSet.getInt("TeacherID"),
+                            resultSet.getString("Fullname")));
+                }
+                return teacher;
+            } else {
+                System.err.println("Connection is null. Cannot execute query.");
+            }
+        } catch (SQLException ex) {
+            // Log the exception or handle it appropriately
+            ex.printStackTrace();
+        }
+        return null; // Moved the return statement outside the try-catch block
     }
 
     public List<Integer> getTeacherIDs() {

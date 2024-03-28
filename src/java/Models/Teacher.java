@@ -8,11 +8,10 @@ package Models;
  *
  * @author admin
  */
-public class Teacher {
+public class Teacher extends BaseEntity {
 
     private int userId;
     private int teacherId;
-
     public Teacher() {
     }
 
@@ -20,10 +19,18 @@ public class Teacher {
         this.userId = userId;
         this.teacherId = teacherId;
     }
+    
+    public Teacher(int userId, int teacherId, String name) {
+        this.userId = userId;
+        this.teacherId = teacherId;
+        this.name = name;
+    }
 
     public int getuserId() {
         return userId;
     }
+    
+     
 
     public void setuserId(int userId) {
         this.userId = userId;

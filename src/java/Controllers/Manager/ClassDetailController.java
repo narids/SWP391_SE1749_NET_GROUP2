@@ -7,6 +7,7 @@ package Controllers.Manager;
 import DAOs.ClassDAO;
 import Models.Account;
 import Models.MyClass;
+import Models.Teacher;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -65,7 +66,8 @@ public class ClassDetailController extends HttpServlet {
         
         HttpSession session = request.getSession();
         
-        String TeacherID = t.getTeacherByClassID(ClassID);
+        Teacher teacher = t.getTeacherByClassID(ClassID);
+        int TeacherID = teacher.getTeacherId(); 
         request.setAttribute("TeacherID", TeacherID);
 
         List<Integer> TeacherIDs = t.getTeacherIDs();

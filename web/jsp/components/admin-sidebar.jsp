@@ -61,6 +61,12 @@
                             <span class="ttr-label">Manage News</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="addQuiz" class="ttr-material-button">
+                            <span class="ttr-icon"><i class="ti-bookmark-alt"></i></span>
+                            <span class="ttr-label">Add Quiz</span>
+                        </a>
+                    </li>
                 </c:if>
                 <c:if test="${sessionScope.account.getRole().getRoleId() eq 3}">
                     <li>

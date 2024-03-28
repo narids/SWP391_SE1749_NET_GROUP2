@@ -14,13 +14,14 @@
                         <c:if test="${sessionScope.account ne null}">
                             <li><a href="profile">${sessionScope.account.getUsername()}</a></li>
                                 <c:if test="${sessionScope.account.getRole().getRoleId() eq 1}">
-                                <li><a href="news-list"></i>Dashboard</a></li>
+                                <li><a href="dashboard"></i>Dashboard</a></li>
                                 </c:if>
                                 <c:if test="${sessionScope.account.getRole().getRoleId() eq 2}">
                                 <li><a href="news-list"></i>Dashboard</a></li>
                                 </c:if>
                                 <c:if test="${sessionScope.account.getRole().getRoleId() eq 3}">
                                 <li><a href="questionbank"></i>Question Bank</a></li>
+
                                 </c:if>
                             <li><a href="logout"></i>Log out</a></li>
                             </c:if>
@@ -74,6 +75,8 @@
                         <li class="active"><a href="home">Home</a>
                         </li>
                         <li class=""><c:if test="${sessionScope.account.getRole().getRoleId() eq 2 or sessionScope.account.getRole().getRoleId() eq 3}"> <a href="subdelist">Subject Dimension</a></c:if>
+                        </li>
+                        <li class=""><a href="quizzes">Quizzes</a>
                         </li>
                         <li class=""><a href="catalog">Your library</a>
                         </li>

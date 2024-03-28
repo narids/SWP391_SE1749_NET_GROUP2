@@ -191,15 +191,17 @@ public class QuestionDAO extends DBContext<Question> {
         return null;
     }
 
-    public List<Question> getQuestionAndAnswersBySubjectId(String quizID, String subjectID) {
+    public List<Question> getQuestionAndAnswersBySubjectId(String quizID, String subjectID, String searchQuestionVal) {
         List<Question> ltQuestion = new ArrayList<>();
 
         String sql = "SELECT Question.QuestionID, Question.Question_Content, Question.Created_Day, Question.ImageURL, Question.Explain, Subject.SubjectID, Subject.SubjectName\n"
                 + "FROM Question INNER JOIN Subject \n"
                 + "ON Question.SubjectId = Subject.SubjectID\n"
                 + "where Subject.SubjectID = " + subjectID
+                + " AND Question.Question_Content like '%" + searchQuestionVal + "%' \n"
                 + " AND NOT EXISTS ( SELECT  1 FROM QuizQuestion WHERE QuizQuestion.QuizID = " + quizID
-                + " AND QuizQuestion.QuestionID = Question.QuestionID)";
+                + " AND QuizQuestion.QuestionID = Question.QuestionID) \n";
+
         try {
             PreparedStatement stm = connection.prepareStatement(sql);
             ResultSet rs = stm.executeQuery();
@@ -328,6 +330,15 @@ public class QuestionDAO extends DBContext<Question> {
             int subid = sub.getIDbyName(subject);
             statement.setInt(5, subid);
             statement.setString(6, id);
+
+    
+
+    public void deleteByID(int id) {
+        try {
+            String strSQL = "DELETE FROM [Question] WHERE QuestionID = ?";
+            PreparedStatement statement = connection.prepareStatement(strSQL);
+            statement.setInt(1, id);
+
             statement.executeUpdate();
         }
     }
