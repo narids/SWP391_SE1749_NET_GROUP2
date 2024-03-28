@@ -56,6 +56,35 @@ public class QuestionDAO extends DBContext<Question> {
         return null;
     }
 
+    public Question getQuestionAndAnswers(String id) {
+        Question ltQuestion = new Question();
+
+        String sql = "SELECT Question.QuestionID, Question.Question_Content\n"
+                + "FROM Question INNER JOIN\n"
+                + "QuizQuestion ON Question.QuestionID = QuizQuestion.QuestionID INNER JOIN\n"
+                + "Quiz ON QuizQuestion.QuizID = Quiz.QuizID\n"
+                + "where Quiz.QuizID = " + id;
+
+        try {
+            PreparedStatement stm = connection.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Question question = new Question();
+
+                question.setQuestionId(rs.getInt("QuestionID"));
+                question.setQuestionContent(rs.getString("Question_Content"));
+
+                question.setAnswers(getAnswersByQuestionID(rs.getInt("QuestionID")));
+
+               
+            }
+
+            return ltQuestion;
+        } catch (SQLException ex) {
+            Logger.getLogger(QuizDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
     public List<Question> getQuestionByQuiz(int quizId) {
         List<Question> ltQuestion = new ArrayList<>();
         try {
@@ -256,7 +285,6 @@ public class QuestionDAO extends DBContext<Question> {
                 System.out.println("True");
             } else {
                 System.out.println("False");
-
             }
         } catch (Exception ex) {
             System.out.println("Error");

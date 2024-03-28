@@ -127,8 +127,8 @@ public class ProfileController extends HttpServlet {
         int id = account.getUserId();
         String uid = request.getParameter("userId");
         AccountDAO dao = new AccountDAO();
-        dao.updatefAccount(fullname, email, id);
-        response.sendRedirect("profile?userid="+uid);
+        dao.updateAcc(fullname, email, id);
+        response.sendRedirect("profile");
     }
 
     /**

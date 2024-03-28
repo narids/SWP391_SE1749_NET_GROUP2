@@ -20,7 +20,7 @@
                                 <li><a href="news-list"></i>Dashboard</a></li>
                                 </c:if>
                                 <c:if test="${sessionScope.account.getRole().getRoleId() eq 3}">
-                                <li><a href="news-list"></i>Dashboard</a></li>
+                                <li><a href="questionbank"></i>Question Bank</a></li>
                                 </c:if>
                             <li><a href="logout"></i>Log out</a></li>
                             </c:if>

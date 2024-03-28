@@ -51,6 +51,9 @@ public class SubDeController extends HttpServlet{
         switch (action) {
             case "delete":
                 int id = Integer.parseInt(request.getParameter("subDeId"));
+                queD.deleteByIDdd(id);
+                queD.deleteByIDd(id);
+                queD.deleteByIDddd(id);
                 queD.deleteByID(id);
                 response.sendRedirect("subdelist");
                 break;

@@ -57,8 +57,7 @@ public class QuestionDetailController extends HttpServlet {
                                 request.setAttribute("questionid", id);
                 Question que = qued.getbyId(id);
                 request.setAttribute("questiondetail", que);
-                List<Answer> list = an.getAnswerByQuestion(Integer.parseInt(id));
-                request.setAttribute("listan", list);
+                
                 request.getRequestDispatcher("jsp/questiondetail.jsp").forward(request, response);
             } else {
                 response.sendRedirect("home");
