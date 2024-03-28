@@ -74,7 +74,7 @@
                     <div class="breadcrumb-row">
                         <div class="container">
                             <ul class="list-inline">
-                                <li><a href="#">Home</a></li>
+                                <li><a href="class">Home</a></li>
                                 <li>Class Details</li>
                             </ul>
                         </div>
@@ -110,12 +110,17 @@
                                                         <div class="form-group col-8">
                                                             <input name="ClassId" class="form-control" type="hidden" value="${param.id}" required/>
                                                             <label class="col-form-label">Classname <span class="text-red">*</span></label>
+                                                            <span class="text-red">${error}</span>
+                                                            <br/>
                                                             <input name="ClassName" class="form-control" type="text" value="${classSelected.getClassName()}" required>
                                                             <label class="col-form-label">Teacher ID <span class="text-red">*</span></label>
                                                             <select name="TeacherID" id="TeacherID" class="form-control" required>
-                                                                <c:forEach var="teacher" items="${TeacherIDs}">
-                                                                    <option value="${teacher}" ${teacher == TeacherID ? 'selected' : ''}>${teacher}</option>
+                                                                <c:forEach var="teacher" items="${Teachers}">
+                                                                    <option value="${teacher.getTeacherId()}"}>${teacher.getName()} </option>
                                                                 </c:forEach>
+                                                                <input type="hidden" name="HiddenTeacherID" id="hiddenTeacherID">
+
+
                                                             </select>
                                                             <input type="hidden" name="HiddenTeacherID" id="hiddenTeacherID">
                                                         </div>

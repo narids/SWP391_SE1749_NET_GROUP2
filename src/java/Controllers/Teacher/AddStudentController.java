@@ -87,10 +87,18 @@ public class AddStudentController extends HttpServlet {
         String email = request.getParameter("StudentEmail");
         HttpSession session = request.getSession();
         int ClassID = (int) session.getAttribute("Classid");
+        String error = "Student had been already added, pls try another ones";
+
         StudentDAO s = new StudentDAO();
         int StudentID = s.getStudentIdByEmail(email);
-        s.addStudentToClass(StudentID, ClassID);
-        response.sendRedirect("StudentList");
+        if (s.checkStudentName(StudentID)) {
+         request.setAttribute("error", error);
+          request.getRequestDispatcher("jsp/add-student.jsp").include(  request, response);
+
+        } else {
+            s.addStudentToClass(StudentID, ClassID);
+            response.sendRedirect("StudentList");
+        }
     }
 
     /**

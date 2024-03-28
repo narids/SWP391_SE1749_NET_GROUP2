@@ -67,7 +67,7 @@ public class StudentDAO extends DBContext<BaseEntity> {
         return StudentID; // Moved the return statement outside the try-catch block
     }
 
-    public String getStudentNameByID(String id) {
+    public String getStudentNameByID(int id) {
         String sql = "SELECT StudentID, Fullname "
                 + "from ClassStudent cs, Account a, Student s where cs.StudentID = s.StudentID\n"
                 + "and s.UserID = a.UserID and cs.StudentID = ? ";
@@ -77,7 +77,7 @@ public class StudentDAO extends DBContext<BaseEntity> {
             // Check if connection is null or not
             if (connection != null) {
                 PreparedStatement statement = connection.prepareStatement(sql);
-                statement.setString(1, id); // set the parameter for the query
+                statement.setInt(1, id); // set the parameter for the query
                 ResultSet resultSet = statement.executeQuery();
 
                 if (resultSet.next()) {
@@ -174,6 +174,14 @@ public class StudentDAO extends DBContext<BaseEntity> {
 //        }
 //
 //    }
+    
+       public boolean checkStudentName(int studentID) {
+        if (getStudentNameByID(studentID) == null) {
+            return false;
+        }
+        return true;
+    }
+    
     public void addStudentToClass(int studentID, int classID) {
         String sql = "INSERT INTO ClassStudent(StudentID, ClassID) VALUES (?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {

@@ -35,7 +35,7 @@ public class ClassDetailController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
+        try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
@@ -63,19 +63,19 @@ public class ClassDetailController extends HttpServlet {
             throws ServletException, IOException {
         ClassDAO t = new ClassDAO();
         int ClassID = Integer.parseInt(request.getParameter("id"));
-        
+
         HttpSession session = request.getSession();
-        
+
         Teacher teacher = t.getTeacherByClassID(ClassID);
-        int TeacherID = teacher.getTeacherId(); 
+        int TeacherID = teacher.getTeacherId();
         request.setAttribute("TeacherID", TeacherID);
 
-        List<Integer> TeacherIDs = t.getTeacherIDs();
-        request.setAttribute("TeacherIDs", TeacherIDs);
+        List<Teacher> teachers = t.getTeachers();
+        request.setAttribute("Teachers", teachers);
 
         MyClass ClassSelected = t.getClassesByID(ClassID);
         request.setAttribute("classSelected", ClassSelected);
-        
+
         session.setAttribute("Classid", ClassID);
 //        int numStudent = t.getNumberOfStudentInClass(ClassID);
 //        request.setAttribute("num", numStudent);
@@ -96,15 +96,29 @@ public class ClassDetailController extends HttpServlet {
             throws ServletException, IOException {
         ClassDAO t = new ClassDAO();
         String TeacherID = request.getParameter("HiddenTeacherID");
-        int ClassID = Integer.parseInt(request.getParameter("ClassId"));
-        
-        t.updateClass(TeacherID, ClassID);
+//        int ClassID = Integer.parseInt(request.getParameter("ClassId"));
+        HttpSession session = request.getSession();
+        int ClassID = (int) session.getAttribute("Classid");
 
-        response.sendRedirect("class");
+        String ClassName = request.getParameter("ClassName");
+        if (ClassName != null && ClassName.length() > 10) {
+              request.setAttribute("ClassId", ClassID);
+            String error = "Class name must less than 10 characters";
+            request.setAttribute("error", error);
+
+//            doGet(request, response);
+             List<MyClass> ClassList = t.getAllClasses();
+        request.setAttribute("ClassList", ClassList);
+            request.getRequestDispatcher("jsp/Class-list.jsp").include(request, response);
+        } else {
+            t.updateClassName(ClassName, ClassID);
+            t.updateClass(TeacherID, ClassID);
+
+            response.sendRedirect("class");
 //        String test = TeacherID; 
 //        request.setAttribute("test", test);
 //    request.getRequestDispatcher("jsp/test.jsp").forward(request, response);
-
+        }
     }
 
     /**
