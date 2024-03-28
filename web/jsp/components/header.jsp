@@ -75,6 +75,8 @@
                         </li>
                         <li class=""><c:if test="${sessionScope.account.getRole().getRoleId() eq 2 or sessionScope.account.getRole().getRoleId() eq 3}"> <a href="subdelist">Subject Dimension</a></c:if>
                         </li>
+                        <li class=""><a href="quizzes">Quizzes</a>
+                        </li>
                         <li class=""><a href="catalog">Your library</a>
                         </li>
                         <li class=""><a href="News">News</a>

@@ -132,7 +132,7 @@
             .noClick {
                 pointer-events: none;
                 color: lightgray;
-                background-color: lightgray;
+                /*background-color: lightgray;*/
             }
 
             #questionLengthCount{
@@ -189,14 +189,14 @@
                                             <div class="review">
                                                 <c:choose>
                                                     <c:when test = "${requestScope.quiz.quiz.quizStatus == 0}">
-                                                        <span id='quizStatusID-${requestScope.quiz.quiz.quizId}' style=" display: flex; align-items: center; gap: 8px; justify-content: space-between;">
-                                                            <span style="color: red;">Private</span><c:if test="${sessionScope.account.role.roleId != 4}"><i onclick="updateStatus(${requestScope.quiz.quiz.quizId}, 'toPublish')" class="bi bi-arrow-repeat quizStatusBtn" style="font-size: 19px; cursor: pointer"></c:if></i>
+                                                        <span id='quizStatusID-${quiz.quiz.quizId}' style=" display: flex; align-items: center; gap: 8px; justify-content: space-between;">
+                                                            <span style="color: red;">Private</span><c:if test="${sessionScope.account.role.roleId != 4}"><i onclick="updateStatus(${quiz.quiz.quizId}, 'toPublish')" class="bi bi-arrow-repeat quizStatusBtn" style="font-size: 19px; cursor: pointer"></c:if></i>
                                                             </span>
                                                     </c:when>
 
                                                     <c:when test = "${requestScope.quiz.quiz.quizStatus == 1}">
-                                                        <span id='quizStatusID-${requestScope.quiz.quiz.quizId}' style="display: flex; align-items: center; gap: 8px; justify-content: space-between;">
-                                                            <span style="color: green;">Publish</span><c:if test="${sessionScope.account.role.roleId != 4}"><i onclick="updateStatus(${requestScope.quiz.quiz.quizId}, 'toPrivate')" class="bi bi-arrow-repeat quizStatusBtn" style="font-size: 19px; cursor: pointer"></i></c:if>
+                                                        <span id='quizStatusID-${quiz.quiz.quizId}' style="display: flex; align-items: center; gap: 8px; justify-content: space-between;">
+                                                            <span style="color: green;">Public</span><c:if test="${sessionScope.account.role.roleId != 4}"><i onclick="updateStatus(${quiz.quiz.quizId}, 'toPrivate')" class="bi bi-arrow-repeat quizStatusBtn" style="font-size: 19px; cursor: pointer"></i></c:if>
                                                             </span>
                                                     </c:when>
                                                 </c:choose>
@@ -1198,6 +1198,37 @@
                                                 }
                                             });
                                         });
+
+                                        function updateStatus(id, type) {
+                                            $("i.quizStatusBtn").addClass("noClick");
+                                            $.ajax({
+                                                url: "/SWP391_SE1749_NET_GROUP2/catalog",
+                                                type: "post",
+                                                data: {
+                                                    action: "changeQuizStatus",
+                                                    id: id,
+                                                    type: type
+                                                },
+                                                success: function (data) {
+                                                    let text = "Change status successfully";
+                                                    let color = "green";
+                                                    let IDString = "quizStatusID-" + id;
+
+                                                    if (data !== "failed") {
+                                                        var parent = document.getElementById(IDString);
+                                                        parent.innerHTML = data;
+                                                    } else {
+                                                        text = "Change status failed";
+                                                        color = "red";
+                                                    }
+
+                                                    toastMessageAction(text, color, ".quizStatusBtn");
+                                                },
+                                                error: function (err) {
+                                                    toastMessageAction("Something went wrong", "red");
+                                                }
+                                            });
+                                        }
         </script>
     </body>
 

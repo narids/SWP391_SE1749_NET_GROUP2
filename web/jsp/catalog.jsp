@@ -169,7 +169,7 @@
                                                             </li>
                                                             <li data-filter="publish" class="btn">
                                                                 <input type="radio">
-                                                                <a href="#"><span>Publish</span></a> 
+                                                                <a href="#"><span>Public</span></a> 
                                                             </li>
                                                             <li data-filter="pending" class="btn">
                                                                 <input type="radio">
@@ -181,7 +181,7 @@
                                                 <div class="courses-filter">
                                                     <div class="clearfix">
                                                         <form action="ViewClass" method="get">
-                                                            <ul id="masonry" class="ttr-gallery-listing magnific-image row">
+                                                            <ul id="masonry" class="ttr-gallery-listing magnific-image row" style="justify-content: flex-start">
                                                                 <c:forEach items="${classes}" var="c">
                                                                     <li class="action-card col-xl-4 col-lg-6 col-md-12 col-sm-6 pending">
                                                                         <div class="cours-bx">
@@ -231,7 +231,7 @@
                                                                 </li>
                                                                 <li data-filter="publish" class="btn" id="filterPublish">
                                                                     <input type="radio">
-                                                                    <a href=""><span>Publish</span></a> 
+                                                                    <a href=""><span>Public</span></a> 
                                                                 </li>
                                                                 <li data-filter="pending" class="btn" id="filterPrivate">
                                                                     <input type="radio">
@@ -288,7 +288,7 @@
 
                                                                                     <c:when test = "${q.quiz.quizStatus == 1}">
                                                                                         <span id='quizStatusID-${q.quiz.quizId}' style="display: flex; align-items: center; gap: 8px; justify-content: space-between;">
-                                                                                            <span style="color: green;">Publish</span><c:if test="${sessionScope.account.role.roleId != 4}"><i onclick="updateStatus(${q.quiz.quizId}, 'toPrivate')" class="bi bi-arrow-repeat quizStatusBtn" style="font-size: 19px; cursor: pointer"></i></c:if>
+                                                                                            <span style="color: green;">Public</span><c:if test="${sessionScope.account.role.roleId != 4}"><i onclick="updateStatus(${q.quiz.quizId}, 'toPrivate')" class="bi bi-arrow-repeat quizStatusBtn" style="font-size: 19px; cursor: pointer"></i></c:if>
                                                                                             </span>
                                                                                     </c:when>
                                                                                 </c:choose>
