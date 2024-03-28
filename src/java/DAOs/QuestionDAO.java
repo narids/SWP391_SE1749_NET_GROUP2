@@ -312,7 +312,7 @@ public class QuestionDAO extends DBContext<Question> {
     }
 
     public void updateByID(String content, String explain, String subject, String id) throws SQLException {
-       try{
+        try {
             String sql = "UPDATE [Question] \n"
                     + "               Set      [Question_Content] = ?,\n"
                     + "                  [Created_Day] = ?,\n"
@@ -331,7 +331,10 @@ public class QuestionDAO extends DBContext<Question> {
             statement.setInt(5, subid);
             statement.setString(6, id);
 
-    
+        } catch (SQLException e) {
+            System.out.println("getListUsers:" + e.getMessage());
+        }
+    }
 
     public void deleteByID(int id) {
         try {
@@ -340,11 +343,11 @@ public class QuestionDAO extends DBContext<Question> {
             statement.setInt(1, id);
 
             statement.executeUpdate();
-        
-    }catch(SQLException e) {
+
+        } catch (SQLException e) {
             System.out.println("getListUsers:" + e.getMessage());
         }
-        
+
     }
 
     public void deleteByID(String id) {

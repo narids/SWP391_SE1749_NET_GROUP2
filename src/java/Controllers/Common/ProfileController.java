@@ -59,8 +59,10 @@ public class ProfileController extends HttpServlet {
         
         Account account = (Account) request.getSession().getAttribute("account");
         AccountDAO accDao = new AccountDAO();
-                int id = account.getUserId();
-        Account acc = accDao.getAccountById(id);
+        
+        int id = account.getUserId();
+        AccountDAO dao = new AccountDAO();
+        Account acc =  dao.getAccountById(id);
         
         if (account == null) {
             response.sendRedirect("login");
@@ -125,12 +127,13 @@ public class ProfileController extends HttpServlet {
             throws ServletException, IOException {
         String fullname = request.getParameter("fullname");
         String email = request.getParameter("email");
-        Account account = (Account) request.getSession().getAttribute("account");
-        int id = account.getUserId();
-        String uid = request.getParameter("userId");
+        String uid = request.getParameter("userid");
+        int id = Integer.parseInt(uid);
         AccountDAO dao = new AccountDAO();
+        Account acc = new Account();
+        dao.getAccountById(id);
         dao.updateAcc(fullname, email, id);
-        response.sendRedirect("profile");
+        response.sendRedirect("home");
     }
 
     /**
