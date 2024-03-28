@@ -33,7 +33,7 @@ public class addClassController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
+        try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
@@ -87,13 +87,17 @@ public class addClassController extends HttpServlet {
         if (t.checkClassName(className)) {
 
             request.setAttribute("error", error);
-            response.sendRedirect("class");
+            List<Teacher> teachers = t.getTeachers();
+            request.setAttribute("Teachers", teachers);
+            List<MyClass> ClassList = t.getAllClasses();
+            request.setAttribute("ClassList", ClassList);
+            request.getRequestDispatcher("jsp/Class-list.jsp").include(request, response);
         } else {
-           
-            int classID =  t.addClassName(className);
-            
-            t.AddClassTeacher(classID,TeacherID);
-            
+
+            int classID = t.addClassName(className);
+
+            t.AddClassTeacher(classID, TeacherID);
+
             response.sendRedirect("class");
 
         }

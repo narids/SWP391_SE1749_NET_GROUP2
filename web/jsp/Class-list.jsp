@@ -65,31 +65,33 @@
 
         <!-- header start -->
         <jsp:include page="components/admin-header.jsp"></jsp:include>
-        <!-- header end -->
-        <!-- Left sidebar menu start -->
+            <!-- header end -->
+            <!-- Left sidebar menu start -->
         <jsp:include page="components/admin-sidebar.jsp"></jsp:include>
-        <!-- Left sidebar menu end -->
+            <!-- Left sidebar menu end -->
 
-        <!--Main container start -->
-        <main class="ttr-wrapper">
-            <div class="container-fluid">
-                <div class="db-breadcrumb">
-                    <h4 class="breadcrumb-title">Classes</h4>
-                    <ul class="db-breadcrumb-list">
-                        <li><a href="#"><i class="fa fa-home"></i>Home</a></li>
-                        <li>Classes</li>
-                    </ul>
-                </div>	
-                <div class="row">
+            <!--Main container start -->
+            <main class="ttr-wrapper">
+                <div class="container-fluid">
+                    <div class="db-breadcrumb">
+                        <h4 class="breadcrumb-title">Classes</h4>
+                        <ul class="db-breadcrumb-list">
+                            <li><a href="#"><i class="fa fa-home"></i>Home</a></li>
+                            <li>Classes</li>
+                        </ul>
+                    </div>	
+                    <div class="row">
 
-                    <div class="col-lg-12 m-b30">
-                        <div class="widget-box">
-                            <div class="wc-title d-flex justify-content-between align-items-center">
-                                <h4>Class list</h4>
-                                <a href="addClass" class="btn btn-sm info ">
-                                    Add a class
-                                </a>
-                            </div>
+                        <div class="col-lg-12 m-b30">
+                            <div class="widget-box">
+                                <div class="wc-title d-flex justify-content-between align-items-center">
+                                    <h4>Class list</h4>
+                                    <a href="addClass" class="btn btn-sm info ">
+                                        Add a class
+                                    </a>
+                                </div>
+                                <span class="text-red">${error}</span>
+                            <br/>
                             <div class="widget-inner">
                                 <table id="Mytable" class="table table-hover" border="0px">
                                     <thead>
@@ -98,32 +100,32 @@
                                             <th scope="col">Class Name</th>
                                             <th scope="col">Teacher</th>
                                             <th scope="col">Action</th>
-                                     
-                                         
+
+
                                         </tr>
                                     </thead>
-                                                                      
-                                        <c:forEach  var="n" items="${ClassList}">
-                                            <tr>
 
-                                                <th style="">${n.getClassID()}
-                                                </th> 
+                                    <c:forEach  var="n" items="${ClassList}">
+                                        <tr>
 
-                                                <td style="width:50%; white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;"><a href="ClassDetail?id=${n.getClassID()}
-                                                                ">${n.className} </a> </td>
-                                                <td style="width:10%">${n.name}</td>
+                                            <th style="">${n.getClassID()}
+                                            </th> 
 
-                                                <td>
-                                                    <a href="ClassDetail?id=${n.getClassID()}" class="btn btn-sm yellow outline radius-xl ">
-                                                        <i class="fa fa-pencil"></i>
-                                                    </a>
-                                                    <a href="#" class="btn btn-sm red outline radius-xl delete-news" data-toggle="modal" data-target="#deleteModal-${n.getClassID()}">
-                                                        <i class="fa fa-trash"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        </c:forEach>
-                                    
+                                            <td style="width:50%; white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px;"><a href="ClassDetail?id=${n.getClassID()}
+                                                                                                                                                    ">${n.className} </a> </td>
+                                            <td style="width:10%">${n.name}</td>
+
+                                            <td>
+                                                <a href="ClassDetail?id=${n.getClassID()}" class="btn btn-sm yellow outline radius-xl ">
+                                                    <i class="fa fa-pencil"></i>
+                                                </a>
+                                                <a href="#" class="btn btn-sm red outline radius-xl delete-news" data-toggle="modal" data-target="#deleteModal-${n.getClassID()}">
+                                                    <i class="fa fa-trash"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
+
                                 </table>
                             </div>
                         </div>
@@ -160,7 +162,7 @@
         </c:forEach>
 
         <!-- External JavaScripts -->
-         <script>
+        <script>
             // Pricing add
             function newMenuItem() {
                 var newElem = $('tr.list-item').first().clone();
@@ -198,8 +200,8 @@
         <script src='assets/vendors/switcher/switcher.js'></script>
         <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 
-         <script>
-            let table = new DataTable('#Mytable' , {
+        <script>
+            let table = new DataTable('#Mytable', {
                 lengthChange: false,
                 length: 5
             });

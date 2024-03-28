@@ -349,7 +349,7 @@
                 <div class="db-breadcrumb">
                     <h4 class="breadcrumb-title">Classes</h4>
                     <ul class="db-breadcrumb-list">
-                        <li><a href="#"><i class="fa fa-home"></i>Home</a></li>
+                        <li><a href="class"><i class="fa fa-home"></i>Home</a></li>
                         <li>Courses</li>
                     </ul>
                 </div>	
@@ -386,9 +386,7 @@
                                                                 ${n.name}  </td>
                                              
                                                 <td>
-                                                    <a href="StudentDetail?id=${n.getStudentId()}" class="btn btn-sm yellow outline radius-xl ">
-                                                        <i class="fa fa-pencil"></i>
-                                                    </a>
+      
                                                     <a href="#" class="btn btn-sm red outline radius-xl delete-news" data-toggle="modal" data-target="#deleteModal-${n.getStudentId()}">
                                                         <i class="fa fa-trash"></i>
                                                     </a>
